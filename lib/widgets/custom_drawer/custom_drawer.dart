@@ -1,5 +1,6 @@
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
+import 'package:birds_view/views/bookmark_screen/bookmark_screen.dart';
 import 'package:birds_view/views/home_screen/home_screem.dart';
 import 'package:birds_view/views/profile_screen/profile_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
@@ -129,7 +130,10 @@ class CustomDrawer extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-               
+                 Navigator.push(
+                    context,
+                  PageTransition(child:const BookmarkScreen(), type: PageTransitionType.fade)
+                 );
               },
               leading: SvgPicture.asset(
                 bookmarksIcon,
