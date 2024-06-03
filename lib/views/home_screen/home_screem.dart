@@ -2,9 +2,11 @@ import 'dart:ui';
 
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/images.dart';
+import 'package:birds_view/views/detail_screen/detail_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../../widgets/custom_drawer/custom_drawer.dart';
 import '../../widgets/custom_recommended_widget/custom_recommended_widget.dart';
@@ -223,7 +225,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: 3,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(context, 
+                              PageTransition(child: const DetailScreen(),
+                               type: PageTransitionType.fade));
+                            },
                             child: const CustomRecommendedWidget());
                       },
                     ),

@@ -1,6 +1,7 @@
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/views/home_screen/home_screem.dart';
+import 'package:birds_view/views/profile_screen/profile_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,13 +20,19 @@ class CustomDrawer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: size.height*0.05,
+            ),
             GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: const Icon(
-                  Icons.arrow_back_ios, 
-                  color: Colors.white,
+                child:const Padding(
+                  padding:   EdgeInsets.symmetric(horizontal: 10),
+                  child:   Icon(
+                    Icons.arrow_back_ios, 
+                    color: Colors.white,
+                  ),
                 )),
             //
             SizedBox(
@@ -104,7 +111,10 @@ class CustomDrawer extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                 
+                  Navigator.push(
+                    context,
+                  PageTransition(child:const ProfileScreen(), type: PageTransitionType.fade)
+                 );
               },
               leading: SvgPicture.asset(
                 profileIcon,

@@ -51,6 +51,8 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   # svg icon
   flutter_svg: ^2.0.10+1
+  # 
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:
