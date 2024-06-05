@@ -171,7 +171,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 5),
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                 Navigator.push(context, 
+                              PageTransition(child: const DetailScreen(),
+                               type: PageTransitionType.fade));
+                              },
                               child: Container(
                                 width: size.width * 0.35,
                                 decoration: BoxDecoration(
@@ -265,7 +269,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                               Navigator.push(context, 
+                              PageTransition(child: const DetailScreen(),
+                               type: PageTransitionType.fade));
+                            },
                             child: SizedBox(
                               width: size.width * 0.5,
                               child: Column(
@@ -388,7 +396,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: size.height * 0.03),
+                                        fontSize: size.height * 0.026),
                                   ),
                                   GestureDetector(
                                     onTap: () {
