@@ -23,16 +23,16 @@ class CustomDrawer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: size.height*0.05,
+              height: size.height * 0.05,
             ),
             GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child:const Padding(
-                  padding:   EdgeInsets.symmetric(horizontal: 10),
-                  child:   Icon(
-                    Icons.arrow_back_ios, 
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Icon(
+                    Icons.arrow_back_ios,
                     color: Colors.white,
                   ),
                 )),
@@ -45,14 +45,13 @@ class CustomDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 CircleAvatar(
-                        radius: size.height * 0.04,
-                        backgroundColor: primaryColor,
-                        child:const Icon(
-                          Icons.person,
-                          color: Colors.black,
-                        ),
-                      ),
-                    
+                  radius: size.height * 0.04,
+                  backgroundColor: primaryColor,
+                  child: const Icon(
+                    Icons.person,
+                    color: Colors.black,
+                  ),
+                ),
                 SizedBox(
                   width: size.width * 0.05,
                 ),
@@ -63,8 +62,7 @@ class CustomDrawer extends StatelessWidget {
                       width: size.width * 0.3,
                       child: RichText(
                         text: TextSpan(
-                          text:  "Guest"
-                               ,
+                          text: "Guest",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: size.height * 0.03,
@@ -97,15 +95,16 @@ class CustomDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                     context,
-                  PageTransition(child:const HomeScreen(), type: PageTransitionType.fade)
-                 );
+                    PageTransition(
+                        child: const HomeScreen(),
+                        type: PageTransitionType.fade));
               },
               leading: SvgPicture.asset(
                 homeIcon,
                 height: size.height * 0.03,
                 fit: BoxFit.fill,
               ),
-              title:const Text(
+              title: const Text(
                 'Home',
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -113,17 +112,18 @@ class CustomDrawer extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                  Navigator.push(
+                Navigator.push(
                     context,
-                  PageTransition(child:const ProfileScreen(), type: PageTransitionType.fade)
-                 );
+                    PageTransition(
+                        child: const ProfileScreen(),
+                        type: PageTransitionType.fade));
               },
               leading: SvgPicture.asset(
                 profileIcon,
                 height: size.height * 0.03,
                 fit: BoxFit.fill,
               ),
-              title:const Text(
+              title: const Text(
                 'Profile',
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -131,17 +131,18 @@ class CustomDrawer extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                 Navigator.push(
+                Navigator.push(
                     context,
-                  PageTransition(child:const BookmarkScreen(), type: PageTransitionType.fade)
-                 );
+                    PageTransition(
+                        child: const BookmarkScreen(),
+                        type: PageTransitionType.fade));
               },
               leading: SvgPicture.asset(
                 bookmarksIcon,
                 height: size.height * 0.03,
                 fit: BoxFit.fill,
               ),
-              title:const Text(
+              title: const Text(
                 'Bookmarks',
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -149,14 +150,18 @@ class CustomDrawer extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                Navigator.push(context, PageTransition(child:const VisitedBar(), type: PageTransitionType.fade));
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: const VisitedBar(),
+                        type: PageTransitionType.fade));
               },
               leading: SvgPicture.asset(
                 visitedLocationIcon,
                 height: size.height * 0.03,
                 fit: BoxFit.fill,
               ),
-              title:const Text(
+              title: const Text(
                 'Visited Places',
                 style:
                     TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -174,9 +179,9 @@ class CustomDrawer extends StatelessWidget {
             //         TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             //   ),
             // ),
-          const  Spacer(),
+            const Spacer(),
 
-          CustomButton(text: 'Log Out', ontap: (){})
+            CustomButton(text: 'Log Out', ontap: () {})
           ],
         ),
       ),

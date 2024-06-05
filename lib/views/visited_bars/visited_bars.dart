@@ -16,51 +16,47 @@ class _VisitedBarState extends State<VisitedBar> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          leading: GestureDetector(
-              onTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                 PageTransition(child:const HomeScreen(), type: PageTransitionType.fade),
-                  (route) => false,
-                );
-              },
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              )),
-          centerTitle: true,
-          title: RichText(
-            text: TextSpan(
-              text: "Visited ",
-              style:
-                  TextStyle(fontSize: size.height * 0.03, color: Colors.white),
-              children: [
-                TextSpan(
-                  text: 'Places ',
-                  style: TextStyle(
-                      fontSize: size.height * 0.03,
-                      fontWeight: FontWeight.bold,
-                      color: primaryColor),
-                ),
-              ],
-            ),
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: GestureDetector(
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                PageTransition(
+                    child: const HomeScreen(), type: PageTransitionType.fade),
+                (route) => false,
+              );
+            },
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            )),
+        centerTitle: true,
+        title: RichText(
+          text: TextSpan(
+            text: "Visited ",
+            style: TextStyle(fontSize: size.height * 0.03, color: Colors.white),
+            children: [
+              TextSpan(
+                text: 'Places ',
+                style: TextStyle(
+                    fontSize: size.height * 0.03,
+                    fontWeight: FontWeight.bold,
+                    color: primaryColor),
+              ),
+            ],
           ),
         ),
-        body: Padding(
-          padding:const EdgeInsets.all(15),
-          child:  
-             
-                  ListView.builder(
-                          itemCount: 5,
-                          itemBuilder: (context, index) {
-                            return CustomVisitedPlace(
-                            
-                            );
-                          },
-                        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(15),
+        child: ListView.builder(
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return CustomVisitedPlace();
+          },
         ),
-      );
+      ),
+    );
   }
 }

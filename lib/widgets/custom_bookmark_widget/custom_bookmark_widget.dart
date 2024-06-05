@@ -10,13 +10,13 @@ class CustomBookmarkWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return Padding(
-      padding:const EdgeInsets.symmetric(vertical: 15),
+      padding: const EdgeInsets.symmetric(vertical: 15),
       child: GestureDetector(
         onLongPress: () {
           // showCupertinoModalBottomSheet(
           //     context: context,
           //     builder: (context) => CustomBookmarkBottomSheet(
-                    
+
           //         ));
         },
         child: Container(
@@ -32,7 +32,7 @@ class CustomBookmarkWidget extends StatelessWidget {
                 height: size.height,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    image:const DecorationImage(
+                    image: const DecorationImage(
                         image: AssetImage(
                           'assets/recomended_bar.png',
                         ),
@@ -61,11 +61,11 @@ class CustomBookmarkWidget extends StatelessWidget {
                     ),
                     Container(
                       constraints: BoxConstraints(maxWidth: size.width * 0.5),
-                      child:const AutoSizeText(
+                      child: const AutoSizeText(
                         'Lorem ipsum dolor sit amet, consectetur adipiscing elit ...',
                         maxLines: 4,
                         overflow: TextOverflow.visible,
-                        style:  TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                     SizedBox(
@@ -73,11 +73,11 @@ class CustomBookmarkWidget extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                      SvgPicture.asset(personsIcon),
+                        SvgPicture.asset(personsIcon),
                         SizedBox(
                           width: size.width * 0.02,
                         ),
-                       SvgPicture.asset(musicIcon),
+                        SvgPicture.asset(musicIcon),
                         SizedBox(
                           width: size.width * 0.02,
                         ),

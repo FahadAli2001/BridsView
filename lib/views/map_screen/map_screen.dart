@@ -45,9 +45,11 @@ class _MapScreenState extends State<MapScreen> {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child:const CircleAvatar(
-                  backgroundColor: Colors.black,
-                  child:   Center(child: Icon(CupertinoIcons.back, color: Colors.white))))),
+                child: const CircleAvatar(
+                    backgroundColor: Colors.black,
+                    child: Center(
+                        child:
+                            Icon(CupertinoIcons.back, color: Colors.white))))),
       ],
     ));
   }

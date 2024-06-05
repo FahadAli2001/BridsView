@@ -49,10 +49,12 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-       Navigator.push(context, PageTransition(
-        duration:const Duration(seconds: 1),
-        child:const OnboardingOneScreen(),
-        type: PageTransitionType.fade));
+        Navigator.push(
+            context,
+            PageTransition(
+                duration: const Duration(seconds: 1),
+                child: const OnboardingOneScreen(),
+                type: PageTransitionType.fade));
       }
     });
   }

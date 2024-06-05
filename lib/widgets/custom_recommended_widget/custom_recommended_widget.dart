@@ -9,14 +9,14 @@ class CustomRecommendedWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Padding(
-      padding:const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: SizedBox(
         width: size.width * 0.8,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Image.asset(
-             "assets/recomended_bar.png",
+              "assets/recomended_bar.png",
               height: size.height * 0.2,
               width: size.width * 0.8,
               fit: BoxFit.cover,
@@ -33,8 +33,7 @@ class CustomRecommendedWidget extends StatelessWidget {
                 ),
                 RatingBarIndicator(
                   unratedColor: Colors.grey,
-                  rating:
-                      4.0,
+                  rating: 4.0,
                   itemBuilder: (context, index) => Icon(
                     Icons.star,
                     color: primaryColor,

@@ -7,7 +7,8 @@ class CustomTextField extends StatelessWidget {
   final bool? obsecure;
   final Icon? icon;
   final VoidCallback? iconOnTap;
-  const CustomTextField(  {super.key,
+  const CustomTextField(
+      {super.key,
       required this.hintText,
       required this.labelText,
       this.textEditingController,
@@ -21,7 +22,7 @@ class CustomTextField extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: TextField(
         obscureText: obsecure!,
-        style:const TextStyle(color: Colors.white60),
+        style: const TextStyle(color: Colors.white60),
         controller: textEditingController,
         decoration: InputDecoration(
           hintText: hintText,

@@ -132,8 +132,11 @@ class _LogInScreenState extends State<LogInScreen> {
                 CustomButton(
                   text: "Log In",
                   ontap: () {
-                    Navigator.push(context, PageTransition(child:const HomeScreen(), 
-                    type: PageTransitionType.fade));
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: const HomeScreen(),
+                            type: PageTransitionType.fade));
                   },
                 ),
                 //
@@ -189,7 +192,9 @@ class _LogInScreenState extends State<LogInScreen> {
                             ..onTap = () {
                               Navigator.push(
                                   context,
-                                PageTransition(child:const SignupScreen(), type: PageTransitionType.fade));
+                                  PageTransition(
+                                      child: const SignupScreen(),
+                                      type: PageTransitionType.fade));
                             },
                           text: 'Create a new one',
                           style: TextStyle(

@@ -17,12 +17,8 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final List<String> genders = [
-    'Male',
-    'Female',
-    'Other'
-  ];
-  
+  final List<String> genders = ['Male', 'Female', 'Other'];
+
   get pickedFile => null;
   // ignore: prefer_typing_uninitialized_variables
   var selectedDate;
@@ -31,18 +27,15 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
-   
-   
-   return  Scaffold(
-      bottomNavigationBar:   Padding(
-               padding:const EdgeInsets.all(15),
-               child: CustomButton(
-                 text: 'Create Account',
-                 ontap: () {
-                   
-                 },
-               ),
-             ),
+
+    return Scaffold(
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(15),
+        child: CustomButton(
+          text: 'Create Account',
+          ontap: () {},
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
@@ -50,7 +43,7 @@ class _SignupScreenState extends State<SignupScreen> {
             onTap: () {
               Navigator.pop(context);
             },
-            child:   Icon(
+            child: Icon(
               Icons.arrow_back_ios,
               color: whiteColor,
             )),
@@ -65,8 +58,8 @@ class _SignupScreenState extends State<SignupScreen> {
             children: [
               TextSpan(
                 text: 'An ',
-                style: TextStyle(
-                    fontSize: size.height * 0.03, color: whiteColor),
+                style:
+                    TextStyle(fontSize: size.height * 0.03, color: whiteColor),
               ),
               TextSpan(
                 text: 'Account ',
@@ -80,288 +73,268 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       ),
       body: Padding(
-        padding:const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         child: SingleChildScrollView(
-          child:  Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Container(
-                      width: size.width * 0.4,
-                      height: size.height * 0.16,
-                      color: Colors.black,
-                      child: Stack(
-                        children: [
-                         pickedFile != null
-                              ? Center(
-                                  child: CircleAvatar(
-                                  backgroundColor: primaryColor,
-                                  radius: size.height * 0.075,
-                                  backgroundImage:
-                                      FileImage(pickedFile!),
-                                ))
-                              : Center(
-                                  child: CircleAvatar(
-                                    backgroundColor: primaryColor,
-                                    radius: size.height * 0.075,
-                                  ),
-                                ),
-                          Positioned(
-                            right: size.width * 0.06,
-                            top: size.height * 0.1,
-                            child: GestureDetector(
-                              onTap: () {
-                                showCupertinoModalBottomSheet(
-                                    context: context,
-                                    builder: (context) =>
-                                        CustomImagePickerBottomSheet(
-                                          cameraontap: () {
-                                      
-                                          },
-                                          galleryontap: () {
-                                           
-                                          },
-                                        ));
-                              },
-                              child:const CircleAvatar(
-                                backgroundColor: Colors.white,
-                                child: Icon(
-                                  CupertinoIcons.camera,
-                                  color: Colors.black,
-                                ),
-                              ),
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: Container(
+                width: size.width * 0.4,
+                height: size.height * 0.16,
+                color: Colors.black,
+                child: Stack(
+                  children: [
+                    pickedFile != null
+                        ? Center(
+                            child: CircleAvatar(
+                            backgroundColor: primaryColor,
+                            radius: size.height * 0.075,
+                            backgroundImage: FileImage(pickedFile!),
+                          ))
+                        : Center(
+                            child: CircleAvatar(
+                              backgroundColor: primaryColor,
+                              radius: size.height * 0.075,
                             ),
-                          )
-                        ],
+                          ),
+                    Positioned(
+                      right: size.width * 0.06,
+                      top: size.height * 0.1,
+                      child: GestureDetector(
+                        onTap: () {
+                          showCupertinoModalBottomSheet(
+                              context: context,
+                              builder: (context) =>
+                                  CustomImagePickerBottomSheet(
+                                    cameraontap: () {},
+                                    galleryontap: () {},
+                                  ));
+                        },
+                        child: const CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            CupertinoIcons.camera,
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  //
-                  SizedBox(
-                    height: size.height * 0.03,
-                  ),
-                  //
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          width: size.width * 0.45,
-                          child:const CustomTextField(
-                              obsecure: false,
-                              textEditingController:
-                                  null,
-                              hintText: "First Name",
-                              labelText: "First Name")),
-                      //
+                    )
+                  ],
+                ),
+              ),
+            ),
+            //
+            SizedBox(
+              height: size.height * 0.03,
+            ),
+            //
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                    width: size.width * 0.45,
+                    child: const CustomTextField(
+                        obsecure: false,
+                        textEditingController: null,
+                        hintText: "First Name",
+                        labelText: "First Name")),
+                //
 
-                      SizedBox(
-                        width: size.width * 0.45,
-                        child:const CustomTextField(
-                            obsecure: false,
-                            textEditingController:
-                               null,
-                            hintText: "Last Name",
-                            labelText: "Last Name"),
-                      ),
-                      //
-                    ],
-                  ),
-                  //
-
-                const  CustomTextField(
+                SizedBox(
+                  width: size.width * 0.45,
+                  child: const CustomTextField(
                       obsecure: false,
-                      textEditingController:null,
-                      hintText: "Email",
-                      labelText: "Email"),
+                      textEditingController: null,
+                      hintText: "Last Name",
+                      labelText: "Last Name"),
+                ),
+                //
+              ],
+            ),
+            //
 
-                  //
-                  CustomTextField(
-                      iconOnTap: () {
-                       
-                      },
-                      icon:  const Icon(
-                              Icons.visibility,
-                              color: Colors.white60,
-                            ),
-                      obsecure:  false      ,
-                      textEditingController:
-                          null,
-                      hintText: "Password",
-                      labelText: "Password"),
+            const CustomTextField(
+                obsecure: false,
+                textEditingController: null,
+                hintText: "Email",
+                labelText: "Email"),
 
-                  SizedBox(
-                    height: size.height * 0.02,
-                  ),
-                  SizedBox(
-                    width: size.width,
-                    height: size.height * 0.09,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onTap: () {
-                        BottomPicker.date(
-                          backgroundColor: Colors.black,
-                          pickerTitle: Text(
-                            'Select Date Of Birth',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: primaryColor,
-                            ),
-                          ),
-                          dateOrder: DatePickerDateOrder.dmy,
-                          initialDateTime: DateTime(1996, 10, 22),
-                          maxDateTime: DateTime.now(),
-                          minDateTime: DateTime(1980),
-                          pickerTextStyle: TextStyle(
-                            color: primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                          buttonSingleColor: Colors.black,
-                          closeIconColor: primaryColor,
-                          buttonStyle: BoxDecoration(color: primaryColor),
-                          onChange: (index) {},
-                          onSubmit: (date) {
-                            
-                          },
-                        ).show(context);
-                      },
-                      child: SizedBox(
-                        width: size.width,
-                        height: size.height * 0.07,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'Date Of Birth',
-                                style: TextStyle(
-                                  color: Colors.white60,
-                                  fontSize:
-                                      selectedDate != null
-                                          ? size.height * 0.015
-                                          : size.height * 0.018,
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                               selectedDate != null
-                                    ? '${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}'
-                                    : '',
-                                style: TextStyle(
-                                  color: Colors.white60,
-                                  fontSize: size.height * 0.018,
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: size.height * 0.015),
-                           const  Divider(color: Colors.white60),
-                          ],
-                        ),
+            //
+            CustomTextField(
+                iconOnTap: () {},
+                icon: const Icon(
+                  Icons.visibility,
+                  color: Colors.white60,
+                ),
+                obsecure: false,
+                textEditingController: null,
+                hintText: "Password",
+                labelText: "Password"),
+
+            SizedBox(
+              height: size.height * 0.02,
+            ),
+            SizedBox(
+              width: size.width,
+              height: size.height * 0.09,
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  BottomPicker.date(
+                    backgroundColor: Colors.black,
+                    pickerTitle: Text(
+                      'Select Date Of Birth',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: primaryColor,
                       ),
                     ),
-                  ),
-
-                  //
-                  // const CustomTextField(hintText: "Gender", labelText: "Gender"),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2<String>(
-                      isExpanded: true,
-                      hint: Text(
-                        'Gender',
-                        style: TextStyle(
-                          fontSize: size.height * 0.02,
-                          color: Colors.white60,
-                        ),
-                      ),
-                      items:  genders
-                          .map((String item) => DropdownMenuItem<String>(
-                                value: item,
-                                child: Text(
-                                  item,
-                                  style: TextStyle(
-                                    color: Colors.white60,
-                                    fontSize: size.height * 0.02,
-                                  ),
-                                ),
-                              ))
-                          .toList(),
-                      value:  gender,
-                      onChanged: (String? value) {
-                        gender = value;
-                        setState(() {
-                          
-                        });
-                      },
-                      dropdownStyleData:const DropdownStyleData(
-                          decoration: BoxDecoration(color: Colors.black)),
-                      buttonStyleData: ButtonStyleData(
-                        height: 40,
-                        width: size.width,
-                      ),
-                      menuItemStyleData: const MenuItemStyleData(
-                        height: 40,
-                      ),
+                    dateOrder: DatePickerDateOrder.dmy,
+                    initialDateTime: DateTime(1996, 10, 22),
+                    maxDateTime: DateTime.now(),
+                    minDateTime: DateTime(1980),
+                    pickerTextStyle: TextStyle(
+                      color: primaryColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.01,
-                  ),
-                  SizedBox(
-                      width: size.width,
-                      child:const Divider(
-                        color: Colors.white60,
-                      )),
-                  //
-                  SizedBox(
-                    height: size.height * 0.015,
-                  ),
-                  //
-
-                  //
-                  Row(
+                    buttonSingleColor: Colors.black,
+                    closeIconColor: primaryColor,
+                    buttonStyle: BoxDecoration(color: primaryColor),
+                    onChange: (index) {},
+                    onSubmit: (date) {},
+                  ).show(context);
+                },
+                child: SizedBox(
+                  width: size.width,
+                  height: size.height * 0.07,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CupertinoCheckbox(
-                          activeColor: primaryColor,
-                          value: true,
-                          onChanged: (val) {
-                            
-                          }),
-                      SizedBox(
-                        width: size.width * 0.015,
-                      ),
-                      RichText(
-                        text: const TextSpan(
-                          text: "I accept the term of ",
-                          style: TextStyle(color: Colors.white),
-                          children: [
-                            TextSpan(
-                              text: 'use ',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            TextSpan(
-                              text: 'and ',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            TextSpan(
-                              text: 'privacy policy',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Date Of Birth',
+                          style: TextStyle(
+                            color: Colors.white60,
+                            fontSize: selectedDate != null
+                                ? size.height * 0.015
+                                : size.height * 0.018,
+                          ),
                         ),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          selectedDate != null
+                              ? '${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}'
+                              : '',
+                          style: TextStyle(
+                            color: Colors.white60,
+                            fontSize: size.height * 0.018,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: size.height * 0.015),
+                      const Divider(color: Colors.white60),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            //
+            // const CustomTextField(hintText: "Gender", labelText: "Gender"),
+            DropdownButtonHideUnderline(
+              child: DropdownButton2<String>(
+                isExpanded: true,
+                hint: Text(
+                  'Gender',
+                  style: TextStyle(
+                    fontSize: size.height * 0.02,
+                    color: Colors.white60,
+                  ),
+                ),
+                items: genders
+                    .map((String item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: TextStyle(
+                              color: Colors.white60,
+                              fontSize: size.height * 0.02,
+                            ),
+                          ),
+                        ))
+                    .toList(),
+                value: gender,
+                onChanged: (String? value) {
+                  gender = value;
+                  setState(() {});
+                },
+                dropdownStyleData: const DropdownStyleData(
+                    decoration: BoxDecoration(color: Colors.black)),
+                buttonStyleData: ButtonStyleData(
+                  height: 40,
+                  width: size.width,
+                ),
+                menuItemStyleData: const MenuItemStyleData(
+                  height: 40,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: size.height * 0.01,
+            ),
+            SizedBox(
+                width: size.width,
+                child: const Divider(
+                  color: Colors.white60,
+                )),
+            //
+            SizedBox(
+              height: size.height * 0.015,
+            ),
+            //
+
+            //
+            Row(
+              children: [
+                CupertinoCheckbox(
+                    activeColor: primaryColor,
+                    value: true,
+                    onChanged: (val) {}),
+                SizedBox(
+                  width: size.width * 0.015,
+                ),
+                RichText(
+                  text: const TextSpan(
+                    text: "I accept the term of ",
+                    style: TextStyle(color: Colors.white),
+                    children: [
+                      TextSpan(
+                        text: 'use ',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(
+                        text: 'and ',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      TextSpan(
+                        text: 'privacy policy',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
-                ],
-              )
-        ),
+                ),
+              ],
+            ),
+          ],
+        )),
       ),
     );
   }

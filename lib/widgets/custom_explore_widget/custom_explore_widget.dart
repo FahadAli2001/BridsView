@@ -14,10 +14,11 @@ class CustomExploreWidget extends StatelessWidget {
       onTap: () {
         Navigator.push(
             context,
-            PageTransition(child:const DetailScreen(), type: PageTransitionType.fade));
+            PageTransition(
+                child: const DetailScreen(), type: PageTransitionType.fade));
       },
       child: Padding(
-        padding:const EdgeInsets.symmetric(vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 15),
         child: Container(
             width: size.width,
             height: size.height * 0.3,
@@ -29,7 +30,7 @@ class CustomExploreWidget extends StatelessWidget {
                     Colors.black.withOpacity(0.4),
                     BlendMode.darken,
                   ),
-                  image:const AssetImage("assets/recomended_bar.png"),
+                  image: const AssetImage("assets/recomended_bar.png"),
                   fit: BoxFit.fill),
             ),
             child: Stack(
@@ -67,7 +68,7 @@ class CustomExploreWidget extends StatelessWidget {
                       width: size.width * 0.8,
                       // height: size.height * 0.03,
                       child: Text(
-                       "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

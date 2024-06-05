@@ -42,7 +42,7 @@ class _OnboardingOneScreenState extends State<OnboardingOneScreen> {
               ),
             ),
             //
-        
+
             Center(
               child: RichText(
                 text: TextSpan(

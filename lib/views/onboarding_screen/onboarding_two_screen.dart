@@ -68,7 +68,7 @@ class _OnboardTwoScreenState extends State<OnboardTwoScreen> {
               ),
             ),
             //
-        
+
             Center(
               child: RichText(
                 text: TextSpan(
@@ -89,7 +89,7 @@ class _OnboardTwoScreenState extends State<OnboardTwoScreen> {
                 ),
               ),
             ),
-        
+
             //
             Center(
               child: Text(

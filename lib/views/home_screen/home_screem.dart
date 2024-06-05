@@ -145,8 +145,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(context, PageTransition(child:const ExploreScreen(),
-                           type: PageTransitionType.fade));
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: const ExploreScreen(),
+                                  type: PageTransitionType.fade));
                         },
                         child: Text(
                           'see all',
@@ -172,9 +175,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 5),
                             child: GestureDetector(
                               onTap: () {
-                                 Navigator.push(context, 
-                              PageTransition(child: const DetailScreen(),
-                               type: PageTransitionType.fade));
+                                Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        child: const DetailScreen(),
+                                        type: PageTransitionType.fade));
                               },
                               child: Container(
                                 width: size.width * 0.35,
@@ -234,9 +239,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                             onTap: () {
-                              Navigator.push(context, 
-                              PageTransition(child: const DetailScreen(),
-                               type: PageTransitionType.fade));
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      child: const DetailScreen(),
+                                      type: PageTransitionType.fade));
                             },
                             child: const CustomRecommendedWidget());
                       },
@@ -270,9 +277,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: GestureDetector(
                             onTap: () {
-                               Navigator.push(context, 
-                              PageTransition(child: const DetailScreen(),
-                               type: PageTransitionType.fade));
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      child: const DetailScreen(),
+                                      type: PageTransitionType.fade));
                             },
                             child: SizedBox(
                               width: size.width * 0.5,
