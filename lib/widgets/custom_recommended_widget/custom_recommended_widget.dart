@@ -29,7 +29,7 @@ class CustomRecommendedWidget extends StatelessWidget {
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w900,
-                      fontSize: size.height * 0.02),
+                      fontSize: size.width * 0.03),
                 ),
                 RatingBarIndicator(
                   unratedColor: Colors.grey,

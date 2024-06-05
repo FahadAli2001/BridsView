@@ -3,6 +3,7 @@ import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/views/bookmark_screen/bookmark_screen.dart';
 import 'package:birds_view/views/home_screen/home_screem.dart';
 import 'package:birds_view/views/profile_screen/profile_screen.dart';
+import 'package:birds_view/views/visited_bars/visited_bars.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -148,7 +149,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                
+                Navigator.push(context, PageTransition(child:const VisitedBar(), type: PageTransitionType.fade));
               },
               leading: SvgPicture.asset(
                 visitedLocationIcon,

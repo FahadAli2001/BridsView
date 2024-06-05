@@ -2,11 +2,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/utils/images.dart';
+import 'package:birds_view/views/map_screen/map_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../home_screen/home_screem.dart';
 
@@ -24,7 +26,14 @@ class _DetailScreenState extends State<DetailScreen> {
     return Scaffold(
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(15),
-        child: CustomButton(text: 'Locate', ontap: () async {}),
+        child: CustomButton(
+            text: 'Locate',
+            ontap: () async {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      child: const MapScreen(), type: PageTransitionType.fade));
+            }),
       ),
       appBar: AppBar(
           backgroundColor: Colors.black,
@@ -82,7 +91,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   child: Icon(
                                     Icons.bookmark_border,
                                     color: Colors.black,
-                                    size: size.height*0.035,
+                                    size: size.height * 0.035,
                                   ))
                             ],
                           ),

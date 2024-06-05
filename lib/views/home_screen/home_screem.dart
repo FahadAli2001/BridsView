@@ -10,6 +10,7 @@ import 'package:page_transition/page_transition.dart';
 
 import '../../widgets/custom_drawer/custom_drawer.dart';
 import '../../widgets/custom_recommended_widget/custom_recommended_widget.dart';
+import '../explore_screen/explore_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -143,7 +144,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: size.height * 0.026),
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(context, PageTransition(child:const ExploreScreen(),
+                           type: PageTransitionType.fade));
+                        },
                         child: Text(
                           'see all',
                           style: TextStyle(

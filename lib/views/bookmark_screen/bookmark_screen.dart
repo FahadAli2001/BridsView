@@ -18,7 +18,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           backgroundColor: Colors.black,
           leading: GestureDetector(
               onTap: () {
-               
+               Navigator.pop(context);
               },
               child: const Icon(
                 Icons.arrow_back_ios,

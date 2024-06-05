@@ -13,3 +13,4 @@ String glassIcon = "assets/glass.svg";
 String musicIcon = "assets/music.svg";
 String locationIcon = "assets/location_icon.svg";
 String shareIcon = "assets/share_icon.svg";
+String exploreIcon = "assets/explore_icon.png";
