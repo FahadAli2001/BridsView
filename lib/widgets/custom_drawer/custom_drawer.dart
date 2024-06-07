@@ -59,7 +59,7 @@ class CustomDrawer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: size.width * 0.3,
+                      width: size.width  *0.4,
                       child: RichText(
                         text: TextSpan(
                           text: "Guest",
