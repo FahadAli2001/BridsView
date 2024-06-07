@@ -57,16 +57,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Center(
               child: RichText(
                 text: TextSpan(
-                  text: 'Guest',
+                  text: 'Guest ',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: size.height * 0.035,
+                      fontSize:size.height * 0.03,
                       color: Colors.white),
                   children: [
                     TextSpan(
                       text: 'User',
                       style: TextStyle(
-                          fontSize: size.height * 0.035, color: primaryColor),
+                          fontSize: size.height * 0.03, color: primaryColor),
                     ),
                   ],
                 ),

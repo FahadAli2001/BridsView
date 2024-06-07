@@ -68,7 +68,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               Column(
                 children: [
                   Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               
                     children: [
                       Expanded(
                         flex: 1,

@@ -35,7 +35,7 @@ class _VisitedBarState extends State<VisitedBar> {
         title: RichText(
           text: TextSpan(
             text: "Visited ",
-            style: TextStyle(fontSize: size.height * 0.03, color: Colors.white),
+            style: TextStyle(fontSize: size.height * 0.03, color: Colors.white,fontWeight: FontWeight.bold),
             children: [
               TextSpan(
                 text: 'Places ',
