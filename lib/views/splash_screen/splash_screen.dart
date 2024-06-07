@@ -96,12 +96,12 @@ class _SplashScreenState extends State<SplashScreen>
         width: size.width,
         height: size.height,
         decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.9),
+            color: Colors.black.withOpacity(0.99),
             image: DecorationImage(
               image: AssetImage(splashBackground),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.9),
+                Colors.black.withOpacity(0.99),
                 BlendMode.srcOver,
               ),
             )),

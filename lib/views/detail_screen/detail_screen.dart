@@ -201,7 +201,7 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
               //
               SizedBox(
-                height: size.height * 0.05,
+                height: size.height * 0.03,
               ),
               //
               Row(
@@ -219,13 +219,13 @@ class _DetailScreenState extends State<DetailScreen> {
                         height: size.height * 0.015,
                       ),
                       SizedBox(
-                        width: size.width * 0.26,
-                        child: Center(
+                        width: size.width * 0.3,
+                        child:const Center(
                           child: AutoSizeText(
                             'Guy And Boy',
                             maxLines: 1,
                             style: TextStyle(
-                              fontSize: size.height * 0.016,
+                              // fontSize: size.height * 0.016,
                               color: Colors.white,
                             ),
                           ),
@@ -245,13 +245,13 @@ class _DetailScreenState extends State<DetailScreen> {
                         height: size.height * 0.015,
                       ),
                       SizedBox(
-                        width: size.width * 0.26,
-                        child: Center(
+                        width: size.width * 0.3,
+                        child:const Center(
                           child: Text(
                             maxLines: 1,
                             'Good Ambiance',
                             style: TextStyle(
-                              fontSize: size.height * 0.016,
+                              // fontSize: size.height * 0.016,
                               color: Colors.white,
                             ),
                           ),
@@ -271,13 +271,13 @@ class _DetailScreenState extends State<DetailScreen> {
                         height: size.height * 0.015,
                       ),
                       SizedBox(
-                        width: size.width * 0.26,
-                        child: Center(
+                        width: size.width * 0.3,
+                        child:const Center(
                           child: Text(
                             maxLines: 1,
                             'Live Music',
                             style: TextStyle(
-                              fontSize: size.height * 0.016,
+                              // fontSize: size.height * 0.016,
                               color: Colors.white,
                             ),
                           ),

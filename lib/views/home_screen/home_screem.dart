@@ -490,7 +490,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
-                              CustomButton(text: 'Submit', ontap: () async {})
+                              CustomButton(
+                                  text: 'Submit',
+                                  ontap: () async {
+                                    isReview = false;
+                                    setState(() {});
+                                  })
                             ],
                           ),
                         ),
