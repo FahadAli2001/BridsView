@@ -1,9 +1,13 @@
+import 'dart:developer';
+
+import 'package:birds_view/controller/splash_controller/splash_controller.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/images.dart';
+import 'package:birds_view/views/onboarding_screen/onboarding_one_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-
-import '../onboarding_screen/onboarding_one_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,6 +26,8 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+
+    
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 3),
@@ -49,37 +55,39 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Navigator.push(
-            context,
-            PageTransition(
-                duration: const Duration(seconds: 1),
-                child: const OnboardingOneScreen(),
-                type: PageTransitionType.fade));
+    
+        log("Animation completed, checking user status");
+        checkRoute();
       }
     });
   }
 
-  // Future<void> checkRoute() async {
-  //   try {
-  //     SharedPreferences sp = await SharedPreferences.getInstance();
-  //     final fetchProfile =
-  //         // ignore: use_build_context_synchronously
-  //         Provider.of<FetchProfileController>(context, listen: false);
-  //     String? id = sp.getString('id') ?? '';
-  //     String? token = sp.getString('token') ?? '';
-  //     if (id.isEmpty && id == '') {
-  //       // ignore: use_build_context_synchronously
-  //       Navigator.of(context).pushReplacement(PageTransition(
-  //         duration:const Duration(seconds: 1),
-  //           child: const Onboarding1Screen(), type: PageTransitionType.fade));
-  //     } else {
-  //       // ignore: use_build_context_synchronously
-  //       fetchProfile.fetchUserProfile(id, token, context);
-  //     }
-  //   } catch (e) {
-  //     log(e.toString());
-  //   }
-  // }
+  Future<void> checkRoute() async {
+    try {
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      // ignore: use_build_context_synchronously
+      final splashController = Provider.of<SplashController>(context, listen: false);
+      String? id = sp.getString('user_id') ?? '';
+      String? token = sp.getString('token') ?? '';
+      log('User ID: $id, Token: $token');
+
+      if (id.isEmpty && token.isEmpty) {
+        log('Navigating to OnboardingOneScreen');
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pushReplacement(PageTransition(
+          duration: const Duration(seconds: 1),
+          child: const OnboardingOneScreen(), 
+          type: PageTransitionType.fade
+        ));
+      } else {
+        log('Fetching user profile');
+        // ignore: use_build_context_synchronously
+        await splashController.fetchUserProfile(id, token, context);
+      }
+    } catch (e) {
+      log('Error in checkRoute: $e');
+    }
+  }
 
   @override
   void dispose() {

@@ -10,8 +10,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../home_screen/home_screem.dart';
-
 class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key});
 
@@ -39,10 +37,7 @@ class _DetailScreenState extends State<DetailScreen> {
           backgroundColor: Colors.black,
           leading: GestureDetector(
               onTap: () {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                    (route) => false);
+               Navigator.pop(context);
               },
               child: const Icon(
                 Icons.arrow_back_ios,

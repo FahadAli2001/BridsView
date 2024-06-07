@@ -1,13 +1,14 @@
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/views/bookmark_screen/bookmark_screen.dart';
-import 'package:birds_view/views/home_screen/home_screem.dart';
+import 'package:birds_view/views/login_screen/login_screen.dart';
 import 'package:birds_view/views/profile_screen/profile_screen.dart';
 import 'package:birds_view/views/visited_bars/visited_bars.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -59,7 +60,7 @@ class CustomDrawer extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: size.width  *0.4,
+                      width: size.width * 0.4,
                       child: RichText(
                         text: TextSpan(
                           text: "Guest",
@@ -93,11 +94,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: const HomeScreen(),
-                        type: PageTransitionType.fade));
+                Navigator.pop(context);
               },
               leading: SvgPicture.asset(
                 homeIcon,
@@ -181,7 +178,18 @@ class CustomDrawer extends StatelessWidget {
             // ),
             const Spacer(),
 
-            CustomButton(text: 'Log Out', ontap: () {})
+            CustomButton(
+                text: 'Log Out',
+                ontap: () async {
+                  SharedPreferences sp = await SharedPreferences.getInstance();
+                  sp.clear();
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      PageTransition(
+                          child: const LogInScreen(),
+                          type: PageTransitionType.fade),
+                      (route) => false);
+                })
           ],
         ),
       ),

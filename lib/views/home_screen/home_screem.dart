@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/detail_screen/detail_screen.dart';
@@ -13,7 +14,8 @@ import '../../widgets/custom_recommended_widget/custom_recommended_widget.dart';
 import '../explore_screen/explore_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final UserModel? user;
+  const HomeScreen({super.key, required this.user});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -107,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: size.width * 0.04,
                             ),
                             Text(
-                              "Guest",
+                              widget.user?.data?.username ?? "Guest",
                               style: TextStyle(
                                   fontSize: size.height * 0.022,
                                   color: Colors.white,

@@ -1,11 +1,7 @@
 import 'dart:ui';
-
 import 'package:birds_view/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-
 import '../../widgets/custom_explore_widget/custom_explore_widget.dart';
-import '../home_screen/home_screem.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -25,12 +21,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         backgroundColor: Colors.black,
         leading: GestureDetector(
             onTap: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                PageTransition(
-                    child: const HomeScreen(), type: PageTransitionType.fade),
-                (route) => false,
-              );
+             Navigator.pop(context);
             },
             child: const Icon(
               Icons.arrow_back_ios,

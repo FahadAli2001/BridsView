@@ -1,8 +1,6 @@
 import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/views/home_screen/home_screem.dart';
 import 'package:birds_view/widgets/custom_visited_place/custom_visited_place.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 
 class VisitedBar extends StatefulWidget {
   const VisitedBar({super.key});
@@ -20,12 +18,7 @@ class _VisitedBarState extends State<VisitedBar> {
         backgroundColor: Colors.black,
         leading: GestureDetector(
             onTap: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                PageTransition(
-                    child: const HomeScreen(), type: PageTransitionType.fade),
-                (route) => false,
-              );
+               Navigator.pop(context);
             },
             child: const Icon(
               Icons.arrow_back_ios,

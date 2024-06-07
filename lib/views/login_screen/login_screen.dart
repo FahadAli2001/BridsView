@@ -1,14 +1,15 @@
+import 'package:birds_view/controller/login_controller/login_controller.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/forgot_password_screen/verify_email_screen.dart';
-import 'package:birds_view/views/home_screen/home_screem.dart';
 import 'package:birds_view/views/signup_screen/signup_screen.dart';
 import 'package:birds_view/widgets/custom_textfield/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/custom_button/custom_button.dart';
 
@@ -67,115 +68,141 @@ class _LogInScreenState extends State<LogInScreen> {
                 SizedBox(
                   height: size.height * 0.03,
                 ),
-                const CustomTextField(
-                    textEditingController: null,
-                    obsecure: false,
-                    hintText: "Email",
-                    labelText: "Email"),
-                //
-
-                CustomTextField(
-                    iconOnTap: () {},
-                    icon: const Icon(
-                      Icons.visibility_off,
-                      color: Colors.white60,
-                    ),
-                    textEditingController: null,
-                    obsecure: false,
-                    hintText: "Password",
-                    labelText: "Password"),
-                //
-                SizedBox(
-                  height: size.height * 0.02,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      child: Row(
+                Consumer<LoginController>(
+                  builder: (context, value, child) {
+                    return SizedBox(
+                      child: Column(
                         children: [
-                          CupertinoCheckbox(
-                              activeColor: primaryColor,
-                              value: true,
-                              onChanged: (val) {}),
-                          // SizedBox(
-                          //   width: size.width * 0.01,
-                          // ),
-                          Text(
-                            'Remember Me',
-                            style: TextStyle(color: whiteColor),
+                          CustomTextField(
+                              textEditingController: value.emailController,
+                              obsecure: false,
+                              hintText: "Email",
+                              labelText: "Email"),
+                          //
+
+                          CustomTextField(
+                              iconOnTap: () {
+                                if (value.isHide == true) {
+                                  value.isHide = false;
+                                } else {
+                                  value.isHide = true;
+                                }
+                              },
+                              icon: value.isHide == false
+                                  ? const Icon(
+                                      Icons.visibility_off,
+                                      color: Colors.white60,
+                                    )
+                                  : const Icon(
+                                      Icons.visibility,
+                                      color: Colors.white60,
+                                    ),
+                              textEditingController: value.passwordController,
+                              obsecure: value.isHide == false ? true : false,
+                              hintText: "Password",
+                              labelText: "Password"),
+                          //
+                          SizedBox(
+                            height: size.height * 0.02,
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                child: Row(
+                                  children: [
+                                    CupertinoCheckbox(
+                                        activeColor: primaryColor,
+                                        value: value.rememberMe,
+                                        onChanged: (val) {
+                                          value.rememberMe = val!;
+                                        }),
+                                    Text(
+                                      'Remember Me',
+                                      style: TextStyle(color: whiteColor),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          child: const VerifyEmailScreen(),
+                                          type: PageTransitionType.fade));
+                                },
+                                child: Text(
+                                  "Forgot Password ?",
+                                  style: TextStyle(
+                                      color: whiteColor.withOpacity(.7)),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          //
+                          SizedBox(
+                            height: size.height * 0.03,
+                          ),
+                          //
+                          value.isLoging == true
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: primaryColor,
+                                  ),
+                                )
+                              : CustomButton(
+                                  text: "Log In",
+                                  ontap: () {
+                                    value.loginWithEmailAndPassword(context);
+                                  },
+                                ),
+                          //
+                          SizedBox(
+                            height: size.height * 0.03,
+                          ),
+                          //
+                          const Center(
+                            child: Text(
+                              "or login with",
+                              style: TextStyle(color: Colors.white70),
+                            ),
+                          ),
+                          //
+                          SizedBox(
+                            height: size.height * 0.03,
+                          ),
+                          //
+
+                          SizedBox(
+                              width: size.width * 0.6,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  GestureDetector(
+                                      onTap: () {},
+                                      child: Image.asset(googleLoginIcon,
+                                          width: size.height * 0.05)),
+                                  Image.asset(appleLoginIcon,
+                                      width: size.height * 0.05),
+                                  GestureDetector(
+                                    onTap: () {},
+                                    child: Image.asset(
+                                      facebookLoginIcon,
+                                      width: size.height * 0.05,
+                                    ),
+                                  ),
+                                ],
+                              )),
                         ],
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                child: const VerifyEmailScreen(),
-                                type: PageTransitionType.fade));
-                      },
-                      child: Text(
-                        "Forgot Password ?",
-                        style: TextStyle(color: whiteColor.withOpacity(.7)),
-                      ),
-                    ),
-                  ],
-                ),
-
-                //
-                SizedBox(
-                  height: size.height * 0.03,
-                ),
-                //
-                CustomButton(
-                  text: "Log In",
-                  ontap: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            child: const HomeScreen(),
-                            type: PageTransitionType.fade));
+                    );
                   },
                 ),
                 //
-                SizedBox(
-                  height: size.height * 0.03,
-                ),
-                //
-                const Center(
-                  child: Text(
-                    "or login with",
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                ),
-                //
-                SizedBox(
-                  height: size.height * 0.03,
-                ),
-                //
 
-                SizedBox(
-                    width: size.width * 0.6,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        GestureDetector(
-                            onTap: () {},
-                            child: Image.asset(googleLoginIcon,
-                                width: size.height * 0.05)),
-                        Image.asset(appleLoginIcon, width: size.height * 0.05),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Image.asset(
-                            facebookLoginIcon,
-                            width: size.height * 0.05,
-                          ),
-                        ),
-                      ],
-                    )),
-                //
                 SizedBox(
                   height: size.height * 0.03,
                 ),

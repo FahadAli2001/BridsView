@@ -1,5 +1,6 @@
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/images.dart';
+import 'package:birds_view/views/home_screen/home_screem.dart';
 import 'package:birds_view/views/login_screen/login_screen.dart';
 import 'package:birds_view/views/signup_screen/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +122,10 @@ class _OnboardingThreeState extends State<OnboardingThree> {
             //
             Center(
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context, PageTransition(
+                    child: const HomeScreen(user: null), type: PageTransitionType.fade));
+                },
                 child: Text(
                   "continue as a Guest",
                   style: TextStyle(

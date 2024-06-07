@@ -1,9 +1,8 @@
+import 'package:birds_view/controller/reset_password_controller/verfiy_email_controller.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/images.dart';
-import 'package:birds_view/views/forgot_password_screen/otp_verification_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-
+import 'package:provider/provider.dart';
 import '../../widgets/custom_button/custom_button.dart';
 import '../../widgets/custom_textfield/custom_textfield.dart';
 
@@ -79,24 +78,34 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 height: size.height * 0.05,
               ),
               //
-              const CustomTextField(
-                  textEditingController: null,
-                  obsecure: false,
-                  hintText: 'Email',
-                  labelText: 'Email'),
-              SizedBox(
-                height: size.height * 0.1,
-              ),
-              //
-              CustomButton(
-                  text: 'Submit',
-                  ontap: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            child: const OtpVerificationScreen(),
-                            type: PageTransitionType.fade));
-                  })
+              Consumer<VerifyEmailController>(
+                builder: (context, value, child) {
+                  return Column(
+                    children: [
+                      CustomTextField(
+                          textEditingController: value.emailController,
+                          obsecure: false,
+                          hintText: 'Email',
+                          labelText: 'Email'),
+                      SizedBox(
+                        height: size.height * 0.1,
+                      ),
+                      //
+                      value.isChecking == true
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: primaryColor,
+                              ),
+                            )
+                          : CustomButton(
+                              text: 'Submit',
+                              ontap: () {
+                                value.verifyEmail(context);
+                              })
+                    ],
+                  );
+                },
+              )
             ],
           ),
         ),
