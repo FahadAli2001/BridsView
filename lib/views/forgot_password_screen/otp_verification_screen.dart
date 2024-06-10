@@ -1,10 +1,10 @@
+import 'package:birds_view/controller/reset_password_controller/reset_password.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/images.dart';
-import 'package:birds_view/views/forgot_password_screen/change_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
-import 'package:page_transition/page_transition.dart';
-
+import 'package:provider/provider.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../../widgets/custom_button/custom_button.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
@@ -15,6 +15,31 @@ class OtpVerificationScreen extends StatefulWidget {
 }
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
+  late final StopWatchTimer _stopWatchTimer;
+
+  @override
+  void initState() {
+    final resetPasswordController =
+        Provider.of<ResetPasswordController>(context, listen: false);
+    super.initState();
+    _stopWatchTimer = StopWatchTimer(
+      mode: StopWatchMode.countDown,
+      presetMillisecond: 300000,
+      onChange: (value) {},
+      onEnded: () {
+        resetPasswordController.isCountDownDone = true;
+      },
+    );
+
+    _stopWatchTimer.onStartTimer();
+  }
+
+  @override
+  void dispose() async {
+    super.dispose();
+    await _stopWatchTimer.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
@@ -68,31 +93,52 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-
               //
-              OtpTextField(
-                textStyle: const TextStyle(color: Colors.white60),
-                numberOfFields: 6,
-                borderColor: primaryColor,
-                focusedBorderColor: primaryColor,
-                showFieldAsBox: false,
-                onCodeChanged: (String code) {},
-                onSubmit: (String verificationCode) {},
+              StreamBuilder<int>(
+                stream: _stopWatchTimer.rawTime,
+                initialData: _stopWatchTimer.rawTime.value,
+                builder: (context, snapshot) {
+                  final value = snapshot.data!;
+                  final displayTime = StopWatchTimer.getDisplayTime(value,
+                      hours: false, milliSecond: false);
+                  return Text(displayTime,
+                      style: TextStyle(
+                          fontSize: size.height * 0.03, color: primaryColor));
+                },
               ),
               //
               SizedBox(
-                height: size.height * 0.1,
+                height: size.height * 0.02,
               ),
-
-              CustomButton(
-                  text: 'Verify',
-                  ontap: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            child: const ChangePaasswordScreen(),
-                            type: PageTransitionType.fade));
-                  })
+              //
+              Consumer<ResetPasswordController>(
+                builder: (context, value, child) {
+                  return Column(
+                    children: [
+                      OtpTextField(
+                        textStyle: const TextStyle(color: Colors.white60),
+                        numberOfFields: 6,
+                        borderColor: primaryColor,
+                        focusedBorderColor: primaryColor,
+                        showFieldAsBox: false,
+                        onCodeChanged: (String code) {},
+                        onSubmit: (String verificationCode) {
+                          value.otp = verificationCode;
+                        },
+                      ),
+                      SizedBox(
+                        height: size.height * 0.1,
+                      ),
+                      CustomButton(
+                          text: 'Verify',
+                          ontap: () {
+                            value.checkOtpConditions(context);
+                          })
+                    ],
+                  );
+                },
+              ),
+              //
             ],
           ),
         ),

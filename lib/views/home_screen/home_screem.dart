@@ -5,6 +5,7 @@ import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/detail_screen/detail_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:page_transition/page_transition.dart';
@@ -96,15 +97,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         child: Row(
                           children: [
-                            CircleAvatar(
-                              backgroundColor: primaryColor,
-                              child: const Center(
-                                child: Icon(
-                                  Icons.person,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
+                            widget.user == null || widget.user!.data!.image == ' '
+                                  ? CircleAvatar(
+                                      backgroundColor: primaryColor,
+                                      child:const Center(
+                                        child: Icon(
+                                          Icons.person,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    )
+                                  : CircleAvatar(
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(widget.user!.data!.image!),
+                                    ),
                             SizedBox(
                               width: size.width * 0.04,
                             ),

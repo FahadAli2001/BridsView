@@ -1,4 +1,4 @@
-import 'package:birds_view/controller/reset_password_controller/verfiy_email_controller.dart';
+import 'package:birds_view/controller/reset_password_controller/reset_password.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/images.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +78,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 height: size.height * 0.05,
               ),
               //
-              Consumer<VerifyEmailController>(
+              Consumer<ResetPasswordController>(
                 builder: (context, value, child) {
                   return Column(
                     children: [

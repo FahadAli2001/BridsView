@@ -1,9 +1,8 @@
+import 'package:birds_view/controller/reset_password_controller/reset_password.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/images.dart';
-import 'package:birds_view/views/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-
+import 'package:provider/provider.dart';
 import '../../widgets/custom_button/custom_button.dart';
 import '../../widgets/custom_textfield/custom_textfield.dart';
 
@@ -62,32 +61,43 @@ class _ChangePaasswordScreenState extends State<ChangePaasswordScreen> {
               ),
 
               //
-              const CustomTextField(
-                  textEditingController: null,
-                  obsecure: true,
-                  hintText: 'New Password',
-                  labelText: 'New Password'),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              //
-              const CustomTextField(
-                  textEditingController: null,
-                  obsecure: true,
-                  hintText: 'Confirm Password',
-                  labelText: 'Confirm Password'),
-              SizedBox(
-                height: size.height * 0.1,
-              ),
-              CustomButton(
-                  text: 'Confirm',
-                  ontap: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            child: const LogInScreen(),
-                            type: PageTransitionType.fade));
-                  })
+              Consumer<ResetPasswordController>(
+                builder: (context, value, child) {
+                  return Column(
+                    children: [
+                      CustomTextField(
+                          textEditingController: value.newPasswordController,
+                          obsecure: true,
+                          hintText: 'New Password',
+                          labelText: 'New Password'),
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                      //
+                      CustomTextField(
+                          textEditingController:
+                              value.confirmPasswordController,
+                          obsecure: true,
+                          hintText: 'Confirm Password',
+                          labelText: 'Confirm Password'),
+                      SizedBox(
+                        height: size.height * 0.1,
+                      ),
+                      value.isChangingPassword == true
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: primaryColor,
+                              ),
+                            )
+                          : CustomButton(
+                              text: 'Confirm',
+                              ontap: () {
+                                value.checkChangePasswordConditions(context);
+                              })
+                    ],
+                  );
+                },
+              )
             ],
           ),
         ),
