@@ -1,11 +1,14 @@
+import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/edit_profile_screen/edit_profile_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final UserModel? user;
+  const ProfileScreen({super.key, this.user});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -40,17 +43,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(
               height: size.height * 0.05,
             ),
-            Center(
-              child: CircleAvatar(
-                radius: size.height * 0.07,
-                backgroundColor: primaryColor,
-                child: Icon(
-                  Icons.person,
-                  size: size.height * 0.05,
-                  color: Colors.black,
-                ),
-              ),
-            ),
+            widget.user == null || widget.user!.data!.image == ""
+                ? Center(
+                    child: CircleAvatar(
+                      radius: size.height * 0.07,
+                      backgroundColor: primaryColor,
+                      child: Icon(
+                        Icons.person,
+                        size: size.height * 0.05,
+                        color: Colors.black,
+                      ),
+                    ),
+                  )
+                : CircleAvatar(
+                    radius: size.height * 0.07,
+                    backgroundImage:
+                        CachedNetworkImageProvider(widget.user!.data!.image!),
+                  ),
             SizedBox(
               height: size.height * 0.01,
             ),
@@ -60,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   text: 'Guest ',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize:size.height * 0.03,
+                      fontSize: size.height * 0.03,
                       color: Colors.white),
                   children: [
                     TextSpan(
@@ -81,7 +90,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Navigator.push(
                       context,
                       PageTransition(
-                          child: const EditProfileScreen(),
+                          child:   EditProfileScreen(
+                            user: widget.user,
+                          ),
                           type: PageTransitionType.fade));
                 },
                 child: Text(

@@ -1,3 +1,5 @@
+import 'package:birds_view/controller/edit_profile_controller/edit_profile_controller.dart';
+import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/controller/reset_password_controller/reset_password.dart';
 import 'package:birds_view/controller/signup_controller/signup_controller.dart';
 import 'package:birds_view/utils/colors.dart';
@@ -22,7 +24,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginController()),
         ChangeNotifierProvider(create: (_) => SplashController()),
         ChangeNotifierProvider(create: (_)=> ResetPasswordController()),
-        ChangeNotifierProvider(create: (_) => SignUpController())
+        ChangeNotifierProvider(create: (_) => SignUpController()),
+        ChangeNotifierProvider(create: (_)=> EditProfileController()),
+        ChangeNotifierProvider(create: (_)=> MapsController())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

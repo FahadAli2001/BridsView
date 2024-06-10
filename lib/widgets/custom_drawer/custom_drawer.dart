@@ -1,17 +1,22 @@
+import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/views/bookmark_screen/bookmark_screen.dart';
+import 'package:birds_view/views/home_screen/home_screem.dart';
 import 'package:birds_view/views/login_screen/login_screen.dart';
+import 'package:birds_view/views/onboarding_screen/onboarding_one_screen.dart';
 import 'package:birds_view/views/profile_screen/profile_screen.dart';
 import 'package:birds_view/views/visited_bars/visited_bars.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  final UserModel? user;
+  const CustomDrawer({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +50,22 @@ class CustomDrawer extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  radius: size.height * 0.04,
-                  backgroundColor: primaryColor,
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.black,
-                  ),
-                ),
+                user == null || user!.data!.image == ' '
+                    ? CircleAvatar(
+                        radius: size.height * 0.04,
+                        backgroundColor: primaryColor,
+                        child: const Center(
+                          child: Icon(
+                            Icons.person,
+                            color: Colors.black,
+                          ),
+                        ),
+                      )
+                    : CircleAvatar(
+                        radius: size.height * 0.04,
+                        backgroundImage:
+                            CachedNetworkImageProvider(user!.data!.image!),
+                      ),
                 SizedBox(
                   width: size.width * 0.05,
                 ),
@@ -63,14 +76,18 @@ class CustomDrawer extends StatelessWidget {
                       width: size.width * 0.4,
                       child: RichText(
                         text: TextSpan(
-                          text: "Guest",
+                          text: user == null || user!.data!.firstName == ''
+                              ? "Guest "
+                              : '${user!.data!.firstName} ',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: size.height * 0.03,
                               color: Colors.white),
                           children: [
                             TextSpan(
-                              text: ' User',
+                              text: user == null || user!.data!.lastName == ''
+                                  ? "User"
+                                  : '${user!.data!.lastName} ',
                               style: TextStyle(
                                   fontSize: size.height * 0.03,
                                   color: primaryColor),
@@ -94,7 +111,11 @@ class CustomDrawer extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: HomeScreen(user: user),
+                        type: PageTransitionType.fade));
               },
               leading: SvgPicture.asset(
                 homeIcon,
@@ -112,7 +133,9 @@ class CustomDrawer extends StatelessWidget {
                 Navigator.push(
                     context,
                     PageTransition(
-                        child: const ProfileScreen(),
+                        child: ProfileScreen(
+                          user: user,
+                        ),
                         type: PageTransitionType.fade));
               },
               leading: SvgPicture.asset(
@@ -178,18 +201,31 @@ class CustomDrawer extends StatelessWidget {
             // ),
             const Spacer(),
 
-            CustomButton(
-                text: 'Log Out',
-                ontap: () async {
-                  SharedPreferences sp = await SharedPreferences.getInstance();
-                  sp.clear();
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      PageTransition(
-                          child: const LogInScreen(),
-                          type: PageTransitionType.fade),
-                      (route) => false);
-                })
+            user == null || user!.data!.id == null
+                ? CustomButton(
+                    text: 'Log In',
+                    ontap: () async {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          PageTransition(
+                              child: const LogInScreen(),
+                              type: PageTransitionType.fade),
+                          (route) => false);
+                    })
+                : CustomButton(
+                    text: 'Log Out',
+                    ontap: () async {
+                      SharedPreferences sp =
+                          await SharedPreferences.getInstance();
+
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          PageTransition(
+                              child: const OnboardingOneScreen(),
+                              type: PageTransitionType.fade),
+                          (route) => false);
+                      sp.clear();
+                    })
           ],
         ),
       ),

@@ -2,6 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	    <!-- Usage description for location access. -->
+    <key>NSLocationAlwaysAndWhenInUsageDescription</key>
+    <string>App app wants to access your location to get address</string>
+    
+    <!-- Another key for location access when in use. -->
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>App app wants to access your location to get address.</string>
+    
+    <!-- Another key for location access always. -->
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>App app wants to access your location to get address.</string>
+    
+    <!-- Usage description for location access when in use. -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>App wants to access your location to get address.</string>
+    
+    <!-- Usage description for photo library access. -->
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Need photo library access for selecting photos</string>
+
+	 <!-- Usage description for camera access. -->
+    <key>NSCameraUsageDescription</key>
+    <string>Need camera access for taking photos</string>
+	
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

@@ -1,8 +1,8 @@
+import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/views/onboarding_screen/onboarding_three_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 import '../../utils/images.dart';
 
@@ -104,15 +104,21 @@ class _OnboardTwoScreenState extends State<OnboardTwoScreen> {
             SizedBox(
               height: size.height * 0.05,
             ),
-            CustomButton(
-                text: 'Enable Your Location',
-                ontap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          child: const OnboardingThree(),
-                          type: PageTransitionType.fade));
-                })
+            Consumer<MapsController>(
+              builder: (context, value, child) {
+                return value.isGettingLocation == true
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      )
+                    : CustomButton(
+                        text: 'Enable Your Location',
+                        ontap: () {
+                          value.getCurrentLocation(context);
+                        });
+              },
+            )
           ],
         ),
       ),

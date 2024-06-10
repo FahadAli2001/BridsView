@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/images.dart';
@@ -9,6 +10,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../widgets/custom_drawer/custom_drawer.dart';
 import '../../widgets/custom_recommended_widget/custom_recommended_widget.dart';
@@ -44,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+
     isSearchBarOpen;
 
     _focusNode.addListener(() {
@@ -82,7 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: Colors.black,
             backgroundImage: AssetImage(appLogo),
           )),
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(
+        user: widget.user,
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -97,20 +103,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         child: Row(
                           children: [
-                            widget.user == null || widget.user!.data!.image == ' '
-                                  ? CircleAvatar(
-                                      backgroundColor: primaryColor,
-                                      child:const Center(
-                                        child: Icon(
-                                          Icons.person,
-                                          color: Colors.black,
-                                        ),
+                            widget.user == null ||
+                                    widget.user!.data!.image == ' '
+                                ? CircleAvatar(
+                                    backgroundColor: primaryColor,
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.person,
+                                        color: Colors.black,
                                       ),
-                                    )
-                                  : CircleAvatar(
-                                      backgroundImage:
-                                          CachedNetworkImageProvider(widget.user!.data!.image!),
                                     ),
+                                  )
+                                : CircleAvatar(
+                                    backgroundImage: CachedNetworkImageProvider(
+                                        widget.user!.data!.image!),
+                                  ),
                             SizedBox(
                               width: size.width * 0.04,
                             ),
@@ -171,56 +178,83 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: size.height * 0.03,
                   ),
-                  Container(
-                      width: size.width,
-                      height: size.height * 0.15,
-                      color: Colors.black,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: exploreBars.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        child: const DetailScreen(),
-                                        type: PageTransitionType.fade));
-                              },
-                              child: Container(
-                                width: size.width * 0.35,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: DecorationImage(
-                                    image: AssetImage(exploreBars[index]),
-                                    fit: BoxFit.fill,
-                                    colorFilter: ColorFilter.mode(
-                                      Colors.black.withOpacity(0.4),
-                                      BlendMode.darken,
+                  Consumer<MapsController>(
+                    builder: (context, value, child) {
+                      return FutureBuilder(
+                        future: value.exploreNearbyBars(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Shimmer.fromColors(
+                              baseColor: Colors.grey.shade800,
+                              highlightColor: Colors.grey.shade700,
+                              child: Center(
+                                  child: Container(
+                                color: Colors.white,
+                                width: size.width,
+                                height: size.height * 0.15,
+                              )),
+                            );
+                          }
+                          final bars = snapshot.data!.bars;
+                          return Container(
+                              width: size.width,
+                              height: size.height * 0.15,
+                              color: Colors.black,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: bars!.length ,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 5),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                child: const DetailScreen(),
+                                                type: PageTransitionType.fade));
+                                      },
+                                      child: Container(
+                                        width: size.width * 0.35,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                            image:
+                                                AssetImage(exploreBars[index]),
+                                            fit: BoxFit.fill,
+                                            colorFilter: ColorFilter.mode(
+                                              Colors.black.withOpacity(0.4),
+                                              BlendMode.darken,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Align(
+                                          alignment: Alignment.bottomLeft,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Text(
+                                              bars[index].name!,
+                                              maxLines: 2,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize:
+                                                      size.height * 0.016),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Text(
-                                      exploreBarNames[index],
-                                      maxLines: 2,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: size.height * 0.016),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
+                                  );
+                                },
+                              ));
                         },
-                      )),
+                      );
+                    },
+                  ),
                   SizedBox(
                     height: size.height * 0.025,
                   ),
