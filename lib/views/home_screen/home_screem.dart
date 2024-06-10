@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: Colors.black,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: bars!.length ,
+                                itemCount: bars.length ,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -236,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(8),
                                             child: Text(
-                                              bars[index].name!,
+                                              bars[index].name,
                                               maxLines: 2,
                                               style: TextStyle(
                                                   color: Colors.white,
