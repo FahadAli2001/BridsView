@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../widgets/custom_drawer/custom_drawer.dart';
 import '../../widgets/custom_recommended_widget/custom_recommended_widget.dart';
 import '../explore_screen/explore_screen.dart';
@@ -196,14 +194,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               )),
                             );
                           }
-                          final bars = snapshot.data!.bars;
+                          final bars = snapshot.data;
                           return Container(
                               width: size.width,
                               height: size.height * 0.15,
                               color: Colors.black,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: bars.length ,
+                                itemCount:bars!.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -223,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               BorderRadius.circular(10),
                                           image: DecorationImage(
                                             image:
-                                                AssetImage(exploreBars[index]),
+                                                 MemoryImage(value.exploreNearbyBarsImagesList[index]!),
                                             fit: BoxFit.fill,
                                             colorFilter: ColorFilter.mode(
                                               Colors.black.withOpacity(0.4),
@@ -236,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(8),
                                             child: Text(
-                                              bars[index].name,
+                                              bars[index].name ?? "UnKnown",
                                               maxLines: 2,
                                               style: TextStyle(
                                                   color: Colors.white,
