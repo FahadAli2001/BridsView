@@ -1,9 +1,15 @@
+import 'dart:typed_data';
+
+import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class CustomRecommendedWidget extends StatelessWidget {
-  const CustomRecommendedWidget({super.key});
+  final List<Results> recomendedBar ;
+  final int index;
+  final List<Uint8List?> recomdedBarsImages;
+  const CustomRecommendedWidget({super.key,required this.recomendedBar, required this.index, required this.recomdedBarsImages});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +21,8 @@ class CustomRecommendedWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Image.asset(
-              "assets/recomended_bar.png",
+            Image.memory(
+              recomdedBarsImages[index]!,
               height: size.height * 0.2,
               width: size.width * 0.8,
               fit: BoxFit.cover,
@@ -24,16 +30,19 @@ class CustomRecommendedWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Cubix Bar',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w900,
-                      fontSize: size.width * 0.03),
+                SizedBox(
+                  width: size.width * 0.5,
+                  child: Text(
+                    recomendedBar[index].name!,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w900,
+                        fontSize: size.width * 0.03),
+                  ),
                 ),
                 RatingBarIndicator(
                   unratedColor: Colors.grey,
-                  rating: 4.0,
+                  rating: recomendedBar[index].rating! * 1.0,
                   itemBuilder: (context, index) => Icon(
                     Icons.star,
                     color: primaryColor,

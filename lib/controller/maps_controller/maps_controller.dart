@@ -1,7 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
+import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
 import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
+import 'package:birds_view/utils/icons.dart';
+import 'package:custom_info_window/custom_info_window.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:birds_view/views/onboarding_screen/onboarding_three_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,9 +19,138 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MapsController extends ChangeNotifier {
   String googleAPiKey = "AIzaSyAl8_GZb77k5io7_DCkAFYJHgGqDnzeH2k";
-  List<Uint8List?> exploreNearbyBarsImagesList = [];
+  CustomInfoWindowController customInfoWindowController =
+      CustomInfoWindowController();
+  final Map<PolylineId, Polyline> _polylines = {};
+  final List<LatLng> _polylineCoordinates = [];
+  final PolylinePoints _polylinePoints = PolylinePoints();
+  final List<Marker> _markers = <Marker>[];
+  double? _lat;
+  double? _lon;
+
+  List<Marker> get markers => _markers;
+  Map<PolylineId, Polyline> get polylines => _polylines;
+  List<LatLng> get polylineCoordinates => _polylineCoordinates;
+  PolylinePoints get polylinePoints => _polylinePoints;
+
+  List<Uint8List?> exploreBarsImages = [];
+  List<Uint8List?> recomdedBarsImages = [];
+  List<Uint8List?> nearestBarsImages = [];
+  List<Rows> nearestBarsDistanceList = [];
+  List<Rows> exploreBarsDistanceList = [];
+  List<Rows> recomendedBarsDistanceList = [];
+
   bool _isGettingLocation = false;
   bool get isGettingLocation => _isGettingLocation;
+  double? get lat => _lat;
+  double? get lon => _lon;
+
+  Future<void> getCordinateds() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    _lat = double.parse(sp.getString('latitude')!);
+    _lon = double.parse(sp.getString('longitude')!);
+  }
+
+  loadData(lat, lon) async {
+    try {
+     
+      final Uint8List markerIcon =
+          await getUserImageFromAssets(currentLocationIcon, 150);
+
+      _markers.add(Marker(
+        markerId: const MarkerId("user"),
+        position: LatLng(lat, lon),
+        icon: BitmapDescriptor.fromBytes(markerIcon),
+      ));
+
+      // for (var i = 0; i < barAndClub.length; i++) {
+      //   List<Uint8List?> image = [];
+      //   image.clear();
+
+      //   // if (barAndClub[i]['photos'] != null &&
+      //   //     barAndClub[i]['photos'].isNotEmpty) {
+      //   //   var imageData = await getImageFromMap(
+      //   //       barAndClub[i]['photos'][0]['photo_reference']);
+      //   //   image.addAll(imageData);
+      //   // }
+
+      //   _markers.add(Marker(
+      //     markerId: MarkerId(i.toString()),
+      //     position: LatLng(barAndClub[i]['geometry']['location']['lat'],
+      //         barAndClub[i]['geometry']['location']['lng']),
+      //     icon: BitmapDescriptor.defaultMarker,
+      //     onTap: () {
+      //       // customInfoWindowController.addInfoWindow!(
+      //       //   Container(
+      //       //     color: Colors.white,
+      //       //     child: ListTile(
+      //       //       leading: image.length > i && image[i] != null
+      //       //           ? SizedBox(
+      //       //               width: 100,
+      //       //               height: 200,
+      //       //               child: Image.memory(
+      //       //                 image[i]!,
+      //       //                 fit: BoxFit.cover,
+      //       //               ),
+      //       //             )
+      //       //           : Image.network(barAndClub[i]
+      //       //               ['icon']), // Show nothing if image is not available
+
+      //       //       title: Text(
+      //       //         barAndClub[i]['name'] ?? '',
+      //       //         style: const TextStyle(
+      //       //           color: Colors.black,
+      //       //           fontSize: 14,
+      //       //           fontWeight: FontWeight.bold,
+      //       //         ),
+      //       //       ),
+      //       //       subtitle: Column(
+      //       //         crossAxisAlignment: CrossAxisAlignment.start,
+      //       //         children: [
+      //       //           RatingBarIndicator(
+      //       //             unratedColor: Colors.grey,
+      //       //             rating: barAndClub[i]['rating'] * 1.0 ?? '1.0',
+      //       //             itemBuilder: (context, index) => Icon(
+      //       //               Icons.star,
+      //       //               color: goldenColor,
+      //       //             ),
+      //       //             itemCount: 5,
+      //       //             itemSize: 15,
+      //       //             direction: Axis.horizontal,
+      //       //           ),
+      //       //           Text(
+      //       //             barAndClub[i]['vicinity'] ?? '',
+      //       //             style: const TextStyle(
+      //       //               color: Colors.black,
+      //       //               fontSize: 10,
+      //       //               fontWeight: FontWeight.bold,
+      //       //             ),
+      //       //           ),
+      //       //         ],
+      //       //       ),
+      //       //     ),
+      //       //   ),
+      //       //   LatLng(barAndClub[i]['geometry']['location']['lat'],
+      //       //       barAndClub[i]['geometry']['location']['lng']),
+      //       // );
+      //     },
+      //   ));
+      // }
+      notifyListeners();
+    } catch (e) {
+      log("$e load data");
+    }
+  }
+
+  Future<Uint8List> getUserImageFromAssets(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
 
   Future<void> getCurrentLocation(context) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -51,61 +187,182 @@ class MapsController extends ChangeNotifier {
     }
   }
 
-  Future<List<Results>> exploreNearbyBars() async {
-    List<Results> nearbyBars = [];
+  Future<List<Results>> exploreNearbyBarsMethod() async {
+    List<Results> exploreNearbyBars = [];
+
     try {
       SharedPreferences sp = await SharedPreferences.getInstance();
-      String latitude = sp.getString('latitude')!;
-      String longitude = sp.getString('longitude')!;
+      String latitude = sp.getString('latitude') ?? '';
+      String longitude = sp.getString('longitude') ?? '';
       String url =
           'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=3000&type=restaurant&key=$googleAPiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
         var list = values['results'] as List;
-        nearbyBars = list.map((i) => Results.fromJson(i)).toList();
+        exploreNearbyBars = list.map((i) => Results.fromJson(i)).toList();
 
-        for (var i = 0; i < nearbyBars.length; i++) {
-          List<Uint8List?> image = [];
-          image.clear();
+        for (var bar in exploreNearbyBars) {
+          if (bar.photos != null && bar.photos!.isNotEmpty) {
+            var exploreBardata =
+                await exploreImages(bar.photos![0].photoReference!);
+            var distanceData = await getDistanceBetweenPoints(
+                bar.geometry!.location!.lat.toString(),
+                bar.geometry!.location!.lng.toString(),
+                latitude,
+                longitude);
+            exploreBarsDistanceList.addAll(distanceData);
+            exploreBarsImages.addAll(exploreBardata);
+          }
+        }
+      } else {
+        log(response.body);
+      }
+    } catch (e) {
+      log(e.toString());
+    }
 
-          if (nearbyBars[i].photos != null &&
-              nearbyBars[i].photos!.isNotEmpty) {
-          await exploreNearbyBarsImages(
-                nearbyBars[i].photos![0].photoReference!);
-            
+    return exploreNearbyBars;
+  }
+
+  Future<List<Uint8List?>> exploreImages(String ref) async {
+    List<Uint8List?> exploreNearbyBarsImagesList = [];
+    try {
+      var response = await http.get(Uri.parse(
+          "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$ref&key=$googleAPiKey"));
+
+      if (response.statusCode == 200) {
+        var data = response.bodyBytes;
+        exploreNearbyBarsImagesList.add(data);
+
+        // log("Image retrieved successfully");
+      } else {
+        log("Image retrieval failed. Status Code: ${response.statusCode}");
+        log("Error Message: ${response.body}");
+      }
+    } catch (e) {
+      log("getImageFromMap error: $e");
+    }
+    notifyListeners();
+    return exploreNearbyBarsImagesList;
+  }
+
+  Future<List<Results>> recommendedBarsMethod() async {
+    List<Results> bars = [];
+    List<Results> recomnededBars = [];
+    try {
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      String latitude = sp.getString('latitude') ?? '';
+      String longitude = sp.getString('longitude') ?? '';
+      String url =
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1500&type=restaurant&key=$googleAPiKey';
+      http.Response response = await http.get(Uri.parse(url));
+      final values = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        var list = values['results'] as List;
+        bars = list.map((i) => Results.fromJson(i)).toList();
+
+        // Fetch images for the places
+        for (var bar in bars) {
+          if (bar.rating != null && bar.rating! >= 4.0) {
+            if (bar.photos != null && bar.photos!.isNotEmpty) {
+              var imageData =
+                  await exploreImages(bar.photos![0].photoReference!);
+              if (imageData.isNotEmpty) {
+                recomdedBarsImages.addAll(imageData);
+              }
+              var distanceData = await getDistanceBetweenPoints(
+                  bar.geometry!.location!.lat.toString(),
+                  bar.geometry!.location!.lng.toString(),
+                  latitude,
+                  longitude);
+              recomendedBarsDistanceList.addAll(distanceData);
+              recomnededBars.add(bar);
+            }
           }
         }
       }
     } catch (e) {
       log(e.toString());
     }
-    log(nearbyBars.length.toString());
-    return nearbyBars;
+
+    return recomnededBars;
   }
 
-  Future<List<Uint8List?>> exploreNearbyBarsImages(String ref) async {
+  Future<List<Rows>> getDistanceBetweenPoints(
+      String destinationLat, destinationLong, originLat, originLong) async {
+    List<Rows> distanceList = [];
     try {
       var response = await http.get(Uri.parse(
-          "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$ref&key=$googleAPiKey"));
+          'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$destinationLat,$destinationLong&origins=$originLat,$originLong&key=$googleAPiKey'));
+      var data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        var list = data['rows'] as List;
+        distanceList = list.map((i) => Rows.fromJson(i)).toList();
+      } else {}
+    } catch (e) {
+      log('error $e');
+    }
+
+    return distanceList;
+  }
+
+  Future<List<Results>> nearsetBarsMethod() async {
+    List<Results> nearestBars = [];
+
+    try {
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      String latitude = sp.getString('latitude') ?? '';
+      String longitude = sp.getString('longitude') ?? '';
+      String url =
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1500&type=restaurant&key=$googleAPiKey';
+      http.Response response = await http.get(Uri.parse(url));
+      final values = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        // Return the image data as a string
-        var data = response.bodyBytes;
-        exploreNearbyBarsImagesList.add(data);
-        // Log that image retrieval was successful
+        var list = values['results'] as List;
+        nearestBars = list.map((i) => Results.fromJson(i)).toList();
 
-        log("Image retrieved successfully");
+        for (var bar in nearestBars) {
+          if (bar.photos != null && bar.photos!.isNotEmpty) {
+            var nearestBardata =
+                await exploreImages(bar.photos![0].photoReference!);
+            nearestBarsImages.addAll(nearestBardata);
+          }
+          var distanceData = await getDistanceBetweenPoints(
+              bar.geometry!.location!.lat.toString(),
+              bar.geometry!.location!.lng.toString(),
+              latitude,
+              longitude);
+          nearestBarsDistanceList.addAll(distanceData);
+        }
       } else {
-        // Log the status code and body for debugging in case of an error
-        log("Image retrieval failed. Status Code: ${response.statusCode}");
-        log("Error Message: ${response.body}");
+        log("Error");
       }
     } catch (e) {
-      // Log any exceptions that occur during the image retrieval process
-      log("getImageFromMap error: $e");
+      log(e.toString());
     }
-    notifyListeners();
-    return exploreNearbyBarsImagesList;
+
+    return nearestBars;
+  }
+
+  Future<Result?> barsDetailMethod(String placeId) async {
+    Result? results;
+    try {
+      var response = await http.get(Uri.parse(
+          "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$googleAPiKey"));
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        var detailResponse = data['result'];
+        results = Result.fromJson(detailResponse as Map<String, dynamic>);
+      } else {
+        log(response.body);
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+    return results;
   }
 }

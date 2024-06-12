@@ -70,8 +70,12 @@ dependencies:
   # google maps
   google_maps_flutter: ^2.6.1
   geolocator: ^11.0.0
+  custom_info_window: ^1.0.1
+  flutter_polyline_points: ^2.0.0
   # shimmer
   shimmer: ^3.0.0
+  # url launcher
+  url_launcher: ^6.0.20
 
 dev_dependencies:
   flutter_test:

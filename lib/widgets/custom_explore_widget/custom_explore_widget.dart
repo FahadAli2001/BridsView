@@ -1,6 +1,4 @@
-import 'package:birds_view/views/detail_screen/detail_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 
 import '../../utils/icons.dart';
 
@@ -12,10 +10,10 @@ class CustomExploreWidget extends StatelessWidget {
     Size size = MediaQuery.sizeOf(context);
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            PageTransition(
-                child: const DetailScreen(), type: PageTransitionType.fade));
+        // Navigator.push(
+            // context,
+            // PageTransition(
+            //     child: const DetailScreen(), type: PageTransitionType.fade));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),

@@ -14,3 +14,5 @@ String musicIcon = "assets/music.svg";
 String locationIcon = "assets/location_icon.svg";
 String shareIcon = "assets/share_icon.svg";
 String exploreIcon = "assets/explore_icon.png";
+String watchIcon = "assets/watch_icon.svg";
+String currentLocationIcon = "assets/current_location_icon.png";

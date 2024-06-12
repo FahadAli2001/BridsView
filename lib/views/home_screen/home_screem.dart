@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
@@ -11,6 +12,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../model/bars_distance_model/bars_distance_model.dart';
+import '../../model/nearby_bars_model/nearby_bars_model.dart';
 import '../../widgets/custom_drawer/custom_drawer.dart';
 import '../../widgets/custom_recommended_widget/custom_recommended_widget.dart';
 import '../explore_screen/explore_screen.dart';
@@ -26,17 +29,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FocusNode _focusNode = FocusNode();
-  final List<String> exploreBars = [
-    "assets/explore_bar1.png",
-    "assets/explore_bar2.png",
-    "assets/explore_bar3.png"
-  ];
-  final List<String> exploreBarNames = ['Cubix Bar', 'Ruby Bar', 'Cubix Bar'];
+  List<Uint8List?> exploreBarsImages = [];
+  List<Results> exploreBar = [];
+  List<Results> recomendedBarList = [];
+  List<Uint8List?> recomdedBarsImages = [];
+  List<Results> nearestBarList = [];
+  List<Uint8List?> nearestBarsImages = [];
+  List<Rows> nearsetBarsDistanceList = [];
+  List<Rows> exploreBarsDistanceList = [];
+  List<Rows> recomendedBarsDistanceList = [];
 
-  final List<String> nearestBars = [
-    'assets/nearest_bar1.png',
-    'assets/nearest_bar2.png',
-  ];
+   
 
   bool isSearchBarOpen = false;
   bool isReview = true;
@@ -45,7 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
+    exploreBarByMap();
+    recomendedBars();
+    nearestBar();
     isSearchBarOpen;
 
     _focusNode.addListener(() {
@@ -60,6 +65,36 @@ class _HomeScreenState extends State<HomeScreen> {
     _focusNode.dispose();
 
     super.dispose();
+  }
+
+  Future<void> exploreBarByMap() async {
+    final mapController = Provider.of<MapsController>(context, listen: false);
+
+    var data = await mapController.exploreNearbyBarsMethod();
+    exploreBar.addAll(data as Iterable<Results>);
+    exploreBarsImages = mapController.exploreBarsImages;
+    exploreBarsDistanceList = mapController.exploreBarsDistanceList;
+    setState(() {});
+  }
+
+  Future<void> nearestBar() async {
+    final mapController = Provider.of<MapsController>(context, listen: false);
+
+    var data = await mapController.nearsetBarsMethod();
+    nearestBarList.addAll(data as Iterable<Results>);
+    nearestBarsImages = mapController.nearestBarsImages;
+    nearsetBarsDistanceList = mapController.nearestBarsDistanceList;
+    setState(() {});
+  }
+
+  Future<void> recomendedBars() async {
+    final mapController = Provider.of<MapsController>(context, listen: false);
+
+    var data = await mapController.recommendedBarsMethod();
+    recomendedBarList.addAll(data as Iterable<Results>);
+    recomdedBarsImages = mapController.recomdedBarsImages;
+    recomendedBarsDistanceList = mapController.recomendedBarsDistanceList;
+    setState(() {});
   }
 
   @override
@@ -176,83 +211,74 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: size.height * 0.03,
                   ),
-                  Consumer<MapsController>(
-                    builder: (context, value, child) {
-                      return FutureBuilder(
-                        future: value.exploreNearbyBars(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Shimmer.fromColors(
-                              baseColor: Colors.grey.shade800,
-                              highlightColor: Colors.grey.shade700,
-                              child: Center(
+                  exploreBar.isEmpty
+                      ? Shimmer.fromColors(
+                          baseColor: Colors.grey.shade800,
+                          highlightColor: Colors.grey.shade700,
+                          child: Center(
+                              child: Container(
+                            color: Colors.white,
+                            width: size.width,
+                            height: size.height * 0.15,
+                          )),
+                        )
+                      : Container(
+                          width: size.width,
+                          height: size.height * 0.15,
+                          color: Colors.black,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: exploreBar.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            child:   DetailScreen(
+                                              barDetail: exploreBar,
+                                              index: index,
+                                              barImages:exploreBarsImages,
+                                              distance: exploreBarsDistanceList,
+                                            ),
+                                            type: PageTransitionType.fade));
+                                  },
                                   child: Container(
-                                color: Colors.white,
-                                width: size.width,
-                                height: size.height * 0.15,
-                              )),
-                            );
-                          }
-                          final bars = snapshot.data;
-                          return Container(
-                              width: size.width,
-                              height: size.height * 0.15,
-                              color: Colors.black,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount:bars!.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            PageTransition(
-                                                child: const DetailScreen(),
-                                                type: PageTransitionType.fade));
-                                      },
-                                      child: Container(
-                                        width: size.width * 0.35,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          image: DecorationImage(
-                                            image:
-                                                 MemoryImage(value.exploreNearbyBarsImagesList[index]!),
-                                            fit: BoxFit.fill,
-                                            colorFilter: ColorFilter.mode(
-                                              Colors.black.withOpacity(0.4),
-                                              BlendMode.darken,
-                                            ),
-                                          ),
-                                        ),
-                                        child: Align(
-                                          alignment: Alignment.bottomLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8),
-                                            child: Text(
-                                              bars[index].name ?? "UnKnown",
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize:
-                                                      size.height * 0.016),
-                                            ),
-                                          ),
+                                    width: size.width * 0.35,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                        image: MemoryImage(
+                                            exploreBarsImages[index]!),
+                                        fit: BoxFit.cover,
+                                        colorFilter: ColorFilter.mode(
+                                          Colors.black.withOpacity(0.4),
+                                          BlendMode.darken,
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
-                              ));
-                        },
-                      );
-                    },
-                  ),
+                                    child: Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Text(
+                                          exploreBar[index].name ?? "UnKnown",
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: size.height * 0.016),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          )),
                   SizedBox(
                     height: size.height * 0.025,
                   ),
@@ -269,26 +295,46 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  Container(
-                    width: size.width,
-                    height: size.height * 0.25,
-                    color: Colors.black,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 3,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      child: const DetailScreen(),
-                                      type: PageTransitionType.fade));
+                  recomendedBarList.isEmpty
+                      ? Shimmer.fromColors(
+                          baseColor: Colors.grey.shade800,
+                          highlightColor: Colors.grey.shade700,
+                          child: Center(
+                              child: Container(
+                            color: Colors.white,
+                            width: size.width,
+                            height: size.height * 0.25,
+                          )),
+                        )
+                      : Container(
+                          width: size.width,
+                          height: size.height * 0.25,
+                          color: Colors.black,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: recomendedBarList.length,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            child:   DetailScreen(
+                                              barDetail: recomendedBarList,
+                                              index: index,
+                                              barImages: recomdedBarsImages,
+                                              distance:recomendedBarsDistanceList,
+                                            ),
+                                            type: PageTransitionType.fade));
+                                  },
+                                  child: CustomRecommendedWidget(
+                                    recomendedBar: recomendedBarList,
+                                    index: index,
+                                    recomdedBarsImages: recomdedBarsImages,
+                                  ));
                             },
-                            child: const CustomRecommendedWidget());
-                      },
-                    ),
-                  ),
+                          ),
+                        ),
                   SizedBox(
                     height: size.height * 0.02,
                   ),
@@ -305,13 +351,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  Container(
+              nearestBarList.isEmpty ? 
+               Shimmer.fromColors(
+                          baseColor: Colors.grey.shade800,
+                          highlightColor: Colors.grey.shade700,
+                          child: Center(
+                              child: Container(
+                            color: Colors.white,
+                            width: size.width,
+                            height: size.height * 0.2,
+                          )),
+                        )
+              :    Container(
                     width: size.width,
                     height: size.height * 0.2,
                     color: Colors.black,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: nearestBars.length,
+                      itemCount: nearestBarList.length,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -320,7 +377,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               Navigator.push(
                                   context,
                                   PageTransition(
-                                      child: const DetailScreen(),
+                                      child:   DetailScreen(
+                                        index: index,
+                                        barDetail: nearestBarList,
+                                        barImages: nearestBarsImages,
+                                        distance: nearsetBarsDistanceList,
+                                      ),
                                       type: PageTransitionType.fade));
                             },
                             child: SizedBox(
@@ -329,8 +391,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Image.asset(
-                                    nearestBars[index],
+                                  Image.memory(
+                                    nearestBarsImages[index]!,
                                     height: size.height * 0.15,
                                     width: size.width * 0.5,
                                     fit: BoxFit.fitWidth,
@@ -339,12 +401,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        'Cubix Bar',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: size.width * 0.03),
+                                      SizedBox(
+                                        width: size.width*0.25,
+                                        child: Text(
+                                          nearestBarList[index].name!,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.visible,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: size.width * 0.03),
+                                        ),
                                       ),
                                       SizedBox(
                                         child: Row(
@@ -355,7 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               size: size.width * 0.04,
                                             ),
                                             Text(
-                                              "1.5 KM",
+                                              nearsetBarsDistanceList[index].elements![0].distance!.text!,
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: size.width * 0.027),
