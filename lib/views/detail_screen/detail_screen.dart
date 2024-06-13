@@ -69,7 +69,11 @@ class _DetailScreenState extends State<DetailScreen> {
               Navigator.push(
                   context,
                   PageTransition(
-                      child: const MapScreen(), type: PageTransitionType.fade));
+                      child: MapScreen(
+                        bar: widget.barDetail,
+                        index: widget.index,
+                      ),
+                      type: PageTransitionType.fade));
             }),
       ),
       appBar: AppBar(
@@ -206,48 +210,50 @@ class _DetailScreenState extends State<DetailScreen> {
                       height: size.height * 0.01,
                     ),
                     //
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              locationIcon,
-                              height: size.height * 0.02,
-                            ),
-                            SizedBox(
-                              width: size.width * 0.03,
-                            ),
-                            Text(
-                              widget.distance[widget.index].elements![0]
-                                  .distance!.text
-                                  .toString(),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            SizedBox(
-                              width: size.width * 0.1,
-                            ),
-                            SvgPicture.asset(
-                              watchIcon,
-                              height: size.height * 0.02,
-                            ),
-                            SizedBox(
-                              width: size.width * 0.03,
-                            ),
-                            Text(
-                              widget.distance[widget.index].elements![0]
-                                  .duration!.text
-                                  .toString(),
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                        // GestureDetector(
-                        //     onTap: () {},
-                        //     child: Image.asset(twitterLink,
-                        //         width: size.height * 0.04))
-                      ],
-                    ),
+                    widget.distance[widget.index].elements == null
+                        ? const Text('')
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    locationIcon,
+                                    height: size.height * 0.02,
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.03,
+                                  ),
+                                  Text(
+                                    widget.distance[widget.index].elements![0]
+                                        .distance!.text
+                                        .toString(),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.1,
+                                  ),
+                                  SvgPicture.asset(
+                                    watchIcon,
+                                    height: size.height * 0.02,
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.03,
+                                  ),
+                                  Text(
+                                    widget.distance[widget.index].elements![0]
+                                        .duration!.text
+                                        .toString(),
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                              // GestureDetector(
+                              //     onTap: () {},
+                              //     child: Image.asset(twitterLink,
+                              //         width: size.height * 0.04))
+                            ],
+                          ),
                     //
                     SizedBox(
                       height: size.height * 0.02,

@@ -1,19 +1,43 @@
+import 'dart:developer';
+import 'dart:typed_data';
+import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
+import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
 import 'package:flutter/material.dart';
-
+import 'package:page_transition/page_transition.dart';
+import '../../model/bar_details_model/bar_details_model.dart';
 import '../../utils/icons.dart';
+import '../../views/detail_screen/detail_screen.dart';
 
 class CustomExploreWidget extends StatelessWidget {
-  const CustomExploreWidget({super.key});
+  final List<Uint8List?> barsOrClubsImages;
+  final List<Results> barsOrClubsData;
+  final List<Rows> barsOrClubsDistanceList;
+  final List<Result> barAndClubsDetails;
+  final int index;
+  const CustomExploreWidget(
+      {super.key,
+      required this.barsOrClubsImages,
+      required this.barsOrClubsData,
+      required this.barsOrClubsDistanceList,
+      required this.index,
+      required this.barAndClubsDetails});
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-            // context,
-            // PageTransition(
-            //     child: const DetailScreen(), type: PageTransitionType.fade));
+        log("Index : $index");
+        Navigator.push(
+            context,
+            PageTransition(
+                child: DetailScreen(
+                  barDetail: barsOrClubsData,
+                  index: index,
+                  barImages: barsOrClubsImages,
+                  distance: barsOrClubsDistanceList,
+                ),
+                type: PageTransitionType.fade));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -25,11 +49,11 @@ class CustomExploreWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               image: DecorationImage(
                   colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.4),
+                    Colors.black.withOpacity(0.3),
                     BlendMode.darken,
                   ),
-                  image: const AssetImage("assets/recomended_bar.png"),
-                  fit: BoxFit.fill),
+                  image: MemoryImage(barsOrClubsImages[index]!),
+                  fit: BoxFit.cover),
             ),
             child: Stack(
               children: [
@@ -44,36 +68,49 @@ class CustomExploreWidget extends StatelessWidget {
                           image: AssetImage(
                             exploreIcon,
                           ),
-                          fit: BoxFit.fill),
+                          fit: BoxFit.cover),
                     ),
                   ),
                 ),
                 Positioned(
                     bottom: size.height * 0.1,
                     left: size.height * 0.03,
-                    child: Text(
-                      "Cubix Bar",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: size.height * 0.035),
+                    child: SizedBox(
+                      width: size.width * 0.85,
+                      child: Text(
+                        barsOrClubsData[index].name ?? "",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: size.height * 0.03),
+                      ),
                     )),
                 //
                 Positioned(
-                    bottom: size.height * 0.03,
+                    bottom: size.height * 0.04,
                     left: size.height * 0.03,
                     child: SizedBox(
                       width: size.width * 0.8,
                       // height: size.height * 0.03,
-                      child: Text(
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: size.height * 0.02),
-                      ),
+                      child: barAndClubsDetails[index].editorialSummary == null
+                          ? Text(
+                              barAndClubsDetails[index].formattedAddress ?? " ",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.height * 0.018),
+                            )
+                          : Text(
+                              barAndClubsDetails[index]
+                                  .editorialSummary!
+                                  .overview!,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.height * 0.018),
+                            ),
                     ))
               ],
             )),

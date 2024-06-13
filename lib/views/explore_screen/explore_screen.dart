@@ -1,6 +1,14 @@
+import 'dart:developer';
+import 'dart:typed_data';
 import 'dart:ui';
+import 'package:birds_view/controller/maps_controller/maps_controller.dart';
+import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
+import '../../model/bars_distance_model/bars_distance_model.dart';
+import '../../model/nearby_bars_model/nearby_bars_model.dart';
 import '../../widgets/custom_explore_widget/custom_explore_widget.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -11,8 +19,49 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
+  List<Uint8List?> barsOrClubsImages = [];
+  List<Results> barsOrClubsData = [];
+  List<Rows> barsOrClubsDistanceList = [];
+  List<Result> barsOrClubsDetail = [];
   bool isSearchBarOpen = false;
   bool isClubs = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getBarsAndClubs('restaurant');
+  }
+
+  void clearList(){
+    barsOrClubsData.clear();
+    barsOrClubsImages.clear();
+    barsOrClubsDistanceList.clear();
+    barsOrClubsDetail.clear();
+  }
+  Future<void> getBarsAndClubs(String type) async {
+    clearList();
+    
+    final mapController = Provider.of<MapsController>(context, listen: false);
+    mapController.barsAndClubImages.clear();
+    mapController.barsAndClubImages.clear();
+    var data = await mapController.exploreBarsOrClubs(type);
+
+    barsOrClubsData.addAll(data as Iterable<Results>);
+    barsOrClubsImages = mapController.barsAndClubImages;
+    barsOrClubsDistanceList = mapController.barsAndClubsDistanceList;
+
+    for (var i = 0; i < barsOrClubsData.length; i++) {
+      var detail =
+          await mapController.barsDetailMethod(barsOrClubsData[i].reference!);
+      barsOrClubsDetail.add(detail!);
+    }
+    log(barsOrClubsData.length.toString());
+    log(barsOrClubsImages.length.toString());
+    log(barsOrClubsDistanceList.length.toString());
+    log(barsOrClubsDetail.length.toString());
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
@@ -21,7 +70,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         backgroundColor: Colors.black,
         leading: GestureDetector(
             onTap: () {
-             Navigator.pop(context);
+              Navigator.pop(context);
             },
             child: const Icon(
               Icons.arrow_back_ios,
@@ -59,12 +108,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
               Column(
                 children: [
                   Row(
-               
                     children: [
                       Expanded(
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
+                            clearList();
+                            getBarsAndClubs('restaurant');
                             setState(() {
                               isClubs = true;
                             });
@@ -93,6 +143,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         flex: 1,
                         child: GestureDetector(
                           onTap: () {
+                            clearList();
+                            getBarsAndClubs('restaurant');
                             setState(() {
                               isClubs = false;
                             });
@@ -123,23 +175,50 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     height: size.height * 0.03,
                   ),
 
-                  isClubs == true
-                      ? Expanded(
-                          child: ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            itemCount: 5,
-                            itemBuilder: (context, index) {
-                              return const CustomExploreWidget();
-                            },
-                          ),
+                  barsOrClubsData.isEmpty
+                      ? Shimmer.fromColors(
+                          baseColor: Colors.grey.shade800,
+                          highlightColor: Colors.grey.shade700,
+                          child: Center(
+                              child: Container(
+                            color: Colors.white,
+                            width: size.width,
+                            height: size.height * 0.3,
+                          )),
                         )
-                      : Expanded(
-                          child: ListView.builder(
-                          itemCount: 5,
-                          itemBuilder: (context, index) {
-                            return const CustomExploreWidget();
-                          },
-                        ))
+                      : isClubs == true
+                          ? Expanded(
+                              child: ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                itemCount: barsOrClubsData.length,
+                                itemBuilder: (context, index) {
+                                  return CustomExploreWidget(
+                                    barsOrClubsImages: barsOrClubsImages,
+                                    barsOrClubsData: barsOrClubsData,
+                                    barsOrClubsDistanceList:
+                                        barsOrClubsDistanceList,
+                                    index: index,
+                                    barAndClubsDetails: barsOrClubsDetail,
+                                  );
+                                },
+                              ),
+                            )
+                          : Expanded(
+                              child:
+                               ListView.builder(
+                              itemCount: barsOrClubsData.length,
+                              itemBuilder: (context, index) {
+                                return CustomExploreWidget(
+                                  barsOrClubsImages: barsOrClubsImages,
+                                  barsOrClubsData: barsOrClubsData,
+                                  barsOrClubsDistanceList:
+                                      barsOrClubsDistanceList,
+                                  index: index,
+                                  barAndClubsDetails: barsOrClubsDetail,
+                                );
+                              },
+                            )
+                            )
                 ],
               ),
               //
@@ -164,7 +243,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   scrollDirection: Axis.vertical,
                                   itemCount: 5,
                                   itemBuilder: (context, index) {
-                                    return const CustomExploreWidget();
+                                    return CustomExploreWidget(
+                                      barsOrClubsImages: barsOrClubsImages,
+                                      barsOrClubsData: barsOrClubsData,
+                                      barsOrClubsDistanceList:
+                                          barsOrClubsDistanceList,
+                                      index: index,
+                                      barAndClubsDetails: barsOrClubsDetail,
+                                    );
                                   },
                                 ),
                               ),

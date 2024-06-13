@@ -219,6 +219,7 @@ class CustomDrawer extends StatelessWidget {
                           await SharedPreferences.getInstance();
 
                       Navigator.pushAndRemoveUntil(
+                          // ignore: use_build_context_synchronously
                           context,
                           PageTransition(
                               child: const OnboardingOneScreen(),

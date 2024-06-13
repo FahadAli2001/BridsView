@@ -4,14 +4,15 @@ import 'dart:ui' as ui;
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
 import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
+import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:birds_view/views/onboarding_screen/onboarding_three_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:page_transition/page_transition.dart';
@@ -27,15 +28,19 @@ class MapsController extends ChangeNotifier {
   final List<Marker> _markers = <Marker>[];
   double? _lat;
   double? _lon;
+  bool _isGettingDirection = false;
 
   List<Marker> get markers => _markers;
   Map<PolylineId, Polyline> get polylines => _polylines;
   List<LatLng> get polylineCoordinates => _polylineCoordinates;
   PolylinePoints get polylinePoints => _polylinePoints;
+  bool get isGettingDirection => _isGettingDirection;
 
   List<Uint8List?> exploreBarsImages = [];
+  List<Uint8List?> barsAndClubImages = [];
   List<Uint8List?> recomdedBarsImages = [];
   List<Uint8List?> nearestBarsImages = [];
+  List<Rows> barsAndClubsDistanceList = [];
   List<Rows> nearestBarsDistanceList = [];
   List<Rows> exploreBarsDistanceList = [];
   List<Rows> recomendedBarsDistanceList = [];
@@ -51,9 +56,11 @@ class MapsController extends ChangeNotifier {
     _lon = double.parse(sp.getString('longitude')!);
   }
 
-  loadData(lat, lon) async {
+  loadData(lat, lon, List<Results> selectedBar, int index, context) async {
+    List<Results> nearestBars = [];
+    var nearestBar = await nearsetBarsMethod();
+    nearestBars.addAll(nearestBar);
     try {
-     
       final Uint8List markerIcon =
           await getUserImageFromAssets(currentLocationIcon, 150);
 
@@ -63,83 +70,133 @@ class MapsController extends ChangeNotifier {
         icon: BitmapDescriptor.fromBytes(markerIcon),
       ));
 
-      // for (var i = 0; i < barAndClub.length; i++) {
-      //   List<Uint8List?> image = [];
-      //   image.clear();
+      _markers.add(Marker(
+        markerId: const MarkerId("bar"),
+        position: LatLng(selectedBar[index].geometry!.location!.lat!,
+            selectedBar[index].geometry!.location!.lng!),
+        icon: BitmapDescriptor.defaultMarker,
+      ));
 
-      //   // if (barAndClub[i]['photos'] != null &&
-      //   //     barAndClub[i]['photos'].isNotEmpty) {
-      //   //   var imageData = await getImageFromMap(
-      //   //       barAndClub[i]['photos'][0]['photo_reference']);
-      //   //   image.addAll(imageData);
-      //   // }
-
-      //   _markers.add(Marker(
-      //     markerId: MarkerId(i.toString()),
-      //     position: LatLng(barAndClub[i]['geometry']['location']['lat'],
-      //         barAndClub[i]['geometry']['location']['lng']),
-      //     icon: BitmapDescriptor.defaultMarker,
-      //     onTap: () {
-      //       // customInfoWindowController.addInfoWindow!(
-      //       //   Container(
-      //       //     color: Colors.white,
-      //       //     child: ListTile(
-      //       //       leading: image.length > i && image[i] != null
-      //       //           ? SizedBox(
-      //       //               width: 100,
-      //       //               height: 200,
-      //       //               child: Image.memory(
-      //       //                 image[i]!,
-      //       //                 fit: BoxFit.cover,
-      //       //               ),
-      //       //             )
-      //       //           : Image.network(barAndClub[i]
-      //       //               ['icon']), // Show nothing if image is not available
-
-      //       //       title: Text(
-      //       //         barAndClub[i]['name'] ?? '',
-      //       //         style: const TextStyle(
-      //       //           color: Colors.black,
-      //       //           fontSize: 14,
-      //       //           fontWeight: FontWeight.bold,
-      //       //         ),
-      //       //       ),
-      //       //       subtitle: Column(
-      //       //         crossAxisAlignment: CrossAxisAlignment.start,
-      //       //         children: [
-      //       //           RatingBarIndicator(
-      //       //             unratedColor: Colors.grey,
-      //       //             rating: barAndClub[i]['rating'] * 1.0 ?? '1.0',
-      //       //             itemBuilder: (context, index) => Icon(
-      //       //               Icons.star,
-      //       //               color: goldenColor,
-      //       //             ),
-      //       //             itemCount: 5,
-      //       //             itemSize: 15,
-      //       //             direction: Axis.horizontal,
-      //       //           ),
-      //       //           Text(
-      //       //             barAndClub[i]['vicinity'] ?? '',
-      //       //             style: const TextStyle(
-      //       //               color: Colors.black,
-      //       //               fontSize: 10,
-      //       //               fontWeight: FontWeight.bold,
-      //       //             ),
-      //       //           ),
-      //       //         ],
-      //       //       ),
-      //       //     ),
-      //       //   ),
-      //       //   LatLng(barAndClub[i]['geometry']['location']['lat'],
-      //       //       barAndClub[i]['geometry']['location']['lng']),
-      //       // );
-      //     },
-      //   ));
-      // }
+      for (var i = 0; i < nearestBars.length; i++) {
+        _markers.add(Marker(
+          markerId: MarkerId(i.toString()),
+          position: LatLng(nearestBars[i].geometry!.location!.lat!,
+              nearestBars[i].geometry!.location!.lng!),
+          icon: BitmapDescriptor.defaultMarker,
+          onTap: () {
+            customInfoWindowController.addInfoWindow!(
+              GestureDetector(
+                onTap: () {
+                  clearPolylines();
+                  getPolyline(nearestBar, i);
+                },
+                child: Container(
+                    color: Colors.white,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          height: 200,
+                          child: Image.memory(
+                            nearestBarsImages[i]!,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: Text(
+                                nearestBar[i].name ?? '',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            RatingBarIndicator(
+                              unratedColor: Colors.grey,
+                              rating: nearestBar[i].rating! * 1.0,
+                              itemBuilder: (context, index) => Icon(
+                                Icons.star,
+                                color: primaryColor,
+                              ),
+                              itemCount: 5,
+                              itemSize: 15,
+                              direction: Axis.horizontal,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: Text(
+                                nearestBars[i].vicinity ?? '',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
+              ),
+              LatLng(nearestBars[i].geometry!.location!.lat!,
+                  nearestBars[i].geometry!.location!.lng!),
+            );
+          },
+        ));
+      }
       notifyListeners();
     } catch (e) {
       log("$e load data");
     }
+  }
+
+  _addPolyLine() {
+    PolylineId id = const PolylineId("poly");
+    Polyline polyline = Polyline(
+      jointType: JointType.bevel,
+      endCap: Cap.roundCap,
+      geodesic: true,
+        polylineId: id,
+        color: Colors.blue.shade800,
+        points: _polylineCoordinates);
+    _polylines[id] = polyline;
+    notifyListeners();
+  }
+
+  getPolyline(List<Results> bars, int index) async {
+    _isGettingDirection = true;
+    notifyListeners();
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      googleAPiKey,
+      PointLatLng(lat!, lon!),
+      PointLatLng(bars[index].geometry!.location!.lat!,
+          bars[index].geometry!.location!.lng!),
+      travelMode: TravelMode.driving,
+    );
+    if (result.points.isNotEmpty) {
+      _isGettingDirection = false;
+      notifyListeners();
+      for (var point in result.points) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      }
+    }
+    _addPolyLine();
+
+    notifyListeners();
+  }
+
+  void clearPolylines() {
+    _polylines.clear();
+    _polylineCoordinates.clear();
+    notifyListeners();
   }
 
   Future<Uint8List> getUserImageFromAssets(String path, int width) async {
@@ -228,6 +285,7 @@ class MapsController extends ChangeNotifier {
 
   Future<List<Uint8List?>> exploreImages(String ref) async {
     List<Uint8List?> exploreNearbyBarsImagesList = [];
+    exploreNearbyBarsImagesList.clear();
     try {
       var response = await http.get(Uri.parse(
           "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$ref&key=$googleAPiKey"));
@@ -364,5 +422,45 @@ class MapsController extends ChangeNotifier {
       log(e.toString());
     }
     return results;
+  }
+
+  Future<List<Results>> exploreBarsOrClubs(String type) async {
+    List<Results> nearestBars = [];
+    nearestBars.clear();
+
+    try {
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      String latitude = sp.getString('latitude') ?? '';
+      String longitude = sp.getString('longitude') ?? '';
+      String url =
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=2000&type=$type&key=$googleAPiKey';
+      http.Response response = await http.get(Uri.parse(url));
+      final values = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        var list = values['results'] as List;
+        nearestBars = list.map((i) => Results.fromJson(i)).toList();
+
+        for (var bar in nearestBars) {
+          if (bar.photos != null && bar.photos!.isNotEmpty) {
+            var nearestBardata =
+                await exploreImages(bar.photos![0].photoReference!);
+            barsAndClubImages.addAll(nearestBardata);
+          }
+          var distanceData = await getDistanceBetweenPoints(
+              bar.geometry!.location!.lat.toString(),
+              bar.geometry!.location!.lng.toString(),
+              latitude,
+              longitude);
+          barsAndClubsDistanceList.addAll(distanceData);
+        }
+      } else {
+        log("Error");
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+
+    return nearestBars;
   }
 }

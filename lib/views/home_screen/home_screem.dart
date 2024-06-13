@@ -39,8 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Rows> exploreBarsDistanceList = [];
   List<Rows> recomendedBarsDistanceList = [];
 
-   
-
   bool isSearchBarOpen = false;
   bool isReview = true;
   bool isTextFieldFocused = false;
@@ -84,6 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
     nearestBarList.addAll(data as Iterable<Results>);
     nearestBarsImages = mapController.nearestBarsImages;
     nearsetBarsDistanceList = mapController.nearestBarsDistanceList;
+    // log(nearestBarList.length.toString());
+    // log(nearestBarsImages.length.toString());
     setState(() {});
   }
 
@@ -238,10 +238,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.push(
                                         context,
                                         PageTransition(
-                                            child:   DetailScreen(
+                                            child: DetailScreen(
                                               barDetail: exploreBar,
                                               index: index,
-                                              barImages:exploreBarsImages,
+                                              barImages: exploreBarsImages,
                                               distance: exploreBarsDistanceList,
                                             ),
                                             type: PageTransitionType.fade));
@@ -255,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             exploreBarsImages[index]!),
                                         fit: BoxFit.cover,
                                         colorFilter: ColorFilter.mode(
-                                          Colors.black.withOpacity(0.4),
+                                          Colors.black.withOpacity(0.3),
                                           BlendMode.darken,
                                         ),
                                       ),
@@ -319,11 +319,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.push(
                                         context,
                                         PageTransition(
-                                            child:   DetailScreen(
+                                            child: DetailScreen(
                                               barDetail: recomendedBarList,
                                               index: index,
                                               barImages: recomdedBarsImages,
-                                              distance:recomendedBarsDistanceList,
+                                              distance:
+                                                  recomendedBarsDistanceList,
                                             ),
                                             type: PageTransitionType.fade));
                                   },
@@ -351,8 +352,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-              nearestBarList.isEmpty ? 
-               Shimmer.fromColors(
+                  nearestBarList.isEmpty
+                      ? Shimmer.fromColors(
                           baseColor: Colors.grey.shade800,
                           highlightColor: Colors.grey.shade700,
                           child: Center(
@@ -362,84 +363,101 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: size.height * 0.2,
                           )),
                         )
-              :    Container(
-                    width: size.width,
-                    height: size.height * 0.2,
-                    color: Colors.black,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: nearestBarList.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      child:   DetailScreen(
-                                        index: index,
-                                        barDetail: nearestBarList,
-                                        barImages: nearestBarsImages,
-                                        distance: nearsetBarsDistanceList,
+                      : Container(
+                          width: size.width,
+                          height: size.height * 0.2,
+                          color: Colors.black,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: nearestBarList.length,
+                            itemBuilder: (context, index) {
+                              // Ensure that all lists have valid data for the current index
+                              if (index < nearestBarsImages.length &&
+                                  index < nearsetBarsDistanceList.length) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        PageTransition(
+                                          child: DetailScreen(
+                                            index: index,
+                                            barDetail: nearestBarList,
+                                            barImages: nearestBarsImages,
+                                            distance: nearsetBarsDistanceList,
+                                          ),
+                                          type: PageTransitionType.fade,
+                                        ),
+                                      );
+                                    },
+                                    child: SizedBox(
+                                      width: size.width * 0.5,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Image.memory(
+                                            nearestBarsImages[index]!,
+                                            height: size.height * 0.15,
+                                            width: size.width * 0.5,
+                                            fit: BoxFit.fitWidth,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                                                width: size.width * 0.25,
+                                                child: Text(
+                                                  nearestBarList[index].name ??
+                                                      'Unknown',
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.visible,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w900,
+                                                    fontSize: size.width * 0.03,
+                                                  ),
+                                                ),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.pin_drop_outlined,
+                                                    color: primaryColor,
+                                                    size: size.width * 0.04,
+                                                  ),
+                                                  Text(
+                                                    nearsetBarsDistanceList[
+                                                                index]
+                                                            .elements![0]
+                                                            .distance
+                                                            ?.text ??
+                                                        'N/A',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize:
+                                                          size.width * 0.027,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                      type: PageTransitionType.fade));
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return Container();
+                              }
                             },
-                            child: SizedBox(
-                              width: size.width * 0.5,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.memory(
-                                    nearestBarsImages[index]!,
-                                    height: size.height * 0.15,
-                                    width: size.width * 0.5,
-                                    fit: BoxFit.fitWidth,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                        width: size.width*0.25,
-                                        child: Text(
-                                          nearestBarList[index].name!,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.visible,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: size.width * 0.03),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.pin_drop_outlined,
-                                              color: primaryColor,
-                                              size: size.width * 0.04,
-                                            ),
-                                            Text(
-                                              nearsetBarsDistanceList[index].elements![0].distance!.text!,
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: size.width * 0.027),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
                           ),
-                        );
-                      },
-                    ),
-                  )
+                        )
                 ],
               ),
             ),
