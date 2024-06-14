@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
-
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/model/search_bars_model/search_bars_model.dart';

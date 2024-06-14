@@ -28,16 +28,16 @@ class CustomExploreWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         log("Index : $index");
-        // Navigator.push(
-        //     context,
-        //     PageTransition(
-        //         child: DetailScreen(
-        //           barDetail: barsOrClubsData!,
-        //           index: index,
-        //           barImages: barsOrClubsImages,
-        //           distance: barsOrClubsDistanceList,
-        //         ),
-        //         type: PageTransitionType.fade));
+        Navigator.push(
+            context,
+            PageTransition(
+                child: DetailScreen(
+                  barDetail: barsOrClubsData!,
+                  index: index,
+                  barImages: barsOrClubsImages,
+                  distance: barsOrClubsDistanceList,
+                ),
+                type: PageTransitionType.fade));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
