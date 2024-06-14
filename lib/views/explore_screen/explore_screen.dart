@@ -1,7 +1,7 @@
-import 'dart:developer';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
+import 'package:birds_view/controller/search_bars_controller/search_bars_controller.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -23,24 +23,44 @@ class _ExploreScreenState extends State<ExploreScreen> {
   List<Results> barsOrClubsData = [];
   List<Rows> barsOrClubsDistanceList = [];
   List<Result> barsOrClubsDetail = [];
+
+  // List<Uint8List?> searchBarImages = [];
+  // List<Result> searchBarDetail = [];
+  // List<Rows> searchBarDistanceList = [];
   bool isSearchBarOpen = false;
   bool isClubs = true;
 
   @override
   void initState() {
     super.initState();
+    clearList();
     getBarsAndClubs('restaurant');
   }
 
-  void clearList(){
+  void clearList() {
     barsOrClubsData.clear();
     barsOrClubsImages.clear();
     barsOrClubsDistanceList.clear();
     barsOrClubsDetail.clear();
   }
+
+  // Future<void> getSearchBars() async {
+  //   searchBarDetail.clear();
+  //   searchBarDistanceList.clear();
+  //   searchBarImages.clear();
+  //   final searchBarsController =
+  //       Provider.of<SearchBarsController>(context, listen: false);
+
+  //   var data = searchBarsController.getSearchBarsDetail(context: context);
+  //   searchBarDetail.addAll(data as Iterable<Result>);
+  //   searchBarImages = searchBarsController.searcbarsImage;
+  //   searchBarDistanceList = searchBarsController.searcbarsDistance;
+  //   setState(() {});
+  // }
+
   Future<void> getBarsAndClubs(String type) async {
     clearList();
-    
+
     final mapController = Provider.of<MapsController>(context, listen: false);
     mapController.barsAndClubImages.clear();
     mapController.barsAndClubImages.clear();
@@ -55,10 +75,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           await mapController.barsDetailMethod(barsOrClubsData[i].reference!);
       barsOrClubsDetail.add(detail!);
     }
-    log(barsOrClubsData.length.toString());
-    log(barsOrClubsImages.length.toString());
-    log(barsOrClubsDistanceList.length.toString());
-    log(barsOrClubsDetail.length.toString());
+
     setState(() {});
   }
 
@@ -204,8 +221,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                               ),
                             )
                           : Expanded(
-                              child:
-                               ListView.builder(
+                              child: ListView.builder(
                               itemCount: barsOrClubsData.length,
                               itemBuilder: (context, index) {
                                 return CustomExploreWidget(
@@ -217,8 +233,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   barAndClubsDetails: barsOrClubsDetail,
                                 );
                               },
-                            )
-                            )
+                            ))
                 ],
               ),
               //
@@ -230,7 +245,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   // bottom: 0,
                   child: Padding(
                     padding: const EdgeInsets.all(15),
-                    child: Container(
+                    child: Consumer<SearchBarsController>(builder: (context, value, child) {
+                      return Container(
                       color: Colors.black.withOpacity(0.6),
                       child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
@@ -238,25 +254,36 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               customSearchBarWidget(),
-                              Expanded(
-                                child: ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: 5,
-                                  itemBuilder: (context, index) {
-                                    return CustomExploreWidget(
-                                      barsOrClubsImages: barsOrClubsImages,
-                                      barsOrClubsData: barsOrClubsData,
-                                      barsOrClubsDistanceList:
-                                          barsOrClubsDistanceList,
-                                      index: index,
-                                      barAndClubsDetails: barsOrClubsDetail,
-                                    );
-                                  },
-                                ),
-                              ),
+                              value.barDetail.isEmpty
+                                  ? const Text("")
+                                  : Expanded(
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: value.barDetail.length,
+                                        itemBuilder: (context, index) {
+                                          return Container(
+                                            color: Colors.orange,
+                                            height: 300,
+                                            width: 300,
+                                            child: Text(value.barDetail[index]!.name!),
+                                          );
+                                          //  CustomExploreWidget(
+                                          //   barsOrClubsImages:
+                                          //       searchBarImages,
+                                          //   // barsOrClubsData: searchBarDetail,
+                                          //   barsOrClubsDistanceList:
+                                          //       searchBarDistanceList,
+                                          //   index: index,
+                                          //   barAndClubsDetails:
+                                          //       searchBarDetail,
+                                          // );
+                                        },
+                                      ),
+                                    ),
                             ],
                           )),
-                    ),
+                    );
+                    },)
                   ),
                 ),
             ],
@@ -265,29 +292,38 @@ class _ExploreScreenState extends State<ExploreScreen> {
   }
 
   Widget customSearchBarWidget() {
-    return TextField(
-      controller: null,
-      onChanged: (val) {},
-      decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          fillColor: Colors.white,
-          filled: true,
-          prefixIcon: Icon(
-            Icons.search,
-            color: Colors.grey.shade900,
-          ),
-          suffixIcon: GestureDetector(
-              onTap: () {
-                setState(() {
-                  isSearchBarOpen = false;
-                });
-              },
-              child: Icon(
-                Icons.cancel_outlined,
+    return Consumer<SearchBarsController>(
+      builder: (context, value, child) {
+        return TextField(
+          controller: value.searchTextFieldController,
+          onChanged: (val) {
+            value.searchBarsOrClubs(val, context);
+            setState(() {
+              
+            });
+          },
+          decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              fillColor: Colors.white,
+              filled: true,
+              prefixIcon: Icon(
+                Icons.search,
                 color: Colors.grey.shade900,
-              ))),
+              ),
+              suffixIcon: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isSearchBarOpen = false;
+                    });
+                  },
+                  child: Icon(
+                    Icons.cancel_outlined,
+                    color: Colors.grey.shade900,
+                  ))),
+        );
+      },
     );
   }
 }

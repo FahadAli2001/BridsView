@@ -10,14 +10,14 @@ import '../../views/detail_screen/detail_screen.dart';
 
 class CustomExploreWidget extends StatelessWidget {
   final List<Uint8List?> barsOrClubsImages;
-  final List<Results> barsOrClubsData;
+  final List<Results>? barsOrClubsData;
   final List<Rows> barsOrClubsDistanceList;
   final List<Result> barAndClubsDetails;
   final int index;
   const CustomExploreWidget(
       {super.key,
       required this.barsOrClubsImages,
-      required this.barsOrClubsData,
+       this.barsOrClubsData,
       required this.barsOrClubsDistanceList,
       required this.index,
       required this.barAndClubsDetails});
@@ -28,16 +28,16 @@ class CustomExploreWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         log("Index : $index");
-        Navigator.push(
-            context,
-            PageTransition(
-                child: DetailScreen(
-                  barDetail: barsOrClubsData,
-                  index: index,
-                  barImages: barsOrClubsImages,
-                  distance: barsOrClubsDistanceList,
-                ),
-                type: PageTransitionType.fade));
+        // Navigator.push(
+        //     context,
+        //     PageTransition(
+        //         child: DetailScreen(
+        //           barDetail: barsOrClubsData!,
+        //           index: index,
+        //           barImages: barsOrClubsImages,
+        //           distance: barsOrClubsDistanceList,
+        //         ),
+        //         type: PageTransitionType.fade));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -78,7 +78,7 @@ class CustomExploreWidget extends StatelessWidget {
                     child: SizedBox(
                       width: size.width * 0.85,
                       child: Text(
-                        barsOrClubsData[index].name ?? "",
+                        barAndClubsDetails[index].name ?? "",
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -104,7 +104,7 @@ class CustomExploreWidget extends StatelessWidget {
                           : Text(
                               barAndClubsDetails[index]
                                   .editorialSummary!
-                                  .overview!,
+                                  .overview ?? "",
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(

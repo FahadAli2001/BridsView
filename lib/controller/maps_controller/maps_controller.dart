@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
 import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
+import 'package:birds_view/utils/api_keys.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:custom_info_window/custom_info_window.dart';
@@ -19,7 +20,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MapsController extends ChangeNotifier {
-  String googleAPiKey = "AIzaSyAl8_GZb77k5io7_DCkAFYJHgGqDnzeH2k";
+  // String googleAPiKey = "AIzaSyAl8_GZb77k5io7_DCkAFYJHgGqDnzeH2k";
   CustomInfoWindowController customInfoWindowController =
       CustomInfoWindowController();
   final Map<PolylineId, Polyline> _polylines = {};
@@ -175,7 +176,7 @@ class MapsController extends ChangeNotifier {
     _isGettingDirection = true;
     notifyListeners();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleAPiKey,
+      googleMapApiKey,
       PointLatLng(lat!, lon!),
       PointLatLng(bars[index].geometry!.location!.lat!,
           bars[index].geometry!.location!.lng!),
@@ -251,8 +252,10 @@ class MapsController extends ChangeNotifier {
       SharedPreferences sp = await SharedPreferences.getInstance();
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
+      log(latitude);
+      log(longitude);
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=3000&type=restaurant&key=$googleAPiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=3000&type=restaurant&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
@@ -288,7 +291,7 @@ class MapsController extends ChangeNotifier {
     exploreNearbyBarsImagesList.clear();
     try {
       var response = await http.get(Uri.parse(
-          "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$ref&key=$googleAPiKey"));
+          "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$ref&key=$googleMapApiKey"));
 
       if (response.statusCode == 200) {
         var data = response.bodyBytes;
@@ -314,7 +317,7 @@ class MapsController extends ChangeNotifier {
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1500&type=restaurant&key=$googleAPiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1500&type=restaurant&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
@@ -354,7 +357,7 @@ class MapsController extends ChangeNotifier {
     List<Rows> distanceList = [];
     try {
       var response = await http.get(Uri.parse(
-          'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$destinationLat,$destinationLong&origins=$originLat,$originLong&key=$googleAPiKey'));
+          'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$destinationLat,$destinationLong&origins=$originLat,$originLong&key=$googleMapApiKey'));
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         var list = data['rows'] as List;
@@ -375,7 +378,7 @@ class MapsController extends ChangeNotifier {
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1500&type=restaurant&key=$googleAPiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1500&type=restaurant&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
@@ -410,7 +413,7 @@ class MapsController extends ChangeNotifier {
     Result? results;
     try {
       var response = await http.get(Uri.parse(
-          "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$googleAPiKey"));
+          "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$googleMapApiKey"));
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         var detailResponse = data['result'];
@@ -433,7 +436,7 @@ class MapsController extends ChangeNotifier {
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=2000&type=$type&key=$googleAPiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=2000&type=$type&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
