@@ -32,25 +32,36 @@ class CustomExploreWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         log("Index : $index");
-        if (barsOrClubsData!.isEmpty) {
-          
-        } else {
-           Navigator.push(
-          context,
-          PageTransition(
-            child: DetailScreen(
-            
-              barDetail: barsOrClubsData!,
-             
-              index: index,
-              barImages: barsOrClubsImages,
-              distance: barsOrClubsDistanceList,
+        if (barsOrClubsData == null || barsOrClubsData!.isEmpty) {
+          Navigator.push(
+            context,
+            PageTransition(
+              child: DetailScreen(
+                fromSearchScreen: true,
+                // barDetail: barsOrClubsData!,
+                searchBarDetail: barAndClubsDetails,
+                index: index,
+                barImages: barsOrClubsImages,
+                distance: barsOrClubsDistanceList,
+              ),
+              type: PageTransitionType.fade,
             ),
-            type: PageTransitionType.fade,
-          ),
-        );
+          );
+        } else {
+          Navigator.push(
+            context,
+            PageTransition(
+              child: DetailScreen(
+                fromSearchScreen: false,
+                barDetail: barsOrClubsData!,
+                index: index,
+                barImages: barsOrClubsImages,
+                distance: barsOrClubsDistanceList,
+              ),
+              type: PageTransitionType.fade,
+            ),
+          );
         }
-       
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 15),

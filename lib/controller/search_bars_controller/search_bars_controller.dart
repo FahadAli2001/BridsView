@@ -37,15 +37,15 @@ class SearchBarsController extends ChangeNotifier {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         //  log(data['predictions'].toString());
-       
+
         if (data['predictions'] != null && data['predictions'] is List) {
           var list = data['predictions'] as List;
           searchResultList = list.map((e) => Predictions.fromJson(e)).toList();
-           log("search bar method :  ${searchResultList.length.toString()}");
+          log("search bar method :  ${searchResultList.length.toString()}");
           if (searchResultList.isNotEmpty) {
             await getSearchBarsDetail(
               searchResultList,
-                context,
+              context,
             );
             log("searchBarDetail is not empty");
           } else {
@@ -62,16 +62,18 @@ class SearchBarsController extends ChangeNotifier {
     }
   }
 
-  Future<void> getSearchBarsDetail(List<Predictions> searchResult,context,
+  Future<void> getSearchBarsDetail(
+    List<Predictions> searchResult,
+    context,
   ) async {
     final mapController = Provider.of<MapsController>(context, listen: false);
     log("get search bar detail method :  ${searchResult.length.toString()}");
     try {
       for (var i = 0; i < searchResult.length; i++) {
- 
-        var data = await mapController.barsDetailMethod(searchResult[i].placeId!);
+        var data =
+            await mapController.barsDetailMethod(searchResult[i].placeId!);
         barDetail.add(data);
-        log("bar detail : ${barDetail.length}" );
+        log("bar detail : ${barDetail.length}");
         if (data != null) {
           // Check if the item already exists in the list
           if (!barDetail.any((item) => item?.placeId == data.placeId)) {
@@ -82,7 +84,8 @@ class SearchBarsController extends ChangeNotifier {
           }
 
           if (data.photos != null && data.photos!.isNotEmpty) {
-            var imageData = await mapController.exploreImages(data.photos![0].photoReference!);
+            var imageData = await mapController
+                .exploreImages(data.photos![0].photoReference!);
             searcbarsImage.addAll(imageData);
           }
 
@@ -104,7 +107,8 @@ class SearchBarsController extends ChangeNotifier {
       log("get detail method error: ${e.toString()}");
     }
   }
-   void clearFields() {
+
+  void clearFields() {
     barDetail.clear();
     searcbarsImage.clear();
     searcbarsDistance.clear();

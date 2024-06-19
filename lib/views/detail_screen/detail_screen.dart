@@ -21,15 +21,19 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../model/nearby_bars_model/nearby_bars_model.dart';
 
 class DetailScreen extends StatefulWidget {
+  final List<Result>? searchBarDetail;
+  final bool fromSearchScreen;
   final List<Rows> distance;
   final List<Results>? barDetail;
   final int index;
   final List<Uint8List?> barImages;
   const DetailScreen(
       {super.key,
+      this.searchBarDetail,
       this.barDetail,
       required this.index,
       required this.barImages,
+      required this.fromSearchScreen,
       required this.distance});
 
   @override
@@ -42,7 +46,9 @@ class _DetailScreenState extends State<DetailScreen> {
   void initState() {
     super.initState();
 
-    getBarsDetails(widget.barDetail![widget.index].placeId!);
+    if (widget.fromSearchScreen == false) {
+      getBarsDetails(widget.barDetail![widget.index].placeId!);
+    }
   }
 
   Future<void> _launchUrl(String url) async {
@@ -67,18 +73,18 @@ class _DetailScreenState extends State<DetailScreen> {
             text: 'Locate',
             ontap: () async {
               //
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      child: MapScreen(
-                        bar: widget.barDetail!,
-                        index: widget.index,
-                      ),
-                      type: PageTransitionType.fade));
-              // if (widget.fromSearchBar == true) {
-              // } else {
 
-              // }
+              if (widget.fromSearchScreen == true) {
+              } else {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: MapScreen(
+                          bar: widget.barDetail!,
+                          index: widget.index,
+                        ),
+                        type: PageTransitionType.fade));
+              }
             }),
       ),
       appBar: AppBar(
@@ -96,18 +102,8 @@ class _DetailScreenState extends State<DetailScreen> {
             backgroundColor: Colors.black,
             backgroundImage: AssetImage(appLogo),
           )),
-      body: barDetail == null
-          ? Shimmer.fromColors(
-              baseColor: Colors.grey.shade800,
-              highlightColor: Colors.grey.shade700,
-              child: Center(
-                  child: Container(
-                color: Colors.white,
-                width: size.width,
-                height: size.height,
-              )),
-            )
-          : SingleChildScrollView(
+      body: widget.fromSearchScreen == true
+          ? SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(15),
                 child: Column(
@@ -166,7 +162,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         SizedBox(
                           width: size.width * 0.9,
                           child: Text(
-                            widget.barDetail![widget.index].name!,
+                            widget.searchBarDetail![widget.index].name!,
                             maxLines: 2,
                             overflow: TextOverflow.visible,
                             style: TextStyle(
@@ -193,7 +189,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       children: [
                         RatingBarIndicator(
                           unratedColor: Colors.grey,
-                          rating: widget.barDetail![widget.index].rating
+                          rating: widget.searchBarDetail![widget.index].rating
                                   ?.toDouble() ??
                               0.0,
                           itemBuilder: (context, index) => Icon(
@@ -277,19 +273,22 @@ class _DetailScreenState extends State<DetailScreen> {
                     SizedBox(
                       height: size.height * 0.01,
                     ),
-                    barDetail!.editorialSummary == null
+                    widget.searchBarDetail![widget.index].editorialSummary ==
+                            null
                         ? const Text('')
                         : SizedBox(
                             width: size.width,
                             child: Text(
-                              barDetail!.editorialSummary!.overview!,
+                              widget.searchBarDetail![widget.index]
+                                  .editorialSummary!.overview!,
                               style: TextStyle(
                                   fontSize: size.height * 0.018,
                                   color: Colors.white),
                             ),
                           ),
                     //
-                    barDetail!.editorialSummary == null
+                    widget.searchBarDetail![widget.index].editorialSummary ==
+                            null
                         ? Container()
                         : SizedBox(
                             height: size.height * 0.02,
@@ -303,7 +302,8 @@ class _DetailScreenState extends State<DetailScreen> {
                             color: primaryColor),
                         children: [
                           TextSpan(
-                            text: barDetail!.formattedAddress!,
+                            text: widget.searchBarDetail![widget.index]
+                                .formattedAddress!,
                             style: TextStyle(
                                 fontSize: size.height * 0.018,
                                 color: whiteColor),
@@ -314,7 +314,9 @@ class _DetailScreenState extends State<DetailScreen> {
                     SizedBox(
                       height: size.height * 0.02,
                     ),
-                    barDetail!.formattedPhoneNumber == null
+                    widget.searchBarDetail![widget.index]
+                                .formattedPhoneNumber ==
+                            null
                         ? const Text('')
                         : Align(
                             alignment: Alignment.topLeft,
@@ -327,7 +329,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                     color: primaryColor),
                                 children: [
                                   TextSpan(
-                                    text: barDetail!.formattedPhoneNumber ?? "",
+                                    text: widget.searchBarDetail![widget.index]
+                                            .formattedPhoneNumber ??
+                                        "",
                                     style: TextStyle(
                                         fontSize: size.height * 0.018,
                                         color: whiteColor),
@@ -340,7 +344,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     SizedBox(
                       height: size.height * 0.02,
                     ),
-                    barDetail!.openingHours == null
+                    widget.searchBarDetail![widget.index].openingHours == null
                         ? const Text('')
                         : Align(
                             alignment: Alignment.topLeft,
@@ -353,7 +357,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                     color: primaryColor),
                                 children: [
                                   TextSpan(
-                                    text: barDetail!.openingHours!.openNow! ==
+                                    text: widget.searchBarDetail![widget.index]
+                                                .openingHours!.openNow! ==
                                             true
                                         ? "Open"
                                         : "Closed",
@@ -370,7 +375,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     SizedBox(
                       height: size.height * 0.02,
                     ),
-                    barDetail!.openingHours == null
+                    widget.searchBarDetail![widget.index].openingHours == null
                         ? const Text('')
                         : Align(
                             alignment: Alignment.topLeft,
@@ -384,12 +389,15 @@ class _DetailScreenState extends State<DetailScreen> {
                                 children: [
                                   for (var i = 0;
                                       i <
-                                          barDetail!.openingHours!.weekdayText!
+                                          widget
+                                              .searchBarDetail![widget.index]
+                                              .openingHours!
+                                              .weekdayText!
                                               .length;
                                       i++) ...[
                                     TextSpan(
                                       text:
-                                          "${barDetail!.openingHours!.weekdayText![i]} \n",
+                                          "${widget.searchBarDetail![widget.index].openingHours!.weekdayText![i]} \n",
                                       style: TextStyle(
                                           fontSize: size.height * 0.018,
                                           color: whiteColor),
@@ -402,7 +410,9 @@ class _DetailScreenState extends State<DetailScreen> {
                     //
 
                     //
-                    barDetail!.website == null
+                    widget.searchBarDetail![widget.index]
+                                .wheelchairAccessibleEntrance ==
+                            null
                         ? const Text(' ')
                         : Align(
                             alignment: Alignment.topLeft,
@@ -415,7 +425,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                     color: primaryColor),
                                 children: [
                                   TextSpan(
-                                    text: barDetail!
+                                    text: widget.searchBarDetail![widget.index]
                                                 .wheelchairAccessibleEntrance ==
                                             true
                                         ? "Available"
@@ -434,7 +444,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       height: size.height * 0.02,
                     ),
                     //
-                    barDetail!.wheelchairAccessibleEntrance == null
+                    widget.searchBarDetail![widget.index].website == null
                         ? const Text('')
                         : Align(
                             alignment: Alignment.topLeft,
@@ -447,13 +457,17 @@ class _DetailScreenState extends State<DetailScreen> {
                                     color: primaryColor),
                                 children: [
                                   TextSpan(
-                                    text: barDetail?.website ?? '',
+                                    text: widget.searchBarDetail![widget.index]
+                                            .website ??
+                                        '',
                                     style: TextStyle(
                                         fontSize: size.height * 0.018,
                                         color: Colors.white),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () async {
-                                        final url = barDetail?.website;
+                                        final url = widget
+                                            .searchBarDetail![widget.index]
+                                            .website;
 
                                         try {
                                           await _launchUrl(url!);
@@ -469,7 +483,386 @@ class _DetailScreenState extends State<DetailScreen> {
                   ],
                 ),
               ),
-            ),
+            )
+          : barDetail == null
+              ? Shimmer.fromColors(
+                  baseColor: Colors.grey.shade800,
+                  highlightColor: Colors.grey.shade700,
+                  child: Center(
+                      child: Container(
+                    color: Colors.white,
+                    width: size.width,
+                    height: size.height,
+                  )),
+                )
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Column(
+                      children: [
+                        Container(
+                            width: size.width,
+                            height: size.height * 0.25,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(12),
+                              image: DecorationImage(
+                                  image: MemoryImage(
+                                      widget.barImages[widget.index]!),
+                                  fit: BoxFit.cover),
+                            ),
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Container(
+                                    height: size.height * 0.07,
+                                    width: size.height * 0.07,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                            goldenHalf,
+                                          ),
+                                          fit: BoxFit.fill),
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                            top: size.height * 0.015,
+                                            right: size.width * 0.028,
+                                            child: Icon(
+                                              Icons.bookmark_border,
+                                              color: Colors.black,
+                                              size: size.height * 0.035,
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                        //
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        //
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: size.width * 0.9,
+                              child: Text(
+                                widget.barDetail![widget.index].name!,
+                                maxLines: 2,
+                                overflow: TextOverflow.visible,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: size.height * 0.03,
+                                    color: Colors.white),
+                              ),
+                            ),
+                            // GestureDetector(
+                            //     onTap: () {},
+                            //     child: Image.asset(
+                            //       facebookLink,
+                            //       width: size.height * 0.04,
+                            //     ))
+                          ],
+                        ),
+                        //
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        //
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RatingBarIndicator(
+                              unratedColor: Colors.grey,
+                              rating: widget.barDetail![widget.index].rating
+                                      ?.toDouble() ??
+                                  0.0,
+                              itemBuilder: (context, index) => Icon(
+                                Icons.star,
+                                color: primaryColor,
+                              ),
+                              itemCount: 5,
+                              itemSize: size.width * 0.06,
+                              direction: Axis.horizontal,
+                            ),
+                            // GestureDetector(
+                            //     onTap: () {},
+                            //     child: Image.asset(instaLink,
+                            //         width: size.height * 0.04))
+                          ],
+                        ),
+                        //
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        //
+                        widget.distance[widget.index].elements == null
+                            ? const Text('')
+                            : Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        locationIcon,
+                                        height: size.height * 0.02,
+                                      ),
+                                      SizedBox(
+                                        width: size.width * 0.03,
+                                      ),
+                                      Text(
+                                        widget.distance[widget.index]
+                                            .elements![0].distance!.text
+                                            .toString(),
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                      SizedBox(
+                                        width: size.width * 0.1,
+                                      ),
+                                      SvgPicture.asset(
+                                        watchIcon,
+                                        height: size.height * 0.02,
+                                      ),
+                                      SizedBox(
+                                        width: size.width * 0.03,
+                                      ),
+                                      Text(
+                                        widget.distance[widget.index]
+                                            .elements![0].duration!.text
+                                            .toString(),
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                  // GestureDetector(
+                                  //     onTap: () {},
+                                  //     child: Image.asset(twitterLink,
+                                  //         width: size.height * 0.04))
+                                ],
+                              ),
+                        //
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        //
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Description',
+                              style: TextStyle(
+                                  fontSize: size.height * 0.026,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                        //
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        barDetail!.editorialSummary == null
+                            ? const Text('')
+                            : SizedBox(
+                                width: size.width,
+                                child: Text(
+                                  barDetail!.editorialSummary!.overview!,
+                                  style: TextStyle(
+                                      fontSize: size.height * 0.018,
+                                      color: Colors.white),
+                                ),
+                              ),
+                        //
+                        barDetail!.editorialSummary == null
+                            ? Container()
+                            : SizedBox(
+                                height: size.height * 0.02,
+                              ),
+                        RichText(
+                          text: TextSpan(
+                            text: "Address : ",
+                            style: TextStyle(
+                                fontSize: size.height * 0.018,
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor),
+                            children: [
+                              TextSpan(
+                                text: barDetail!.formattedAddress!,
+                                style: TextStyle(
+                                    fontSize: size.height * 0.018,
+                                    color: whiteColor),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        barDetail!.formattedPhoneNumber == null
+                            ? const Text('')
+                            : Align(
+                                alignment: Alignment.topLeft,
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: "Phone : ",
+                                    style: TextStyle(
+                                        fontSize: size.height * 0.018,
+                                        fontWeight: FontWeight.bold,
+                                        color: primaryColor),
+                                    children: [
+                                      TextSpan(
+                                        text: barDetail!.formattedPhoneNumber ??
+                                            "",
+                                        style: TextStyle(
+                                            fontSize: size.height * 0.018,
+                                            color: whiteColor),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                        //
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        barDetail!.openingHours == null
+                            ? const Text('')
+                            : Align(
+                                alignment: Alignment.topLeft,
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: "Open Now : ",
+                                    style: TextStyle(
+                                        fontSize: size.height * 0.018,
+                                        fontWeight: FontWeight.bold,
+                                        color: primaryColor),
+                                    children: [
+                                      TextSpan(
+                                        text:
+                                            barDetail!.openingHours!.openNow! ==
+                                                    true
+                                                ? "Open"
+                                                : "Closed",
+                                        style: TextStyle(
+                                            fontSize: size.height * 0.018,
+                                            color: whiteColor),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                        //
+                        //
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        barDetail!.openingHours == null
+                            ? const Text('')
+                            : Align(
+                                alignment: Alignment.topLeft,
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: "Timings : ",
+                                    style: TextStyle(
+                                        fontSize: size.height * 0.018,
+                                        fontWeight: FontWeight.bold,
+                                        color: primaryColor),
+                                    children: [
+                                      for (var i = 0;
+                                          i <
+                                              barDetail!.openingHours!
+                                                  .weekdayText!.length;
+                                          i++) ...[
+                                        TextSpan(
+                                          text:
+                                              "${barDetail!.openingHours!.weekdayText![i]} \n",
+                                          style: TextStyle(
+                                              fontSize: size.height * 0.018,
+                                              color: whiteColor),
+                                        ),
+                                      ]
+                                    ],
+                                  ),
+                                ),
+                              ),
+                        //
+
+                        //
+                        barDetail!.wheelchairAccessibleEntrance == null
+                            ? const Text(' ')
+                            : Align(
+                                alignment: Alignment.topLeft,
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: "Wheel Chair Entrance: ",
+                                    style: TextStyle(
+                                        fontSize: size.height * 0.018,
+                                        fontWeight: FontWeight.bold,
+                                        color: primaryColor),
+                                    children: [
+                                      TextSpan(
+                                        text: barDetail!
+                                                    .wheelchairAccessibleEntrance ==
+                                                true
+                                            ? "Available"
+                                            : "Not Available",
+                                        style: TextStyle(
+                                            fontSize: size.height * 0.018,
+                                            color: whiteColor),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                        //
+
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        //
+                        barDetail!.website == null
+                            ? const Text('')
+                            : Align(
+                                alignment: Alignment.topLeft,
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: "Website : ",
+                                    style: TextStyle(
+                                        fontSize: size.height * 0.018,
+                                        fontWeight: FontWeight.bold,
+                                        color: primaryColor),
+                                    children: [
+                                      TextSpan(
+                                        text: barDetail?.website ?? '',
+                                        style: TextStyle(
+                                            fontSize: size.height * 0.018,
+                                            color: Colors.white),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () async {
+                                            final url = barDetail?.website;
+
+                                            try {
+                                              await _launchUrl(url!);
+                                            } catch (e) {
+                                              log(e.toString());
+                                            }
+                                          },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
     );
   }
 }
