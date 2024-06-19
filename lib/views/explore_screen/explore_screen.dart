@@ -24,9 +24,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
   List<Rows> barsOrClubsDistanceList = [];
   List<Result> barsOrClubsDetail = [];
 
-  List<Uint8List?> searchBarImages = [];
-  List<Result> searchBarDetail = [];
-  List<Rows> searchBarDistanceList = [];
   bool isSearchBarOpen = false;
   bool isClubs = true;
 
@@ -43,20 +40,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
     barsOrClubsDistanceList.clear();
     barsOrClubsDetail.clear();
   }
-
-  // Future<void> getSearchBars() async {
-  //   searchBarDetail.clear();
-  //   searchBarDistanceList.clear();
-  //   searchBarImages.clear();
-  //   final searchBarsController =
-  //       Provider.of<SearchBarsController>(context, listen: false);
-
-  //   var data = searchBarsController.getSearchBarsDetail(context: context);
-  //   searchBarDetail.addAll(data as Iterable<Result>);
-  //   searchBarImages = searchBarsController.searcbarsImage;
-  //   searchBarDistanceList = searchBarsController.searcbarsDistance;
-  //   setState(() {});
-  // }
 
   Future<void> getBarsAndClubs(String type) async {
     clearList();
