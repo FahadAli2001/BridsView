@@ -34,7 +34,8 @@ class _MapScreenState extends State<MapScreen> {
 
     final mapController = Provider.of<MapsController>(context, listen: false);
     mapController.getCordinateds().then((value) async {
-      mapController.loadData(mapController.lat, mapController.lon, widget.bar,widget.index,context);
+      mapController.loadData(mapController.lat, mapController.lon, widget.bar,
+          widget.index, context);
       mapController.clearPolylines();
       CameraPosition cameraPosition = CameraPosition(
         target: LatLng(mapController.lat!, mapController.lon!),
@@ -92,13 +93,13 @@ class _MapScreenState extends State<MapScreen> {
             ),
             value.isGettingDirection == true
                 ? Positioned(
-                      bottom: 15,
-                      left: size.width * 0.45,
-                      right: size.width * 0.45,
-                      child:   CircularProgressIndicator(
-                        color: primaryColor,
-                      ),
-                    )
+                    bottom: 15,
+                    left: size.width * 0.45,
+                    right: size.width * 0.45,
+                    child: CircularProgressIndicator(
+                      color: primaryColor,
+                    ),
+                  )
                 : Positioned(
                     left: 0,
                     right: 0,

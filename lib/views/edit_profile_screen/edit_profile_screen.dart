@@ -211,14 +211,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   height: size.height * 0.05,
                 ),
                 //
-                  CustomTextField(
+                CustomTextField(
                     textEditingController: value.firstNameController,
                     obsecure: false,
                     hintText: "First Name",
                     labelText: "First Name"),
                 //
 
-                  CustomTextField(
+                CustomTextField(
                     textEditingController: value.lastNameController,
                     obsecure: false,
                     hintText: "Last Name",
@@ -244,7 +244,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     )),
 
                 //
-                  CustomTextField(
+                CustomTextField(
                     textEditingController: value.passwordController,
                     obsecure: true,
                     hintText: "Password",

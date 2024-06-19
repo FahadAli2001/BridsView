@@ -10,17 +10,17 @@ import '../../model/user_model/user_model.dart';
 import '../../views/home_screen/home_screem.dart';
 
 class SplashController extends ChangeNotifier {
-    Future<void> fetchUserProfile(String id, String token,   context) async {
-    log(fetchProfileApi+id);
+  Future<void> fetchUserProfile(String id, String token, context) async {
+    log(fetchProfileApi + id);
     try {
       var headers = {'Authorization': 'Bearer $token'};
-      var response = await http.get(Uri.parse(fetchProfileApi+id), headers: headers);
-      
+      var response =
+          await http.get(Uri.parse(fetchProfileApi + id), headers: headers);
 
       if (response.statusCode == 201) {
         var data = jsonDecode(response.body);
         UserModel user = UserModel.fromJson(data);
-       
+
         Navigator.pushAndRemoveUntil(
           context,
           PageTransition(

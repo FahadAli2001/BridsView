@@ -162,9 +162,9 @@ class MapsController extends ChangeNotifier {
   _addPolyLine() {
     PolylineId id = const PolylineId("poly");
     Polyline polyline = Polyline(
-      jointType: JointType.bevel,
-      endCap: Cap.roundCap,
-      geodesic: true,
+        jointType: JointType.bevel,
+        endCap: Cap.roundCap,
+        geodesic: true,
         polylineId: id,
         color: Colors.blue.shade800,
         points: _polylineCoordinates);

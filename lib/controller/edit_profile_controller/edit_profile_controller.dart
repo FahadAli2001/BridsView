@@ -11,8 +11,8 @@ import '../../views/home_screen/home_screem.dart';
 import '../../widgets/custom_error_toast/custom_error_toast.dart';
 import '../../widgets/custom_success_toast/custom_success_toast.dart';
 
-class EditProfileController extends ChangeNotifier{
-   TextEditingController firstNameController = TextEditingController();
+class EditProfileController extends ChangeNotifier {
+  TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -30,7 +30,7 @@ class EditProfileController extends ChangeNotifier{
     }
   }
 
-  void pickedProfileImage(ImageSource source,context) async {
+  void pickedProfileImage(ImageSource source, context) async {
     try {
       final pickedFile = await ImagePicker().pickImage(source: source);
       if (pickedFile != null) {
@@ -38,7 +38,7 @@ class EditProfileController extends ChangeNotifier{
         Navigator.pop(context);
       }
       log(pickedFile!.path.toString());
-      
+
       notifyListeners();
     } catch (e) {
       log(e.toString());
@@ -57,8 +57,6 @@ class EditProfileController extends ChangeNotifier{
     }
   }
 
-   
-
   Future<void> updateUser(UserModel? user, context) async {
     // ignore: prefer_typing_uninitialized_variables
     var data;
@@ -67,7 +65,6 @@ class EditProfileController extends ChangeNotifier{
       _isUpdating = true;
       notifyListeners();
 
-      
       var userToken = user?.token;
       if (userToken == null) {
         log('User token is null');
@@ -79,7 +76,7 @@ class EditProfileController extends ChangeNotifier{
         'POST',
         Uri.parse(editProfileApi),
       );
- 
+
       request.headers['Authorization'] = 'Bearer ${userToken ?? ''}';
 
       if (pickedFile != null) {
@@ -90,7 +87,6 @@ class EditProfileController extends ChangeNotifier{
         request.fields['image'] = user.data!.image!;
       }
 
-      
       request.fields['first_name'] = firstNameController.text;
       request.fields['last_name'] = lastNameController.text;
       request.fields['email'] = emailController.text;
@@ -108,7 +104,7 @@ class EditProfileController extends ChangeNotifier{
         log('Response JSON: $data');
 
         UserModel updatedUser = UserModel.fromJson(data);
-        
+
         notifyListeners();
 
         Navigator.pushAndRemoveUntil(

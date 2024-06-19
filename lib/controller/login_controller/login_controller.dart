@@ -41,7 +41,7 @@ class LoginController extends ChangeNotifier {
       showCustomErrorToast(message: 'Invalid Email Format');
     }
 
-    if(emailController.text == "" || passwordController.text == ""){
+    if (emailController.text == "" || passwordController.text == "") {
       showCustomErrorToast(message: "Enter Email And Password");
     }
 
@@ -63,14 +63,14 @@ class LoginController extends ChangeNotifier {
         saveUserIdAndToken(user.data!.id.toString(), user.token.toString());
 
         Navigator.pushAndRemoveUntil(
-            context,
-            PageTransition(
-                child: HomeScreen(
-                  user: user,
-                ),
-                type: PageTransitionType.fade),
-                (route) => false,
-                );
+          context,
+          PageTransition(
+              child: HomeScreen(
+                user: user,
+              ),
+              type: PageTransitionType.fade),
+          (route) => false,
+        );
         clearTextField();
 
         _isLoging = false;

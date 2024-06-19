@@ -80,13 +80,9 @@ class ResetPasswordController extends ChangeNotifier {
   void checkChangePasswordConditions(context) {
     if (newPasswordController.text.isEmpty &&
         confirmPasswordController.text.isEmpty) {
-          
       showCustomErrorToast(message: "Enter Password & Comfirm Password");
-
     } else if (newPasswordController.text != confirmPasswordController.text) {
-
       showCustomErrorToast(message: "Password Doesn't Match");
-
     } else {
       changePassword(context);
     }
