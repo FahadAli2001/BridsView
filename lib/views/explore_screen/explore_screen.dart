@@ -278,14 +278,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                   scrollDirection:
                                                       Axis.vertical,
                                                   itemCount:
-                                                      nonNullBarDetail.length,
+                                                      value.searcbarsImage.length,
                                                   itemBuilder:
                                                       (context, index) {
                                                     // Debugging output
-                                                    log(
-                                                        "Building item $index");
-                                                    log(
-                                                        "Item data: ${nonNullBarDetail[index]}");
+                                                   
 
                                                     return CustomExploreWidget(
                                                       barsOrClubsImages:
