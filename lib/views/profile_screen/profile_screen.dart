@@ -66,14 +66,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Center(
               child: RichText(
                 text: TextSpan(
-                  text: 'Guest ',
+                  text: widget.user!.data!.firstName ?? 'Guest ',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: size.height * 0.03,
                       color: Colors.white),
                   children: [
                     TextSpan(
-                      text: 'User',
+                      text: " ${widget.user!.data!.lastName}",
                       style: TextStyle(
                           fontSize: size.height * 0.03, color: primaryColor),
                     ),
@@ -90,7 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Navigator.push(
                       context,
                       PageTransition(
-                          child:   EditProfileScreen(
+                          child: EditProfileScreen(
                             user: widget.user,
                           ),
                           type: PageTransitionType.fade));

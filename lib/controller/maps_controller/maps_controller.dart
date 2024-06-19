@@ -430,6 +430,8 @@ class MapsController extends ChangeNotifier {
   Future<List<Results>> exploreBarsOrClubs(String type) async {
     List<Results> nearestBars = [];
     nearestBars.clear();
+    barsAndClubImages.clear();
+    barsAndClubsDistanceList.clear();
 
     try {
       SharedPreferences sp = await SharedPreferences.getInstance();
