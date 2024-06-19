@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
@@ -277,12 +276,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                 return ListView.builder(
                                                   scrollDirection:
                                                       Axis.vertical,
-                                                  itemCount:
-                                                      value.searcbarsImage.length,
+                                                  itemCount: value
+                                                      .searcbarsImage.length,
                                                   itemBuilder:
                                                       (context, index) {
                                                     // Debugging output
-                                                   
 
                                                     return CustomExploreWidget(
                                                       barsOrClubsImages:
@@ -292,14 +290,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                               .searcbarsDistance,
                                                       index: index,
                                                       barAndClubsDetails:
-                                                          nonNullBarDetail,  
+                                                          nonNullBarDetail,
                                                     );
                                                   },
                                                 );
                                               },
                                             ),
                                           ),
- 
                                   ],
                                 )),
                           );
