@@ -22,12 +22,12 @@ import '../../model/nearby_bars_model/nearby_bars_model.dart';
 
 class DetailScreen extends StatefulWidget {
   final List<Rows> distance;
-  final List<Results> barDetail;
+  final List<Results>? barDetail;
   final int index;
   final List<Uint8List?> barImages;
   const DetailScreen(
       {super.key,
-      required this.barDetail,
+      this.barDetail,
       required this.index,
       required this.barImages,
       required this.distance});
@@ -41,8 +41,8 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   void initState() {
     super.initState();
-    getBarsDetails(widget.barDetail[widget.index].placeId!);
-    log(widget.barDetail[widget.index].placeId!.toString());
+
+    getBarsDetails(widget.barDetail![widget.index].placeId!);
   }
 
   Future<void> _launchUrl(String url) async {
@@ -66,14 +66,19 @@ class _DetailScreenState extends State<DetailScreen> {
         child: CustomButton(
             text: 'Locate',
             ontap: () async {
+              //
               Navigator.push(
                   context,
                   PageTransition(
                       child: MapScreen(
-                        bar: widget.barDetail,
+                        bar: widget.barDetail!,
                         index: widget.index,
                       ),
                       type: PageTransitionType.fade));
+              // if (widget.fromSearchBar == true) {
+              // } else {
+
+              // }
             }),
       ),
       appBar: AppBar(
@@ -161,7 +166,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         SizedBox(
                           width: size.width * 0.9,
                           child: Text(
-                            widget.barDetail[widget.index].name!,
+                            widget.barDetail![widget.index].name!,
                             maxLines: 2,
                             overflow: TextOverflow.visible,
                             style: TextStyle(
@@ -188,7 +193,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       children: [
                         RatingBarIndicator(
                           unratedColor: Colors.grey,
-                          rating: widget.barDetail[widget.index].rating
+                          rating: widget.barDetail![widget.index].rating
                                   ?.toDouble() ??
                               0.0,
                           itemBuilder: (context, index) => Icon(

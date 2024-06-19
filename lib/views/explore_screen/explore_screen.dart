@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
@@ -24,9 +25,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
   List<Rows> barsOrClubsDistanceList = [];
   List<Result> barsOrClubsDetail = [];
 
-  // List<Uint8List?> searchBarImages = [];
-  // List<Result> searchBarDetail = [];
-  // List<Rows> searchBarDistanceList = [];
+  List<Uint8List?> searchBarImages = [];
+  List<Result> searchBarDetail = [];
+  List<Rows> searchBarDistanceList = [];
   bool isSearchBarOpen = false;
   bool isClubs = true;
 
@@ -63,7 +64,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
     final mapController = Provider.of<MapsController>(context, listen: false);
     mapController.barsAndClubImages.clear();
-    mapController.barsAndClubImages.clear();
+    mapController.barsAndClubsDistanceList.clear();
+
     var data = await mapController.exploreBarsOrClubs(type);
 
     barsOrClubsData.addAll(data as Iterable<Results>);
@@ -244,47 +246,68 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   // right: 0,
                   // bottom: 0,
                   child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Consumer<SearchBarsController>(builder: (context, value, child) {
-                      return Container(
-                      color: Colors.black.withOpacity(0.6),
-                      child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              customSearchBarWidget(),
-                              value.barDetail.isEmpty
-                                  ? const Text("")
-                                  : Expanded(
-                                      child: ListView.builder(
-                                        scrollDirection: Axis.vertical,
-                                        itemCount: value.barDetail.length,
-                                        itemBuilder: (context, index) {
-                                          return Container(
-                                            color: Colors.orange,
-                                            height: 300,
-                                            width: 300,
-                                            child: Text(value.barDetail[index]!.name!),
-                                          );
-                                          //  CustomExploreWidget(
-                                          //   barsOrClubsImages:
-                                          //       searchBarImages,
-                                          //   // barsOrClubsData: searchBarDetail,
-                                          //   barsOrClubsDistanceList:
-                                          //       searchBarDistanceList,
-                                          //   index: index,
-                                          //   barAndClubsDetails:
-                                          //       searchBarDetail,
-                                          // );
-                                        },
-                                      ),
-                                    ),
-                            ],
-                          )),
-                    );
-                    },)
-                  ),
+                      padding: const EdgeInsets.all(15),
+                      child: Consumer<SearchBarsController>(
+                        builder: (context, value, child) {
+                          return Container(
+                            color: Colors.black.withOpacity(0.6),
+                            child: BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    customSearchBarWidget(),
+                                    value.barDetail.isEmpty
+                                        ? const Text("")
+                                        : Expanded(
+                                            child:
+                                                Consumer<SearchBarsController>(
+                                              builder: (context, value, child) {
+                                                if (value.barDetail.isEmpty) {
+                                                  return const Center(
+                                                      child: Text(
+                                                          "No data available"));
+                                                }
+                                                final nonNullBarDetail = value
+                                                    .barDetail
+                                                    .where(
+                                                        (item) => item != null)
+                                                    .cast<Result>()
+                                                    .toList();
+                                                return ListView.builder(
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  itemCount:
+                                                      nonNullBarDetail.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    // Debugging output
+                                                    log(
+                                                        "Building item $index");
+                                                    log(
+                                                        "Item data: ${nonNullBarDetail[index]}");
+
+                                                    return CustomExploreWidget(
+                                                      barsOrClubsImages:
+                                                          value.searcbarsImage,
+                                                      barsOrClubsDistanceList:
+                                                          value
+                                                              .searcbarsDistance,
+                                                      index: index,
+                                                      barAndClubsDetails:
+                                                          nonNullBarDetail,  
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ),
+ 
+                                  ],
+                                )),
+                          );
+                        },
+                      )),
                 ),
             ],
           )),
@@ -296,12 +319,17 @@ class _ExploreScreenState extends State<ExploreScreen> {
       builder: (context, value, child) {
         return TextField(
           controller: value.searchTextFieldController,
-          onChanged: (val) {
-            value.searchBarsOrClubs(val, context);
-            setState(() {
-              
-            });
+          onSubmitted: (val) {
+            if (val.isEmpty || isSearchBarOpen == false) {
+              value.clearFields();
+              setState(() {});
+            } else {
+              value.searchBarsOrClubs(val, context);
+
+              setState(() {});
+            }
           },
+          onChanged: (val) {},
           decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
@@ -314,6 +342,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ),
               suffixIcon: GestureDetector(
                   onTap: () {
+                    value.barDetail.clear();
                     setState(() {
                       isSearchBarOpen = false;
                     });

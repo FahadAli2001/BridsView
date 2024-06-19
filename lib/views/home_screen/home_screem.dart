@@ -239,6 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         context,
                                         PageTransition(
                                             child: DetailScreen(
+                                             
                                               barDetail: exploreBar,
                                               index: index,
                                               barImages: exploreBarsImages,
@@ -320,6 +321,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         context,
                                         PageTransition(
                                             child: DetailScreen(
+                                             
                                               barDetail: recomendedBarList,
                                               index: index,
                                               barImages: recomdedBarsImages,
@@ -383,6 +385,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         context,
                                         PageTransition(
                                           child: DetailScreen(
+                                          
                                             index: index,
                                             barDetail: nearestBarList,
                                             barImages: nearestBarsImages,
