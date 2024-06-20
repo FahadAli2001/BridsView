@@ -90,7 +90,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       context,
                       PageTransition(
                           child: MapScreen(
-                            bar: barDetail! as List<Result>,
+                            bar: barDetail!,
                             index: widget.index,
                           ),
                           type: PageTransitionType.fade));
