@@ -690,7 +690,7 @@ class _HomeScreenState extends State<HomeScreen> {
               suffixIcon: GestureDetector(
                   onTap: () {
                     value.barDetail.clear();
-                     value.searchTextFieldController.clear();
+                    value.searchTextFieldController.clear();
                     setState(() {
                       isSearchBarOpen = false;
                     });

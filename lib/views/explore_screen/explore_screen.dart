@@ -310,10 +310,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ),
               suffixIcon: GestureDetector(
                   onTap: () {
-                    
                     setState(() {
                       value.barDetail.clear();
-                    value.searchTextFieldController.clear();
+                      value.searchTextFieldController.clear();
                       isSearchBarOpen = false;
                     });
                   },

@@ -132,8 +132,6 @@ class SearchBarsController extends ChangeNotifier {
     barDetail.clear();
     searcbarsImage.clear();
     searcbarsDistance.clear();
-    notifyListeners();  
+    notifyListeners();
   }
 }
-
-
