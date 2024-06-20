@@ -27,6 +27,7 @@ class MapsController extends ChangeNotifier {
   final List<LatLng> _polylineCoordinates = [];
   final PolylinePoints _polylinePoints = PolylinePoints();
   final List<Marker> _markers = <Marker>[];
+  List<Result> onMapNearestBar = [];
   double? _lat;
   double? _lon;
   bool _isGettingDirection = false;
@@ -36,6 +37,11 @@ class MapsController extends ChangeNotifier {
   List<LatLng> get polylineCoordinates => _polylineCoordinates;
   PolylinePoints get polylinePoints => _polylinePoints;
   bool get isGettingDirection => _isGettingDirection;
+
+  set isGettingDirection(bool val){
+    _isGettingDirection = val;
+    notifyListeners();
+  }
 
   List<Uint8List?> exploreBarsImages = [];
   List<Uint8List?> barsAndClubImages = [];
@@ -58,9 +64,9 @@ class MapsController extends ChangeNotifier {
   }
 
   loadData(lat, lon, List<Result> selectedBar, int index, context) async {
-    List<Result> nearestBars = [];
+    
     var nearestBar = await nearsetBarsMethodForMap();
-    nearestBars.addAll(nearestBar as Iterable<Result>);
+    onMapNearestBar.addAll(nearestBar as Iterable<Result>);
     try {
       final Uint8List markerIcon =
           await getUserImageFromAssets(currentLocationIcon, 150);
@@ -78,11 +84,11 @@ class MapsController extends ChangeNotifier {
         icon: BitmapDescriptor.defaultMarker,
       ));
 
-      for (var i = 0; i < nearestBars.length; i++) {
+      for (var i = 0; i < onMapNearestBar.length; i++) {
         _markers.add(Marker(
           markerId: MarkerId(i.toString()),
-          position: LatLng(nearestBars[i].geometry!.location!.lat!,
-              nearestBars[i].geometry!.location!.lng!),
+          position: LatLng(onMapNearestBar[i].geometry!.location!.lat!,
+              onMapNearestBar[i].geometry!.location!.lng!),
           icon: BitmapDescriptor.defaultMarker,
           onTap: () {
             customInfoWindowController.addInfoWindow!(
@@ -134,7 +140,7 @@ class MapsController extends ChangeNotifier {
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.4,
                               child: Text(
-                                nearestBars[i].vicinity ?? '',
+                                onMapNearestBar[i].vicinity ?? '',
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 10,
@@ -147,8 +153,8 @@ class MapsController extends ChangeNotifier {
                       ],
                     )),
               ),
-              LatLng(nearestBars[i].geometry!.location!.lat!,
-                  nearestBars[i].geometry!.location!.lng!),
+              LatLng(onMapNearestBar[i].geometry!.location!.lat!,
+                  onMapNearestBar[i].geometry!.location!.lng!),
             );
           },
         ));

@@ -83,6 +83,9 @@ class _MapScreenState extends State<MapScreen> {
                 },
               ),
             ),
+            value.onMapNearestBar.isEmpty ? 
+            Center(child: CircularProgressIndicator(color: primaryColor,),)
+            :const SizedBox(),
             CustomInfoWindow(
               controller: value.customInfoWindowController,
               width: 300,
@@ -107,6 +110,7 @@ class _MapScreenState extends State<MapScreen> {
                       child: CustomButton(
                           text: 'Direction',
                           ontap: () {
+                            value.isGettingDirection = false;
                             value.clearPolylines();
                             value.getPolyline(widget.bar, widget.index);
                           }),
