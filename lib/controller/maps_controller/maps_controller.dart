@@ -66,6 +66,8 @@ class MapsController extends ChangeNotifier {
   loadData(lat, lon, List<Result> selectedBar, int index, context) async {
     onMapNearestBar.clear();
     markers.clear();
+    nearestBarsImages.clear();
+    nearestBarsDistanceList.clear();
     var nearestBar = await nearsetBarsMethodForMap();
     onMapNearestBar.addAll(nearestBar as Iterable<Result>);
     try {
