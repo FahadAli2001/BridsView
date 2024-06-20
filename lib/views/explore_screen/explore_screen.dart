@@ -34,7 +34,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         Provider.of<SearchBarsController>(context, listen: false);
     searchController.getCordinateds();
     clearList();
-    getBarsAndClubs('restaurant');
+    getBarsAndClubs('bar');
   }
 
   void clearList() {
@@ -118,7 +118,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         child: GestureDetector(
                           onTap: () {
                             clearList();
-                            getBarsAndClubs('restaurant');
+                            getBarsAndClubs('night_club');
                             setState(() {
                               isClubs = true;
                             });
@@ -148,7 +148,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         child: GestureDetector(
                           onTap: () {
                             clearList();
-                            getBarsAndClubs('restaurant');
+                            getBarsAndClubs('bar');
                             setState(() {
                               isClubs = false;
                             });
@@ -194,7 +194,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           ? Expanded(
                               child: ListView.builder(
                                 scrollDirection: Axis.vertical,
-                                itemCount: barsOrClubsData.length,
+                                itemCount: barsOrClubsImages.length,
                                 itemBuilder: (context, index) {
                                   return CustomExploreWidget(
                                     barsOrClubsImages: barsOrClubsImages,

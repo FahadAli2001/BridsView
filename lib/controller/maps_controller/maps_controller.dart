@@ -88,7 +88,7 @@ class MapsController extends ChangeNotifier {
       ));
 
     try {
-        for (var i = 0; i < onMapNearestBar.length; i++) {
+        for (var i = 0; i < nearestBarsImages.length; i++) {
         _markers.add(Marker(
           markerId: MarkerId(i.toString()),
           position: LatLng(onMapNearestBar[i].geometry!.location!.lat!,
@@ -105,7 +105,16 @@ class MapsController extends ChangeNotifier {
                     color: Colors.white,
                     child: Row(
                       children: [
-                        SizedBox(
+                      nearestBarsImages[i] == null ?
+                       SizedBox(
+                          width: 100,
+                          height: 200,
+                          child: Image.network(
+                            nearestBar[i].icon!,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      :  SizedBox(
                           width: 100,
                           height: 200,
                           child: Image.memory(
@@ -130,9 +139,17 @@ class MapsController extends ChangeNotifier {
                                 ),
                               ),
                             ),
-                            RatingBarIndicator(
+                         nearestBar[i].rating == null ?
+                       const  Text("Ratings Not Available",
+                         style:   TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                         )
+                         :   RatingBarIndicator(
                               unratedColor: Colors.grey,
-                              rating: nearestBar[i].rating! * 1.0,
+                              rating: nearestBar[i].rating! * 1.0  ,
                               itemBuilder: (context, index) => Icon(
                                 Icons.star,
                                 color: primaryColor,
@@ -268,7 +285,7 @@ class MapsController extends ChangeNotifier {
       log(latitude);
       log(longitude);
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=3000&type=restaurant&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=3000&type=bar&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
@@ -330,7 +347,7 @@ class MapsController extends ChangeNotifier {
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1500&type=restaurant&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1500&type=bar&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
@@ -391,7 +408,7 @@ class MapsController extends ChangeNotifier {
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1500&type=restaurant&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1500&type=bar&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
