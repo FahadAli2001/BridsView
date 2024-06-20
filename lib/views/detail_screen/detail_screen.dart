@@ -681,19 +681,19 @@ class _DetailScreenState extends State<DetailScreen> {
                         SizedBox(
                           height: size.height * 0.01,
                         ),
-                        barDetail![widget.index].editorialSummary == null
+                        barDetail![0].editorialSummary == null
                             ? const Text('')
                             : SizedBox(
                                 width: size.width,
                                 child: Text(
-                                 barDetail![widget.index].editorialSummary!.overview!,
+                                 barDetail![0].editorialSummary!.overview!,
                                   style: TextStyle(
                                       fontSize: size.height * 0.018,
                                       color: Colors.white),
                                 ),
                               ),
                         //
-                        barDetail![widget.index].editorialSummary == null
+                        barDetail![0].editorialSummary == null
                             ? Container()
                             : SizedBox(
                                 height: size.height * 0.02,
@@ -707,7 +707,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 color: primaryColor),
                             children: [
                               TextSpan(
-                                text:barDetail![widget.index].formattedAddress!,
+                                text:barDetail![0].formattedAddress!,
                                 style: TextStyle(
                                     fontSize: size.height * 0.018,
                                     color: whiteColor),
@@ -718,7 +718,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         SizedBox(
                           height: size.height * 0.02,
                         ),
-                        barDetail![widget.index].formattedPhoneNumber == null
+                        barDetail![0].formattedPhoneNumber == null
                             ? const Text('')
                             : Align(
                                 alignment: Alignment.topLeft,
@@ -731,7 +731,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                         color: primaryColor),
                                     children: [
                                       TextSpan(
-                                        text: barDetail![widget.index].formattedPhoneNumber ??
+                                        text: barDetail![0].formattedPhoneNumber ??
                                             "",
                                         style: TextStyle(
                                             fontSize: size.height * 0.018,
@@ -745,7 +745,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         SizedBox(
                           height: size.height * 0.02,
                         ),
-                        barDetail![widget.index].openingHours == null
+                        barDetail![0].openingHours == null
                             ? const Text('')
                             : Align(
                                 alignment: Alignment.topLeft,
@@ -759,7 +759,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                     children: [
                                       TextSpan(
                                         text:
-                                         barDetail![widget.index].openingHours!.openNow! ==
+                                         barDetail![0].openingHours!.openNow! ==
                                                     true
                                                 ? "Open"
                                                 : "Closed",
@@ -776,7 +776,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         SizedBox(
                           height: size.height * 0.02,
                         ),
-                        barDetail![widget.index].openingHours == null
+                        barDetail![0].openingHours == null
                             ? const Text('')
                             : Align(
                                 alignment: Alignment.topLeft,
@@ -790,12 +790,12 @@ class _DetailScreenState extends State<DetailScreen> {
                                     children: [
                                       for (var i = 0;
                                           i <
-                                              barDetail![widget.index].openingHours!
+                                              barDetail![0].openingHours!
                                                   .weekdayText!.length;
                                           i++) ...[
                                         TextSpan(
                                           text:
-                                              "${barDetail![widget.index].openingHours!.weekdayText![i]} \n",
+                                              "${barDetail![0].openingHours!.weekdayText![i]} \n",
                                           style: TextStyle(
                                               fontSize: size.height * 0.018,
                                               color: whiteColor),
@@ -808,7 +808,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         //
 
                         //
-                       barDetail![widget.index].wheelchairAccessibleEntrance == null
+                       barDetail![0].wheelchairAccessibleEntrance == null
                             ? const Text(' ')
                             : Align(
                                 alignment: Alignment.topLeft,
@@ -821,7 +821,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                         color: primaryColor),
                                     children: [
                                       TextSpan(
-                                        text:barDetail![widget.index]
+                                        text:barDetail![0]
                                                     .wheelchairAccessibleEntrance ==
                                                 true
                                             ? "Available"
@@ -840,7 +840,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           height: size.height * 0.02,
                         ),
                         //
-                      barDetail![widget.index].website == null
+                      barDetail![0].website == null
                             ? const Text('')
                             : Align(
                                 alignment: Alignment.topLeft,
@@ -853,13 +853,13 @@ class _DetailScreenState extends State<DetailScreen> {
                                         color: primaryColor),
                                     children: [
                                       TextSpan(
-                                        text: barDetail![widget.index].website ?? '',
+                                        text: barDetail![0].website ?? '',
                                         style: TextStyle(
                                             fontSize: size.height * 0.018,
                                             color: Colors.white),
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () async {
-                                            final url = barDetail![widget.index].website;
+                                            final url = barDetail![0].website;
 
                                             try {
                                               await _launchUrl(url!);
