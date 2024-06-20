@@ -48,9 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-
     super.initState();
-    final searchController = Provider.of<SearchBarsController>(context,listen: false);
+    final searchController =
+        Provider.of<SearchBarsController>(context, listen: false);
     searchController.getCordinateds();
     exploreBarByMap();
     recomendedBars();
@@ -472,70 +472,61 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           if (isSearchBarOpen)
-                Positioned.fill(
-                  // top: 0,
-                  // left: 0,
-                  // right: 0,
-                  // bottom: 0,
-                  child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Consumer<SearchBarsController>(
-                        builder: (context, value, child) {
-                          return Container(
-                            color: Colors.black.withOpacity(0.6),
-                            child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    customSearchBarWidget(),
-                                    value.barDetail.isEmpty
-                                        ? const Text("")
-                                        : Expanded(
-                                            child:
-                                                Consumer<SearchBarsController>(
-                                              builder: (context, value, child) {
-                                                if (value.barDetail.isEmpty) {
-                                                  return const Center(
-                                                      child: Text(
-                                                          "No data available"));
-                                                }
-                                                final nonNullBarDetail = value
-                                                    .barDetail
-                                                    .where(
-                                                        (item) => item != null)
-                                                    .cast<Result>()
-                                                    .toList();
-                                                return ListView.builder(
-                                                  scrollDirection:
-                                                      Axis.vertical,
-                                                  itemCount: value
-                                                      .searcbarsImage.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    // Debugging output
-
-                                                    return CustomExploreWidget(
-                                                      barsOrClubsImages:
-                                                          value.searcbarsImage,
-                                                      barsOrClubsDistanceList:
-                                                          value
-                                                              .searcbarsDistance,
-                                                      index: index,
-                                                      barAndClubsDetails:
-                                                          nonNullBarDetail,
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                  ],
-                                )),
-                          );
-                        },
-                      )),
+            Positioned.fill(
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Consumer<SearchBarsController>(
+                  builder: (context, value, child) {
+                    return Container(
+                      color: Colors.black.withOpacity(0.6),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            customSearchBarWidget(),
+                            value.searchingBar
+                                ? Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20),
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: primaryColor,
+                                      ),
+                                    ),
+                                  )
+                                : value.barDetail.isEmpty
+                                    ? const Text("No results found.")
+                                    : Expanded(
+                                        child: ListView.builder(
+                                          itemCount:
+                                              value.searcbarsImage.length,
+                                          itemBuilder: (context, index) {
+                                            final nonNullBarDetail = value
+                                                .barDetail
+                                                .where((item) => item != null)
+                                                .cast<Result>()
+                                                .toList();
+                                            return CustomExploreWidget(
+                                              barsOrClubsImages:
+                                                  value.searcbarsImage,
+                                              barsOrClubsDistanceList:
+                                                  value.searcbarsDistance,
+                                              index: index,
+                                              barAndClubsDetails:
+                                                  nonNullBarDetail,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
+              ),
+            ),
           if (isReview == true)
             Positioned(
               top: size.height * 0.15,

@@ -16,10 +16,12 @@ class SearchBarsController extends ChangeNotifier {
   List<Uint8List?> searcbarsImage = [];
   List<Rows> searcbarsDistance = [];
   List<Result?> barDetail = [];
+  bool _searchingBar = false;
   double? _lat;
   double? _lon;
   double? get lat => _lat;
   double? get lon => _lon;
+  bool get searchingBar => _searchingBar;
 
   Future<void> getCordinateds() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -30,9 +32,13 @@ class SearchBarsController extends ChangeNotifier {
   }
 
   Future<void> searchBarsOrClubs(String placeName, context) async {
+    _searchingBar = true;
+    notifyListeners();
+    log(searchingBar.toString());
     List<Predictions> searchResultList = [];
     searchResultList.clear();
     clearFields();
+
     try {
       var response = await http.get(Uri.parse(
           "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$googleMapApiKey&sessiontoken=123456&components=country:pk"));
@@ -49,17 +55,28 @@ class SearchBarsController extends ChangeNotifier {
               searchResultList,
               context,
             );
+            _searchingBar = false;
+            notifyListeners();
+            log(searchingBar.toString());
             log("searchBarDetail is not empty");
           } else {
+            _searchingBar = false;
+            notifyListeners();
             log("searchBarDetail is empty");
           }
         } else {
+          _searchingBar = false;
+          notifyListeners();
           log("No predictions found or predictions is not a list.");
         }
       } else {
+        _searchingBar = false;
+        notifyListeners();
         log("response.statusCode.toString()");
       }
     } catch (e) {
+      _searchingBar = false;
+      notifyListeners();
       log("search method error: ${e.toString()}");
     }
   }
@@ -105,7 +122,7 @@ class SearchBarsController extends ChangeNotifier {
           log("Received null data from barsDetailMethod for placeId: ${searchResult[i].placeId.toString()}");
         }
       }
-      notifyListeners(); 
+      notifyListeners();
     } catch (e) {
       log("get detail method error: ${e.toString()}");
     }

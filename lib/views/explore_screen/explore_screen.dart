@@ -226,68 +226,56 @@ class _ExploreScreenState extends State<ExploreScreen> {
               //
               if (isSearchBarOpen)
                 Positioned.fill(
-                  // top: 0,
-                  // left: 0,
-                  // right: 0,
-                  // bottom: 0,
                   child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Consumer<SearchBarsController>(
-                        builder: (context, value, child) {
-                          return Container(
-                            color: Colors.black.withOpacity(0.6),
-                            child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    customSearchBarWidget(),
-                                    value.barDetail.isEmpty
-                                        ? const Text("")
+                    padding: const EdgeInsets.all(15),
+                    child: Consumer<SearchBarsController>(
+                      builder: (context, value, child) {
+                        return Container(
+                          color: Colors.black.withOpacity(0.6),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                customSearchBarWidget(),
+                                value.searchingBar
+                                    ? Center(
+                                        child: CircularProgressIndicator(
+                                          color: primaryColor,
+                                        ),
+                                      )
+                                    : value.barDetail.isEmpty
+                                        ? const Text("No results found.")
                                         : Expanded(
-                                            child:
-                                                Consumer<SearchBarsController>(
-                                              builder: (context, value, child) {
-                                                if (value.barDetail.isEmpty) {
-                                                  return const Center(
-                                                      child: Text(
-                                                          "No data available"));
-                                                }
+                                            child: ListView.builder(
+                                              itemCount:
+                                                  value.searcbarsImage.length,
+                                              itemBuilder: (context, index) {
                                                 final nonNullBarDetail = value
                                                     .barDetail
                                                     .where(
                                                         (item) => item != null)
                                                     .cast<Result>()
                                                     .toList();
-                                                return ListView.builder(
-                                                  scrollDirection:
-                                                      Axis.vertical,
-                                                  itemCount: value
-                                                      .searcbarsImage.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    // Debugging output
-
-                                                    return CustomExploreWidget(
-                                                      barsOrClubsImages:
-                                                          value.searcbarsImage,
-                                                      barsOrClubsDistanceList:
-                                                          value
-                                                              .searcbarsDistance,
-                                                      index: index,
-                                                      barAndClubsDetails:
-                                                          nonNullBarDetail,
-                                                    );
-                                                  },
+                                                return CustomExploreWidget(
+                                                  barsOrClubsImages:
+                                                      value.searcbarsImage,
+                                                  barsOrClubsDistanceList:
+                                                      value.searcbarsDistance,
+                                                  index: index,
+                                                  barAndClubsDetails:
+                                                      nonNullBarDetail,
                                                 );
                                               },
                                             ),
                                           ),
-                                  ],
-                                )),
-                          );
-                        },
-                      )),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
             ],
           )),
@@ -322,8 +310,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ),
               suffixIcon: GestureDetector(
                   onTap: () {
-                    value.barDetail.clear();
+                    
                     setState(() {
+                      value.barDetail.clear();
+                    value.searchTextFieldController.clear();
                       isSearchBarOpen = false;
                     });
                   },
