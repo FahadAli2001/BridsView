@@ -411,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             nearestBarsImages[index]!,
                                             height: size.height * 0.15,
                                             width: size.width * 0.5,
-                                            fit: BoxFit.fitWidth,
+                                            fit: BoxFit.cover,
                                           ),
                                           Row(
                                             mainAxisAlignment:
