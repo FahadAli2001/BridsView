@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:custom_info_window/custom_info_window.dart';
@@ -30,22 +31,27 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
 
-    final mapController = Provider.of<MapsController>(context, listen: false);
-    mapController.getCordinateds().then((value) async {
-      mapController.loadData(mapController.lat, mapController.lon, widget.bar,
-          widget.index, context);
-      mapController.clearPolylines();
-      CameraPosition cameraPosition = CameraPosition(
-        target: LatLng(mapController.lat!, mapController.lon!),
-        zoom: 16,
-      );
-      final GoogleMapController controller = await _controller.future;
-      controller.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    try {
+      final mapController = Provider.of<MapsController>(context, listen: false);
+      mapController.getCordinateds().then((value) async {
+        mapController.loadData(mapController.lat, mapController.lon, widget.bar,
+            widget.index, context);
+        mapController.clearPolylines();
+        CameraPosition cameraPosition = CameraPosition(
+          target: LatLng(mapController.lat!, mapController.lon!),
+          zoom: 16,
+        );
+        final GoogleMapController controller = await _controller.future;
+        controller
+            .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
+        setState(() {});
+      });
 
       setState(() {});
-    });
-
-    setState(() {});
+    } catch (e) {
+      log("map screen ${e.toString()}");
+    }
   }
 
   @override
@@ -83,9 +89,13 @@ class _MapScreenState extends State<MapScreen> {
                 },
               ),
             ),
-            value.onMapNearestBar.isEmpty ? 
-            Center(child: CircularProgressIndicator(color: primaryColor,),)
-            :const SizedBox(),
+            value.onMapNearestBar.isEmpty
+                ? Center(
+                    child: CircularProgressIndicator(
+                      color: primaryColor,
+                    ),
+                  )
+                : const SizedBox(),
             CustomInfoWindow(
               controller: value.customInfoWindowController,
               width: 300,

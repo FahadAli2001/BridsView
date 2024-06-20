@@ -64,7 +64,8 @@ class MapsController extends ChangeNotifier {
   }
 
   loadData(lat, lon, List<Result> selectedBar, int index, context) async {
-    
+    onMapNearestBar.clear();
+    markers.clear();
     var nearestBar = await nearsetBarsMethodForMap();
     onMapNearestBar.addAll(nearestBar as Iterable<Result>);
     try {
@@ -84,7 +85,8 @@ class MapsController extends ChangeNotifier {
         icon: BitmapDescriptor.defaultMarker,
       ));
 
-      for (var i = 0; i < onMapNearestBar.length; i++) {
+    try {
+        for (var i = 0; i < onMapNearestBar.length; i++) {
         _markers.add(Marker(
           markerId: MarkerId(i.toString()),
           position: LatLng(onMapNearestBar[i].geometry!.location!.lat!,
@@ -158,7 +160,10 @@ class MapsController extends ChangeNotifier {
             );
           },
         ));
-      }
+      } 
+    } catch (e) {
+      log("custom box ${e.toString()}"); 
+    }
       notifyListeners();
     } catch (e) {
       log("$e load data");

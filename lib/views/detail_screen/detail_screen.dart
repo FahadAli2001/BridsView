@@ -814,7 +814,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 alignment: Alignment.topLeft,
                                 child: RichText(
                                   text: TextSpan(
-                                    text: "Wheel Chair Entrance: ",
+                                    text: "Wheel Chair Entrance : ",
                                     style: TextStyle(
                                         fontSize: size.height * 0.018,
                                         fontWeight: FontWeight.bold,
@@ -836,7 +836,10 @@ class _DetailScreenState extends State<DetailScreen> {
                               ),
                         //
 
-                        SizedBox(
+                     barDetail![0].website == null
+                            ?   const  SizedBox(
+                          
+                        ):  SizedBox(
                           height: size.height * 0.02,
                         ),
                         //
