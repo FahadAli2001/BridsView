@@ -57,10 +57,10 @@ class MapsController extends ChangeNotifier {
     _lon = double.parse(sp.getString('longitude')!);
   }
 
-  loadData(lat, lon, List<Results> selectedBar, int index, context) async {
-    List<Results> nearestBars = [];
-    var nearestBar = await nearsetBarsMethod();
-    nearestBars.addAll(nearestBar);
+  loadData(lat, lon, List<Result> selectedBar, int index, context) async {
+    List<Result> nearestBars = [];
+    var nearestBar = await nearsetBarsMethodForMap();
+    nearestBars.addAll(nearestBar as Iterable<Result>);
     try {
       final Uint8List markerIcon =
           await getUserImageFromAssets(currentLocationIcon, 150);
@@ -89,7 +89,7 @@ class MapsController extends ChangeNotifier {
               GestureDetector(
                 onTap: () {
                   clearPolylines();
-                  getPolyline(nearestBar, i);
+                  getPolyline(nearestBar.cast<Result>(), i);
                 },
                 child: Container(
                     color: Colors.white,
@@ -172,7 +172,7 @@ class MapsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  getPolyline(List<Results> bars, int index) async {
+  getPolyline(List<Result> bars, int index) async {
     _isGettingDirection = true;
     notifyListeners();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
@@ -378,7 +378,7 @@ class MapsController extends ChangeNotifier {
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1000&type=restaurant&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1500&type=restaurant&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
@@ -406,6 +406,55 @@ class MapsController extends ChangeNotifier {
       log(e.toString());
     }
 
+    return nearestBars;
+  }
+
+  Future<List<Result>> nearsetBarsMethodForMap() async {
+    log("nearsetBarsMethodForMap");
+    List<Result> nearestBars = [];
+
+    try {
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      String latitude = sp.getString('latitude') ?? '';
+      String longitude = sp.getString('longitude') ?? '';
+      String url =
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1000&type=restaurant&key=$googleMapApiKey';
+      http.Response response = await http.get(Uri.parse(url));
+      final values = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        var list = values['results'] as List;
+        List<Results> resultsList = list
+            .map(
+              (e) => Results.fromJson(e),
+            )
+            .toList();
+        log("result list length : ${resultsList.length}");
+        // nearestBars = list.map((i) => Result.fromJson(i)).toList();
+
+        for (var i = 0; i < resultsList.length; i++) {
+          if (resultsList[i].photos != null &&
+              resultsList[i].photos!.isNotEmpty) {
+            var nearestBardata =
+                await exploreImages(resultsList[i].photos![0].photoReference!);
+            nearestBarsImages.addAll(nearestBardata);
+          }
+          var barDetail =await barsDetailMethod(resultsList[i].placeId!);
+          nearestBars.add(barDetail!);
+          var distanceData = await getDistanceBetweenPoints(
+              resultsList[i].geometry!.location!.lat.toString(),
+              resultsList[i].geometry!.location!.lng.toString(),
+              latitude,
+              longitude);
+          nearestBarsDistanceList.addAll(distanceData);
+        }
+      } else {
+        log("Error");
+      }
+    } catch (e) {
+      log("nearest bar method :  ${e.toString()}");
+    }
+    log(nearestBars.length.toString());
     return nearestBars;
   }
 

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:custom_info_window/custom_info_window.dart';
@@ -7,12 +6,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-
-import '../../model/nearby_bars_model/nearby_bars_model.dart';
+import '../../model/bar_details_model/bar_details_model.dart';
 import '../../widgets/custom_button/custom_button.dart';
 
 class MapScreen extends StatefulWidget {
-  final List<Results> bar;
+  final List<Result> bar;
   final int index;
   const MapScreen({super.key, required this.bar, required this.index});
 

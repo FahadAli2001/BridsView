@@ -41,7 +41,7 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
-  Result? barDetail;
+  List<Result>? barDetail = [];
   @override
   void initState() {
     super.initState();
@@ -59,7 +59,8 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Future<void> getBarsDetails(String placeId) async {
     final mapController = Provider.of<MapsController>(context, listen: false);
-    barDetail = await mapController.barsDetailMethod(placeId);
+    var detail = await mapController.barsDetailMethod(placeId);
+    barDetail!.add(detail!);
     setState(() {});
   }
 
@@ -74,16 +75,28 @@ class _DetailScreenState extends State<DetailScreen> {
             ontap: () async {
               //
 
-              if (widget.fromSearchScreen == true) {
-              } else {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: MapScreen(
-                          bar: widget.barDetail!,
-                          index: widget.index,
-                        ),
-                        type: PageTransitionType.fade));
+              try {
+                if (widget.fromSearchScreen == true) {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: MapScreen(
+                            bar: widget.searchBarDetail!,
+                            index: widget.index,
+                          ),
+                          type: PageTransitionType.fade));
+                } else {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: MapScreen(
+                            bar: barDetail! as List<Result>,
+                            index: widget.index,
+                          ),
+                          type: PageTransitionType.fade));
+                }
+              } catch (e) {
+                log(e.toString());
               }
             }),
       ),
@@ -484,7 +497,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
               ),
             )
-          : barDetail == null
+          : barDetail!.isEmpty
               ? Shimmer.fromColors(
                   baseColor: Colors.grey.shade800,
                   highlightColor: Colors.grey.shade700,
@@ -668,19 +681,19 @@ class _DetailScreenState extends State<DetailScreen> {
                         SizedBox(
                           height: size.height * 0.01,
                         ),
-                        barDetail!.editorialSummary == null
+                        barDetail![widget.index].editorialSummary == null
                             ? const Text('')
                             : SizedBox(
                                 width: size.width,
                                 child: Text(
-                                  barDetail!.editorialSummary!.overview!,
+                                 barDetail![widget.index].editorialSummary!.overview!,
                                   style: TextStyle(
                                       fontSize: size.height * 0.018,
                                       color: Colors.white),
                                 ),
                               ),
                         //
-                        barDetail!.editorialSummary == null
+                        barDetail![widget.index].editorialSummary == null
                             ? Container()
                             : SizedBox(
                                 height: size.height * 0.02,
@@ -694,7 +707,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 color: primaryColor),
                             children: [
                               TextSpan(
-                                text: barDetail!.formattedAddress!,
+                                text:barDetail![widget.index].formattedAddress!,
                                 style: TextStyle(
                                     fontSize: size.height * 0.018,
                                     color: whiteColor),
@@ -705,7 +718,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         SizedBox(
                           height: size.height * 0.02,
                         ),
-                        barDetail!.formattedPhoneNumber == null
+                        barDetail![widget.index].formattedPhoneNumber == null
                             ? const Text('')
                             : Align(
                                 alignment: Alignment.topLeft,
@@ -718,7 +731,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                         color: primaryColor),
                                     children: [
                                       TextSpan(
-                                        text: barDetail!.formattedPhoneNumber ??
+                                        text: barDetail![widget.index].formattedPhoneNumber ??
                                             "",
                                         style: TextStyle(
                                             fontSize: size.height * 0.018,
@@ -732,7 +745,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         SizedBox(
                           height: size.height * 0.02,
                         ),
-                        barDetail!.openingHours == null
+                        barDetail![widget.index].openingHours == null
                             ? const Text('')
                             : Align(
                                 alignment: Alignment.topLeft,
@@ -746,7 +759,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                     children: [
                                       TextSpan(
                                         text:
-                                            barDetail!.openingHours!.openNow! ==
+                                         barDetail![widget.index].openingHours!.openNow! ==
                                                     true
                                                 ? "Open"
                                                 : "Closed",
@@ -763,7 +776,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         SizedBox(
                           height: size.height * 0.02,
                         ),
-                        barDetail!.openingHours == null
+                        barDetail![widget.index].openingHours == null
                             ? const Text('')
                             : Align(
                                 alignment: Alignment.topLeft,
@@ -777,12 +790,12 @@ class _DetailScreenState extends State<DetailScreen> {
                                     children: [
                                       for (var i = 0;
                                           i <
-                                              barDetail!.openingHours!
+                                              barDetail![widget.index].openingHours!
                                                   .weekdayText!.length;
                                           i++) ...[
                                         TextSpan(
                                           text:
-                                              "${barDetail!.openingHours!.weekdayText![i]} \n",
+                                              "${barDetail![widget.index].openingHours!.weekdayText![i]} \n",
                                           style: TextStyle(
                                               fontSize: size.height * 0.018,
                                               color: whiteColor),
@@ -795,7 +808,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         //
 
                         //
-                        barDetail!.wheelchairAccessibleEntrance == null
+                       barDetail![widget.index].wheelchairAccessibleEntrance == null
                             ? const Text(' ')
                             : Align(
                                 alignment: Alignment.topLeft,
@@ -808,7 +821,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                         color: primaryColor),
                                     children: [
                                       TextSpan(
-                                        text: barDetail!
+                                        text:barDetail![widget.index]
                                                     .wheelchairAccessibleEntrance ==
                                                 true
                                             ? "Available"
@@ -827,7 +840,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           height: size.height * 0.02,
                         ),
                         //
-                        barDetail!.website == null
+                      barDetail![widget.index].website == null
                             ? const Text('')
                             : Align(
                                 alignment: Alignment.topLeft,
@@ -840,13 +853,13 @@ class _DetailScreenState extends State<DetailScreen> {
                                         color: primaryColor),
                                     children: [
                                       TextSpan(
-                                        text: barDetail?.website ?? '',
+                                        text: barDetail![widget.index].website ?? '',
                                         style: TextStyle(
                                             fontSize: size.height * 0.018,
                                             color: Colors.white),
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () async {
-                                            final url = barDetail?.website;
+                                            final url = barDetail![widget.index].website;
 
                                             try {
                                               await _launchUrl(url!);
