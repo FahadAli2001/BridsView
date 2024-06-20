@@ -25,6 +25,8 @@ class SearchBarsController extends ChangeNotifier {
     SharedPreferences sp = await SharedPreferences.getInstance();
     _lat = double.tryParse(sp.getString('latitude') ?? '');
     _lon = double.tryParse(sp.getString('longitude') ?? '');
+
+    notifyListeners();
   }
 
   Future<void> searchBarsOrClubs(String placeName, context) async {
@@ -96,13 +98,14 @@ class SearchBarsController extends ChangeNotifier {
               lat,
               lon,
             );
+
             searcbarsDistance.addAll(distanceData);
           }
         } else {
           log("Received null data from barsDetailMethod for placeId: ${searchResult[i].placeId.toString()}");
         }
       }
-      notifyListeners(); // Notify listeners to rebuild UI
+      notifyListeners(); 
     } catch (e) {
       log("get detail method error: ${e.toString()}");
     }

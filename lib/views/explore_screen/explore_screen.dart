@@ -30,6 +30,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   void initState() {
     super.initState();
+    final searchController =
+        Provider.of<SearchBarsController>(context, listen: false);
+    searchController.getCordinateds();
     clearList();
     getBarsAndClubs('restaurant');
   }
