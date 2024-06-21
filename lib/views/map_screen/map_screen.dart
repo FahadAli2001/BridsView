@@ -132,6 +132,7 @@ class _MapScreenState extends State<MapScreen> {
                 child: GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
+                      value.isGettingDirection = false;
                     },
                     child: const CircleAvatar(
                         backgroundColor: Colors.black,

@@ -763,7 +763,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 Consumer<DetailScreenController>(
                                   builder: (context, value, child) {
                                     return Text(
-                                      '(${value.randomPopulation.toString()})',
+                                      '(${value.randomPopulation.toString()} APROX)',
                                       style: TextStyle(
                                           fontSize: size.height * 0.026,
                                           color: primaryColor,
