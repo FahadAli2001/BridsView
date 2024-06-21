@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:typed_data';
+import 'package:birds_view/controller/deatil_screen_controller/detail_screen_controller.dart';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
@@ -16,8 +17,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../../model/nearby_bars_model/nearby_bars_model.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -45,16 +44,19 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   void initState() {
     super.initState();
-
     if (widget.fromSearchScreen == false) {
       getBarsDetails(widget.barDetail![widget.index].placeId!);
+      checkBarId();
     }
   }
 
-  Future<void> _launchUrl(String url) async {
-    if (!await launchUrl(Uri.parse(url))) {
-      throw Exception('Could not launch $url');
-    }
+  Future<void> checkBarId() async {
+    final detailController =
+        Provider.of<DetailScreenController>(context, listen: false);
+
+    // await detailController.getRandomNumbers();
+    await detailController
+        .checkBarPlaceIdExist(widget.barDetail![widget.index].placeId!);
   }
 
   Future<void> getBarsDetails(String placeId) async {
@@ -269,6 +271,81 @@ class _DetailScreenState extends State<DetailScreen> {
                             ],
                           ),
                     //
+
+                    SizedBox(
+                      height: size.height * 0.02,
+                    ),
+                    //
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Row(
+                          children: [
+                            Text(
+                              'Mix Crowd ',
+                              style: TextStyle(
+                                  fontSize: size.height * 0.026,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Consumer<DetailScreenController>(
+                              builder: (context, value, child) {
+                                return Text(
+                                  '(${value.randomPopulation.toString()})',
+                                  style: TextStyle(
+                                      fontSize: size.height * 0.026,
+                                      color: primaryColor,
+                                      fontWeight: FontWeight.bold),
+                                );
+                              },
+                            )
+                          ],
+                        )),
+                    //
+                    SizedBox(
+                      height: size.height * 0.02,
+                    ),
+                    //
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            Icon(
+                              Icons.man,
+                              color: primaryColor,
+                              size: size.height * 0.05,
+                            ),
+                            Text(
+                              "Men",
+                              style: TextStyle(
+                                  fontSize: size.height * 0.018,
+                                  color: Colors.white),
+                            )
+                          ],
+                        ),
+                        Container(
+                          height: size.height * 0.1,
+                          width: 2,
+                          color: primaryColor,
+                        ),
+                        Column(
+                          children: [
+                            Icon(
+                              Icons.woman,
+                              color: primaryColor,
+                              size: size.height * 0.05,
+                            ),
+                            Text(
+                              "Women",
+                              style: TextStyle(
+                                  fontSize: size.height * 0.018,
+                                  color: Colors.white),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    //
                     SizedBox(
                       height: size.height * 0.02,
                     ),
@@ -461,38 +538,42 @@ class _DetailScreenState extends State<DetailScreen> {
                         ? const Text('')
                         : Align(
                             alignment: Alignment.topLeft,
-                            child: RichText(
-                              text: TextSpan(
-                                text: "Website : ",
-                                style: TextStyle(
-                                    fontSize: size.height * 0.018,
-                                    fontWeight: FontWeight.bold,
-                                    color: primaryColor),
-                                children: [
-                                  TextSpan(
-                                    text: widget.searchBarDetail![widget.index]
-                                            .website ??
-                                        '',
+                            child: Consumer<DetailScreenController>(
+                              builder: (context, value, child) {
+                                return RichText(
+                                  text: TextSpan(
+                                    text: "Website : ",
                                     style: TextStyle(
                                         fontSize: size.height * 0.018,
-                                        color: Colors.white),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () async {
-                                        final url = widget
-                                            .searchBarDetail![widget.index]
-                                            .website;
+                                        fontWeight: FontWeight.bold,
+                                        color: primaryColor),
+                                    children: [
+                                      TextSpan(
+                                        text: widget
+                                                .searchBarDetail![widget.index]
+                                                .website ??
+                                            '',
+                                        style: TextStyle(
+                                            fontSize: size.height * 0.018,
+                                            color: Colors.white),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () async {
+                                            final url = widget
+                                                .searchBarDetail![widget.index]
+                                                .website;
 
-                                        try {
-                                          await _launchUrl(url!);
-                                        } catch (e) {
-                                          log(e.toString());
-                                        }
-                                      },
+                                            try {
+                                              await value.socialLaunchUrl(url!);
+                                            } catch (e) {
+                                              log(e.toString());
+                                            }
+                                          },
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
+                                );
+                              },
+                            )),
                   ],
                 ),
               ),
@@ -670,6 +751,80 @@ class _DetailScreenState extends State<DetailScreen> {
                         //
                         Align(
                             alignment: Alignment.topLeft,
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Mix Crowd ',
+                                  style: TextStyle(
+                                      fontSize: size.height * 0.026,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Consumer<DetailScreenController>(
+                                  builder: (context, value, child) {
+                                    return Text(
+                                      '(${value.randomPopulation.toString()})',
+                                      style: TextStyle(
+                                          fontSize: size.height * 0.026,
+                                          color: primaryColor,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  },
+                                )
+                              ],
+                            )),
+                        //
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        //
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                Icon(
+                                  Icons.man,
+                                  color: primaryColor,
+                                  size: size.height * 0.05,
+                                ),
+                                Text(
+                                  "Men",
+                                  style: TextStyle(
+                                      fontSize: size.height * 0.018,
+                                      color: Colors.white),
+                                )
+                              ],
+                            ),
+                            Container(
+                              height: size.height * 0.1,
+                              width: 2,
+                              color: primaryColor,
+                            ),
+                            Column(
+                              children: [
+                                Icon(
+                                  Icons.woman,
+                                  color: primaryColor,
+                                  size: size.height * 0.05,
+                                ),
+                                Text(
+                                  "Women",
+                                  style: TextStyle(
+                                      fontSize: size.height * 0.018,
+                                      color: Colors.white),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        //
+                        SizedBox(
+                          height: size.height * 0.02,
+                        ),
+                        //
+                        Align(
+                            alignment: Alignment.topLeft,
                             child: Text(
                               'Description',
                               style: TextStyle(
@@ -686,7 +841,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             : SizedBox(
                                 width: size.width,
                                 child: Text(
-                                 barDetail![0].editorialSummary!.overview!,
+                                  barDetail![0].editorialSummary!.overview!,
                                   style: TextStyle(
                                       fontSize: size.height * 0.018,
                                       color: Colors.white),
@@ -707,7 +862,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 color: primaryColor),
                             children: [
                               TextSpan(
-                                text:barDetail![0].formattedAddress!,
+                                text: barDetail![0].formattedAddress!,
                                 style: TextStyle(
                                     fontSize: size.height * 0.018,
                                     color: whiteColor),
@@ -731,7 +886,8 @@ class _DetailScreenState extends State<DetailScreen> {
                                         color: primaryColor),
                                     children: [
                                       TextSpan(
-                                        text: barDetail![0].formattedPhoneNumber ??
+                                        text: barDetail![0]
+                                                .formattedPhoneNumber ??
                                             "",
                                         style: TextStyle(
                                             fontSize: size.height * 0.018,
@@ -758,11 +914,12 @@ class _DetailScreenState extends State<DetailScreen> {
                                         color: primaryColor),
                                     children: [
                                       TextSpan(
-                                        text:
-                                         barDetail![0].openingHours!.openNow! ==
-                                                    true
-                                                ? "Open"
-                                                : "Closed",
+                                        text: barDetail![0]
+                                                    .openingHours!
+                                                    .openNow! ==
+                                                true
+                                            ? "Open"
+                                            : "Closed",
                                         style: TextStyle(
                                             fontSize: size.height * 0.018,
                                             color: whiteColor),
@@ -790,8 +947,10 @@ class _DetailScreenState extends State<DetailScreen> {
                                     children: [
                                       for (var i = 0;
                                           i <
-                                              barDetail![0].openingHours!
-                                                  .weekdayText!.length;
+                                              barDetail![0]
+                                                  .openingHours!
+                                                  .weekdayText!
+                                                  .length;
                                           i++) ...[
                                         TextSpan(
                                           text:
@@ -808,7 +967,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         //
 
                         //
-                       barDetail![0].wheelchairAccessibleEntrance == null
+                        barDetail![0].wheelchairAccessibleEntrance == null
                             ? const Text(' ')
                             : Align(
                                 alignment: Alignment.topLeft,
@@ -821,7 +980,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                         color: primaryColor),
                                     children: [
                                       TextSpan(
-                                        text:barDetail![0]
+                                        text: barDetail![0]
                                                     .wheelchairAccessibleEntrance ==
                                                 true
                                             ? "Available"
@@ -836,45 +995,49 @@ class _DetailScreenState extends State<DetailScreen> {
                               ),
                         //
 
-                     barDetail![0].website == null
-                            ?   const  SizedBox(
-                          
-                        ):  SizedBox(
-                          height: size.height * 0.02,
-                        ),
+                        barDetail![0].website == null
+                            ? const SizedBox()
+                            : SizedBox(
+                                height: size.height * 0.02,
+                              ),
                         //
-                      barDetail![0].website == null
+                        barDetail![0].website == null
                             ? const Text('')
                             : Align(
                                 alignment: Alignment.topLeft,
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: "Website : ",
-                                    style: TextStyle(
-                                        fontSize: size.height * 0.018,
-                                        fontWeight: FontWeight.bold,
-                                        color: primaryColor),
-                                    children: [
-                                      TextSpan(
-                                        text: barDetail![0].website ?? '',
+                                child: Consumer<DetailScreenController>(
+                                  builder: (context, value, child) {
+                                    return RichText(
+                                      text: TextSpan(
+                                        text: "Website : ",
                                         style: TextStyle(
                                             fontSize: size.height * 0.018,
-                                            color: Colors.white),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () async {
-                                            final url = barDetail![0].website;
+                                            fontWeight: FontWeight.bold,
+                                            color: primaryColor),
+                                        children: [
+                                          TextSpan(
+                                            text: barDetail![0].website ?? '',
+                                            style: TextStyle(
+                                                fontSize: size.height * 0.018,
+                                                color: Colors.white),
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () async {
+                                                final url =
+                                                    barDetail![0].website;
 
-                                            try {
-                                              await _launchUrl(url!);
-                                            } catch (e) {
-                                              log(e.toString());
-                                            }
-                                          },
+                                                try {
+                                                  await value
+                                                      .socialLaunchUrl(url!);
+                                                } catch (e) {
+                                                  log(e.toString());
+                                                }
+                                              },
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                                    );
+                                  },
+                                )),
                       ],
                     ),
                   ),

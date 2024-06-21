@@ -6,6 +6,7 @@ import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/views/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'controller/deatil_screen_controller/detail_screen_controller.dart';
 import 'controller/login_controller/login_controller.dart';
 import 'controller/search_bars_controller/search_bars_controller.dart';
 import 'controller/splash_controller/splash_controller.dart';
@@ -17,7 +18,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -28,7 +28,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SignUpController()),
         ChangeNotifierProvider(create: (_) => EditProfileController()),
         ChangeNotifierProvider(create: (_) => MapsController()),
-        ChangeNotifierProvider(create: (_) => SearchBarsController())
+        ChangeNotifierProvider(create: (_) => SearchBarsController()),
+        ChangeNotifierProvider(create: (_) => DetailScreenController())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
