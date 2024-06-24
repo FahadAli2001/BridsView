@@ -346,7 +346,7 @@ class _DetailScreenState extends State<DetailScreen>
                                   animation: _controller,
                                   builder: (context, child) {
                                     return Positioned(
-                                      left: size.width * 0.3,
+                                      left: size.width * 0.33,
                                       child: ScaleTransition(
                                         scale: _animation,
                                         child: Image.asset(
@@ -846,7 +846,7 @@ class _DetailScreenState extends State<DetailScreen>
                                       animation: _controller,
                                       builder: (context, child) {
                                         return Positioned(
-                                          left: size.width * 0.3,
+                                          left: size.width * 0.33,
                                           child: ScaleTransition(
                                             scale: _animation,
                                             child: Image.asset(
