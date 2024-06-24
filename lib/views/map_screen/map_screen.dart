@@ -5,15 +5,18 @@ import 'package:birds_view/utils/colors.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../model/bar_details_model/bar_details_model.dart';
 import '../../widgets/custom_button/custom_button.dart';
 
 class MapScreen extends StatefulWidget {
+  final List<Uint8List> barImage;
   final List<Result> bar;
   final int index;
-  const MapScreen({super.key, required this.bar, required this.index});
+  const MapScreen({super.key, required this.bar, required this.index,required this.barImage});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -35,7 +38,7 @@ class _MapScreenState extends State<MapScreen> {
       final mapController = Provider.of<MapsController>(context, listen: false);
       mapController.getCordinateds().then((value) async {
         mapController.loadData(mapController.lat, mapController.lon, widget.bar,
-            widget.index, context);
+            widget.index, widget.barImage,context);
         mapController.clearPolylines();
         CameraPosition cameraPosition = CameraPosition(
           target: LatLng(mapController.lat!, mapController.lon!),
@@ -90,16 +93,23 @@ class _MapScreenState extends State<MapScreen> {
               ),
             ),
             value.onMapNearestBar.isEmpty
-                ? Center(
-                    child: CircularProgressIndicator(
-                      color: primaryColor,
-                    ),
-                  )
+                ? Shimmer.fromColors(
+                  baseColor: Colors.grey.shade400,
+                  highlightColor: Colors.grey.shade700,
+                  child: Center(
+                      child:Text("Loading",
+                      style: TextStyle(
+                        color: Colors.grey.shade100,
+                        fontWeight: FontWeight.bold,
+                        fontSize: size.height *0.07
+                      ),)
+                  ),
+                )
                 : const SizedBox(),
             CustomInfoWindow(
               controller: value.customInfoWindowController,
               width: 300,
-              height: 150,
+              height: 120,
               offset: 50,
             ),
             value.isGettingDirection == true

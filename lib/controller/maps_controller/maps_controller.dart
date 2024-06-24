@@ -63,7 +63,7 @@ class MapsController extends ChangeNotifier {
     _lon = double.parse(sp.getString('longitude')!);
   }
 
-  loadData(lat, lon, List<Result> selectedBar, int index, context) async {
+  loadData(lat, lon, List<Result> selectedBar, int index,List<Uint8List> barImage,context) async {
     onMapNearestBar.clear();
     markers.clear();
     nearestBarsImages.clear();
@@ -73,6 +73,8 @@ class MapsController extends ChangeNotifier {
     try {
       final Uint8List markerIcon =
           await getUserImageFromAssets(currentLocationIcon, 150);
+      
+      final Uint8List barsIcon = await getUserImageFromAssets(currentLocationIcon, 70);
 
       _markers.add(Marker(
         markerId: const MarkerId("user"),
@@ -84,7 +86,90 @@ class MapsController extends ChangeNotifier {
         markerId: const MarkerId("bar"),
         position: LatLng(selectedBar[index].geometry!.location!.lat!,
             selectedBar[index].geometry!.location!.lng!),
-        icon: BitmapDescriptor.defaultMarker,
+        icon: BitmapDescriptor.fromBytes(barsIcon),
+        onTap: () {
+                      customInfoWindowController.addInfoWindow!(
+              GestureDetector(
+                onTap: () {
+                  clearPolylines();
+                  getPolyline(nearestBar.cast<Result>(), index);
+                },
+                child: Container(
+                    color: Colors.white,
+                    child: Row(
+                      children: [
+                     
+                     SizedBox(
+                          width: 100,
+                          height: 200,
+                          child: Image.memory(
+                          barImage[index]  ,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: Text(
+                                selectedBar[index].name ?? '',
+                                maxLines: 2,
+                                style: const TextStyle(
+                                  
+                                  color: Colors.black,
+                                  
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                         selectedBar[index].rating == null ?
+                       const  Text("Ratings Not Available",
+                         style:   TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                         )
+                         :   Align(
+                          alignment: Alignment.topLeft,
+                           child: RatingBarIndicator(
+                                unratedColor: Colors.grey,
+                                rating: selectedBar[index].rating! * 1.0  ,
+                                itemBuilder: (context, index) => Icon(
+                                  Icons.star,
+                                  color: primaryColor,
+                                ),
+                                itemCount: 5,
+                                itemSize: 15,
+                                direction: Axis.horizontal,
+                              ),
+                         ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: Text(
+                                selectedBar[index].vicinity ?? '',
+                                maxLines: 4,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                   fontSize: 10
+                                  // fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
+              ),
+              LatLng(selectedBar[index].geometry!.location!.lat!,
+                 selectedBar[index].geometry!.location!.lng!),
+            );
+        },
       ));
 
     try {
@@ -93,7 +178,7 @@ class MapsController extends ChangeNotifier {
           markerId: MarkerId(i.toString()),
           position: LatLng(onMapNearestBar[i].geometry!.location!.lat!,
               onMapNearestBar[i].geometry!.location!.lng!),
-          icon: BitmapDescriptor.defaultMarker,
+          icon: BitmapDescriptor.fromBytes(barsIcon),
           onTap: () {
             customInfoWindowController.addInfoWindow!(
               GestureDetector(
@@ -127,14 +212,17 @@ class MapsController extends ChangeNotifier {
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.4,
                               child: Text(
                                 nearestBar[i].name ?? '',
+                                maxLines: 2,
                                 style: const TextStyle(
+                                  
                                   color: Colors.black,
-                                  fontSize: 14,
+                                  
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -147,25 +235,29 @@ class MapsController extends ChangeNotifier {
                                   fontWeight: FontWeight.bold,
                                 ),
                          )
-                         :   RatingBarIndicator(
-                              unratedColor: Colors.grey,
-                              rating: nearestBar[i].rating! * 1.0  ,
-                              itemBuilder: (context, index) => Icon(
-                                Icons.star,
-                                color: primaryColor,
+                         :   Align(
+                          alignment: Alignment.topLeft,
+                           child: RatingBarIndicator(
+                                unratedColor: Colors.grey,
+                                rating: nearestBar[i].rating! * 1.0  ,
+                                itemBuilder: (context, index) => Icon(
+                                  Icons.star,
+                                  color: primaryColor,
+                                ),
+                                itemCount: 5,
+                                itemSize: 15,
+                                direction: Axis.horizontal,
                               ),
-                              itemCount: 5,
-                              itemSize: 15,
-                              direction: Axis.horizontal,
-                            ),
+                         ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.4,
                               child: Text(
                                 onMapNearestBar[i].vicinity ?? '',
+                                maxLines: 4,
                                 style: const TextStyle(
                                   color: Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
+                                   fontSize: 10
+                                  // fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),

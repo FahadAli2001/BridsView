@@ -69,13 +69,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   text: widget.user!.data!.firstName ?? 'Guest ',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: size.height * 0.03,
+                      fontSize: size.height * 0.026,
                       color: Colors.white),
                   children: [
                     TextSpan(
                       text: " ${widget.user!.data!.lastName}",
                       style: TextStyle(
-                          fontSize: size.height * 0.03, color: primaryColor),
+                          fontSize: size.height * 0.026, color: primaryColor),
                     ),
                   ],
                 ),

@@ -41,7 +41,7 @@ class SearchBarsController extends ChangeNotifier {
 
     try {
       var response = await http.get(Uri.parse(
-          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$googleMapApiKey&sessiontoken=123456&components=country:us"));
+          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$googleMapApiKey&sessiontoken=123456&components=country:pk"));
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         //  log(data['predictions'].toString());

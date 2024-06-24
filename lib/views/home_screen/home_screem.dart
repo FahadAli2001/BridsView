@@ -3,12 +3,15 @@ import 'dart:ui';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
+import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/detail_screen/detail_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
+import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -160,13 +163,30 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               width: size.width * 0.04,
                             ),
-                            Text(
-                              widget.user?.data?.username ?? "Guest",
+                              SizedBox(
+                      width: size.width * 0.4,
+                      child: RichText(
+                        text: TextSpan(
+                          text:widget. user == null ||widget.  user!.data!.firstName == ''
+                              ? "Guest "
+                              : '${widget. user!.data!.firstName} ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: size.height * 0.026,
+                              color: Colors.white),
+                          children: [
+                            TextSpan(
+                              text:widget.  user == null ||widget.  user!.data!.lastName == ''
+                                  ? "User"
+                                  : '${widget. user!.data!.lastName} ',
                               style: TextStyle(
-                                  fontSize: size.height * 0.022,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            )
+                                  fontSize: size.height * 0.026,
+                                  color: primaryColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                           ],
                         ),
                       ),
@@ -190,13 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Explore',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w900,
-                            fontSize: size.height * 0.026),
-                      ),
+                    const  CustomHeadingText(heading: "Explore"),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -234,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.black,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            itemCount: exploreBar.length,
+                            itemCount: exploreBarsImages.length,
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding:
@@ -289,15 +303,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: size.height * 0.025,
                   ),
-                  Align(
+                const  Align(
                     alignment: Alignment.topLeft,
-                    child: Text(
-                      'Recommended',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                          fontSize: size.height * 0.026),
-                    ),
+                    child: CustomHeadingText(heading: "Recommended")
                   ),
                   SizedBox(
                     height: size.height * 0.02,
@@ -347,15 +355,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                  Align(
+                const  Align(
                     alignment: Alignment.topLeft,
-                    child: Text(
-                      'Nearest',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                          fontSize: size.height * 0.026),
-                    ),
+                    child: CustomHeadingText(heading: "Nearest")
                   ),
                   SizedBox(
                     height: size.height * 0.02,
@@ -434,24 +436,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ),
                                               Row(
                                                 children: [
-                                                  Icon(
-                                                    Icons.pin_drop_outlined,
-                                                    color: primaryColor,
-                                                    size: size.width * 0.04,
+                                                  SvgPicture.asset(
+                                                    locationIcon,
+                                                    height: size.height * 0.015,
+                                                  ),
+                                                  SizedBox(
+                                                    width: size.width * 0.01,
                                                   ),
                                                   Text(
-                                                    nearsetBarsDistanceList[
-                                                                index]
-                                                            .elements![0]
-                                                            .distance
-                                                            ?.text ??
-                                                        'N/A',
+                                                    (double.parse(nearsetBarsDistanceList[
+                                                                        index]
+                                                                    .elements![
+                                                                        0]
+                                                                    .distance
+                                                                    ?.text
+                                                                    ?.split(
+                                                                        " ")[0] ??
+                                                                '0') *
+                                                            0.621371)
+                                                        .toStringAsFixed(3),
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize:
                                                           size.width * 0.027,
                                                     ),
                                                   ),
+                                                  Text(
+                                                    ' Miles',
+                                                    style: TextStyle(
+                                                      color: primaryColor,
+                                                      fontSize:
+                                                          size.width * 0.03,
+                                                    ),
+                                                  )
                                                 ],
                                               ),
                                             ],

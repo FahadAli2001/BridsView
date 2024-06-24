@@ -7,3 +7,5 @@ String onboardTwo = "assets/onboard_two.png";
 String onboardThree = "assets/onboard_three.png";
 String goldenHalf = "assets/golden_half.png";
 String goldenCircle = "assets/golden_circle.png";
+String crowdImage = "assets/crowd.png";
+String banner = "assets/banner.png";

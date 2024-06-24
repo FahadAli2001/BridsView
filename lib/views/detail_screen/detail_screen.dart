@@ -39,15 +39,29 @@ class DetailScreen extends StatefulWidget {
   State<DetailScreen> createState() => _DetailScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> {
+class _DetailScreenState extends State<DetailScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
   List<Result>? barDetail = [];
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    )..repeat(reverse: true);
+    _animation = Tween<double>(begin: 1.0, end: 1.2).animate(_controller);
     if (widget.fromSearchScreen == false) {
       getBarsDetails(widget.barDetail![widget.index].placeId!);
       checkBarId();
     }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Future<void> checkBarId() async {
@@ -76,7 +90,10 @@ class _DetailScreenState extends State<DetailScreen> {
             text: 'Locate',
             ontap: () async {
               //
-
+              List<Uint8List> nonNullableList = widget.barImages
+                  .where((image) => image != null)
+                  .cast<Uint8List>()
+                  .toList();
               try {
                 if (widget.fromSearchScreen == true) {
                   Navigator.push(
@@ -85,6 +102,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: MapScreen(
                             bar: widget.searchBarDetail!,
                             index: widget.index,
+                            barImage: nonNullableList,
                           ),
                           type: PageTransitionType.fade));
                 } else {
@@ -94,6 +112,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           child: MapScreen(
                             bar: barDetail!,
                             index: widget.index,
+                            barImage: nonNullableList,
                           ),
                           type: PageTransitionType.fade));
                 }
@@ -182,7 +201,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             overflow: TextOverflow.visible,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: size.height * 0.03,
+                                fontSize: size.height * 0.026,
                                 color: Colors.white),
                           ),
                         ),
@@ -241,10 +260,21 @@ class _DetailScreenState extends State<DetailScreen> {
                                     width: size.width * 0.03,
                                   ),
                                   Text(
-                                    widget.distance[widget.index].elements![0]
-                                        .distance!.text
-                                        .toString(),
-                                    style: const TextStyle(color: Colors.white),
+                                    (double.parse(widget.distance[widget.index]
+                                                    .elements![0].distance?.text
+                                                    ?.split(" ")[0]
+                                                    .replaceAll(',', '') ??
+                                                '0') *
+                                            0.621371)
+                                        .toStringAsFixed(3),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: size.width * 0.027,
+                                    ),
+                                  ),
+                                  const Text(
+                                    ' Miles',
+                                    style: TextStyle(color: Colors.white),
                                   ),
                                   SizedBox(
                                     width: size.width * 0.1,
@@ -276,79 +306,94 @@ class _DetailScreenState extends State<DetailScreen> {
                       height: size.height * 0.02,
                     ),
                     //
-                    Align(
-                        alignment: Alignment.topLeft,
-                        child: Row(
-                          children: [
-                            Text(
-                              'Mix Crowd ',
-                              style: TextStyle(
-                                  fontSize: size.height * 0.026,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Consumer<DetailScreenController>(
-                              builder: (context, value, child) {
-                                return Text(
-                                  '(${value.randomPopulation.toString()})',
+                    SizedBox(
+                      width: size.width,
+                      height: size.height * 0.15,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 18,
+                            left: 0,
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: RichText(
+                                text: TextSpan(
+                                  text: "Mix ",
                                   style: TextStyle(
                                       fontSize: size.height * 0.026,
-                                      color: primaryColor,
+                                      fontWeight: FontWeight.w900,
+                                      color: primaryColor),
+                                  children: [
+                                    TextSpan(
+                                      text: 'Crowd',
+                                      style: TextStyle(
+                                          fontSize: size.height * 0.026,
+                                          fontWeight: FontWeight.w900,
+                                          color: whiteColor),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          widget.searchBarDetail![widget.index].rating !=
+                                      null &&
+                                  widget.searchBarDetail![widget.index]
+                                          .rating! >=
+                                      4.0
+                              ? AnimatedBuilder(
+                                  animation: _controller,
+                                  builder: (context, child) {
+                                    return Positioned(
+                                      left: size.width * 0.27,
+                                      child: ScaleTransition(
+                                        scale: _animation,
+                                        child: Image.asset(
+                                          banner,
+                                          height: size.height * 0.07,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )
+                              : const SizedBox(),
+                          //
+
+                          //
+                          Positioned(
+                            top: size.height * 0.07,
+                            child: Image.asset(
+                              crowdImage,
+                              height: size.height * 0.08,
+                            ),
+                          ),
+
+                          Consumer<DetailScreenController>(
+                            builder: (context, value, child) {
+                              return Positioned(
+                                top: size.height * 0.09,
+                                left: size.width * 0.2,
+                                child: Text(
+                                  value.randomPopulation.toString(),
+                                  style: TextStyle(
+                                      fontSize: size.height * 0.03,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold),
-                                );
-                              },
-                            )
-                          ],
-                        )),
-                    //
-                    SizedBox(
-                      height: size.height * 0.02,
-                    ),
-                    //
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(
-                          children: [
-                            Icon(
-                              Icons.man,
-                              color: primaryColor,
-                              size: size.height * 0.05,
-                            ),
-                            Text(
-                              "Men",
-                              style: TextStyle(
-                                  fontSize: size.height * 0.018,
-                                  color: Colors.white),
-                            )
-                          ],
-                        ),
-                        Container(
-                          height: size.height * 0.1,
-                          width: 2,
-                          color: primaryColor,
-                        ),
-                        Column(
-                          children: [
-                            Icon(
-                              Icons.woman,
-                              color: primaryColor,
-                              size: size.height * 0.05,
-                            ),
-                            Text(
-                              "Women",
-                              style: TextStyle(
-                                  fontSize: size.height * 0.018,
-                                  color: Colors.white),
-                            )
-                          ],
-                        ),
-                      ],
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                     //
                     SizedBox(
                       height: size.height * 0.02,
                     ),
+                    //
+
                     //
                     Align(
                         alignment: Alignment.topLeft,
@@ -530,9 +575,13 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                     //
 
-                    SizedBox(
-                      height: size.height * 0.02,
-                    ),
+                    widget.searchBarDetail![widget.index]
+                                .wheelchairAccessibleEntrance ==
+                            null
+                        ? const SizedBox()
+                        : SizedBox(
+                            height: size.height * 0.02,
+                          ),
                     //
                     widget.searchBarDetail![widget.index].website == null
                         ? const Text('')
@@ -653,7 +702,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 overflow: TextOverflow.visible,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: size.height * 0.03,
+                                    fontSize: size.height * 0.026,
                                     color: Colors.white),
                               ),
                             ),
@@ -713,11 +762,21 @@ class _DetailScreenState extends State<DetailScreen> {
                                         width: size.width * 0.03,
                                       ),
                                       Text(
-                                        widget.distance[widget.index]
-                                            .elements![0].distance!.text
-                                            .toString(),
+                                        (double.parse(widget
+                                                        .distance[widget.index]
+                                                        .elements![0]
+                                                        .distance
+                                                        ?.text
+                                                        ?.split(" ")[0] ??
+                                                    '0') *
+                                                0.621371)
+                                            .toStringAsFixed(3),
                                         style: const TextStyle(
                                             color: Colors.white),
+                                      ),
+                                      const Text(
+                                        ' Miles',
+                                        style: TextStyle(color: Colors.white),
                                       ),
                                       SizedBox(
                                         width: size.width * 0.1,
@@ -749,74 +808,86 @@ class _DetailScreenState extends State<DetailScreen> {
                           height: size.height * 0.02,
                         ),
                         //
-                        Align(
-                            alignment: Alignment.topLeft,
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Mix Crowd ',
-                                  style: TextStyle(
-                                      fontSize: size.height * 0.026,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Consumer<DetailScreenController>(
-                                  builder: (context, value, child) {
-                                    return Text(
-                                      '(${value.randomPopulation.toString()} APROX)',
+                        SizedBox(
+                          width: size.width,
+                          height: size.height * 0.15,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 18,
+                                left: 0,
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: "Mix ",
                                       style: TextStyle(
                                           fontSize: size.height * 0.026,
-                                          color: primaryColor,
+                                          fontWeight: FontWeight.w900,
+                                          color: primaryColor),
+                                      children: [
+                                        TextSpan(
+                                          text: 'Crowd',
+                                          style: TextStyle(
+                                              fontSize: size.height * 0.026,
+                                              fontWeight: FontWeight.w900,
+                                              color: whiteColor),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              barDetail != null &&
+                                      barDetail!.isNotEmpty &&
+                                      barDetail![0].rating != null &&
+                                      barDetail![0].rating! >= 4.0
+                                  ? AnimatedBuilder(
+                                      animation: _controller,
+                                      builder: (context, child) {
+                                        return Positioned(
+                                          left: size.width * 0.27,
+                                          child: ScaleTransition(
+                                            scale: _animation,
+                                            child: Image.asset(
+                                              banner,
+                                              height: size.height * 0.07,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : const SizedBox(),
+
+                              //
+
+                              //
+                              Positioned(
+                                top: size.height * 0.07,
+                                child: Image.asset(
+                                  crowdImage,
+                                  height: size.height * 0.08,
+                                ),
+                              ),
+
+                              Consumer<DetailScreenController>(
+                                builder: (context, value, child) {
+                                  return Positioned(
+                                    top: size.height * 0.09,
+                                    left: size.width * 0.2,
+                                    child: Text(
+                                      value.randomPopulation.toString(),
+                                      style: TextStyle(
+                                          fontSize: size.height * 0.03,
+                                          color: Colors.white,
                                           fontWeight: FontWeight.bold),
-                                    );
-                                  },
-                                )
-                              ],
-                            )),
-                        //
-                        SizedBox(
-                          height: size.height * 0.02,
-                        ),
-                        //
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              children: [
-                                Icon(
-                                  Icons.man,
-                                  color: primaryColor,
-                                  size: size.height * 0.05,
-                                ),
-                                Text(
-                                  "Men",
-                                  style: TextStyle(
-                                      fontSize: size.height * 0.018,
-                                      color: Colors.white),
-                                )
-                              ],
-                            ),
-                            Container(
-                              height: size.height * 0.1,
-                              width: 2,
-                              color: primaryColor,
-                            ),
-                            Column(
-                              children: [
-                                Icon(
-                                  Icons.woman,
-                                  color: primaryColor,
-                                  size: size.height * 0.05,
-                                ),
-                                Text(
-                                  "Women",
-                                  style: TextStyle(
-                                      fontSize: size.height * 0.018,
-                                      color: Colors.white),
-                                )
-                              ],
-                            ),
-                          ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                         //
                         SizedBox(
@@ -995,7 +1066,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               ),
                         //
 
-                        barDetail![0].website == null
+                        barDetail![0].wheelchairAccessibleEntrance == null
                             ? const SizedBox()
                             : SizedBox(
                                 height: size.height * 0.02,
