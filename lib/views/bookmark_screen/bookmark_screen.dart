@@ -1,10 +1,8 @@
 import 'dart:typed_data';
-
 import 'package:birds_view/controller/bookmark_controller/bookmark_controller.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../widgets/custom_bookmark_widget/custom_bookmark_widget.dart';
 
 class BookmarkScreen extends StatefulWidget {
