@@ -163,30 +163,32 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               width: size.width * 0.04,
                             ),
-                              SizedBox(
-                      width: size.width * 0.4,
-                      child: RichText(
-                        text: TextSpan(
-                          text:widget. user == null ||widget.  user!.data!.firstName == ''
-                              ? "Guest "
-                              : '${widget. user!.data!.firstName} ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: size.height * 0.026,
-                              color: Colors.white),
-                          children: [
-                            TextSpan(
-                              text:widget.  user == null ||widget.  user!.data!.lastName == ''
-                                  ? "User"
-                                  : '${widget. user!.data!.lastName} ',
-                              style: TextStyle(
-                                  fontSize: size.height * 0.026,
-                                  color: primaryColor),
+                            SizedBox(
+                              width: size.width * 0.4,
+                              child: RichText(
+                                text: TextSpan(
+                                  text: widget.user == null ||
+                                          widget.user!.data!.firstName == ''
+                                      ? "Guest "
+                                      : '${widget.user!.data!.firstName} ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: size.height * 0.026,
+                                      color: Colors.white),
+                                  children: [
+                                    TextSpan(
+                                      text: widget.user == null ||
+                                              widget.user!.data!.lastName == ''
+                                          ? "User"
+                                          : '${widget.user!.data!.lastName} ',
+                                      style: TextStyle(
+                                          fontSize: size.height * 0.026,
+                                          color: primaryColor),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
                           ],
                         ),
                       ),
@@ -210,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                    const  CustomHeadingText(heading: "Explore"),
+                      const CustomHeadingText(heading: "Explore"),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -291,7 +293,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w600,
-                                              fontSize: size.height * 0.016),
+                                              fontSize: size.height * 0.016
+                                              ),
                                         ),
                                       ),
                                     ),
@@ -303,10 +306,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: size.height * 0.025,
                   ),
-                const  Align(
-                    alignment: Alignment.topLeft,
-                    child: CustomHeadingText(heading: "Recommended")
-                  ),
+                  const Align(
+                      alignment: Alignment.topLeft,
+                      child: CustomHeadingText(heading: "Recommended")),
                   SizedBox(
                     height: size.height * 0.02,
                   ),
@@ -355,10 +357,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     height: size.height * 0.02,
                   ),
-                const  Align(
-                    alignment: Alignment.topLeft,
-                    child: CustomHeadingText(heading: "Nearest")
-                  ),
+                  const Align(
+                      alignment: Alignment.topLeft,
+                      child: CustomHeadingText(heading: "Nearest")),
                   SizedBox(
                     height: size.height * 0.02,
                   ),
@@ -409,12 +410,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Image.memory(
-                                            nearestBarsImages[index]!,
+                                          Container(
                                             height: size.height * 0.15,
                                             width: size.width * 0.5,
-                                            fit: BoxFit.cover,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                    image: MemoryImage(
+                                                        nearestBarsImages[index]!),
+                                                    fit: BoxFit.cover)),
                                           ),
+                                          
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -424,13 +431,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 child: Text(
                                                   nearestBarList[index].name ??
                                                       'Unknown',
-                                                  maxLines: 2,
+                                                  maxLines: 1,
                                                   overflow:
-                                                      TextOverflow.visible,
+                                                      TextOverflow.fade,
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontWeight: FontWeight.w900,
-                                                    fontSize: size.width * 0.03,
+                                                  fontWeight: FontWeight.w600,
+                                              fontSize: size.height * 0.016
                                                   ),
                                                 ),
                                               ),
@@ -513,7 +520,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   )
                                 : value.barDetail.isEmpty
-                                    ? const Text("No results found.")
+                                    ? const Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 20),
+                                        child: Text(
+                                          "Search Bars Or Clubs",
+                                          style:
+                                              TextStyle(color: Colors.white60),
+                                        ),
+                                      )
                                     : Expanded(
                                         child: ListView.builder(
                                           itemCount:
@@ -703,6 +718,7 @@ class _HomeScreenState extends State<HomeScreen> {
               prefixIcon: Icon(
                 Icons.search,
                 color: Colors.grey.shade900,
+                size: 30,
               ),
               suffixIcon: GestureDetector(
                   onTap: () {
@@ -715,6 +731,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Icon(
                     Icons.cancel_outlined,
                     color: Colors.grey.shade900,
+                    size: 30,
                   ))),
         );
       },

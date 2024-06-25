@@ -11,7 +11,7 @@ class CustomHeadingText extends StatelessWidget {
       heading,
       style: TextStyle(
           color: Colors.white,
-          fontWeight: FontWeight.w900,
+          fontWeight: FontWeight.bold,
           fontSize: size.height * 0.026),
     );
   }

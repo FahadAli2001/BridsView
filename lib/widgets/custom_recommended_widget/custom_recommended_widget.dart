@@ -18,15 +18,22 @@ class CustomRecommendedWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: SizedBox(
         width: size.width * 0.8,
+       
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          
           children: [
-            Image.memory(
-              recomdedBarsImages[index]!,
-              height: size.height * 0.2,
+            Container(
+                 height: size.height * 0.2,
               width: size.width * 0.8,
-              fit: BoxFit.cover,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(image: MemoryImage(recomdedBarsImages[index]!),
+                fit: BoxFit.cover
+                )
+              ),
             ),
+           
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -36,8 +43,9 @@ class CustomRecommendedWidget extends StatelessWidget {
                     recomendedBar[index].name!,
                     style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                        fontSize: size.width * 0.03),
+                        fontWeight: FontWeight.w600,
+                                              fontSize: size.height * 0.016
+                        ),
                   ),
                 ),
                 RatingBarIndicator(

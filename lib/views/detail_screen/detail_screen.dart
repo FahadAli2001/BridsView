@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:typed_data';
+import 'package:birds_view/controller/bookmark_controller/bookmark_controller.dart';
 import 'package:birds_view/controller/deatil_screen_controller/detail_screen_controller.dart';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
@@ -9,6 +10,8 @@ import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/map_screen/map_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
+import 'package:birds_view/widgets/custom_description_rich_text/custom_description_rich_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -44,6 +47,7 @@ class _DetailScreenState extends State<DetailScreen>
   late AnimationController _controller;
   late Animation<double> _animation;
   List<Result>? barDetail = [];
+
   @override
   void initState() {
     super.initState();
@@ -52,9 +56,11 @@ class _DetailScreenState extends State<DetailScreen>
       vsync: this,
     )..repeat(reverse: true);
     _animation = Tween<double>(begin: 1.0, end: 1.2).animate(_controller);
+
     if (widget.fromSearchScreen == false) {
       getBarsDetails(widget.barDetail![widget.index].placeId!);
       checkBarId();
+      getUserCredential();
     }
   }
 
@@ -64,11 +70,16 @@ class _DetailScreenState extends State<DetailScreen>
     super.dispose();
   }
 
+  Future<void> getUserCredential() async {
+    final bookmarkController =
+        Provider.of<BookmarkController>(context, listen: false);
+    await bookmarkController.getUserCredential();
+  }
+
   Future<void> checkBarId() async {
     final detailController =
         Provider.of<DetailScreenController>(context, listen: false);
 
-    // await detailController.getRandomNumbers();
     await detailController
         .checkBarPlaceIdExist(widget.barDetail![widget.index].placeId!);
   }
@@ -172,11 +183,69 @@ class _DetailScreenState extends State<DetailScreen>
                                   children: [
                                     Positioned(
                                         top: size.height * 0.015,
-                                        right: size.width * 0.028,
-                                        child: Icon(
-                                          Icons.bookmark_border,
-                                          color: Colors.black,
-                                          size: size.height * 0.035,
+                                        right: size.width * 0.035,
+                                        child: Consumer<BookmarkController>(
+                                          builder: (context, value, child) {
+                                            return StreamBuilder(
+                                              stream: value.getBookMarkStream(
+                                                  widget
+                                                      .searchBarDetail![
+                                                          widget.index]
+                                                      .placeId!),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return Shimmer.fromColors(
+                                                    baseColor: primaryColor,
+                                                    highlightColor:
+                                                        Colors.white10,
+                                                    child: Center(
+                                                        child: Container(
+                                                      color: Colors.white,
+                                                    )),
+                                                  );
+                                                } else if (snapshot.hasError) {
+                                                  return Text(
+                                                      'Error: ${snapshot.error}');
+                                                } else {
+                                                  return GestureDetector(
+                                                      onTap: () {
+                                                        if (snapshot.data[
+                                                                "status"] ==
+                                                            0) {
+                                                          value.addBookmark(widget
+                                                              .searchBarDetail![
+                                                                  widget.index]
+                                                              .placeId!);
+                                                        } else if (snapshot
+                                                                    .data[
+                                                                "status"] ==
+                                                            1) {
+                                                          value.deleteBookmark(widget
+                                                              .searchBarDetail![
+                                                                  widget.index]
+                                                              .placeId!);
+                                                        }
+                                                      },
+                                                      child: snapshot.data[
+                                                                  "status"] ==
+                                                              1
+                                                          ? const Icon(
+                                                              CupertinoIcons
+                                                                  .bookmark_fill,
+                                                              color:
+                                                                  Colors.black,
+                                                            )
+                                                          : const Icon(
+                                                              CupertinoIcons
+                                                                  .bookmark,
+                                                              color:
+                                                                  Colors.black,
+                                                            ));
+                                                }
+                                              },
+                                            );
+                                          },
                                         ))
                                   ],
                                 ),
@@ -378,7 +447,7 @@ class _DetailScreenState extends State<DetailScreen>
                                 child: Text(
                                   value.randomPopulation.toString(),
                                   style: TextStyle(
-                                      fontSize: size.height * 0.03,
+                                      fontSize: size.height * 0.026,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -417,7 +486,7 @@ class _DetailScreenState extends State<DetailScreen>
                               widget.searchBarDetail![widget.index]
                                   .editorialSummary!.overview!,
                               style: TextStyle(
-                                  fontSize: size.height * 0.018,
+                                  fontSize: size.height * 0.016,
                                   color: Colors.white),
                             ),
                           ),
@@ -426,26 +495,13 @@ class _DetailScreenState extends State<DetailScreen>
                             null
                         ? Container()
                         : SizedBox(
-                            height: size.height * 0.02,
+                            height: size.height * 0.01,
                           ),
-                    RichText(
-                      text: TextSpan(
-                        text: "Address : ",
-                        style: TextStyle(
-                            fontSize: size.height * 0.018,
-                            fontWeight: FontWeight.bold,
-                            color: primaryColor),
-                        children: [
-                          TextSpan(
-                            text: widget.searchBarDetail![widget.index]
-                                .formattedAddress!,
-                            style: TextStyle(
-                                fontSize: size.height * 0.018,
-                                color: whiteColor),
-                          ),
-                        ],
-                      ),
-                    ),
+                    CustomDescriptionRichText(
+                        title: "Address : ",
+                        subtitle: widget
+                            .searchBarDetail![widget.index].formattedAddress!),
+
                     SizedBox(
                       height: size.height * 0.02,
                     ),
@@ -455,26 +511,10 @@ class _DetailScreenState extends State<DetailScreen>
                         ? const Text('')
                         : Align(
                             alignment: Alignment.topLeft,
-                            child: RichText(
-                              text: TextSpan(
-                                text: "Phone : ",
-                                style: TextStyle(
-                                    fontSize: size.height * 0.018,
-                                    fontWeight: FontWeight.bold,
-                                    color: primaryColor),
-                                children: [
-                                  TextSpan(
-                                    text: widget.searchBarDetail![widget.index]
-                                            .formattedPhoneNumber ??
-                                        "",
-                                    style: TextStyle(
-                                        fontSize: size.height * 0.018,
-                                        color: whiteColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                            child: CustomDescriptionRichText(
+                                title: "Phone : ",
+                                subtitle: widget.searchBarDetail![widget.index]
+                                    .formattedPhoneNumber!)),
                     //
                     SizedBox(
                       height: size.height * 0.02,
@@ -483,28 +523,13 @@ class _DetailScreenState extends State<DetailScreen>
                         ? const Text('')
                         : Align(
                             alignment: Alignment.topLeft,
-                            child: RichText(
-                              text: TextSpan(
-                                text: "Open Now : ",
-                                style: TextStyle(
-                                    fontSize: size.height * 0.018,
-                                    fontWeight: FontWeight.bold,
-                                    color: primaryColor),
-                                children: [
-                                  TextSpan(
-                                    text: widget.searchBarDetail![widget.index]
-                                                .openingHours!.openNow! ==
-                                            true
-                                        ? "Open"
-                                        : "Closed",
-                                    style: TextStyle(
-                                        fontSize: size.height * 0.018,
-                                        color: whiteColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                            child: CustomDescriptionRichText(
+                                title: "Open Now : ",
+                                subtitle: widget.searchBarDetail![widget.index]
+                                            .openingHours!.openNow! ==
+                                        true
+                                    ? "Open"
+                                    : "Closed")),
                     //
                     //
                     SizedBox(
@@ -516,9 +541,9 @@ class _DetailScreenState extends State<DetailScreen>
                             alignment: Alignment.topLeft,
                             child: RichText(
                               text: TextSpan(
-                                text: "Timings : ",
+                                text: "Timings :\n ",
                                 style: TextStyle(
-                                    fontSize: size.height * 0.018,
+                                    fontSize: size.height * 0.016,
                                     fontWeight: FontWeight.bold,
                                     color: primaryColor),
                                 children: [
@@ -532,9 +557,9 @@ class _DetailScreenState extends State<DetailScreen>
                                       i++) ...[
                                     TextSpan(
                                       text:
-                                          "${widget.searchBarDetail![widget.index].openingHours!.weekdayText![i]} \n",
+                                          "\n ${widget.searchBarDetail![widget.index].openingHours!.weekdayText![i]} \n",
                                       style: TextStyle(
-                                          fontSize: size.height * 0.018,
+                                          fontSize: size.height * 0.016,
                                           color: whiteColor),
                                     ),
                                   ]
@@ -551,28 +576,14 @@ class _DetailScreenState extends State<DetailScreen>
                         ? const Text(' ')
                         : Align(
                             alignment: Alignment.topLeft,
-                            child: RichText(
-                              text: TextSpan(
-                                text: "Wheel Chair Entrance: ",
-                                style: TextStyle(
-                                    fontSize: size.height * 0.018,
-                                    fontWeight: FontWeight.bold,
-                                    color: primaryColor),
-                                children: [
-                                  TextSpan(
-                                    text: widget.searchBarDetail![widget.index]
-                                                .wheelchairAccessibleEntrance ==
-                                            true
-                                        ? "Available"
-                                        : "Not Available",
-                                    style: TextStyle(
-                                        fontSize: size.height * 0.018,
-                                        color: whiteColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                            child: CustomDescriptionRichText(
+                                title: "Wheel Chair Entrance",
+                                subtitle: widget.searchBarDetail![widget.index]
+                                            .wheelchairAccessibleEntrance ==
+                                        true
+                                    ? "Available"
+                                    : "Not Available")),
+
                     //
 
                     widget.searchBarDetail![widget.index]
@@ -593,7 +604,7 @@ class _DetailScreenState extends State<DetailScreen>
                                   text: TextSpan(
                                     text: "Website : ",
                                     style: TextStyle(
-                                        fontSize: size.height * 0.018,
+                                        fontSize: size.height * 0.016,
                                         fontWeight: FontWeight.bold,
                                         color: primaryColor),
                                     children: [
@@ -603,7 +614,7 @@ class _DetailScreenState extends State<DetailScreen>
                                                 .website ??
                                             '',
                                         style: TextStyle(
-                                            fontSize: size.height * 0.018,
+                                            fontSize: size.height * 0.016,
                                             color: Colors.white),
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () async {
@@ -673,11 +684,74 @@ class _DetailScreenState extends State<DetailScreen>
                                       children: [
                                         Positioned(
                                             top: size.height * 0.015,
-                                            right: size.width * 0.028,
-                                            child: Icon(
-                                              Icons.bookmark_border,
-                                              color: Colors.black,
-                                              size: size.height * 0.035,
+                                            right: size.width * 0.035,
+                                            child: Consumer<BookmarkController>(
+                                              builder: (context, value, child) {
+                                                return StreamBuilder(
+                                                  stream: value
+                                                      .getBookMarkStream(widget
+                                                          .barDetail![
+                                                              widget.index]
+                                                          .placeId!),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return Shimmer.fromColors(
+                                                        baseColor: primaryColor,
+                                                        highlightColor:
+                                                            Colors.white10,
+                                                        child: Center(
+                                                            child: Container(
+                                                          color: Colors.white,
+                                                        )),
+                                                      );
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Text(
+                                                          'Error: ${snapshot.error}');
+                                                    } else {
+                                                      return GestureDetector(
+                                                          onTap: () {
+                                                            if (snapshot.data[
+                                                                    "status"] ==
+                                                                0) {
+                                                              value.addBookmark(widget
+                                                                  .barDetail![
+                                                                      widget
+                                                                          .index]
+                                                                  .placeId!);
+                                                            } else if (snapshot
+                                                                        .data[
+                                                                    "status"] ==
+                                                                1) {
+                                                              value.deleteBookmark(widget
+                                                                  .barDetail![
+                                                                      widget
+                                                                          .index]
+                                                                  .placeId!);
+                                                            }
+                                                          },
+                                                          child: snapshot.data[
+                                                                      "status"] ==
+                                                                  1
+                                                              ? const Icon(
+                                                                  CupertinoIcons
+                                                                      .bookmark_fill,
+                                                                  color: Colors
+                                                                      .black,
+                                                                )
+                                                              : const Icon(
+                                                                  CupertinoIcons
+                                                                      .bookmark,
+                                                                  color: Colors
+                                                                      .black,
+                                                                ));
+                                                    }
+                                                  },
+                                                );
+                                              },
                                             ))
                                       ],
                                     ),
@@ -879,7 +953,7 @@ class _DetailScreenState extends State<DetailScreen>
                                     child: Text(
                                       value.randomPopulation.toString(),
                                       style: TextStyle(
-                                          fontSize: size.height * 0.03,
+                                          fontSize: size.height * 0.026,
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -904,9 +978,7 @@ class _DetailScreenState extends State<DetailScreen>
                                   fontWeight: FontWeight.bold),
                             )),
                         //
-                        SizedBox(
-                          height: size.height * 0.01,
-                        ),
+
                         barDetail![0].editorialSummary == null
                             ? const Text('')
                             : SizedBox(
@@ -914,7 +986,7 @@ class _DetailScreenState extends State<DetailScreen>
                                 child: Text(
                                   barDetail![0].editorialSummary!.overview!,
                                   style: TextStyle(
-                                      fontSize: size.height * 0.018,
+                                      fontSize: size.height * 0.016,
                                       color: Colors.white),
                                 ),
                               ),
@@ -924,23 +996,9 @@ class _DetailScreenState extends State<DetailScreen>
                             : SizedBox(
                                 height: size.height * 0.02,
                               ),
-                        RichText(
-                          text: TextSpan(
-                            text: "Address : ",
-                            style: TextStyle(
-                                fontSize: size.height * 0.018,
-                                fontWeight: FontWeight.bold,
-                                color: primaryColor),
-                            children: [
-                              TextSpan(
-                                text: barDetail![0].formattedAddress!,
-                                style: TextStyle(
-                                    fontSize: size.height * 0.018,
-                                    color: whiteColor),
-                              ),
-                            ],
-                          ),
-                        ),
+                        CustomDescriptionRichText(
+                            title: "Address : ",
+                            subtitle: barDetail![0].formattedAddress!),
                         SizedBox(
                           height: size.height * 0.02,
                         ),
@@ -948,26 +1006,10 @@ class _DetailScreenState extends State<DetailScreen>
                             ? const Text('')
                             : Align(
                                 alignment: Alignment.topLeft,
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: "Phone : ",
-                                    style: TextStyle(
-                                        fontSize: size.height * 0.018,
-                                        fontWeight: FontWeight.bold,
-                                        color: primaryColor),
-                                    children: [
-                                      TextSpan(
-                                        text: barDetail![0]
-                                                .formattedPhoneNumber ??
-                                            "",
-                                        style: TextStyle(
-                                            fontSize: size.height * 0.018,
-                                            color: whiteColor),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                                child: CustomDescriptionRichText(
+                                    title: "Phone : ",
+                                    subtitle:
+                                        barDetail![0].formattedPhoneNumber!)),
                         //
                         SizedBox(
                           height: size.height * 0.02,
@@ -976,29 +1018,13 @@ class _DetailScreenState extends State<DetailScreen>
                             ? const Text('')
                             : Align(
                                 alignment: Alignment.topLeft,
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: "Open Now : ",
-                                    style: TextStyle(
-                                        fontSize: size.height * 0.018,
-                                        fontWeight: FontWeight.bold,
-                                        color: primaryColor),
-                                    children: [
-                                      TextSpan(
-                                        text: barDetail![0]
-                                                    .openingHours!
-                                                    .openNow! ==
+                                child: CustomDescriptionRichText(
+                                    title: "Open Now : ",
+                                    subtitle:
+                                        barDetail![0].openingHours!.openNow! ==
                                                 true
                                             ? "Open"
-                                            : "Closed",
-                                        style: TextStyle(
-                                            fontSize: size.height * 0.018,
-                                            color: whiteColor),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                                            : "Closed")),
                         //
                         //
                         SizedBox(
@@ -1010,9 +1036,9 @@ class _DetailScreenState extends State<DetailScreen>
                                 alignment: Alignment.topLeft,
                                 child: RichText(
                                   text: TextSpan(
-                                    text: "Timings : ",
+                                    text: "Timings :\n ",
                                     style: TextStyle(
-                                        fontSize: size.height * 0.018,
+                                        fontSize: size.height * 0.016,
                                         fontWeight: FontWeight.bold,
                                         color: primaryColor),
                                     children: [
@@ -1025,9 +1051,9 @@ class _DetailScreenState extends State<DetailScreen>
                                           i++) ...[
                                         TextSpan(
                                           text:
-                                              "${barDetail![0].openingHours!.weekdayText![i]} \n",
+                                              "\n ${barDetail![0].openingHours!.weekdayText![i]} \n",
                                           style: TextStyle(
-                                              fontSize: size.height * 0.018,
+                                              fontSize: size.height * 0.016,
                                               color: whiteColor),
                                         ),
                                       ]
@@ -1042,28 +1068,13 @@ class _DetailScreenState extends State<DetailScreen>
                             ? const Text(' ')
                             : Align(
                                 alignment: Alignment.topLeft,
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: "Wheel Chair Entrance : ",
-                                    style: TextStyle(
-                                        fontSize: size.height * 0.018,
-                                        fontWeight: FontWeight.bold,
-                                        color: primaryColor),
-                                    children: [
-                                      TextSpan(
-                                        text: barDetail![0]
-                                                    .wheelchairAccessibleEntrance ==
-                                                true
-                                            ? "Available"
-                                            : "Not Available",
-                                        style: TextStyle(
-                                            fontSize: size.height * 0.018,
-                                            color: whiteColor),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                                child: CustomDescriptionRichText(
+                                    title: "Wheel Chair Entrance : ",
+                                    subtitle: barDetail![0]
+                                                .wheelchairAccessibleEntrance ==
+                                            true
+                                        ? "Available"
+                                        : "Not Available")),
                         //
 
                         barDetail![0].wheelchairAccessibleEntrance == null
@@ -1082,14 +1093,14 @@ class _DetailScreenState extends State<DetailScreen>
                                       text: TextSpan(
                                         text: "Website : ",
                                         style: TextStyle(
-                                            fontSize: size.height * 0.018,
+                                            fontSize: size.height * 0.016,
                                             fontWeight: FontWeight.bold,
                                             color: primaryColor),
                                         children: [
                                           TextSpan(
                                             text: barDetail![0].website ?? '',
                                             style: TextStyle(
-                                                fontSize: size.height * 0.018,
+                                                fontSize: size.height * 0.016,
                                                 color: Colors.white),
                                             recognizer: TapGestureRecognizer()
                                               ..onTap = () async {

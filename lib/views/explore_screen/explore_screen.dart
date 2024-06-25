@@ -96,9 +96,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 isSearchBarOpen = true;
                 setState(() {});
               },
-              child: const Icon(
+              child:   Icon(
                 Icons.search,
                 color: Colors.white,
+               size:  size.height * 0.04
               ),
             ),
           )
@@ -245,7 +246,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                         ),
                                       )
                                     : value.barDetail.isEmpty
-                                        ? const Text("No results found.")
+                                        ? const Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 20),
+                                        child: Text(
+                                          "Search Bars Or Clubs",
+                                          style:
+                                              TextStyle(color: Colors.white60),
+                                        ),
+                                      )
                                         : Expanded(
                                             child: ListView.builder(
                                               itemCount:
@@ -307,6 +316,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               prefixIcon: Icon(
                 Icons.search,
                 color: Colors.grey.shade900,
+                size: 30,
               ),
               suffixIcon: GestureDetector(
                   onTap: () {
@@ -319,6 +329,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   child: Icon(
                     Icons.cancel_outlined,
                     color: Colors.grey.shade900,
+                    size: 30,
                   ))),
         );
       },
