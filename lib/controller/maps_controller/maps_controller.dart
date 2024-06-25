@@ -581,21 +581,21 @@ class MapsController extends ChangeNotifier {
   }
 
   Future<Result?> barsDetailMethod(String placeId) async {
-    Result? results;
+    Result? result;
     try {
       var response = await http.get(Uri.parse(
           "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$googleMapApiKey"));
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         var detailResponse = data['result'];
-        results = Result.fromJson(detailResponse as Map<String, dynamic>);
+        result = Result.fromJson(detailResponse as Map<String, dynamic>);
       } else {
         log(response.body);
       }
     } catch (e) {
       log(e.toString());
     }
-    return results;
+    return result;
   }
 
   Future<List<Results>> exploreBarsOrClubs(String type) async {

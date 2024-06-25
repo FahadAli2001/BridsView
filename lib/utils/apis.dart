@@ -9,6 +9,7 @@ String editProfileUrl = "edit-profile";
 String addBookmarkUrl = "bookmark";
 String deletBookmarkUrl = "delete/bookmark";
 String checkBookmarkUrl = "bookmarks?user_id=";
+String getAllBookmarksUrl = "bookmarks/user?user_id=";
 // ------------------------
 String loginApi = baseUrl + loginUrl;
 String fetchProfileApi = baseUrl + fetchProfileUrl;
@@ -19,6 +20,7 @@ String editProfileApi = baseUrl + editProfileUrl;
 String addBookmarkApi = baseUrl + addBookmarkUrl;
 String deleteBookmarkApi = baseUrl + deletBookmarkUrl;
 String checkBookmarkApi = baseUrl + checkBookmarkUrl;
+String getAllBookmarksApi = baseUrl + getAllBookmarksUrl;
 
 
 

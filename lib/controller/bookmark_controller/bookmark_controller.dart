@@ -1,12 +1,20 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
+import 'package:birds_view/controller/maps_controller/maps_controller.dart';
+import 'package:birds_view/model/get_bookmarks_model/get_bookmarks_model.dart';
 import 'package:birds_view/utils/apis.dart';
 import 'package:birds_view/widgets/custom_success_toast/custom_success_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import '../../model/bar_details_model/bar_details_model.dart';
+
 class BookmarkController extends ChangeNotifier {
+  List<Result> bookmarksBarsDetailList = [];
+  List<Uint8List> bookmarksBarsImagesList = [];
   String? _userId;
   String? _token;
   String? get userId => _userId;
@@ -36,7 +44,7 @@ class BookmarkController extends ChangeNotifier {
     } catch (e) {
       log("add Bookmak call error : ${e.toString()}");
     }
-    notifyListeners();
+    
   }
 
  Stream getBookMarkStream(String placeId) async* {
@@ -80,6 +88,38 @@ class BookmarkController extends ChangeNotifier {
     } catch (e) {
       log("delete Bookmak call error : ${e.toString()}");
     }
-    notifyListeners();
+    
+  }
+
+  Future<void> getAllBookmarks(context)async{
+    await getUserCredential();
+    var header = {"Authorization": "Bearer $token"};
+    try {
+       var response = await http.get(Uri.parse(getAllBookmarksApi+userId!),
+       headers: header);
+       if (response.statusCode == 200) {
+         var data = jsonDecode(response.body);
+         GetBookmarksModel getBookmarksModel = GetBookmarksModel.fromJson(data);
+         getBookmarkDetails(getBookmarksModel,context);
+       } else {
+         log(response.statusCode.toString());
+       }
+    } catch (e) {
+      log("get all bookmarks call : $e"); 
+    }
+  }
+
+  Future<void>getBookmarkDetails (GetBookmarksModel getBookmarksModel,context)async{
+    final mapController = Provider.of<MapsController>(context,listen:false);
+    try {
+      for (var i = 0; i < getBookmarksModel.barPlacesId!.length; i++) {
+        var barsDetails = await mapController.barsDetailMethod(getBookmarksModel.barPlacesId![i]);
+        bookmarksBarsDetailList.add(barsDetails!);
+        var barsImages = await mapController.exploreImages(bookmarksBarsDetailList[i].photos![0].photoReference!);
+        bookmarksBarsImagesList.add(barsImages as Uint8List);
+      }
+    } catch (e) {
+      log("get bookmarks detail call : $e");
+    }
   }
 }
