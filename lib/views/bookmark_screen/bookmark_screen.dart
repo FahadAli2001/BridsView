@@ -45,15 +45,18 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           centerTitle: true,
           title: const CustomHeadingText(heading: "Bookmarks")),
       body: Padding(
-        padding: const EdgeInsets.all(15),
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          itemCount: 3,
-          itemBuilder: (context, index) {
-            return const CustomBookmarkWidget();
-          },
-        ),
-      ),
+          padding: const EdgeInsets.all(15),
+          child: Consumer<BookmarkController>(
+            builder: (context, value, child) {
+              return ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return const CustomBookmarkWidget();
+                },
+              );
+            },
+          )),
     );
   }
 }
