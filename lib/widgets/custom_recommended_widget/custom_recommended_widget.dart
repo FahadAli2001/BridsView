@@ -50,7 +50,7 @@ class CustomRecommendedWidget extends StatelessWidget {
                   ),
                 ),
                 RatingBarIndicator(
-                  unratedColor: Colors.grey,
+                  unratedColor: Colors.white,
                   rating: recomendedBar[index].rating! * 1.0,
                   itemBuilder: (context, index) => Icon(
                     Icons.star,

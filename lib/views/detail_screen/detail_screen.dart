@@ -296,7 +296,7 @@ class _DetailScreenState extends State<DetailScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         RatingBarIndicator(
-                          unratedColor: Colors.grey,
+                          unratedColor: Colors.white,
                           rating: widget.searchBarDetail![widget.index].rating
                                   ?.toDouble() ??
                               0.0,
@@ -809,7 +809,7 @@ class _DetailScreenState extends State<DetailScreen>
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             RatingBarIndicator(
-                              unratedColor: Colors.grey,
+                              unratedColor: Colors.white,
                               rating: widget.barDetail![widget.index].rating
                                       ?.toDouble() ??
                                   0.0,
