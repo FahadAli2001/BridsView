@@ -984,7 +984,7 @@ class _DetailScreenState extends State<DetailScreen>
                                               fit: BoxFit.fill)),
                                       child: Center(
                                         child: Text(
-                                          "Subscription Now",
+                                          "Subscribe Now",
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: size.height * 0.015,
