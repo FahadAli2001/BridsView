@@ -369,6 +369,9 @@ class MapsController extends ChangeNotifier {
 
   Future<List<Results>> exploreNearbyBarsMethod() async {
     List<Results> exploreNearbyBars = [];
+    exploreNearbyBars.clear();
+    exploreBarsDistanceList.clear();
+    exploreBarsImages.clear();
 
     try {
       SharedPreferences sp = await SharedPreferences.getInstance();
@@ -411,6 +414,8 @@ class MapsController extends ChangeNotifier {
   Future<List<Uint8List?>> exploreImages(String ref) async {
     List<Uint8List?> exploreNearbyBarsImagesList = [];
     exploreNearbyBarsImagesList.clear();
+     
+    
     try {
       var response = await http.get(Uri.parse(
           "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$ref&key=$googleMapApiKey"));
@@ -494,6 +499,9 @@ class MapsController extends ChangeNotifier {
 
   Future<List<Results>> nearsetBarsMethod() async {
     List<Results> nearestBars = [];
+    nearestBars.clear();
+    nearestBarsImages.clear();
+    nearestBarsDistanceList.clear();
 
     try {
       SharedPreferences sp = await SharedPreferences.getInstance();
@@ -534,6 +542,7 @@ class MapsController extends ChangeNotifier {
   Future<List<Result>> nearsetBarsMethodForMap() async {
     log("nearsetBarsMethodForMap");
     List<Result> nearestBars = [];
+    nearestBars.clear();
 
     try {
       SharedPreferences sp = await SharedPreferences.getInstance();

@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:birds_view/controller/bookmark_controller/bookmark_controller.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
+import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/custom_bookmark_widget/custom_bookmark_widget.dart';
@@ -32,7 +33,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.sizeOf(context);
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -45,13 +46,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
               color: Colors.white,
             )),
         centerTitle: true,
-        title: Text(
-          'Bookmarks',
-          style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: size.height * 0.03),
-        ),
+        title:const  CustomHeadingText(heading: "Bookmarks")
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),

@@ -90,7 +90,7 @@ class CustomDrawer extends StatelessWidget {
                                   : '${user!.data!.lastName} ',
                               style: TextStyle(
                                   fontSize: size.height * 0.026,
-                                  color: primaryColor),
+                                  color: Colors.white),
                             ),
                           ],
                         ),

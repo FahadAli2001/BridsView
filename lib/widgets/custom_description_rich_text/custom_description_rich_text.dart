@@ -14,12 +14,16 @@ class CustomDescriptionRichText extends StatelessWidget {
       text: TextSpan(
         text: title,
         style: TextStyle(fontSize: size.height * 0.016,
-        fontWeight: FontWeight.bold,
+         fontWeight: FontWeight.bold,
+         height: 2,
          color: primaryColor),
         children: [
           TextSpan(
             text: subtitle,
-            style: TextStyle(fontSize: size.height * 0.016, color: whiteColor),
+            style: TextStyle(
+              fontSize: size.height * 0.016,
+              fontWeight: FontWeight.normal,
+               color: Colors.white),
           ),
         ],
       ),

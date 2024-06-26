@@ -6,7 +6,6 @@ import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import '../../model/bars_distance_model/bars_distance_model.dart';
 import '../../model/nearby_bars_model/nearby_bars_model.dart';
 import '../../widgets/custom_explore_widget/custom_explore_widget.dart';
@@ -181,16 +180,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   ),
 
                   barsOrClubsData.isEmpty
-                      ? Shimmer.fromColors(
-                          baseColor: Colors.grey.shade800,
-                          highlightColor: Colors.grey.shade700,
-                          child: Center(
-                              child: Container(
-                            color: Colors.white,
-                            width: size.width,
-                            height: size.height * 0.3,
-                          )),
-                        )
+                      ?  Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      )
                       : isClubs == true
                           ? Expanded(
                               child: ListView.builder(

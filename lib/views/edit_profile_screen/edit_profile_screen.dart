@@ -1,5 +1,6 @@
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
+import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -90,22 +91,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               color: Colors.white,
             )),
         centerTitle: true,
-        title: RichText(
-          text: TextSpan(
-            text: "Edit ",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: size.height * 0.03,
-                color: Colors.white70),
-            children: [
-              TextSpan(
-                text: 'Profile ',
-                style: TextStyle(
-                    fontSize: size.height * 0.03, color: primaryColor),
-              ),
-            ],
-          ),
-        ),
+        title:const  CustomHeadingText(heading: "Edit Profile",)
       ),
       body: Padding(
         padding: const EdgeInsets.all(25),
@@ -173,6 +159,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               backgroundColor: primaryColor,
                               child: const Icon(
                                 CupertinoIcons.camera,
+                                size: 25,
                               ),
                             ),
                           ),
@@ -193,7 +180,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         : '${widget.user!.data!.firstName} ',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: size.height * 0.035,
+                        fontSize: size.height * 0.026,
                         color: Colors.white),
                     children: [
                       TextSpan(
@@ -202,7 +189,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ? ''
                             : widget.user!.data!.lastName,
                         style: TextStyle(
-                            fontSize: size.height * 0.035, color: primaryColor),
+                            fontSize: size.height * 0.026, color: Colors.white),
                       ),
                     ],
                   ),

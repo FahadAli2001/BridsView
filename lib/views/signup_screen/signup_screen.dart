@@ -83,20 +83,20 @@ class _SignupScreenState extends State<SignupScreen> {
             text: "Create ",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: size.height * 0.03,
+                fontSize: size.height * 0.026,
                 color: whiteColor),
             children: [
               TextSpan(
                 text: 'An ',
                 style:
-                    TextStyle(fontSize: size.height * 0.03, color: whiteColor),
+                    TextStyle(fontSize: size.height * 0.026, color: whiteColor),
               ),
               TextSpan(
                 text: 'Account ',
                 style: TextStyle(
-                    fontSize: size.height * 0.03,
+                    fontSize: size.height * 0.026,
                     fontWeight: FontWeight.bold,
-                    color: primaryColor),
+                    color: whiteColor),
               ),
             ],
           ),
@@ -243,7 +243,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
-                          color: primaryColor,
+                          color: whiteColor,
                         ),
                       ),
                       dateOrder: DatePickerDateOrder.dmy,

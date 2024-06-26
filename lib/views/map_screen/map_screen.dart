@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import '../../model/bar_details_model/bar_details_model.dart';
 import '../../widgets/custom_button/custom_button.dart';
 
@@ -24,6 +23,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _controller = Completer();
+  String mapTheme = '';
 
   CameraPosition kGooglePlex = const CameraPosition(
     target: LatLng(0.0, 0.0),
@@ -33,8 +33,12 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
-
-    try {
+    DefaultAssetBundle.of(context).loadString("assets/map_theme/night_map_theme.json").then((value)  {
+      mapTheme = value;
+      setState(() {
+        
+      });
+       try {
       final mapController = Provider.of<MapsController>(context, listen: false);
       mapController.getCordinateds().then((value) async {
         mapController.loadData(mapController.lat, mapController.lon, widget.bar,
@@ -51,10 +55,12 @@ class _MapScreenState extends State<MapScreen> {
         setState(() {});
       });
 
-      setState(() {});
+     
     } catch (e) {
       log("map screen ${e.toString()}");
     }
+    });
+   
   }
 
   @override
@@ -86,6 +92,7 @@ class _MapScreenState extends State<MapScreen> {
                 markers: Set<Marker>.of(value.markers),
                 polylines: Set<Polyline>.of(value.polylines.values),
                 onMapCreated: (GoogleMapController controller) {
+                  controller.setMapStyle(mapTheme);
                   _controller.complete(controller);
                   value.customInfoWindowController.googleMapController =
                       controller;
@@ -93,16 +100,9 @@ class _MapScreenState extends State<MapScreen> {
               ),
             ),
             value.onMapNearestBar.isEmpty
-                ? Shimmer.fromColors(
-                  baseColor: Colors.grey.shade400,
-                  highlightColor: Colors.grey.shade700,
-                  child: Center(
-                      child:Text("Loading",
-                      style: TextStyle(
-                        color: Colors.grey.shade100,
-                        fontWeight: FontWeight.bold,
-                        fontSize: size.height *0.07
-                      ),)
+                ? Center(
+                  child: CircularProgressIndicator(
+                    color: primaryColor,
                   ),
                 )
                 : const SizedBox(),

@@ -75,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     TextSpan(
                       text: " ${widget.user!.data!.lastName}",
                       style: TextStyle(
-                          fontSize: size.height * 0.026, color: primaryColor),
+                          fontSize: size.height * 0.026, color: Colors.white),
                     ),
                   ],
                 ),
@@ -98,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Text(
                   "Edit Profile",
                   style: TextStyle(
-                      fontSize: size.height * 0.02,
+                      fontSize: size.height * 0.022,
                       decorationColor: Colors.white,
                       decoration: TextDecoration.underline,
                       color: Colors.white),
@@ -115,9 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Text(
                   "Bookmarks",
                   style: TextStyle(
-                      fontSize: size.height * 0.022,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                      fontSize: size.height * 0.022, color: Colors.white),
                 ),
               ),
             ),
@@ -137,9 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Text(
                   "Visited Places",
                   style: TextStyle(
-                      fontSize: size.height * 0.022,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                      fontSize: size.height * 0.022, color: Colors.white),
                 ),
               ),
             ),

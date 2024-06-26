@@ -16,7 +16,7 @@ class CustomButton extends StatelessWidget {
         height: size.height * 0.06,
         decoration: BoxDecoration(
             image:
-                DecorationImage(image: AssetImage(button),fit: BoxFit.cover )),
+                DecorationImage(image: AssetImage(button),fit: BoxFit.fill )),
         child: Center(
           child: Text(
             text,

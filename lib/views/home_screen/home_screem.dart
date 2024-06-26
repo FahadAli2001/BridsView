@@ -55,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final searchController =
         Provider.of<SearchBarsController>(context, listen: false);
     searchController.getCordinateds();
+    clearAllList();
     exploreBarByMap();
     recomendedBars();
     nearestBar();
@@ -74,6 +75,18 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  void clearAllList(){
+    exploreBarsImages.clear();
+    exploreBar.clear();
+    recomendedBarList.clear();
+    recomdedBarsImages.clear();
+    nearestBarList.clear();
+    nearestBarsImages.clear();
+    nearsetBarsDistanceList.clear();
+    exploreBarsDistanceList.clear();
+    recomendedBarsDistanceList.clear();
+  }
+
   Future<void> exploreBarByMap() async {
     final mapController = Provider.of<MapsController>(context, listen: false);
 
@@ -86,13 +99,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> nearestBar() async {
     final mapController = Provider.of<MapsController>(context, listen: false);
-
     var data = await mapController.nearsetBarsMethod();
     nearestBarList.addAll(data as Iterable<Results>);
     nearestBarsImages = mapController.nearestBarsImages;
     nearsetBarsDistanceList = mapController.nearestBarsDistanceList;
-    // log(nearestBarList.length.toString());
-    // log(nearestBarsImages.length.toString());
     setState(() {});
   }
 
@@ -183,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           : '${widget.user!.data!.lastName} ',
                                       style: TextStyle(
                                           fontSize: size.height * 0.026,
-                                          color: primaryColor),
+                                          color: Colors.white),
                                     ),
                                   ],
                                 ),
@@ -222,10 +232,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   type: PageTransitionType.fade));
                         },
                         child: Text(
-                          'see all',
+                          'See all',
                           style: TextStyle(
                               color: primaryColor,
-                              fontSize: size.height * 0.02),
+                              fontSize: size.height * 0.016),
                         ),
                       ),
                     ],
@@ -293,8 +303,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w600,
-                                              fontSize: size.height * 0.016
-                                              ),
+                                              fontSize: size.height * 0.016),
                                         ),
                                       ),
                                     ),
@@ -418,10 +427,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     BorderRadius.circular(10),
                                                 image: DecorationImage(
                                                     image: MemoryImage(
-                                                        nearestBarsImages[index]!),
+                                                        nearestBarsImages[
+                                                            index]!),
                                                     fit: BoxFit.cover)),
                                           ),
-                                          
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -432,13 +441,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   nearestBarList[index].name ??
                                                       'Unknown',
                                                   maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.fade,
+                                                  overflow: TextOverflow.fade,
                                                   style: TextStyle(
-                                                    color: Colors.white,
-                                                  fontWeight: FontWeight.w600,
-                                              fontSize: size.height * 0.016
-                                                  ),
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize:
+                                                          size.height * 0.016),
                                                 ),
                                               ),
                                               Row(

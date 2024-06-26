@@ -395,14 +395,14 @@ class _DetailScreenState extends State<DetailScreen>
                                   text: "Mix ",
                                   style: TextStyle(
                                       fontSize: size.height * 0.026,
-                                      fontWeight: FontWeight.w900,
+                                      fontWeight: FontWeight.bold,
                                       color: primaryColor),
                                   children: [
                                     TextSpan(
                                       text: 'Crowd',
                                       style: TextStyle(
                                           fontSize: size.height * 0.026,
-                                          fontWeight: FontWeight.w900,
+                                          fontWeight: FontWeight.bold,
                                           color: whiteColor),
                                     ),
                                   ],
@@ -565,6 +565,7 @@ class _DetailScreenState extends State<DetailScreen>
                                           "\n ${widget.searchBarDetail![widget.index].openingHours!.weekdayText![i]} \n",
                                       style: TextStyle(
                                           fontSize: size.height * 0.016,
+                                          fontWeight: FontWeight.normal,
                                           color: whiteColor),
                                     ),
                                   ]
@@ -619,6 +620,7 @@ class _DetailScreenState extends State<DetailScreen>
                                                 .website ??
                                             '',
                                         style: TextStyle(
+                                          fontWeight: FontWeight.normal,
                                             fontSize: size.height * 0.016,
                                             color: Colors.white),
                                         recognizer: TapGestureRecognizer()
@@ -907,14 +909,14 @@ class _DetailScreenState extends State<DetailScreen>
                                       text: "Mix ",
                                       style: TextStyle(
                                           fontSize: size.height * 0.026,
-                                          fontWeight: FontWeight.w900,
-                                          color: primaryColor),
+                                          fontWeight: FontWeight.bold,
+                                          color: whiteColor),
                                       children: [
                                         TextSpan(
                                           text: 'Crowd',
                                           style: TextStyle(
                                               fontSize: size.height * 0.026,
-                                              fontWeight: FontWeight.w900,
+                                              fontWeight: FontWeight.bold,
                                               color: whiteColor),
                                         ),
                                       ],
@@ -1087,6 +1089,7 @@ class _DetailScreenState extends State<DetailScreen>
                                               "\n ${barDetail![0].openingHours!.weekdayText![i]} \n",
                                           style: TextStyle(
                                               fontSize: size.height * 0.016,
+                                              fontWeight: FontWeight.normal,
                                               color: whiteColor),
                                         ),
                                       ]
@@ -1134,6 +1137,7 @@ class _DetailScreenState extends State<DetailScreen>
                                             text: barDetail![0].website ?? '',
                                             style: TextStyle(
                                                 fontSize: size.height * 0.016,
+                                                fontWeight: FontWeight.normal,
                                                 color: Colors.white),
                                             recognizer: TapGestureRecognizer()
                                               ..onTap = () async {
