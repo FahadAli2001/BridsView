@@ -38,7 +38,7 @@ class MapsController extends ChangeNotifier {
   PolylinePoints get polylinePoints => _polylinePoints;
   bool get isGettingDirection => _isGettingDirection;
 
-  set isGettingDirection(bool val){
+  set isGettingDirection(bool val) {
     _isGettingDirection = val;
     notifyListeners();
   }
@@ -63,7 +63,8 @@ class MapsController extends ChangeNotifier {
     _lon = double.parse(sp.getString('longitude')!);
   }
 
-  loadData(lat, lon, List<Result> selectedBar, int index,List<Uint8List> barImage,context) async {
+  loadData(lat, lon, List<Result> selectedBar, int index,
+      List<Uint8List> barImage, context) async {
     onMapNearestBar.clear();
     markers.clear();
     nearestBarsImages.clear();
@@ -73,8 +74,9 @@ class MapsController extends ChangeNotifier {
     try {
       final Uint8List markerIcon =
           await getUserImageFromAssets(currentLocationIcon, 150);
-      
-      final Uint8List barsIcon = await getUserImageFromAssets(currentLocationIcon, 70);
+
+      final Uint8List barsIcon =
+          await getUserImageFromAssets(currentLocationIcon, 70);
 
       _markers.add(Marker(
         markerId: const MarkerId("user"),
@@ -88,193 +90,188 @@ class MapsController extends ChangeNotifier {
             selectedBar[index].geometry!.location!.lng!),
         icon: BitmapDescriptor.fromBytes(barsIcon),
         onTap: () {
-                      customInfoWindowController.addInfoWindow!(
-              GestureDetector(
-                onTap: () {
-                  clearPolylines();
-                  getPolyline(nearestBar.cast<Result>(), index);
-                },
-                child: Container(
-                    color: Colors.white,
-                    child: Row(
-                      children: [
-                     
-                     SizedBox(
-                          width: 100,
-                          height: 200,
-                          child: Image.memory(
-                          barImage[index]  ,
-                            fit: BoxFit.cover,
+          customInfoWindowController.addInfoWindow!(
+            GestureDetector(
+              onTap: () {
+                clearPolylines();
+                getPolyline(nearestBar.cast<Result>(), index);
+              },
+              child: Container(
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 100,
+                        height: 200,
+                        child: Image.memory(
+                          barImage[index],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: Text(
+                              selectedBar[index].name ?? '',
+                              maxLines: 2,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: Text(
-                                selectedBar[index].name ?? '',
-                                maxLines: 2,
-                                style: const TextStyle(
-                                  
-                                  color: Colors.black,
-                                  
-                                  fontWeight: FontWeight.bold,
+                          selectedBar[index].rating == null
+                              ? const Text(
+                                  "Ratings Not Available",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : Align(
+                                  alignment: Alignment.topLeft,
+                                  child: RatingBarIndicator(
+                                    unratedColor: Colors.grey,
+                                    rating: selectedBar[index].rating! * 1.0,
+                                    itemBuilder: (context, index) => Icon(
+                                      Icons.star,
+                                      color: primaryColor,
+                                    ),
+                                    itemCount: 5,
+                                    itemSize: 15,
+                                    direction: Axis.horizontal,
+                                  ),
                                 ),
-                              ),
-                            ),
-                         selectedBar[index].rating == null ?
-                       const  Text("Ratings Not Available",
-                         style:   TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                         )
-                         :   Align(
-                          alignment: Alignment.topLeft,
-                           child: RatingBarIndicator(
-                                unratedColor: Colors.grey,
-                                rating: selectedBar[index].rating! * 1.0  ,
-                                itemBuilder: (context, index) => Icon(
-                                  Icons.star,
-                                  color: primaryColor,
-                                ),
-                                itemCount: 5,
-                                itemSize: 15,
-                                direction: Axis.horizontal,
-                              ),
-                         ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: Text(
-                                selectedBar[index].vicinity ?? '',
-                                maxLines: 4,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                   fontSize: 10
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: Text(
+                              selectedBar[index].vicinity ?? '',
+                              maxLines: 4,
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 10
                                   // fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                                  ),
                             ),
-                          ],
-                        ),
-                      ],
-                    )),
-              ),
-              LatLng(selectedBar[index].geometry!.location!.lat!,
-                 selectedBar[index].geometry!.location!.lng!),
-            );
+                          ),
+                        ],
+                      ),
+                    ],
+                  )),
+            ),
+            LatLng(selectedBar[index].geometry!.location!.lat!,
+                selectedBar[index].geometry!.location!.lng!),
+          );
         },
       ));
 
-    try {
+      try {
         for (var i = 0; i < nearestBarsImages.length; i++) {
-        _markers.add(Marker(
-          markerId: MarkerId(i.toString()),
-          position: LatLng(onMapNearestBar[i].geometry!.location!.lat!,
-              onMapNearestBar[i].geometry!.location!.lng!),
-          icon: BitmapDescriptor.fromBytes(barsIcon),
-          onTap: () {
-            customInfoWindowController.addInfoWindow!(
-              GestureDetector(
-                onTap: () {
-                  clearPolylines();
-                  getPolyline(nearestBar.cast<Result>(), i);
-                },
-                child: Container(
-                    color: Colors.white,
-                    child: Row(
-                      children: [
-                      nearestBarsImages[i] == null ?
-                       SizedBox(
-                          width: 100,
-                          height: 200,
-                          child: Image.network(
-                            nearestBar[i].icon!,
-                            fit: BoxFit.cover,
+          _markers.add(Marker(
+            markerId: MarkerId(i.toString()),
+            position: LatLng(onMapNearestBar[i].geometry!.location!.lat!,
+                onMapNearestBar[i].geometry!.location!.lng!),
+            icon: BitmapDescriptor.fromBytes(barsIcon),
+            onTap: () {
+              customInfoWindowController.addInfoWindow!(
+                GestureDetector(
+                  onTap: () {
+                    clearPolylines();
+                    getPolyline(nearestBar.cast<Result>(), i);
+                  },
+                  child: Container(
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          nearestBarsImages[i] == null
+                              ? SizedBox(
+                                  width: 100,
+                                  height: 200,
+                                  child: Image.network(
+                                    nearestBar[i].icon!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : SizedBox(
+                                  width: 100,
+                                  height: 200,
+                                  child: Image.memory(
+                                    nearestBarsImages[i]!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                          const SizedBox(
+                            width: 5,
                           ),
-                        )
-                      :  SizedBox(
-                          width: 100,
-                          height: 200,
-                          child: Image.memory(
-                            nearestBarsImages[i]!,
-                            fit: BoxFit.cover,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                child: Text(
+                                  nearestBar[i].name ?? '',
+                                  maxLines: 2,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              nearestBar[i].rating == null
+                                  ? const Text(
+                                      "Ratings Not Available",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  : Align(
+                                      alignment: Alignment.topLeft,
+                                      child: RatingBarIndicator(
+                                        unratedColor: Colors.grey,
+                                        rating: nearestBar[i].rating! * 1.0,
+                                        itemBuilder: (context, index) => Icon(
+                                          Icons.star,
+                                          color: primaryColor,
+                                        ),
+                                        itemCount: 5,
+                                        itemSize: 15,
+                                        direction: Axis.horizontal,
+                                      ),
+                                    ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                child: Text(
+                                  onMapNearestBar[i].vicinity ?? '',
+                                  maxLines: 4,
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 10
+                                      // fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: Text(
-                                nearestBar[i].name ?? '',
-                                maxLines: 2,
-                                style: const TextStyle(
-                                  
-                                  color: Colors.black,
-                                  
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                         nearestBar[i].rating == null ?
-                       const  Text("Ratings Not Available",
-                         style:   TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                         )
-                         :   Align(
-                          alignment: Alignment.topLeft,
-                           child: RatingBarIndicator(
-                                unratedColor: Colors.grey,
-                                rating: nearestBar[i].rating! * 1.0  ,
-                                itemBuilder: (context, index) => Icon(
-                                  Icons.star,
-                                  color: primaryColor,
-                                ),
-                                itemCount: 5,
-                                itemSize: 15,
-                                direction: Axis.horizontal,
-                              ),
-                         ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: Text(
-                                onMapNearestBar[i].vicinity ?? '',
-                                maxLines: 4,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                   fontSize: 10
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )),
-              ),
-              LatLng(onMapNearestBar[i].geometry!.location!.lat!,
-                  onMapNearestBar[i].geometry!.location!.lng!),
-            );
-          },
-        ));
-      } 
-    } catch (e) {
-      log("custom box ${e.toString()}"); 
-    }
+                        ],
+                      )),
+                ),
+                LatLng(onMapNearestBar[i].geometry!.location!.lat!,
+                    onMapNearestBar[i].geometry!.location!.lng!),
+              );
+            },
+          ));
+        }
+      } catch (e) {
+        log("custom box ${e.toString()}");
+      }
       notifyListeners();
     } catch (e) {
       log("$e load data");
@@ -414,8 +411,7 @@ class MapsController extends ChangeNotifier {
   Future<List<Uint8List?>> exploreImages(String ref) async {
     List<Uint8List?> exploreNearbyBarsImagesList = [];
     exploreNearbyBarsImagesList.clear();
-     
-    
+
     try {
       var response = await http.get(Uri.parse(
           "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$ref&key=$googleMapApiKey"));
@@ -570,7 +566,7 @@ class MapsController extends ChangeNotifier {
                 await exploreImages(resultsList[i].photos![0].photoReference!);
             nearestBarsImages.addAll(nearestBardata);
           }
-          var barDetail =await barsDetailMethod(resultsList[i].placeId!);
+          var barDetail = await barsDetailMethod(resultsList[i].placeId!);
           nearestBars.add(barDetail!);
           var distanceData = await getDistanceBetweenPoints(
               resultsList[i].geometry!.location!.lat.toString(),

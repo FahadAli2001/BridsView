@@ -81,18 +81,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         },
       ),
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            )),
-        centerTitle: true,
-        title:const  CustomHeadingText(heading: "Edit Profile",)
-      ),
+          backgroundColor: Colors.black,
+          leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              )),
+          centerTitle: true,
+          title: const CustomHeadingText(
+            heading: "Edit Profile",
+          )),
       body: Padding(
         padding: const EdgeInsets.all(25),
         child: SingleChildScrollView(child: Consumer<EditProfileController>(

@@ -620,7 +620,7 @@ class _DetailScreenState extends State<DetailScreen>
                                                 .website ??
                                             '',
                                         style: TextStyle(
-                                          fontWeight: FontWeight.normal,
+                                            fontWeight: FontWeight.normal,
                                             fontSize: size.height * 0.016,
                                             color: Colors.white),
                                         recognizer: TapGestureRecognizer()

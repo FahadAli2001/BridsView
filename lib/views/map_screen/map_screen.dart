@@ -15,7 +15,11 @@ class MapScreen extends StatefulWidget {
   final List<Uint8List> barImage;
   final List<Result> bar;
   final int index;
-  const MapScreen({super.key, required this.bar, required this.index,required this.barImage});
+  const MapScreen(
+      {super.key,
+      required this.bar,
+      required this.index,
+      required this.barImage});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -33,34 +37,32 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
-    DefaultAssetBundle.of(context).loadString("assets/map_theme/night_map_theme.json").then((value)  {
+    DefaultAssetBundle.of(context)
+        .loadString("assets/map_theme/night_map_theme.json")
+        .then((value) {
       mapTheme = value;
-      setState(() {
-        
-      });
-       try {
-      final mapController = Provider.of<MapsController>(context, listen: false);
-      mapController.getCordinateds().then((value) async {
-        mapController.loadData(mapController.lat, mapController.lon, widget.bar,
-            widget.index, widget.barImage,context);
-        mapController.clearPolylines();
-        CameraPosition cameraPosition = CameraPosition(
-          target: LatLng(mapController.lat!, mapController.lon!),
-          zoom: 16,
-        );
-        final GoogleMapController controller = await _controller.future;
-        controller
-            .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+      setState(() {});
+      try {
+        final mapController =
+            Provider.of<MapsController>(context, listen: false);
+        mapController.getCordinateds().then((value) async {
+          mapController.loadData(mapController.lat, mapController.lon,
+              widget.bar, widget.index, widget.barImage, context);
+          mapController.clearPolylines();
+          CameraPosition cameraPosition = CameraPosition(
+            target: LatLng(mapController.lat!, mapController.lon!),
+            zoom: 16,
+          );
+          final GoogleMapController controller = await _controller.future;
+          controller
+              .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
-        setState(() {});
-      });
-
-     
-    } catch (e) {
-      log("map screen ${e.toString()}");
-    }
+          setState(() {});
+        });
+      } catch (e) {
+        log("map screen ${e.toString()}");
+      }
     });
-   
   }
 
   @override
@@ -101,10 +103,10 @@ class _MapScreenState extends State<MapScreen> {
             ),
             value.onMapNearestBar.isEmpty
                 ? Center(
-                  child: CircularProgressIndicator(
-                    color: primaryColor,
-                  ),
-                )
+                    child: CircularProgressIndicator(
+                      color: primaryColor,
+                    ),
+                  )
                 : const SizedBox(),
             CustomInfoWindow(
               controller: value.customInfoWindowController,

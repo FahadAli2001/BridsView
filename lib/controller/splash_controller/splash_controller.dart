@@ -24,7 +24,7 @@ class SplashController extends ChangeNotifier {
         Navigator.pushAndRemoveUntil(
           context,
           PageTransition(
-            duration:const Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
             child: HomeScreen(user: user),
             type: PageTransitionType.fade,
           ),

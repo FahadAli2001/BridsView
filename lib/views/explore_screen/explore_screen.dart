@@ -95,11 +95,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 isSearchBarOpen = true;
                 setState(() {});
               },
-              child:   Icon(
-                Icons.search,
-                color: Colors.white,
-               size:  size.height * 0.04
-              ),
+              child: Icon(Icons.search,
+                  color: Colors.white, size: size.height * 0.04),
             ),
           )
         ],
@@ -180,11 +177,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   ),
 
                   barsOrClubsData.isEmpty
-                      ?  Center(
-                        child: CircularProgressIndicator(
-                          color: primaryColor,
-                        ),
-                      )
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: primaryColor,
+                          ),
+                        )
                       : isClubs == true
                           ? Expanded(
                               child: ListView.builder(
@@ -241,14 +238,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                       )
                                     : value.barDetail.isEmpty
                                         ? const Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 20),
-                                        child: Text(
-                                          "Search Bars Or Clubs",
-                                          style:
-                                              TextStyle(color: Colors.white60),
-                                        ),
-                                      )
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 20),
+                                            child: Text(
+                                              "Search Bars Or Clubs",
+                                              style: TextStyle(
+                                                  color: Colors.white60),
+                                            ),
+                                          )
                                         : Expanded(
                                             child: ListView.builder(
                                               itemCount:
