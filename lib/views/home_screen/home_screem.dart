@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  void clearAllList(){
+  void clearAllList() {
     exploreBarsImages.clear();
     exploreBar.clear();
     recomendedBarList.clear();
@@ -259,7 +259,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: size.height * 0.15,
                           color: Colors.black,
                           child: ListView.builder(
-                           
                             scrollDirection: Axis.horizontal,
                             itemCount: exploreBarsImages.length,
                             itemBuilder: (context, index) {

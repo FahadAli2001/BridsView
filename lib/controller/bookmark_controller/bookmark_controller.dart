@@ -13,15 +13,14 @@ import 'package:http/http.dart' as http;
 import '../../model/bar_details_model/bar_details_model.dart';
 
 class BookmarkController extends ChangeNotifier {
- final List<Result> _bookmarksBarsDetailList = [];
+  final List<Result> _bookmarksBarsDetailList = [];
   final List<Uint8List?> _bookmarksBarsImagesList = [];
-
 
   String? _userId;
   String? _token;
   String? get userId => _userId;
   String? get token => _token;
-  List<Result> get bookmarksBarsDetailList => _bookmarksBarsDetailList ;
+  List<Result> get bookmarksBarsDetailList => _bookmarksBarsDetailList;
   List<Uint8List?> get bookmarksBarsImagesList => _bookmarksBarsImagesList;
 
   Future<void> getUserCredential() async {
@@ -99,7 +98,7 @@ class BookmarkController extends ChangeNotifier {
         var data = jsonDecode(response.body);
         GetBookmarksModel getBookmarksModel = GetBookmarksModel.fromJson(data);
         log(data.toString());
-          await  getBookmarkDetails(getBookmarksModel, context);
+        await getBookmarkDetails(getBookmarksModel, context);
       } else {
         log(response.statusCode.toString());
       }
