@@ -14,7 +14,7 @@ import '../../model/bar_details_model/bar_details_model.dart';
 
 class BookmarkController extends ChangeNotifier {
  final List<Result> _bookmarksBarsDetailList = [];
-  final List<Uint8List> _bookmarksBarsImagesList = [];
+  final List<Uint8List?> _bookmarksBarsImagesList = [];
 
 
   String? _userId;
@@ -22,7 +22,7 @@ class BookmarkController extends ChangeNotifier {
   String? get userId => _userId;
   String? get token => _token;
   List<Result> get bookmarksBarsDetailList => _bookmarksBarsDetailList ;
-  List<Uint8List> get bookmarksBarsImagesList => _bookmarksBarsImagesList;
+  List<Uint8List?> get bookmarksBarsImagesList => _bookmarksBarsImagesList;
 
   Future<void> getUserCredential() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -98,7 +98,8 @@ class BookmarkController extends ChangeNotifier {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         GetBookmarksModel getBookmarksModel = GetBookmarksModel.fromJson(data);
-        getBookmarkDetails(getBookmarksModel, context);
+        log(data.toString());
+          await  getBookmarkDetails(getBookmarksModel, context);
       } else {
         log(response.statusCode.toString());
       }
@@ -111,13 +112,13 @@ class BookmarkController extends ChangeNotifier {
       GetBookmarksModel getBookmarksModel, context) async {
     final mapController = Provider.of<MapsController>(context, listen: false);
     try {
-      for (var i = 0; i < getBookmarksModel.barPlacesId!.length; i++) {
+      for (var i = 0; i < getBookmarksModel.data!.length; i++) {
         var barsDetails = await mapController
-            .barsDetailMethod(getBookmarksModel.barPlacesId![i]);
+            .barsDetailMethod(getBookmarksModel.data![i].barPlaceId!);
         _bookmarksBarsDetailList.add(barsDetails!);
         var barsImages = await mapController.exploreImages(
             _bookmarksBarsDetailList[i].photos![0].photoReference!);
-        _bookmarksBarsImagesList.add(barsImages as Uint8List);
+        _bookmarksBarsImagesList.addAll(barsImages);
       }
       notifyListeners();
     } catch (e) {
