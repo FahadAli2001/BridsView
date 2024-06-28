@@ -2,7 +2,6 @@ import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/views/bookmark_screen/bookmark_screen.dart';
-import 'package:birds_view/views/home_screen/home_screem.dart';
 import 'package:birds_view/views/login_screen/login_screen.dart';
 import 'package:birds_view/views/onboarding_screen/onboarding_one_screen.dart';
 import 'package:birds_view/views/profile_screen/profile_screen.dart';
@@ -111,11 +110,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: HomeScreen(user: user),
-                        type: PageTransitionType.fade));
+                Navigator.pop(context);
               },
               leading: SvgPicture.asset(
                 homeIcon,
