@@ -295,11 +295,13 @@ class MapsController extends ChangeNotifier {
     _isGettingDirection = true;
     notifyListeners();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleMapApiKey,
-      PointLatLng(lat!, lon!),
-      PointLatLng(bars[index].geometry!.location!.lat!,
-          bars[index].geometry!.location!.lng!),
-      travelMode: TravelMode.driving,
+      googleApiKey: googleMapApiKey,
+      request: PolylineRequest(
+        origin: PointLatLng(lat!, lon!),
+        destination: PointLatLng(bars[index].geometry!.location!.lat!,
+            bars[index].geometry!.location!.lng!),
+        mode: TravelMode.driving,
+      ),
     );
     if (result.points.isNotEmpty) {
       _isGettingDirection = false;
