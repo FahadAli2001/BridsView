@@ -2,11 +2,14 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/utils/colors.dart';
+import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_description_heading_widget/custom_bar_description_heading_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_distance_widget/custom_bar_distance_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_heading_widget/custom_bar_heading_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_hot_badge_widget/custom_bar_hot_badge_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_image_widget/custom_bar_image_widget.dart';
+import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_random_population_widget/custom_bar_random_population_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_rating_widget/custom_bar_rating_widget.dart';
+import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_subscribe_now_button_widget/custom_bar_subscribe_now_button_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -89,23 +92,10 @@ class CustomDetailScreenFromSearchScreen extends StatelessWidget {
                   //
 
                   //
-                 CustomBarCrowdImageWidget(size: size),
-                 //
-                  Consumer<DetailScreenController>(
-                    builder: (context, value, child) {
-                      return Positioned(
-                        top: size.height * 0.09,
-                        left: size.width * 0.2,
-                        child: Text(
-                          value.randomPopulation.toString(),
-                          style: TextStyle(
-                              fontSize: size.height * 0.026,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    },
-                  ),
+                  CustomBarCrowdImageWidget(size: size),
+                  //
+                  CustomBarRandomPopulationWidget(size: size),
+                 CustomBarSubscribeNowButtonWidget(size: size)
                 ],
               ),
             ),
@@ -116,15 +106,7 @@ class CustomDetailScreenFromSearchScreen extends StatelessWidget {
             //
 
             //
-            Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Description',
-                  style: TextStyle(
-                      fontSize: size.height * 0.026,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                )),
+            CustomBarDescriptionHeadingWidget(size: size),
             //
             SizedBox(
               height: size.height * 0.01,

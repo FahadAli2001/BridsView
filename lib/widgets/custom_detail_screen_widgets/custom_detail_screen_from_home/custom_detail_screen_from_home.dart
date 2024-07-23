@@ -2,13 +2,14 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
-import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_crowd_image_widget/custom_bar_crowd_image_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_distance_widget/custom_bar_distance_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_heading_widget/custom_bar_heading_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_hot_badge_widget/custom_bar_hot_badge_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_image_widget/custom_bar_image_widget.dart';
+import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_random_population_widget/custom_bar_random_population_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_rating_widget/custom_bar_rating_widget.dart';
+import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_subscribe_now_button_widget/custom_bar_subscribe_now_button_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_mix_crowd_heading_widget/custom_mix_crowd_heading_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import 'package:provider/provider.dart';
 import '../../../controller/deatil_screen_controller/detail_screen_controller.dart';
 import '../../../utils/colors.dart';
 import '../../custom_description_rich_text/custom_description_rich_text.dart';
+import '../custom_bar_description_heading_widget/custom_bar_description_heading_widget.dart';
 
 class CustomDetailScreenFromHome extends StatelessWidget {
   final List<Uint8List?> barImage;
@@ -93,43 +95,8 @@ class CustomDetailScreenFromHome extends StatelessWidget {
                   //
                   CustomBarCrowdImageWidget(size: size),
                   //
-                  Consumer<DetailScreenController>(
-                    builder: (context, value, child) {
-                      return Positioned(
-                        top: size.height * 0.07,
-                        left: size.width * 0.32,
-                        child: Text(
-                          value.randomPopulation.toString(),
-                          style: TextStyle(
-                              fontSize: size.height * 0.026,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    },
-                  ),
-                  Positioned(
-                      top: size.height * 0.11,
-                      left: size.width * 0.2,
-                      child: GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: size.width * 0.35,
-                          height: size.height * 0.04,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(button), fit: BoxFit.fill)),
-                          child: Center(
-                            child: Text(
-                              "Subscribe Now",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: size.height * 0.015,
-                                  color: Colors.black),
-                            ),
-                          ),
-                        ),
-                      ))
+                 CustomBarRandomPopulationWidget(size: size),
+                 CustomBarSubscribeNowButtonWidget(size: size)
                 ],
               ),
             ),
@@ -138,15 +105,7 @@ class CustomDetailScreenFromHome extends StatelessWidget {
               height: size.height * 0.02,
             ),
             //
-            Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Description',
-                  style: TextStyle(
-                      fontSize: size.height * 0.026,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                )),
+           CustomBarDescriptionHeadingWidget(size: size),
             //
 
             barDetail![0].editorialSummary == null
