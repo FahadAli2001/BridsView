@@ -1,4 +1,4 @@
-String baseUrl = "https://owlapi.zemfar.com/api/";
+String baseUrl = "https://zemfar.com/owl-api/api/";
 // ------------------------
 String loginUrl = "login";
 String fetchProfileUrl = "fetch-profile?id=";
@@ -10,6 +10,7 @@ String addBookmarkUrl = "bookmark";
 String deletBookmarkUrl = "delete/bookmark";
 String checkBookmarkUrl = "bookmarks?user_id=";
 String getAllBookmarksUrl = "bookmarks/user?user_id=";
+String reviewUrl = "review";
 // ------------------------
 String loginApi = baseUrl + loginUrl;
 String fetchProfileApi = baseUrl + fetchProfileUrl;
@@ -21,6 +22,7 @@ String addBookmarkApi = baseUrl + addBookmarkUrl;
 String deleteBookmarkApi = baseUrl + deletBookmarkUrl;
 String checkBookmarkApi = baseUrl + checkBookmarkUrl;
 String getAllBookmarksApi = baseUrl + getAllBookmarksUrl;
+String postReviewApi = baseUrl+reviewUrl;
 
 
 

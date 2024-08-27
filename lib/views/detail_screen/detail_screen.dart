@@ -58,6 +58,7 @@ class _DetailScreenState extends State<DetailScreen>
       checkBarId();
       getUserCredential();
     }
+    log(barDetail!.length.toString() + " bar detail length");
   }
 
   @override

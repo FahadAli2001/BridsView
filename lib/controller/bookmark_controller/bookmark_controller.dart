@@ -35,7 +35,7 @@ class BookmarkController extends ChangeNotifier {
   Future<void> addBookmark(String placeId) async {
     try {
       var header = {"Authorization": "Bearer $token"};
-      var body = {"user_id": userId, "bar_place_id": placeId};
+      var body = {"user_id": userId, "bar_type_id": placeId};
       var response = await http.post(Uri.parse(addBookmarkApi),
           headers: header, body: body);
       if (response.statusCode == 200) {
@@ -49,6 +49,7 @@ class BookmarkController extends ChangeNotifier {
   }
 
   Stream getBookMarkStream(String placeId) async* {
+     
     var headers = {
       'Authorization': 'Bearer $token',
     };
@@ -57,11 +58,13 @@ class BookmarkController extends ChangeNotifier {
       var bookmark;
       try {
         var response = await http.get(
-            Uri.parse('$checkBookmarkApi$userId&bar_place_id=$placeId'),
+            Uri.parse('$checkBookmarkApi$userId&bar_type_id=$placeId'),
             headers: headers);
         var data = jsonDecode(response.body);
+       
         if (response.statusCode == 200) {
           bookmark = data;
+           
         } else {
           bookmark = data;
         }
@@ -94,8 +97,10 @@ class BookmarkController extends ChangeNotifier {
     try {
       var response = await http.get(Uri.parse(getAllBookmarksApi + userId!),
           headers: header);
+          var data = jsonDecode(response.body);
+          log(data.toString());
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
+        
         GetBookmarksModel getBookmarksModel = GetBookmarksModel.fromJson(data);
         log(data.toString());
         await getBookmarkDetails(getBookmarksModel, context);
@@ -107,21 +112,61 @@ class BookmarkController extends ChangeNotifier {
     }
   }
 
+  // Future<void> getBookmarkDetails(
+  //     GetBookmarksModel getBookmarksModel, context) async {
+  //   final mapController = Provider.of<MapsController>(context, listen: false);
+  //   try {
+  //     for (var i = 0; i < getBookmarksModel.data!.length; i++) {
+  //       var barsDetails = await mapController
+  //           .barsDetailMethod(getBookmarksModel.data![i].barPlaceId!);
+  //       _bookmarksBarsDetailList.add(barsDetails!);
+  //       var barsImages = await mapController.exploreImages(
+  //           _bookmarksBarsDetailList[i].photos![0].photoReference!);
+  //       _bookmarksBarsImagesList.addAll(barsImages);
+  //     }
+  //     notifyListeners();
+  //   } catch (e) {
+  //     log("get bookmarks detail call : $e");
+  //   }
+  // }
+
   Future<void> getBookmarkDetails(
-      GetBookmarksModel getBookmarksModel, context) async {
-    final mapController = Provider.of<MapsController>(context, listen: false);
-    try {
+    GetBookmarksModel getBookmarksModel, BuildContext context) async {
+  final mapController = Provider.of<MapsController>(context, listen: false);
+  try {
+    if (getBookmarksModel.data != null) {
       for (var i = 0; i < getBookmarksModel.data!.length; i++) {
-        var barsDetails = await mapController
-            .barsDetailMethod(getBookmarksModel.data![i].barPlaceId!);
-        _bookmarksBarsDetailList.add(barsDetails!);
-        var barsImages = await mapController.exploreImages(
-            _bookmarksBarsDetailList[i].photos![0].photoReference!);
-        _bookmarksBarsImagesList.addAll(barsImages);
+        // Check if barPlaceId is not null
+        if (getBookmarksModel.data![i].barPlaceId != null) {
+          var barsDetails = await mapController
+              .barsDetailMethod(getBookmarksModel.data![i].barPlaceId!);
+
+          if (barsDetails != null) {
+            _bookmarksBarsDetailList.add(barsDetails);
+
+            // Check if photos list is not null and has elements
+            if (barsDetails.photos != null && barsDetails.photos!.isNotEmpty) {
+              var barsImages = await mapController.exploreImages(
+                  barsDetails.photos![0].photoReference!);
+              
+              _bookmarksBarsImagesList.addAll(barsImages);
+                        } else {
+              log("No photos available for barPlaceId: ${getBookmarksModel.data![i].barPlaceId}");
+            }
+          } else {
+            log("barsDetailMethod returned null for barPlaceId: ${getBookmarksModel.data![i].barPlaceId}");
+          }
+        } else {
+          log("barPlaceId is null for index $i");
+        }
       }
-      notifyListeners();
-    } catch (e) {
-      log("get bookmarks detail call : $e");
+    } else {
+      log("getBookmarksModel.data is null");
     }
+    notifyListeners();
+  } catch (e) {
+    log("get bookmarks detail call : $e");
   }
+}
+
 }

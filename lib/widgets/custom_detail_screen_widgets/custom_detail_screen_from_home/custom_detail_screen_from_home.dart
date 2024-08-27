@@ -43,13 +43,20 @@ class CustomDetailScreenFromHome extends StatelessWidget {
         padding: const EdgeInsets.all(15),
         child: Column(
           children: [
-            CustomBarImageWidget(barImage: barImage, index: index),
+            CustomBarImageWidget(
+              barImage: barImage,
+              index: index,
+              barDetail: barDetail,
+            ),
 
             SizedBox(
               height: size.height * 0.02,
             ),
             //
+            
+            
 
+            //
             CustomBarRatingWidget(
                 barDetail: barDetail, index: index, size: size),
             //
@@ -95,8 +102,8 @@ class CustomDetailScreenFromHome extends StatelessWidget {
                   //
                   CustomBarCrowdImageWidget(size: size),
                   //
-                 CustomBarRandomPopulationWidget(size: size),
-                 CustomBarSubscribeNowButtonWidget(size: size)
+                  CustomBarRandomPopulationWidget(size: size),
+                  CustomBarSubscribeNowButtonWidget(size: size)
                 ],
               ),
             ),
@@ -105,7 +112,7 @@ class CustomDetailScreenFromHome extends StatelessWidget {
               height: size.height * 0.02,
             ),
             //
-           CustomBarDescriptionHeadingWidget(size: size),
+            CustomBarDescriptionHeadingWidget(size: size),
             //
 
             barDetail![0].editorialSummary == null

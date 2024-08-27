@@ -1,19 +1,26 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:birds_view/utils/icons.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'dart:typed_data';
 
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:birds_view/controller/bookmark_controller/bookmark_controller.dart';
+import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+ 
 class CustomBookmarkWidget extends StatelessWidget {
-  const CustomBookmarkWidget({super.key});
+  final int index;
+  final List<Result> bookmarksBarsDetailList ;
+  final List<Uint8List>? bookmarksBarsImagesList ;
+  const CustomBookmarkWidget({super.key,required this.bookmarksBarsDetailList,required this.bookmarksBarsImagesList, required this.index});
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
-      child: GestureDetector(
+      child: Consumer<BookmarkController>(builder: (context, bookmarkController, child) {
+        return GestureDetector(
         onLongPress: () {
-          
+          bookmarkController.deleteBookmark(bookmarksBarsDetailList[index].plusCode.toString());
         },
         child: Container(
           width: size.width,
@@ -28,11 +35,12 @@ class CustomBookmarkWidget extends StatelessWidget {
                 height: size.height,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    image: const DecorationImage(
-                        image: AssetImage(
-                          'assets/recomended_bar.png',
+                    image:   DecorationImage(
+                        image: MemoryImage(bookmarksBarsImagesList![index],
+                        
                         ),
-                        fit: BoxFit.fill)),
+                        fit: BoxFit.cover)
+                        ),
               ),
               SizedBox(
                 width: size.width * 0.02,
@@ -45,7 +53,7 @@ class CustomBookmarkWidget extends StatelessWidget {
                     SizedBox(
                       width: size.width * 0.5,
                       child: Text(
-                        "Cubix Bar",
+                        bookmarksBarsDetailList[index].name!,
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -57,36 +65,37 @@ class CustomBookmarkWidget extends StatelessWidget {
                     ),
                     Container(
                       constraints: BoxConstraints(maxWidth: size.width * 0.5),
-                      child: const AutoSizeText(
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit ...',
-                        maxLines: 4,
-                        overflow: TextOverflow.visible,
-                        style: TextStyle(color: Colors.white),
+                      child:   AutoSizeText(
+                        bookmarksBarsDetailList[index].formattedAddress!,
+                        maxLines: 3,
+                        overflow: TextOverflow.fade,
+                        style:const TextStyle(color: Colors.white),
                       ),
                     ),
                     SizedBox(
                       height: size.height * 0.015,
                     ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(personsIcon),
-                        SizedBox(
-                          width: size.width * 0.02,
-                        ),
-                        SvgPicture.asset(musicIcon),
-                        SizedBox(
-                          width: size.width * 0.02,
-                        ),
-                        SvgPicture.asset(glassIcon)
-                      ],
-                    )
+                    // Row(
+                    //   children: [
+                    //     SvgPicture.asset(personsIcon),
+                    //     SizedBox(
+                    //       width: size.width * 0.02,
+                    //     ),
+                    //     SvgPicture.asset(musicIcon),
+                    //     SizedBox(
+                    //       width: size.width * 0.02,
+                    //     ),
+                    //     SvgPicture.asset(glassIcon)
+                    //   ],
+                    // )
                   ],
                 ),
               )
             ],
           ),
         ),
-      ),
+      );
+      },)
     );
   }
 }

@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
+import 'package:birds_view/controller/review_controller/review_controller.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
@@ -14,6 +16,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../controller/search_bars_controller/search_bars_controller.dart';
 import '../../model/bar_details_model/bar_details_model.dart';
@@ -49,6 +52,17 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isReview = true;
   bool isTextFieldFocused = false;
 
+  String lastVisitedBar = "";
+
+  Future<void> getLastBar()async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    lastVisitedBar= sp.getString("lastVisitedBar")!;
+    setState(() {
+      
+    });
+    log(lastVisitedBar);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -59,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
     exploreBarByMap();
     recomendedBars();
     nearestBar();
+    getLastBar();
     isSearchBarOpen;
 
     _focusNode.addListener(() {
@@ -86,6 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
     exploreBarsDistanceList.clear();
     recomendedBarsDistanceList.clear();
   }
+
 
   Future<void> exploreBarByMap() async {
     final mapController = Provider.of<MapsController>(context, listen: false);
@@ -568,14 +584,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-          if (isReview == true)
+          if (lastVisitedBar.isNotEmpty || lastVisitedBar != "")
             Positioned(
               top: size.height * 0.15,
               left: size.width * 0.03,
               right: size.width * 0.03,
               child: Padding(
                 padding: const EdgeInsets.all(15),
-                child: Container(
+                child:Consumer<ReviewController>(builder:(context, value, child) {
+                  return  Container(
                   color: Colors.black.withOpacity(0.4),
                   child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
@@ -602,8 +619,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontSize: size.height * 0.026),
                                   ),
                                   GestureDetector(
-                                    onTap: () {
-                                      isReview = false;
+                                    onTap: ()async {
+                                      SharedPreferences sp = await SharedPreferences.getInstance();
+                                      sp.remove("lastVisitedBar");
+                                      lastVisitedBar = 
+                                      "";
                                       setState(() {});
                                     },
                                     child: Icon(
@@ -633,6 +653,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     onRatingUpdate: (rating) {
                                       // log(reviewController.rating.toString());
+                                      value.rating = rating.toString();
                                     },
                                   ),
                                   if (isTextFieldFocused)
@@ -662,7 +683,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Expanded(
                                         child: TextField(
                                           focusNode: _focusNode,
-                                          controller: null,
+                                          controller: value.reviewController,
                                           maxLines: null,
                                           expands: true,
                                           textAlignVertical:
@@ -687,14 +708,23 @@ class _HomeScreenState extends State<HomeScreen> {
                               CustomButton(
                                   text: 'Submit',
                                   ontap: () async {
-                                    isReview = false;
-                                    setState(() {});
+                                    
+                                    value.postReview().then((val){
+                                         lastVisitedBar = 
+                                      "";
+                                      setState(() {
+                                        
+                                      });
+                                    });
+                                    
+                                   
                                   })
                             ],
                           ),
                         ),
                       )),
-                ),
+                );
+                },)
               ),
             ),
         ],

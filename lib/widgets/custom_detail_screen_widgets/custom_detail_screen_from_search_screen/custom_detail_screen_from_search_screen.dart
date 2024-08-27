@@ -43,7 +43,7 @@ class CustomDetailScreenFromSearchScreen extends StatelessWidget {
         padding: const EdgeInsets.all(15),
         child: Column(
           children: [
-            CustomBarImageWidget(barImage: barImage, index: index),
+            CustomBarImageWidget(barImage: barImage, index: index,barDetail: searchBarDetail,),
 
             SizedBox(
               height: size.height * 0.02,

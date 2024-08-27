@@ -292,6 +292,7 @@ class MapsController extends ChangeNotifier {
   }
 
   getPolyline(List<Result> bars, int index) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
     _isGettingDirection = true;
     notifyListeners();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
@@ -303,6 +304,7 @@ class MapsController extends ChangeNotifier {
         mode: TravelMode.driving,
       ),
     );
+    sp.setString("lastVisitedBar", bars[index].placeId.toString());
     if (result.points.isNotEmpty) {
       _isGettingDirection = false;
       notifyListeners();
