@@ -49,7 +49,6 @@ class BookmarkController extends ChangeNotifier {
   }
 
   Stream getBookMarkStream(String placeId) async* {
-     
     var headers = {
       'Authorization': 'Bearer $token',
     };
@@ -61,10 +60,9 @@ class BookmarkController extends ChangeNotifier {
             Uri.parse('$checkBookmarkApi$userId&bar_type_id=$placeId'),
             headers: headers);
         var data = jsonDecode(response.body);
-       
+
         if (response.statusCode == 200) {
           bookmark = data;
-           
         } else {
           bookmark = data;
         }
@@ -97,10 +95,9 @@ class BookmarkController extends ChangeNotifier {
     try {
       var response = await http.get(Uri.parse(getAllBookmarksApi + userId!),
           headers: header);
-          var data = jsonDecode(response.body);
-          log(data.toString());
+      var data = jsonDecode(response.body);
+      log(data.toString());
       if (response.statusCode == 200) {
-        
         GetBookmarksModel getBookmarksModel = GetBookmarksModel.fromJson(data);
         log(data.toString());
         await getBookmarkDetails(getBookmarksModel, context);
@@ -131,42 +128,42 @@ class BookmarkController extends ChangeNotifier {
   // }
 
   Future<void> getBookmarkDetails(
-    GetBookmarksModel getBookmarksModel, BuildContext context) async {
-  final mapController = Provider.of<MapsController>(context, listen: false);
-  try {
-    if (getBookmarksModel.data != null) {
-      for (var i = 0; i < getBookmarksModel.data!.length; i++) {
-        // Check if barPlaceId is not null
-        if (getBookmarksModel.data![i].barPlaceId != null) {
-          var barsDetails = await mapController
-              .barsDetailMethod(getBookmarksModel.data![i].barPlaceId!);
+      GetBookmarksModel getBookmarksModel, BuildContext context) async {
+    final mapController = Provider.of<MapsController>(context, listen: false);
+    try {
+      if (getBookmarksModel.data != null) {
+        for (var i = 0; i < getBookmarksModel.data!.length; i++) {
+          // Check if barPlaceId is not null
+          if (getBookmarksModel.data![i].barPlaceId != null) {
+            var barsDetails = await mapController
+                .barsDetailMethod(getBookmarksModel.data![i].barPlaceId!);
 
-          if (barsDetails != null) {
-            _bookmarksBarsDetailList.add(barsDetails);
+            if (barsDetails != null) {
+              _bookmarksBarsDetailList.add(barsDetails);
 
-            // Check if photos list is not null and has elements
-            if (barsDetails.photos != null && barsDetails.photos!.isNotEmpty) {
-              var barsImages = await mapController.exploreImages(
-                  barsDetails.photos![0].photoReference!);
-              
-              _bookmarksBarsImagesList.addAll(barsImages);
-                        } else {
-              log("No photos available for barPlaceId: ${getBookmarksModel.data![i].barPlaceId}");
+              // Check if photos list is not null and has elements
+              if (barsDetails.photos != null &&
+                  barsDetails.photos!.isNotEmpty) {
+                var barsImages = await mapController
+                    .exploreImages(barsDetails.photos![0].photoReference!);
+
+                _bookmarksBarsImagesList.addAll(barsImages);
+              } else {
+                log("No photos available for barPlaceId: ${getBookmarksModel.data![i].barPlaceId}");
+              }
+            } else {
+              log("barsDetailMethod returned null for barPlaceId: ${getBookmarksModel.data![i].barPlaceId}");
             }
           } else {
-            log("barsDetailMethod returned null for barPlaceId: ${getBookmarksModel.data![i].barPlaceId}");
+            log("barPlaceId is null for index $i");
           }
-        } else {
-          log("barPlaceId is null for index $i");
         }
+      } else {
+        log("getBookmarksModel.data is null");
       }
-    } else {
-      log("getBookmarksModel.data is null");
+      notifyListeners();
+    } catch (e) {
+      log("get bookmarks detail call : $e");
     }
-    notifyListeners();
-  } catch (e) {
-    log("get bookmarks detail call : $e");
   }
-}
-
 }

@@ -12,6 +12,7 @@ import 'controller/login_controller/login_controller.dart';
 import 'controller/review_controller/review_controller.dart';
 import 'controller/search_bars_controller/search_bars_controller.dart';
 import 'controller/splash_controller/splash_controller.dart';
+import 'controller/visited_bars_controller/visited_bars_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,7 +34,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => SearchBarsController()),
         ChangeNotifierProvider(create: (_) => DetailScreenController()),
         ChangeNotifierProvider(create: (_)=>BookmarkController()),
-        ChangeNotifierProvider(create: (_)=>ReviewController())
+        ChangeNotifierProvider(create: (_)=>ReviewController()),
+        ChangeNotifierProvider(create: (_)=>VisitedBarsController())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -94,7 +94,7 @@ class _MapScreenState extends State<MapScreen> {
                 markers: Set<Marker>.of(value.markers),
                 polylines: Set<Polyline>.of(value.polylines.values),
                 onMapCreated: (GoogleMapController controller) {
-                  controller.setMapStyle(mapTheme);
+                  // controller.setMapStyle(mapTheme);
                   _controller.complete(controller);
                   value.customInfoWindowController.googleMapController =
                       controller;

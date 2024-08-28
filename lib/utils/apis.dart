@@ -11,6 +11,7 @@ String deletBookmarkUrl = "delete/bookmark";
 String checkBookmarkUrl = "bookmarks?user_id=";
 String getAllBookmarksUrl = "bookmarks/user?user_id=";
 String reviewUrl = "review";
+String visitedBarsUrl = "visited-bars?user_id=";
 // ------------------------
 String loginApi = baseUrl + loginUrl;
 String fetchProfileApi = baseUrl + fetchProfileUrl;
@@ -23,6 +24,7 @@ String deleteBookmarkApi = baseUrl + deletBookmarkUrl;
 String checkBookmarkApi = baseUrl + checkBookmarkUrl;
 String getAllBookmarksApi = baseUrl + getAllBookmarksUrl;
 String postReviewApi = baseUrl+reviewUrl;
+String visitedBarsApi = baseUrl + visitedBarsUrl;
 
 
 

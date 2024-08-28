@@ -1,9 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomVisitedPlace extends StatelessWidget {
-  CustomVisitedPlace({super.key});
+  final int index;
+  final  List<Result> visitedBarsDetailList  ;
+  final List<Uint8List>? visitedBarsImagesList ;
+  CustomVisitedPlace({super.key,required this.visitedBarsDetailList,required this.visitedBarsImagesList,required this.index});
 
   final GlobalKey globalKey = GlobalKey();
 
@@ -21,18 +27,21 @@ class CustomVisitedPlace extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               color: Colors.grey.shade900),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              
               Container(
                 width: size.width * 0.35,
                 height: size.height,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    image: const DecorationImage(
-                        image: AssetImage("assets/recomended_bar.png"),
-                        fit: BoxFit.fill)),
+                    image:   DecorationImage(
+                        image: MemoryImage(visitedBarsImagesList![index]),
+                        fit: BoxFit.cover)),
               ),
-
+               SizedBox(
+                      width: size.width * 0.03,
+                    ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Column(
@@ -41,7 +50,7 @@ class CustomVisitedPlace extends StatelessWidget {
                     SizedBox(
                       width: size.width * 0.3,
                       child: Text(
-                        'Cubix Bar',
+                        visitedBarsDetailList[index].name!,
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -58,14 +67,14 @@ class CustomVisitedPlace extends StatelessWidget {
                           color: primaryColor,
                           size: size.height * 0.02,
                         ),
-                        const Text(
-                          "4.5 ",
-                          style: TextStyle(
+                          Text(
+                          visitedBarsDetailList[index].rating.toString(),
+                          style:const TextStyle(
                             color: Colors.white,
                           ),
                         ),
                         Text(
-                          "(10 Review's)",
+                          " (${visitedBarsDetailList[index].userRatingsTotal.toString()} Review's)",
                           style: TextStyle(
                             color: primaryColor,
                           ),
@@ -77,45 +86,45 @@ class CustomVisitedPlace extends StatelessWidget {
                     ),
                     Container(
                       constraints: BoxConstraints(maxWidth: size.width * 0.3),
-                      child: const AutoSizeText(
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit ...',
-                        maxLines: 2,
-                        overflow: TextOverflow.visible,
-                        style: TextStyle(color: Colors.white),
+                      child:   AutoSizeText(
+                        visitedBarsDetailList[index].formattedAddress! ,
+                        maxLines: 3,
+                        overflow: TextOverflow.fade,
+                        style:const TextStyle(color: Colors.white),
                       ),
                     ),
                   ],
                 ),
               ),
               // Spacer(),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {},
-                        child: Icon(
-                          Icons.share,
-                          color: Colors.white,
-                          size: size.height * 0.025,
-                        ),
-                      ),
-                      SizedBox(
-                        width: size.width * 0.015,
-                      ),
-                      Icon(
-                        Icons.favorite,
-                        color: primaryColor,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: size.width * 0.01,
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(vertical: 8),
+              //   child: Align(
+              //     alignment: Alignment.topRight,
+              //     child: Row(
+              //       children: [
+              //         GestureDetector(
+              //           onTap: () {},
+              //           child: Icon(
+              //             Icons.share,
+              //             color: Colors.white,
+              //             size: size.height * 0.025,
+              //           ),
+              //         ),
+              //         SizedBox(
+              //           width: size.width * 0.015,
+              //         ),
+              //         Icon(
+              //           Icons.favorite,
+              //           color: primaryColor,
+              //         )
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(
+              //   width: size.width * 0.01,
+              // ),
             ],
           ),
         ),
