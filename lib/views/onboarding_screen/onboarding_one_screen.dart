@@ -1,5 +1,5 @@
 import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/utils/images.dart';
+import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/views/onboarding_screen/onboarding_two_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -17,17 +17,20 @@ class _OnboardingOneScreenState extends State<OnboardingOneScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
-      bottomNavigationBar: SizedBox(
-        height: size.height * 0.05,
-        child: Image.asset(onboardOne),
-      ),
+      // bottomNavigationBar: SizedBox(
+      //   height: size.height * 0.05,
+      //   child: Image.asset(onboardOne),
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(child: Image.asset(logoWithName)),
+            Center(child: Image.asset(whiteLogo,
+            height: size.height * 0.3,
+          ),
+            ),
             //
             SizedBox(
               height: size.height * 0.1,
@@ -46,7 +49,7 @@ class _OnboardingOneScreenState extends State<OnboardingOneScreen> {
             Center(
               child: RichText(
                 text: TextSpan(
-                  text: "BIRDS ",
+                  text: "BIRDS",
                   style: TextStyle(
                       fontSize: size.height * 0.04,
                       fontWeight: FontWeight.w900,

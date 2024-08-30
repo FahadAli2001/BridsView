@@ -1,6 +1,6 @@
 import 'package:birds_view/controller/reset_password_controller/reset_password.dart';
 import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/utils/images.dart';
+import 'package:birds_view/utils/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +57,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               //
               Center(
                   child: Image.asset(
-                appLogo,
+                whiteLogo,
                 width: size.width * 0.2,
               )),
               //

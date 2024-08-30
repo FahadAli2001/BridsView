@@ -1,7 +1,6 @@
 import 'package:birds_view/controller/login_controller/login_controller.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
-import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/forgot_password_screen/verify_email_screen.dart';
 import 'package:birds_view/views/signup_screen/signup_screen.dart';
 import 'package:birds_view/widgets/custom_textfield/custom_textfield.dart';
@@ -38,8 +37,8 @@ class _LogInScreenState extends State<LogInScreen> {
                 ),
                 Center(
                     child: Image.asset(
-                  appLogo,
-                  width: size.height * 0.15,
+                  whiteLogo,
+                  width: size.height * 0.2,
                 )),
                 //
                 SizedBox(

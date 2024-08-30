@@ -6,7 +6,6 @@ import 'package:birds_view/controller/review_controller/review_controller.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
-import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/detail_screen/detail_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
@@ -152,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
           centerTitle: true,
           title: CircleAvatar(
             backgroundColor: Colors.black,
-            backgroundImage: AssetImage(appLogo),
+            backgroundImage: AssetImage(whiteLogo),
           )),
       drawer: CustomDrawer(
         user: widget.user,
@@ -248,10 +247,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   type: PageTransitionType.fade));
                         },
                         child: Text(
-                          'See all',
+                          'More',
                           style: TextStyle(
                               color: primaryColor,
-                              fontSize: size.height * 0.016),
+                              fontSize: size.height * 0.018),
                         ),
                       ),
                     ],

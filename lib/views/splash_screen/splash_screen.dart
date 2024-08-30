@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:birds_view/controller/splash_controller/splash_controller.dart';
 import 'package:birds_view/utils/colors.dart';
+import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/onboarding_screen/onboarding_one_screen.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen>
       if (status == AnimationStatus.completed) {
     
         log("Animation completed, checking user status");
-        checkRoute();
+         checkRoute();
       }
     });
   }
@@ -120,7 +121,7 @@ class _SplashScreenState extends State<SplashScreen>
               ScaleTransition(
                 scale: _scaleAnimation,
                 child: Image.asset(
-                  appLogo,
+                  whiteLogo,
                   height: size.height * 0.3,
                 ),
               ),
@@ -130,7 +131,7 @@ class _SplashScreenState extends State<SplashScreen>
                   opacity: _fadeAnimation,
                   child: RichText(
                     text: TextSpan(
-                      text: "BIRDS ",
+                      text: "BIRDS",
                       style: TextStyle(
                           fontSize: size.height * 0.05,
                           fontWeight: FontWeight.w900,

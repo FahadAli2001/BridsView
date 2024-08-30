@@ -1,6 +1,6 @@
 import 'package:birds_view/controller/reset_password_controller/reset_password.dart';
 import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/utils/images.dart';
+import 'package:birds_view/utils/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/custom_button/custom_button.dart';
@@ -47,7 +47,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               //
               Center(
                   child: Image.asset(
-                appLogo,
+                whiteLogo,
                 width: size.width * 0.2,
               )),
               //
