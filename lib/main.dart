@@ -5,6 +5,7 @@ import 'package:birds_view/controller/signup_controller/signup_controller.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/views/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'controller/bookmark_controller/bookmark_controller.dart';
 import 'controller/deatil_screen_controller/detail_screen_controller.dart';
@@ -15,7 +16,13 @@ import 'controller/splash_controller/splash_controller.dart';
 import 'controller/visited_bars_controller/visited_bars_controller.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -33,9 +40,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MapsController()),
         ChangeNotifierProvider(create: (_) => SearchBarsController()),
         ChangeNotifierProvider(create: (_) => DetailScreenController()),
-        ChangeNotifierProvider(create: (_)=>BookmarkController()),
-        ChangeNotifierProvider(create: (_)=>ReviewController()),
-        ChangeNotifierProvider(create: (_)=>VisitedBarsController())
+        ChangeNotifierProvider(create: (_) => BookmarkController()),
+        ChangeNotifierProvider(create: (_) => ReviewController()),
+        ChangeNotifierProvider(create: (_) => VisitedBarsController())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

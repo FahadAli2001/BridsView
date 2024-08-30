@@ -95,11 +95,7 @@ class CustomDrawer extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Text(
-                      "Night Owl",
-                      style: TextStyle(
-                          color: Colors.white, fontSize: size.height * 0.02),
-                    ),
+                    
                   ],
                 )
               ],

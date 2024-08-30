@@ -68,92 +68,94 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
-    return Scaffold(body: Consumer<MapsController>(
-      builder: (context, value, child) {
-        return Stack(
-          children: [
-            SizedBox(
-              height: size.height,
-              width: size.width,
-              child: GoogleMap(
-                initialCameraPosition: kGooglePlex,
-                mapType: MapType.normal,
-                zoomControlsEnabled: true,
-                zoomGesturesEnabled: true,
-                myLocationButtonEnabled: true,
-                myLocationEnabled: true,
-                trafficEnabled: true,
-                rotateGesturesEnabled: true,
-                buildingsEnabled: true,
-                onTap: (argument) {
-                  value.customInfoWindowController.hideInfoWindow!();
-                },
-                onCameraMove: (position) {
-                  value.customInfoWindowController.onCameraMove!();
-                },
-                markers: Set<Marker>.of(value.markers),
-                polylines: Set<Polyline>.of(value.polylines.values),
-                onMapCreated: (GoogleMapController controller) {
-                  // controller.setMapStyle(mapTheme);
-                  _controller.complete(controller);
-                  value.customInfoWindowController.googleMapController =
-                      controller;
-                },
+    return SafeArea(
+      child: Scaffold(body: Consumer<MapsController>(
+        builder: (context, value, child) {
+          return Stack(
+            children: [
+              SizedBox(
+                height: size.height,
+                width: size.width,
+                child: GoogleMap(
+                  initialCameraPosition: kGooglePlex,
+                  mapType: MapType.normal,
+                  zoomControlsEnabled: true,
+                  zoomGesturesEnabled: true,
+                  myLocationButtonEnabled: true,
+                  myLocationEnabled: true,
+                  trafficEnabled: true,
+                  rotateGesturesEnabled: true,
+                  buildingsEnabled: true,
+                  onTap: (argument) {
+                    value.customInfoWindowController.hideInfoWindow!();
+                  },
+                  onCameraMove: (position) {
+                    value.customInfoWindowController.onCameraMove!();
+                  },
+                  markers: Set<Marker>.of(value.markers),
+                  polylines: Set<Polyline>.of(value.polylines.values),
+                  onMapCreated: (GoogleMapController controller) {
+                    // controller.setMapStyle(mapTheme);
+                    _controller.complete(controller);
+                    value.customInfoWindowController.googleMapController =
+                        controller;
+                  },
+                ),
               ),
-            ),
-            value.onMapNearestBar.isEmpty
-                ? Center(
-                    child: CircularProgressIndicator(
-                      color: primaryColor,
+              value.onMapNearestBar.isEmpty
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: primaryColor,
+                      ),
+                    )
+                  : const SizedBox(),
+              CustomInfoWindow(
+                controller: value.customInfoWindowController,
+                width: 300,
+                height: 120,
+                offset: 50,
+              ),
+              value.isGettingDirection == true
+                  ? Positioned(
+                      bottom: 15,
+                      left: size.width * 0.45,
+                      right: size.width * 0.45,
+                      child: CircularProgressIndicator(
+                        color: primaryColor,
+                      ),
+                    )
+                  : Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: CustomButton(
+                            text: 'Direction',
+                            ontap: () {
+                              value.isGettingDirection = false;
+                              value.clearPolylines();
+                              value.getPolyline(widget.bar, widget.index);
+                            }),
+                      ),
                     ),
-                  )
-                : const SizedBox(),
-            CustomInfoWindow(
-              controller: value.customInfoWindowController,
-              width: 300,
-              height: 120,
-              offset: 50,
-            ),
-            value.isGettingDirection == true
-                ? Positioned(
-                    bottom: 15,
-                    left: size.width * 0.45,
-                    right: size.width * 0.45,
-                    child: CircularProgressIndicator(
-                      color: primaryColor,
-                    ),
-                  )
-                : Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: CustomButton(
-                          text: 'Direction',
-                          ontap: () {
-                            value.isGettingDirection = false;
-                            value.clearPolylines();
-                            value.getPolyline(widget.bar, widget.index);
-                          }),
-                    ),
-                  ),
-            Positioned(
-                top: size.height * 0.05,
-                left: size.width * 0.05,
-                child: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                      value.isGettingDirection = false;
-                    },
-                    child: const CircleAvatar(
-                        backgroundColor: Colors.black,
-                        child: Center(
-                            child: Icon(CupertinoIcons.back,
-                                color: Colors.white))))),
-          ],
-        );
-      },
-    ));
+              Positioned(
+                  top: size.height * 0.05,
+                  left: size.width * 0.05,
+                  child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        value.isGettingDirection = false;
+                      },
+                      child: const CircleAvatar(
+                          backgroundColor: Colors.black,
+                          child: Center(
+                              child: Icon(CupertinoIcons.back,
+                                  color: Colors.white))))),
+            ],
+          );
+        },
+      )),
+    );
   }
 }

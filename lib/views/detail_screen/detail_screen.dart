@@ -354,7 +354,7 @@ class _DetailScreenState extends State<DetailScreen>
                                                               ',', '') ??
                                                       '0') *
                                                   0.621371)
-                                              .toStringAsFixed(3),
+                                              .toStringAsFixed(1),
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: size.width * 0.027,
@@ -461,20 +461,20 @@ class _DetailScreenState extends State<DetailScreen>
                               subtitle: widget.searchBarDetail![widget.index]
                                   .formattedAddress!),
 
-                          SizedBox(
-                            height: size.height * 0.02,
-                          ),
-                          widget.searchBarDetail![widget.index]
-                                      .formattedPhoneNumber ==
-                                  null
-                              ? const Text('')
-                              : Align(
-                                  alignment: Alignment.topLeft,
-                                  child: CustomDescriptionRichText(
-                                      title: "Phone : ",
-                                      subtitle: widget
-                                          .searchBarDetail![widget.index]
-                                          .formattedPhoneNumber!)),
+                          // SizedBox(
+                          //   height: size.height * 0.02,
+                          // ),
+                          // widget.searchBarDetail![widget.index]
+                          //             .formattedPhoneNumber ==
+                          //         null
+                          //     ? const Text('')
+                          //     : Align(
+                          //         alignment: Alignment.topLeft,
+                          //         child: CustomDescriptionRichText(
+                          //             title: "Phone : ",
+                          //             subtitle: widget
+                          //                 .searchBarDetail![widget.index]
+                          //                 .formattedPhoneNumber!)),
                           //
                           SizedBox(
                             height: size.height * 0.02,
@@ -542,7 +542,7 @@ class _DetailScreenState extends State<DetailScreen>
                               : Align(
                                   alignment: Alignment.topLeft,
                                   child: CustomDescriptionRichText(
-                                      title: "Wheel Chair Entrance",
+                                      title: "Wheel Chair Entrance : ",
                                       subtitle: widget
                                                   .searchBarDetail![
                                                       widget.index]
@@ -807,7 +807,7 @@ class _DetailScreenState extends State<DetailScreen>
                                                                   ',', '') ??
                                                           '0') *
                                                       0.621371)
-                                                  .toStringAsFixed(3),
+                                                  .toStringAsFixed(1),
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: size.width * 0.027,
@@ -909,17 +909,17 @@ class _DetailScreenState extends State<DetailScreen>
                                   title: "Address : ",
                                   subtitle: barDetail![0].formattedAddress!),
 
-                              SizedBox(
-                                height: size.height * 0.02,
-                              ),
-                              barDetail![0].formattedPhoneNumber == null
-                                  ? const Text('')
-                                  : Align(
-                                      alignment: Alignment.topLeft,
-                                      child: CustomDescriptionRichText(
-                                          title: "Phone : ",
-                                          subtitle: barDetail![0]
-                                              .formattedPhoneNumber!)),
+                              // SizedBox(
+                              //   height: size.height * 0.02,
+                              // ),
+                              // barDetail![0].formattedPhoneNumber == null
+                              //     ? const Text('')
+                              //     : Align(
+                              //         alignment: Alignment.topLeft,
+                              //         child: CustomDescriptionRichText(
+                              //             title: "Phone : ",
+                              //             subtitle: barDetail![0]
+                              //                 .formattedPhoneNumber!)),
                               //
                               SizedBox(
                                 height: size.height * 0.02,

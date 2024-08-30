@@ -381,7 +381,7 @@ class MapsController extends ChangeNotifier {
       log(latitude);
       log(longitude);
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=3000&type=bar&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=5000&type=bar|night_club&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
@@ -444,7 +444,7 @@ class MapsController extends ChangeNotifier {
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1500&type=bar&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=96500&type=bar|night_club&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
@@ -479,6 +479,8 @@ class MapsController extends ChangeNotifier {
     return recomnededBars;
   }
 
+  
+  
   Future<List<Rows>> getDistanceBetweenPoints(
       String destinationLat, destinationLong, originLat, originLong) async {
     List<Rows> distanceList = [];
@@ -508,7 +510,7 @@ class MapsController extends ChangeNotifier {
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1500&type=bar&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=96500&type=bar|night_club&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
@@ -549,7 +551,7 @@ class MapsController extends ChangeNotifier {
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=1000&type=restaurant&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=2000&type=night_club|bar&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
@@ -589,6 +591,8 @@ class MapsController extends ChangeNotifier {
     return nearestBars;
   }
 
+ 
+ 
   Future<Result?> barsDetailMethod(String placeId) async {
     Result? result;
     try {
@@ -618,7 +622,7 @@ class MapsController extends ChangeNotifier {
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=2000&type=$type&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=96500&type=$type&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
