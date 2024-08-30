@@ -17,99 +17,106 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: const EdgeInsets.all(15),
-        child: SingleChildScrollView(
-          child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.center,
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: size.height * 0.03,
-              ),
-              //
-              Align(
-                alignment: Alignment.topLeft,
-                child: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
-                    )),
-              ),
-              SizedBox(
-                height: size.height * 0.05,
-              ),
-              //
-              Center(
-                  child: Image.asset(
-                whiteLogo,
-                width: size.width * 0.2,
-              )),
-              //
-              SizedBox(
-                height: size.height * 0.07,
-              ),
-              //
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                    text: "Verify ",
-                    style: TextStyle(
-                        fontSize: size.height * 0.04, color: Colors.white70),
-                    children: [
-                      TextSpan(
-                        text: 'Email',
+    return Dismissible(
+        key: const Key("VerifyEmail"),
+        direction: DismissDirection.horizontal,
+        onDismissed: (direction) {
+          Navigator.pop(context);
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Padding(
+            padding: const EdgeInsets.all(15),
+            child: SingleChildScrollView( 
+              child: Column(
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  //
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                        )),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.05,
+                  ),
+                  //
+                  Center(
+                      child: Image.asset(
+                    whiteLogo,
+                    width: size.width * 0.2,
+                  )),
+                  //
+                  SizedBox(
+                    height: size.height * 0.07,
+                  ),
+                  //
+                  Center(
+                    child: RichText(
+                      text: TextSpan(
+                        text: "Verify ",
                         style: TextStyle(
                             fontSize: size.height * 0.04,
-                            fontWeight: FontWeight.w900,
-                            color: primaryColor),
+                            color: Colors.white70),
+                        children: [
+                          TextSpan(
+                            text: 'Email',
+                            style: TextStyle(
+                                fontSize: size.height * 0.04,
+                                fontWeight: FontWeight.w900,
+                                color: primaryColor),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  //
+                  SizedBox(
+                    height: size.height * 0.05,
+                  ),
+                  //
+                  Consumer<ResetPasswordController>(
+                    builder: (context, value, child) {
+                      return Column(
+                        children: [
+                          CustomTextField(
+                              textEditingController: value.emailController,
+                              obsecure: false,
+                              hintText: 'Email',
+                              labelText: 'Email'),
+                          SizedBox(
+                            height: size.height * 0.1,
+                          ),
+                          //
+                          value.isChecking == true
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: primaryColor,
+                                  ),
+                                )
+                              : CustomButton(
+                                  text: 'Submit',
+                                  ontap: () {
+                                    value.verifyEmail(context);
+                                  })
+                        ],
+                      );
+                    },
+                  )
+                ],
               ),
-              //
-              SizedBox(
-                height: size.height * 0.05,
-              ),
-              //
-              Consumer<ResetPasswordController>(
-                builder: (context, value, child) {
-                  return Column(
-                    children: [
-                      CustomTextField(
-                          textEditingController: value.emailController,
-                          obsecure: false,
-                          hintText: 'Email',
-                          labelText: 'Email'),
-                      SizedBox(
-                        height: size.height * 0.1,
-                      ),
-                      //
-                      value.isChecking == true
-                          ? Center(
-                              child: CircularProgressIndicator(
-                                color: primaryColor,
-                              ),
-                            )
-                          : CustomButton(
-                              text: 'Submit',
-                              ontap: () {
-                                value.verifyEmail(context);
-                              })
-                    ],
-                  );
-                },
-              )
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
