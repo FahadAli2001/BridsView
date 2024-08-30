@@ -28,53 +28,64 @@ class _VisitedBarState extends State<VisitedBar> {
         Provider.of<VisitedBarsController>(context, listen: false);
     bookmarkController.getAllVisitedBars(context);
     visitedBarsDetailList = bookmarkController.visitedBarsDetailList;
-    visitedBarsImagesList = bookmarkController.visitedBarsImagesList.cast<Uint8List>();
+    visitedBarsImagesList =
+        bookmarkController.visitedBarsImagesList.cast<Uint8List>();
     setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        leading: GestureDetector(
-            onTap: () {
-               Navigator.pop(context);
-            },
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-            )),
-        centerTitle: true,
-        title: RichText(
-          text: TextSpan(
-            text: "Visited ",
-            style: TextStyle(fontSize: size.height * 0.03, color: Colors.white,fontWeight: FontWeight.bold),
-            children: [
-              TextSpan(
-                text: 'Places ',
+    return Dismissible(
+        key: const Key("Visited Place"),
+        direction: DismissDirection.horizontal,
+        onDismissed: (direction) {
+          Navigator.pop(context);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.black,
+            leading: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                )),
+            centerTitle: true,
+            title: RichText(
+              text: TextSpan(
+                text: "Visited ",
                 style: TextStyle(
                     fontSize: size.height * 0.03,
-                    fontWeight: FontWeight.bold,
-                    color: primaryColor),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+                children: [
+                  TextSpan(
+                    text: 'Places ',
+                    style: TextStyle(
+                        fontSize: size.height * 0.03,
+                        fontWeight: FontWeight.bold,
+                        color: primaryColor),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(15),
-        child: ListView.builder(
-          itemCount: visitedBarsDetailList.length,
-          itemBuilder: (context, index) {
-            return CustomVisitedPlace(
-              index: index,
-              visitedBarsDetailList: visitedBarsDetailList,
-              visitedBarsImagesList: visitedBarsImagesList,
-            );
-          },
-        ),
-      ),
-    );
+          body: Padding(
+            padding: const EdgeInsets.all(15),
+            child: ListView.builder(
+              itemCount: visitedBarsDetailList.length,
+              itemBuilder: (context, index) {
+                return CustomVisitedPlace(
+                  index: index,
+                  visitedBarsDetailList: visitedBarsDetailList,
+                  visitedBarsImagesList: visitedBarsImagesList,
+                );
+              },
+            ),
+          ),
+        ));
   }
 }
