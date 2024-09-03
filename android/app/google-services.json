@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "499762911206",
+    "project_id": "birdsviewapp-9d25a",
+    "storage_bucket": "birdsviewapp-9d25a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:499762911206:android:20ae6b9fbae4ca0a492827",
+        "android_client_info": {
+          "package_name": "com.example.birds_view"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "499762911206-t8esgkiqknjq649fimcunq75092amupq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.birds_view",
+            "certificate_hash": "323f749f4d3b34a2357d4dcf2278cabcf7b1daac"
+          }
+        },
+        {
+          "client_id": "499762911206-funrtmo7sgolsarhj7t20k19u64ia5ck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUgXBrpMNpP8az5g-3H7fLjfLvUCrw3-M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "499762911206-funrtmo7sgolsarhj7t20k19u64ia5ck.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "499762911206-9vook2hp3ugj35hvpmnkid0vf06sv24n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.birdsView"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

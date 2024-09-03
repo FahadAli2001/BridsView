@@ -2,8 +2,10 @@ import 'package:birds_view/controller/edit_profile_controller/edit_profile_contr
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/controller/reset_password_controller/reset_password.dart';
 import 'package:birds_view/controller/signup_controller/signup_controller.dart';
+import 'package:birds_view/firebase_options.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/views/splash_screen/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +17,11 @@ import 'controller/search_bars_controller/search_bars_controller.dart';
 import 'controller/splash_controller/splash_controller.dart';
 import 'controller/visited_bars_controller/visited_bars_controller.dart';
 
-void main() {
+void main()async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

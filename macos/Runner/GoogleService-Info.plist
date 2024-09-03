@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>499762911206-9vook2hp3ugj35hvpmnkid0vf06sv24n.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.499762911206-9vook2hp3ugj35hvpmnkid0vf06sv24n</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>499762911206-t8esgkiqknjq649fimcunq75092amupq.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDS11d9W47MR32DdnjumQYO42zOSjrdvPo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>499762911206</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.birdsView</string>
+	<key>PROJECT_ID</key>
+	<string>birdsviewapp-9d25a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>birdsviewapp-9d25a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:499762911206:ios:572ffd8aa7a9e58a492827</string>
+</dict>
+</plist>

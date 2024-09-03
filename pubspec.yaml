@@ -76,6 +76,8 @@ dependencies:
   shimmer: ^3.0.0
   # url launcher
   url_launcher: ^6.0.20
+  # 
+  firebase_core: ^3.4.0
 
 dev_dependencies:
   flutter_test:
