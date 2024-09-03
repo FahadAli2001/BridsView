@@ -6,7 +6,6 @@ import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
 import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
 import 'package:birds_view/utils/api_keys.dart';
 import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/utils/icons.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -72,23 +71,25 @@ class MapsController extends ChangeNotifier {
     var nearestBar = await nearsetBarsMethodForMap();
     onMapNearestBar.addAll(nearestBar as Iterable<Result>);
     try {
-      final Uint8List markerIcon =
-          await getUserImageFromAssets(currentLocationIcon, 150);
+      // final Uint8List markerIcon =
+      //     await getUserImageFromAssets(currentLocationIcon, 150);
 
-      final Uint8List barsIcon =
-          await getUserImageFromAssets(currentLocationIcon, 70);
+      // final Uint8List barsIcon =
+      //     await getUserImageFromAssets(currentLocationIcon, 70);
 
       _markers.add(Marker(
         markerId: const MarkerId("user"),
         position: LatLng(lat, lon),
-        icon: BitmapDescriptor.fromBytes(markerIcon),
+        // icon: BitmapDescriptor.fromBytes(markerIcon),
+        icon: BitmapDescriptor.defaultMarker
       ));
 
       _markers.add(Marker(
         markerId: const MarkerId("bar"),
         position: LatLng(selectedBar[index].geometry!.location!.lat!,
             selectedBar[index].geometry!.location!.lng!),
-        icon: BitmapDescriptor.fromBytes(barsIcon),
+        // icon: BitmapDescriptor.fromBytes(barsIcon),
+        icon: BitmapDescriptor.defaultMarker,
         onTap: () {
           customInfoWindowController.addInfoWindow!(
             GestureDetector(
@@ -177,7 +178,8 @@ class MapsController extends ChangeNotifier {
             markerId: MarkerId(i.toString()),
             position: LatLng(onMapNearestBar[i].geometry!.location!.lat!,
                 onMapNearestBar[i].geometry!.location!.lng!),
-            icon: BitmapDescriptor.fromBytes(barsIcon),
+            // icon: BitmapDescriptor.fromBytes(barsIcon),
+            icon: BitmapDescriptor.defaultMarker,
             onTap: () {
               customInfoWindowController.addInfoWindow!(
                 GestureDetector(
