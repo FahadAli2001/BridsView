@@ -73,24 +73,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: RichText(
                     text: TextSpan(
                       text: widget.user == null ||
-                              widget.user!.data!.firstName == ''
+                              widget.user!.data!.username == ''
                           ? 'Guest '
-                          : widget.user!.data!.firstName,
+                          : widget.user!.data!.username,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: size.height * 0.026,
                           color: Colors.white),
-                      children: [
-                        TextSpan(
-                          text: widget.user == null ||
-                                  widget.user!.data!.lastName == ''
-                              ? ""
-                              : "${widget.user!.data!.lastName}",
-                          style: TextStyle(
-                              fontSize: size.height * 0.026,
-                              color: Colors.white),
-                        ),
-                      ],
+                      // children: [
+                      //   TextSpan(
+                      //     text: widget.user == null ||
+                      //             widget.user!.data!.lastName == ''
+                      //         ? ""
+                      //         : "${widget.user!.data!.lastName}",
+                      //     style: TextStyle(
+                      //         fontSize: size.height * 0.026,
+                      //         color: Colors.white),
+                      //   ),
+                      // ],
                     ),
                   ),
                 ),

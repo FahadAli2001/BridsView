@@ -176,16 +176,24 @@ class _LogInScreenState extends State<LogInScreen> {
 
                           SizedBox(
                               width: size.width * 0.6,
-                              child: Row(
+                              child: Consumer<LoginController>(builder:(context, value, child) {
+                                return Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                        value.signInWithGoogle(context);
+                                      },
                                       child: Image.asset(googleLoginIcon,
                                           width: size.height * 0.05)),
-                                  Image.asset(appleLoginIcon,
-                                      width: size.height * 0.05),
+                                  GestureDetector(
+                                    onTap: () {
+                                      value.signInWithApple(context);
+                                    },
+                                    child: Image.asset(appleLoginIcon,
+                                        width: size.height * 0.05),
+                                  ),
                                   GestureDetector(
                                     onTap: () {},
                                     child: Image.asset(
@@ -194,7 +202,8 @@ class _LogInScreenState extends State<LogInScreen> {
                                     ),
                                   ),
                                 ],
-                              )),
+                              );
+                              },)),
                         ],
                       ),
                     );

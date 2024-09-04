@@ -1,9 +1,9 @@
+import 'package:birds_view/controller/login_controller/login_controller.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/views/bookmark_screen/bookmark_screen.dart';
 import 'package:birds_view/views/login_screen/login_screen.dart';
-import 'package:birds_view/views/onboarding_screen/onboarding_one_screen.dart';
 import 'package:birds_view/views/profile_screen/profile_screen.dart';
 import 'package:birds_view/views/visited_bars/visited_bars.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
@@ -11,7 +11,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class CustomDrawer extends StatelessWidget {
   final UserModel? user;
@@ -75,23 +75,23 @@ class CustomDrawer extends StatelessWidget {
                       width: size.width * 0.4,
                       child: RichText(
                         text: TextSpan(
-                          text: user == null || user!.data!.firstName == ''
+                          text: user == null || user!.data!.username == ''
                               ? "Guest "
-                              : '${user!.data!.firstName} ',
+                              : '${user!.data!.username} ',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: size.height * 0.026,
                               color: Colors.white),
-                          children: [
-                            TextSpan(
-                              text: user == null || user!.data!.lastName == ''
-                                  ? "User"
-                                  : '${user!.data!.lastName} ',
-                              style: TextStyle(
-                                  fontSize: size.height * 0.026,
-                                  color: Colors.white),
-                            ),
-                          ],
+                          // children: [
+                          //   TextSpan(
+                          //     text: user == null || user!.data!.lastName == ''
+                          //         ? "User"
+                          //         : '${user!.data!.lastName} ',
+                          //     style: TextStyle(
+                          //         fontSize: size.height * 0.026,
+                          //         color: Colors.white),
+                          //   ),
+                          // ],
                         ),
                       ),
                     ),
@@ -203,21 +203,15 @@ class CustomDrawer extends StatelessWidget {
                               type: PageTransitionType.fade),
                           (route) => false);
                     })
-                : CustomButton(
+                :  Consumer<LoginController>(builder:(context, value, child) {
+                  return CustomButton(
                     text: 'Log Out',
                     ontap: () async {
-                      SharedPreferences sp =
-                          await SharedPreferences.getInstance();
-
-                      Navigator.pushAndRemoveUntil(
-                          // ignore: use_build_context_synchronously
-                          context,
-                          PageTransition(
-                              child: const OnboardingOneScreen(),
-                              type: PageTransitionType.fade),
-                          (route) => false);
-                      sp.clear();
-                    })
+                     
+                          value.signOutFromSocialPlatforms(context);
+                     
+                    });
+                },)
           ],
         ),
       ),
