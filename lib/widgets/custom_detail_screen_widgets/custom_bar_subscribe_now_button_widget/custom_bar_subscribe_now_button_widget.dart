@@ -4,7 +4,9 @@ import '../../../utils/images.dart';
 
 class CustomBarSubscribeNowButtonWidget extends StatelessWidget {
   final Size size;
-  const CustomBarSubscribeNowButtonWidget({super.key, required this.size});
+  final VoidCallback ontap;
+  const CustomBarSubscribeNowButtonWidget(
+      {super.key, required this.size, required this.ontap});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,7 @@ class CustomBarSubscribeNowButtonWidget extends StatelessWidget {
         top: size.height * 0.11,
         left: size.width * 0.2,
         child: GestureDetector(
-          onTap: () {},
+          onTap: ontap,
           child: Container(
             width: size.width * 0.35,
             height: size.height * 0.04,

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:birds_view/controller/bookmark_controller/bookmark_controller.dart';
 import 'package:birds_view/controller/deatil_screen_controller/detail_screen_controller.dart';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
+import 'package:birds_view/controller/payment_controller/payment_controller.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
 import 'package:birds_view/utils/colors.dart';
@@ -418,7 +419,15 @@ class _DetailScreenState extends State<DetailScreen>
                                 CustomBarCrowdImageWidget(size: size),
                                 //
                                 CustomBarRandomPopulationWidget(size: size),
-                                CustomBarSubscribeNowButtonWidget(size: size)
+                                Consumer<PaymentController>(
+                                  builder: (context, value, child) {
+                                    return CustomBarSubscribeNowButtonWidget(
+                                        ontap: () async {
+                                          await value.makePayment(context);
+                                        },
+                                        size: size);
+                                  },
+                                )
                               ],
                             ),
                           ),
@@ -576,8 +585,7 @@ class _DetailScreenState extends State<DetailScreen>
                                               color: primaryColor),
                                           children: [
                                             TextSpan(
-                                              text:"Click To Visit Website !" ,
-                                                   
+                                              text: "Click To Visit Website !",
                                               style: TextStyle(
                                                   fontWeight: FontWeight.normal,
                                                   fontSize: size.height * 0.016,
@@ -869,8 +877,15 @@ class _DetailScreenState extends State<DetailScreen>
                                     CustomBarCrowdImageWidget(size: size),
                                     //
                                     CustomBarRandomPopulationWidget(size: size),
-                                    CustomBarSubscribeNowButtonWidget(
-                                        size: size)
+                                    Consumer<PaymentController>(
+                                      builder: (context, value, child) {
+                                        return CustomBarSubscribeNowButtonWidget(
+                                            ontap: () async {
+                                              await value.makePayment(context);
+                                            },
+                                            size: size);
+                                      },
+                                    )
                                   ],
                                 ),
                               ),
@@ -1013,7 +1028,8 @@ class _DetailScreenState extends State<DetailScreen>
                                                   color: primaryColor),
                                               children: [
                                                 TextSpan(
-                                                  text: "Click To Visit Website !",
+                                                  text:
+                                                      "Click To Visit Website !",
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.normal,
