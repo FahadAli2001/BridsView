@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
- 
+
 class PaymentController extends ChangeNotifier {
   Map<String, dynamic>? paymentIntent;
 
@@ -19,8 +19,8 @@ class PaymentController extends ChangeNotifier {
                   paymentIntentClientSecret: paymentIntent!['client_secret'],
                   // googlePay:
                   //     const PaymentSheetGooglePay(merchantCountryCode: "US"),
-                  applePay:
-                      const PaymentSheetApplePay(merchantCountryCode: "US",
+                  applePay: const PaymentSheetApplePay(
+                    merchantCountryCode: "US",
                   ),
                   customFlow: true,
                   appearance: const PaymentSheetAppearance(
@@ -39,9 +39,9 @@ class PaymentController extends ChangeNotifier {
       await Stripe.instance.presentPaymentSheet().then((newValue) {
         log('payment intent${paymentIntent!['id']}');
         log('payment intent${paymentIntent!['client_secret']}');
-         log('payment intent${paymentIntent!['amount']}');
+        log('payment intent${paymentIntent!['amount']}');
         log('payment intent$paymentIntent');
-        
+
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("paid successfully")));
         log("paaaaaaaaiiiiiiiid");

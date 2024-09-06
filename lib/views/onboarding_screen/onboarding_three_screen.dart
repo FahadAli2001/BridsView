@@ -65,23 +65,23 @@ class _OnboardingThreeState extends State<OnboardingThree> {
             Center(
               child: RichText(
                 text: TextSpan(
-                  text: "Easy ",
+                  text: "Check the Vibe, ",
                   style: TextStyle(
-                      fontSize: size.height * 0.04,
+                      fontSize: size.height * 0.025,
                       fontWeight: FontWeight.w900,
                       color: primaryColor),
                   children: [
+                    // TextSpan(
+                    //   text: 'To ',
+                    //   style: TextStyle(
+                    //       fontSize: size.height * 0.04,
+                    //       fontWeight: FontWeight.w900,
+                    //       color: whiteColor.withOpacity(.7)),
+                    // ),
                     TextSpan(
-                      text: 'To ',
+                      text: 'Then Arrive',
                       style: TextStyle(
-                          fontSize: size.height * 0.04,
-                          fontWeight: FontWeight.w900,
-                          color: whiteColor.withOpacity(.7)),
-                    ),
-                    TextSpan(
-                      text: 'Manage',
-                      style: TextStyle(
-                          fontSize: size.height * 0.04,
+                          fontSize: size.height * 0.025,
                           fontWeight: FontWeight.w900,
                           color: whiteColor),
                     ),

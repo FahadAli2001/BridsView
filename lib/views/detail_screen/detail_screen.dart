@@ -27,6 +27,7 @@ import '../../widgets/custom_detail_screen_widgets/custom_bar_hot_badge_widget/c
 import '../../widgets/custom_detail_screen_widgets/custom_bar_random_population_widget/custom_bar_random_population_widget.dart';
 import '../../widgets/custom_detail_screen_widgets/custom_bar_subscribe_now_button_widget/custom_bar_subscribe_now_button_widget.dart';
 import '../../widgets/custom_detail_screen_widgets/custom_mix_crowd_heading_widget/custom_mix_crowd_heading_widget.dart';
+import '../../widgets/custom_showProSubscriptionPopup_widget/custom_showProSubscriptionPopup.dart';
 
 class DetailScreen extends StatefulWidget {
   final List<Result>? searchBarDetail;
@@ -422,8 +423,10 @@ class _DetailScreenState extends State<DetailScreen>
                                 Consumer<PaymentController>(
                                   builder: (context, value, child) {
                                     return CustomBarSubscribeNowButtonWidget(
-                                        ontap: () async {
-                                          await value.makePayment(context);
+                                        ontap: ()   {
+                                          showProSubscriptionPopup(context, ()async{
+                                            await value.makePayment(context);
+                                          });
                                         },
                                         size: size);
                                   },
@@ -513,7 +516,7 @@ class _DetailScreenState extends State<DetailScreen>
                                   alignment: Alignment.topLeft,
                                   child: RichText(
                                     text: TextSpan(
-                                      text: "Timings :\n ",
+                                      text: "Hours of Operation :\n ",
                                       style: TextStyle(
                                           fontSize: size.height * 0.016,
                                           fontWeight: FontWeight.bold,
@@ -880,8 +883,10 @@ class _DetailScreenState extends State<DetailScreen>
                                     Consumer<PaymentController>(
                                       builder: (context, value, child) {
                                         return CustomBarSubscribeNowButtonWidget(
-                                            ontap: () async {
-                                              await value.makePayment(context);
+                                            ontap: ()   {
+                                              showProSubscriptionPopup(context,()async{
+                                                await value.makePayment(context);
+                                              });
                                             },
                                             size: size);
                                       },
@@ -962,7 +967,7 @@ class _DetailScreenState extends State<DetailScreen>
                                       alignment: Alignment.topLeft,
                                       child: RichText(
                                         text: TextSpan(
-                                          text: "Timings :\n ",
+                                          text: "Hours of Operation :\n ",
                                           style: TextStyle(
                                               fontSize: size.height * 0.016,
                                               fontWeight: FontWeight.bold,
