@@ -211,17 +211,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: size.height * 0.026,
                                         color: Colors.white),
-                                    // children: [
-                                    //   TextSpan(
-                                    //     text: widget.user == null ||
-                                    //             widget.user!.data!.lastName == ''
-                                    //         ? "User"
-                                    //         : '${widget.user!.data!.lastName} ',
-                                    //     style: TextStyle(
-                                    //         fontSize: size.height * 0.026,
-                                    //         color: Colors.white),
-                                    //   ),
-                                    // ],
+                                    children: [
+                                      TextSpan(
+                                        text: widget.user == null ||
+                                                widget.user!.data!.subscribe == '0'
+                                            ? " "
+                                            : 'Pro',
+                                        style: TextStyle(
+                                            fontSize: size.height * 0.013,
+                                            color: primaryColor),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -254,7 +254,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.push(
                                 context,
                                 PageTransition(
-                                    child: const ExploreScreen(),
+                                    child:   ExploreScreen(
+                                      user: widget.user,
+                                    ),
                                     type: PageTransitionType.fade));
                           },
                           child: Text(
@@ -297,6 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           context,
                                           PageTransition(
                                               child: DetailScreen(
+                                                user: widget.user,
                                                 fromSearchScreen: false,
                                                 barDetail: exploreBar,
                                                 index: index,
@@ -372,6 +375,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           context,
                                           PageTransition(
                                               child: DetailScreen(
+                                                user: widget.user,
                                                 fromSearchScreen: false,
                                                 barDetail: recomendedBarList,
                                                 index: index,
@@ -429,6 +433,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           context,
                                           PageTransition(
                                             child: DetailScreen(
+                                              user: widget.user,
                                               fromSearchScreen: false,
                                               index: index,
                                               barDetail: nearestBarList,
@@ -575,6 +580,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .cast<Result>()
                                                   .toList();
                                               return CustomExploreWidget(
+                                                user: widget.user,
                                                 barsOrClubsImages:
                                                     value.searcbarsImage,
                                                 barsOrClubsDistanceList:

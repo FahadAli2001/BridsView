@@ -82,16 +82,16 @@ class CustomDrawer extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               fontSize: size.height * 0.026,
                               color: Colors.white),
-                          // children: [
-                          //   TextSpan(
-                          //     text: user == null || user!.data!.lastName == ''
-                          //         ? "User"
-                          //         : '${user!.data!.lastName} ',
-                          //     style: TextStyle(
-                          //         fontSize: size.height * 0.026,
-                          //         color: Colors.white),
-                          //   ),
-                          // ],
+                          children: [
+                            TextSpan(
+                              text: user == null || user!.data!.subscribe == '0'
+                                  ? " "
+                                  : 'Pro',
+                              style: TextStyle(
+                                  fontSize: size.height * 0.012,
+                                  color: primaryColor),
+                            ),
+                          ],
                         ),
                       ),
                     ),

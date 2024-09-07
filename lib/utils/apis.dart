@@ -12,6 +12,7 @@ String checkBookmarkUrl = "bookmarks?user_id=";
 String getAllBookmarksUrl = "bookmarks/user?user_id=";
 String reviewUrl = "review";
 String visitedBarsUrl = "visited-bars?user_id=";
+String subscribeUrl = "subscribe-user";
 // ------------------------
 String loginApi = baseUrl + loginUrl;
 String fetchProfileApi = baseUrl + fetchProfileUrl;
@@ -25,6 +26,7 @@ String checkBookmarkApi = baseUrl + checkBookmarkUrl;
 String getAllBookmarksApi = baseUrl + getAllBookmarksUrl;
 String postReviewApi = baseUrl+reviewUrl;
 String visitedBarsApi = baseUrl + visitedBarsUrl;
+String subscribeApi = baseUrl + subscribeUrl;
 
 
 

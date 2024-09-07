@@ -6,12 +6,16 @@ import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/controller/payment_controller/payment_controller.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
+import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/map_screen/map_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
-import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_crowd_image_widget/custom_bar_crowd_image_widget.dart';
+import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_hot_badge_widget/custom_bar_hot_badge_widget.dart';
+import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_random_population_widget/custom_bar_random_population_widget.dart';
+import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_mix_crowd_heading_widget/custom_mix_crowd_heading_widget.dart';
+import 'package:birds_view/widgets/custom_error_toast/custom_error_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +26,13 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../model/nearby_bars_model/nearby_bars_model.dart';
 import '../../widgets/custom_description_rich_text/custom_description_rich_text.dart';
+import '../../widgets/custom_detail_screen_widgets/custom_bar_crowd_image_widget/custom_bar_crowd_image_widget.dart';
 import '../../widgets/custom_detail_screen_widgets/custom_bar_description_heading_widget/custom_bar_description_heading_widget.dart';
-import '../../widgets/custom_detail_screen_widgets/custom_bar_hot_badge_widget/custom_bar_hot_badge_widget.dart';
-import '../../widgets/custom_detail_screen_widgets/custom_bar_random_population_widget/custom_bar_random_population_widget.dart';
 import '../../widgets/custom_detail_screen_widgets/custom_bar_subscribe_now_button_widget/custom_bar_subscribe_now_button_widget.dart';
-import '../../widgets/custom_detail_screen_widgets/custom_mix_crowd_heading_widget/custom_mix_crowd_heading_widget.dart';
-import '../../widgets/custom_showProSubscriptionPopup_widget/custom_showProSubscriptionPopup.dart';
+import '../../widgets/custom_showpro_subscription_popup_widget/custom_showpro_subscription_popup.dart';
 
 class DetailScreen extends StatefulWidget {
+  final UserModel? user;
   final List<Result>? searchBarDetail;
   final bool fromSearchScreen;
   final List<Rows> distance;
@@ -43,6 +46,7 @@ class DetailScreen extends StatefulWidget {
       required this.index,
       required this.barImages,
       required this.fromSearchScreen,
+      required this.user,
       required this.distance});
 
   @override
@@ -396,45 +400,60 @@ class _DetailScreenState extends State<DetailScreen>
                           SizedBox(
                             height: size.height * 0.02,
                           ),
-                          //
-                          SizedBox(
-                            width: size.width,
-                            height: size.height * 0.15,
-                            child: Stack(
-                              children: [
-                                CustomMixCrowdHeadingWidget(size: size),
 
-                                widget.searchBarDetail![widget.index].rating !=
-                                            null &&
-                                        widget.searchBarDetail![widget.index]
-                                                .rating! >=
-                                            4.0
-                                    ? CustomBarHotBadgeWidget(
-                                        animation: _animation,
-                                        controller: _controller,
-                                        size: size)
-                                    : const SizedBox(),
-                                //
+                          widget.user!.data!.subscribe == '1'
+                              ? SizedBox(
+                                  width: size.width,
+                                  height: size.height * 0.15,
+                                  child: Stack(
+                                    children: [
+                                      CustomMixCrowdHeadingWidget(size: size),
 
-                                //
-                                CustomBarCrowdImageWidget(size: size),
-                                //
-                                CustomBarRandomPopulationWidget(size: size),
-                                Consumer<PaymentController>(
-                                  builder: (context, value, child) {
-                                    return CustomBarSubscribeNowButtonWidget(
-                                        ontap: ()   {
-                                          showProSubscriptionPopup(context, ()async{
-                                            await value.makePayment(context);
-                                          });
-                                        },
-                                        size: size);
-                                  },
+                                      widget.searchBarDetail![widget.index]
+                                                      .rating !=
+                                                  null &&
+                                              widget
+                                                      .searchBarDetail![
+                                                          widget.index]
+                                                      .rating! >=
+                                                  4.0
+                                          ? CustomBarHotBadgeWidget(
+                                              animation: _animation,
+                                              controller: _controller,
+                                              size: size)
+                                          : const SizedBox(),
+                                      //
+
+                                      //
+                                      CustomBarCrowdImageWidget(size: size),
+                                      //
+                                      CustomBarRandomPopulationWidget(
+                                          size: size),
+                                    ],
+                                  ),
                                 )
-                              ],
-                            ),
-                          ),
-                          //
+                              : Consumer<PaymentController>(
+                                  builder: (context, value, child) {
+                                    return Align(
+                                      alignment: Alignment.topLeft,
+                                      child: CustomBarSubscribeNowButtonWidget(
+                                          ontap: () {
+                                            if (widget.user == null) {
+                                              showCustomErrorToast(
+                                                  message:
+                                                      "Please Login First");
+                                            } else {
+                                              showProSubscriptionPopup(context,
+                                                  () async {
+                                                await value
+                                                    .makePayment(context);
+                                              });
+                                            }
+                                          },
+                                          size: size),
+                                    );
+                                  },
+                                ),
                           SizedBox(
                             height: size.height * 0.02,
                           ),
@@ -860,40 +879,57 @@ class _DetailScreenState extends State<DetailScreen>
                                 height: size.height * 0.02,
                               ),
                               //
-                              SizedBox(
-                                width: size.width,
-                                height: size.height * 0.15,
-                                child: Stack(
-                                  children: [
-                                    CustomMixCrowdHeadingWidget(size: size),
 
-                                    barDetail![0].rating != null &&
-                                            barDetail![0].rating! >= 4.0
-                                        ? CustomBarHotBadgeWidget(
-                                            animation: _animation,
-                                            controller: _controller,
-                                            size: size)
-                                        : const SizedBox(),
-                                    //
+                              widget.user!.data!.subscribe == "1"
+                                  ? SizedBox(
+                                      width: size.width,
+                                      height: size.height * 0.15,
+                                      child: Stack(
+                                        children: [
+                                          CustomMixCrowdHeadingWidget(
+                                              size: size),
 
-                                    //
-                                    CustomBarCrowdImageWidget(size: size),
-                                    //
-                                    CustomBarRandomPopulationWidget(size: size),
-                                    Consumer<PaymentController>(
-                                      builder: (context, value, child) {
-                                        return CustomBarSubscribeNowButtonWidget(
-                                            ontap: ()   {
-                                              showProSubscriptionPopup(context,()async{
-                                                await value.makePayment(context);
-                                              });
-                                            },
-                                            size: size);
-                                      },
+                                          barDetail![0].rating != null &&
+                                                  barDetail![0].rating! >= 4.0
+                                              ? CustomBarHotBadgeWidget(
+                                                  animation: _animation,
+                                                  controller: _controller,
+                                                  size: size)
+                                              : const SizedBox(),
+                                          //
+
+                                          //
+                                          CustomBarCrowdImageWidget(size: size),
+                                          //
+                                          CustomBarRandomPopulationWidget(
+                                              size: size),
+                                        ],
+                                      ),
                                     )
-                                  ],
-                                ),
-                              ),
+                                  : Consumer<PaymentController>(
+                                      builder: (context, value, child) {
+                                        return Align(
+                                          alignment: Alignment.topLeft,
+                                          child:
+                                              CustomBarSubscribeNowButtonWidget(
+                                                  ontap: () {
+                                                    if (widget.user == null) {
+                                                      showCustomErrorToast(
+                                                          message:
+                                                              "Please Login First");
+                                                    } else {
+                                                      showProSubscriptionPopup(
+                                                          context, () async {
+                                                        await value.makePayment(
+                                                            context);
+                                                      });
+                                                    }
+                                                  },
+                                                  size: size),
+                                        );
+                                      },
+                                    ),
+
                               //
                               SizedBox(
                                 height: size.height * 0.02,

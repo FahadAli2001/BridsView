@@ -1,11 +1,29 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:birds_view/model/user_model/user_model.dart';
+import 'package:birds_view/utils/apis.dart';
+import 'package:birds_view/views/home_screen/home_screem.dart';
+import 'package:birds_view/widgets/custom_success_toast/custom_success_toast.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PaymentController extends ChangeNotifier {
+  String? _userId;
+  String? _token;
+  String? get userId => _userId;
+  String? get token => _token;
   Map<String, dynamic>? paymentIntent;
+
+  Future<void> getUserCredential() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    _userId = sp.getString("user_id")!;
+    _token = sp.getString("token")!;
+    log("user id : $userId");
+    log("user token : $token");
+    notifyListeners();
+  }
 
   Future<void> makePayment(context) async {
     try {
@@ -42,10 +60,9 @@ class PaymentController extends ChangeNotifier {
         log('payment intent${paymentIntent!['amount']}');
         log('payment intent$paymentIntent');
 
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("paid successfully")));
+        showCustomSuccessToast(message: "Paid Successfully");
         log("paaaaaaaaiiiiiiiid");
-
+        updateUserStatus(context);
         paymentIntent = null;
       }).onError((error, stackTrace) {
         log('Exception/DISPLAYPAYMENTSHEET==> $error $stackTrace');
@@ -88,5 +105,22 @@ class PaymentController extends ChangeNotifier {
   calculateAmount(String amount) {
     final a = (int.parse(amount)) * 100;
     return a.toString();
+  }
+
+  Future<void> updateUserStatus(context) async {
+    try {
+      var response =
+          await http.post(Uri.parse(subscribeApi), body: {"user_id": userId});
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        UserModel user = UserModel.fromJson(data);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => HomeScreen(user: user)));
+      } else {
+        log("updateUserStatus ${response.body}");
+      }
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }

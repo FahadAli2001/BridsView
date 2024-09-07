@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/controller/search_bars_controller/search_bars_controller.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
+import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,13 +12,15 @@ import '../../model/nearby_bars_model/nearby_bars_model.dart';
 import '../../widgets/custom_explore_widget/custom_explore_widget.dart';
 
 class ExploreScreen extends StatefulWidget {
-  const ExploreScreen({super.key});
+  final UserModel? user;
+  const ExploreScreen({super.key,required this.user});
 
   @override
   State<ExploreScreen> createState() => _ExploreScreenState();
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
+
   List<Uint8List?> barsOrClubsImages = [];
   List<Results> barsOrClubsData = [];
   List<Rows> barsOrClubsDistanceList = [];
@@ -195,6 +198,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                     itemCount: barsOrClubsImages.length,
                                     itemBuilder: (context, index) {
                                       return CustomExploreWidget(
+                                        user: widget.user,
                                         barsOrClubsImages: barsOrClubsImages,
                                         barsOrClubsData: barsOrClubsData,
                                         barsOrClubsDistanceList:
@@ -210,6 +214,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   itemCount: barsOrClubsImages.length,
                                   itemBuilder: (context, index) {
                                     return CustomExploreWidget(
+                                      user:  widget.user,
                                       barsOrClubsImages: barsOrClubsImages,
                                       barsOrClubsData: barsOrClubsData,
                                       barsOrClubsDistanceList:
@@ -265,6 +270,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                             .cast<Result>()
                                                             .toList();
                                                     return CustomExploreWidget(
+                                                      user: widget.user,
                                                       barsOrClubsImages:
                                                           value.searcbarsImage,
                                                       barsOrClubsDistanceList:

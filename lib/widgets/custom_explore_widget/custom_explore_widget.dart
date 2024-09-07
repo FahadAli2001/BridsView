@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
+import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -8,6 +9,7 @@ import '../../model/bars_distance_model/bars_distance_model.dart';
 import '../../views/detail_screen/detail_screen.dart';
 
 class CustomExploreWidget extends StatelessWidget {
+  final UserModel? user;
   final List<Uint8List?> barsOrClubsImages;
   final List<Results>? barsOrClubsData;
   final List<Rows> barsOrClubsDistanceList;
@@ -21,6 +23,7 @@ class CustomExploreWidget extends StatelessWidget {
     required this.barsOrClubsDistanceList,
     required this.index,
     required this.barAndClubsDetails,
+    required this.user
   });
 
   @override
@@ -34,6 +37,7 @@ class CustomExploreWidget extends StatelessWidget {
             context,
             PageTransition(
               child: DetailScreen(
+                user: user,
                 fromSearchScreen: true,
                 // barDetail: barsOrClubsData!,
                 searchBarDetail: barAndClubsDetails,
@@ -49,6 +53,7 @@ class CustomExploreWidget extends StatelessWidget {
             context,
             PageTransition(
               child: DetailScreen(
+                user: user,
                 fromSearchScreen: false,
                 barDetail: barsOrClubsData!,
                 index: index,
