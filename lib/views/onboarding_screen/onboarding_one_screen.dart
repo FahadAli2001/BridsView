@@ -27,9 +27,11 @@ class _OnboardingOneScreenState extends State<OnboardingOneScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(child: Image.asset(whiteLogo,
-            height: size.height * 0.3,
-          ),
+            Center(
+              child: Image.asset(
+                whiteLogo,
+                height: size.height * 0.3,
+              ),
             ),
             //
             SizedBox(

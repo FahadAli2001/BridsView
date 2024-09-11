@@ -28,7 +28,6 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
-    
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 3),
@@ -56,9 +55,8 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-    
         log("Animation completed, checking user status");
-         checkRoute();
+        checkRoute();
       }
     });
   }
@@ -67,7 +65,8 @@ class _SplashScreenState extends State<SplashScreen>
     try {
       SharedPreferences sp = await SharedPreferences.getInstance();
       // ignore: use_build_context_synchronously
-      final splashController = Provider.of<SplashController>(context, listen: false);
+      final splashController =
+          Provider.of<SplashController>(context, listen: false);
       String? id = sp.getString('user_id') ?? '';
       String? token = sp.getString('token') ?? '';
       log('User ID: $id, Token: $token');
@@ -76,10 +75,9 @@ class _SplashScreenState extends State<SplashScreen>
         log('Navigating to OnboardingOneScreen');
         // ignore: use_build_context_synchronously
         Navigator.of(context).pushReplacement(PageTransition(
-          duration: const Duration(seconds: 1),
-          child: const OnboardTwoScreen(), 
-          type: PageTransitionType.fade
-        ));
+            duration: const Duration(seconds: 1),
+            child: const OnboardTwoScreen(),
+            type: PageTransitionType.fade));
       } else {
         log('Fetching user profile');
         // ignore: use_build_context_synchronously

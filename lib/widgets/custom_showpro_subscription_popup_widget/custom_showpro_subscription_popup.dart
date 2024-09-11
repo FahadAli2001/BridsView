@@ -4,21 +4,22 @@ import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 
-
-void showProSubscriptionPopup(BuildContext context,VoidCallback ontap) {
+void showProSubscriptionPopup(BuildContext context, VoidCallback ontap) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
         backgroundColor: Colors.black.withOpacity(0.7),
-         icon: Image.asset(whiteLogo,
-         height: 70,),
+        icon: Image.asset(
+          whiteLogo,
+          height: 70,
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         title: Text(
           'BirdsView Pro Benefits',
           style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
         ),
-        content:const Text(
+        content: const Text(
           '- Get real-time information on how many girls and guys are at the bar or club.\n\n- 100\$ per/year',
           style: TextStyle(color: Colors.white),
         ),

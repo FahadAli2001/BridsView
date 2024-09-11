@@ -13,17 +13,18 @@ class CustomDescriptionRichText extends StatelessWidget {
     return RichText(
       text: TextSpan(
         text: title,
-        style: TextStyle(fontSize: size.height * 0.016,
-         fontWeight: FontWeight.bold,
-         height: 2,
-         color: primaryColor),
+        style: TextStyle(
+            fontSize: size.height * 0.016,
+            fontWeight: FontWeight.bold,
+            height: 2,
+            color: primaryColor),
         children: [
           TextSpan(
             text: subtitle,
             style: TextStyle(
-              fontSize: size.height * 0.016,
-              fontWeight: FontWeight.normal,
-               color: Colors.white),
+                fontSize: size.height * 0.016,
+                fontWeight: FontWeight.normal,
+                color: Colors.white),
           ),
         ],
       ),

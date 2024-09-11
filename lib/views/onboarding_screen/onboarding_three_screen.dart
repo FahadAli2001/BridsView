@@ -55,8 +55,11 @@ class _OnboardingThreeState extends State<OnboardingThree> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(child: Image.asset(whiteLogo,
-            height: size.height*0.3,)),
+            Center(
+                child: Image.asset(
+              whiteLogo,
+              height: size.height * 0.3,
+            )),
             //
             SizedBox(
               height: size.height * 0.1,
@@ -124,8 +127,11 @@ class _OnboardingThreeState extends State<OnboardingThree> {
             Center(
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(context, PageTransition(
-                    child: const HomeScreen(user: null), type: PageTransitionType.fade));
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: const HomeScreen(user: null),
+                          type: PageTransitionType.fade));
                 },
                 child: Text(
                   "continue as a Guest",

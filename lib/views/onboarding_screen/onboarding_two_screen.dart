@@ -52,8 +52,12 @@ class _OnboardTwoScreenState extends State<OnboardTwoScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(child: Image.asset(whiteLogo,
-            height: size.height*0.3,),),
+            Center(
+              child: Image.asset(
+                whiteLogo,
+                height: size.height * 0.3,
+              ),
+            ),
             //
             SizedBox(
               height: size.height * 0.1,

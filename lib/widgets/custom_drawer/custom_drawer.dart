@@ -95,7 +95,6 @@ class CustomDrawer extends StatelessWidget {
                         ),
                       ),
                     ),
-                    
                   ],
                 )
               ],
@@ -203,15 +202,15 @@ class CustomDrawer extends StatelessWidget {
                               type: PageTransitionType.fade),
                           (route) => false);
                     })
-                :  Consumer<LoginController>(builder:(context, value, child) {
-                  return CustomButton(
-                    text: 'Log Out',
-                    ontap: () async {
-                     
-                          value.signOutFromSocialPlatforms(context);
-                     
-                    });
-                },)
+                : Consumer<LoginController>(
+                    builder: (context, value, child) {
+                      return CustomButton(
+                          text: 'Log Out',
+                          ontap: () async {
+                            value.signOutFromSocialPlatforms(context);
+                          });
+                    },
+                  )
           ],
         ),
       ),

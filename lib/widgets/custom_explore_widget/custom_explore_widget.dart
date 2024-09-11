@@ -16,22 +16,20 @@ class CustomExploreWidget extends StatelessWidget {
   final List<Result> barAndClubsDetails;
   final int index;
 
-  const CustomExploreWidget({
-    super.key,
-    required this.barsOrClubsImages,
-    this.barsOrClubsData,
-    required this.barsOrClubsDistanceList,
-    required this.index,
-    required this.barAndClubsDetails,
-    required this.user
-  });
+  const CustomExploreWidget(
+      {super.key,
+      required this.barsOrClubsImages,
+      this.barsOrClubsData,
+      required this.barsOrClubsDistanceList,
+      required this.index,
+      required this.barAndClubsDetails,
+      required this.user});
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return GestureDetector(
       onTap: () {
-        
         if (barsOrClubsData == null || barsOrClubsData!.isEmpty) {
           Navigator.push(
             context,
@@ -136,5 +134,3 @@ class CustomExploreWidget extends StatelessWidget {
     );
   }
 }
-
- 

@@ -7,9 +7,13 @@ import 'package:flutter/material.dart';
 
 class CustomVisitedPlace extends StatelessWidget {
   final int index;
-  final  List<Result> visitedBarsDetailList  ;
-  final List<Uint8List>? visitedBarsImagesList ;
-  CustomVisitedPlace({super.key,required this.visitedBarsDetailList,required this.visitedBarsImagesList,required this.index});
+  final List<Result> visitedBarsDetailList;
+  final List<Uint8List>? visitedBarsImagesList;
+  CustomVisitedPlace(
+      {super.key,
+      required this.visitedBarsDetailList,
+      required this.visitedBarsImagesList,
+      required this.index});
 
   final GlobalKey globalKey = GlobalKey();
 
@@ -29,19 +33,18 @@ class CustomVisitedPlace extends StatelessWidget {
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              
               Container(
                 width: size.width * 0.35,
                 height: size.height,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    image:   DecorationImage(
+                    image: DecorationImage(
                         image: MemoryImage(visitedBarsImagesList![index]),
                         fit: BoxFit.cover)),
               ),
-               SizedBox(
-                      width: size.width * 0.03,
-                    ),
+              SizedBox(
+                width: size.width * 0.03,
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Column(
@@ -67,9 +70,9 @@ class CustomVisitedPlace extends StatelessWidget {
                           color: primaryColor,
                           size: size.height * 0.02,
                         ),
-                          Text(
+                        Text(
                           visitedBarsDetailList[index].rating.toString(),
-                          style:const TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
@@ -86,11 +89,11 @@ class CustomVisitedPlace extends StatelessWidget {
                     ),
                     Container(
                       constraints: BoxConstraints(maxWidth: size.width * 0.3),
-                      child:   AutoSizeText(
-                        visitedBarsDetailList[index].formattedAddress! ,
+                      child: AutoSizeText(
+                        visitedBarsDetailList[index].formattedAddress!,
                         maxLines: 3,
                         overflow: TextOverflow.fade,
-                        style:const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ],
