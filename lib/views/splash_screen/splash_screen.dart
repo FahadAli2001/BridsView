@@ -66,6 +66,7 @@ class _SplashScreenState extends State<SplashScreen>
       SharedPreferences sp = await SharedPreferences.getInstance();
       // ignore: use_build_context_synchronously
       final splashController =
+          // ignore: use_build_context_synchronously
           Provider.of<SplashController>(context, listen: false);
       String? id = sp.getString('user_id') ?? '';
       String? token = sp.getString('token') ?? '';
