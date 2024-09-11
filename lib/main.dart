@@ -88,7 +88,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Birds  View',
+        title: 'BirdsView',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
           scaffoldBackgroundColor: Colors.black,
