@@ -78,11 +78,10 @@ class MapsController extends ChangeNotifier {
       //     await getUserImageFromAssets(currentLocationIcon, 70);
 
       _markers.add(Marker(
-        markerId: const MarkerId("user"),
-        position: LatLng(lat, lon),
-        // icon: BitmapDescriptor.fromBytes(markerIcon),
-        icon: BitmapDescriptor.defaultMarker
-      ));
+          markerId: const MarkerId("user"),
+          position: LatLng(lat, lon),
+          // icon: BitmapDescriptor.fromBytes(markerIcon),
+          icon: BitmapDescriptor.defaultMarker));
 
       _markers.add(Marker(
         markerId: const MarkerId("bar"),
@@ -481,8 +480,6 @@ class MapsController extends ChangeNotifier {
     return recomnededBars;
   }
 
-  
-  
   Future<List<Rows>> getDistanceBetweenPoints(
       String destinationLat, destinationLong, originLat, originLong) async {
     List<Rows> distanceList = [];
@@ -593,8 +590,6 @@ class MapsController extends ChangeNotifier {
     return nearestBars;
   }
 
- 
- 
   Future<Result?> barsDetailMethod(String placeId) async {
     Result? result;
     try {

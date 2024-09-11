@@ -7,13 +7,12 @@ class BarsDetailModel {
 
   BarsDetailModel.fromJson(Map<String, dynamic> json) {
     if (json['html_attributions'] != null) {
-      htmlAttributions =  [];
+      htmlAttributions = [];
       json['html_attributions'].forEach((v) {
         htmlAttributions!.add(v.fromJson(v));
       });
     }
-    result =
-        json['result'] != null ?  Result.fromJson(json['result']) : null;
+    result = json['result'] != null ? Result.fromJson(json['result']) : null;
     status = json['status'];
   }
 
@@ -23,8 +22,8 @@ class BarsDetailModel {
       data['html_attributions'] =
           htmlAttributions!.map((v) => v.toJson()).toList();
     }
-    if ( result != null) {
-      data['result'] =  result!.toJson();
+    if (result != null) {
+      data['result'] = result!.toJson();
     }
     data['status'] = status;
     return data;
@@ -107,7 +106,8 @@ class Result {
         : null;
     formattedAddress = json['formatted_address'];
     formattedPhoneNumber = json['formatted_phone_number'];
-    geometry = json['geometry'] != null ? Geometry.fromJson(json['geometry']) : null;
+    geometry =
+        json['geometry'] != null ? Geometry.fromJson(json['geometry']) : null;
     icon = json['icon'];
     iconBackgroundColor = json['icon_background_color'];
     iconMaskBaseUri = json['icon_mask_base_uri'];
@@ -123,7 +123,8 @@ class Result {
       });
     }
     placeId = json['place_id'];
-    plusCode = json['plus_code'] != null ? PlusCode.fromJson(json['plus_code']) : null;
+    plusCode =
+        json['plus_code'] != null ? PlusCode.fromJson(json['plus_code']) : null;
     rating = (json['rating'] is int)
         ? (json['rating'] as int).toDouble()
         : (json['rating'] as double?);
@@ -146,7 +147,8 @@ class Result {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (addressComponents != null) {
-      data['address_components'] = addressComponents!.map((v) => v.toJson()).toList();
+      data['address_components'] =
+          addressComponents!.map((v) => v.toJson()).toList();
     }
     data['adr_address'] = adrAddress;
     data['business_status'] = businessStatus;
@@ -206,7 +208,7 @@ class AddressComponents {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =   <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['long_name'] = longName;
     data['short_name'] = shortName;
     data['types'] = types;
@@ -226,14 +228,14 @@ class CurrentOpeningHours {
     if (json['periods'] != null) {
       periods = <Periods>[];
       json['periods'].forEach((v) {
-        periods!.add(  Periods.fromJson(v));
+        periods!.add(Periods.fromJson(v));
       });
     }
     weekdayText = json['weekday_text'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =   <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['open_now'] = openNow;
     if (periods != null) {
       data['periods'] = periods!.map((v) => v.toJson()).toList();
@@ -242,8 +244,6 @@ class CurrentOpeningHours {
     return data;
   }
 }
-
- 
 
 class Close {
   String? date;
@@ -261,7 +261,7 @@ class Close {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =   <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['date'] = date;
     data['day'] = day;
     data['time'] = time;
@@ -282,7 +282,7 @@ class EditorialSummary {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =   <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['language'] = language;
     data['overview'] = overview;
     return data;
@@ -296,16 +296,14 @@ class Geometry {
   Geometry({location, viewport});
 
   Geometry.fromJson(Map<String, dynamic> json) {
-    location = json['location'] != null
-        ?   Location.fromJson(json['location'])
-        : null;
-    viewport = json['viewport'] != null
-        ?   Viewport.fromJson(json['viewport'])
-        : null;
+    location =
+        json['location'] != null ? Location.fromJson(json['location']) : null;
+    viewport =
+        json['viewport'] != null ? Viewport.fromJson(json['viewport']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =   <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (location != null) {
       data['location'] = location!.toJson();
     }
@@ -328,7 +326,7 @@ class Location {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =   <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['lat'] = lat;
     data['lng'] = lng;
     return data;
@@ -342,16 +340,14 @@ class Viewport {
   Viewport({northeast, southwest});
 
   Viewport.fromJson(Map<String, dynamic> json) {
-    northeast = json['northeast'] != null
-        ?   Location.fromJson(json['northeast'])
-        : null;
-    southwest = json['southwest'] != null
-        ?   Location.fromJson(json['southwest'])
-        : null;
+    northeast =
+        json['northeast'] != null ? Location.fromJson(json['northeast']) : null;
+    southwest =
+        json['southwest'] != null ? Location.fromJson(json['southwest']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =   <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (northeast != null) {
       data['northeast'] = northeast!.toJson();
     }
@@ -368,11 +364,11 @@ class Periods {
   Periods({open});
 
   Periods.fromJson(Map<String, dynamic> json) {
-    open = json['open'] != null ?   Close.fromJson(json['open']) : null;
+    open = json['open'] != null ? Close.fromJson(json['open']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =   <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (open != null) {
       data['open'] = open!.toJson();
     }
@@ -392,7 +388,7 @@ class Open {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =   <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['day'] = day;
     data['time'] = time;
     return data;
@@ -415,7 +411,7 @@ class Photos {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =   <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['height'] = height;
     data['html_attributions'] = htmlAttributions;
     data['photo_reference'] = photoReference;
@@ -436,7 +432,7 @@ class PlusCode {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =   <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['compound_code'] = compoundCode;
     data['global_code'] = globalCode;
     return data;
@@ -481,7 +477,7 @@ class Reviews {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =   <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['author_name'] = authorName;
     data['author_url'] = authorUrl;
     data['language'] = language;

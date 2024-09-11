@@ -47,8 +47,7 @@ class Predictions {
       description: json['description'] as String?,
       matchedSubstrings: json['matched_substrings'] != null
           ? (json['matched_substrings'] as List)
-              .map((i) =>
-                  MatchedSubstrings.fromJson(i as Map<String, dynamic>))
+              .map((i) => MatchedSubstrings.fromJson(i as Map<String, dynamic>))
               .toList()
           : null,
       placeId: json['place_id'] as String?,
@@ -71,8 +70,7 @@ class Predictions {
   Map<String, dynamic> toJson() {
     return {
       'description': description,
-      'matched_substrings':
-          matchedSubstrings?.map((i) => i.toJson()).toList(),
+      'matched_substrings': matchedSubstrings?.map((i) => i.toJson()).toList(),
       'place_id': placeId,
       'reference': reference,
       'structured_formatting': structuredFormatting?.toJson(),
@@ -119,8 +117,7 @@ class StructuredFormatting {
       mainText: json['main_text'] as String?,
       mainTextMatchedSubstrings: json['main_text_matched_substrings'] != null
           ? (json['main_text_matched_substrings'] as List)
-              .map((i) =>
-                  MatchedSubstrings.fromJson(i as Map<String, dynamic>))
+              .map((i) => MatchedSubstrings.fromJson(i as Map<String, dynamic>))
               .toList()
           : null,
       secondaryText: json['secondary_text'] as String?,

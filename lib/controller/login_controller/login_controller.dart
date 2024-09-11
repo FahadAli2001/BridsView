@@ -8,11 +8,11 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
- import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
- 
+
 import '../../views/home_screen/home_screem.dart';
 
 class LoginController extends ChangeNotifier {
@@ -102,6 +102,7 @@ class LoginController extends ChangeNotifier {
     emailController.clear();
     passwordController.clear();
   }
+
   Future<void> signInWithGoogle(context) async {
     try {
       final GoogleSignInAccount? googleSignInAccount =
@@ -135,54 +136,52 @@ class LoginController extends ChangeNotifier {
   }
 
   Future<void> signInWithApple(BuildContext context) async {
-  try {
-    final AuthorizationCredentialAppleID appleCredential =
-        await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-        
-      ],
-    );
-
-    final OAuthProvider oAuthProvider = OAuthProvider('apple.com');
-    final OAuthCredential credential = oAuthProvider.credential(
-      idToken: appleCredential.identityToken,
-      accessToken: appleCredential.authorizationCode,
-    );
-
-    final UserCredential authResult =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    final User? userDetail = authResult.user;
-
-    if (userDetail != null) {
-      String? userEmail = userDetail.email;
-      String? userName = userDetail.displayName ?? 
-        '${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}';
-      String? userProfileImage = userDetail.photoURL;
-
-      log(userDetail.displayName.toString());
-
-      registerUser(
-        userName,
-        '', 
-        userEmail ?? '', 
-        'apple',
-        '',
-        // ignore: use_build_context_synchronously
-        context, 
-        userProfileImage ?? '', 
-        ''
+    try {
+      final AuthorizationCredentialAppleID appleCredential =
+          await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
       );
 
-      log('User Email: $userEmail');
-      log('User Name: $userName');
-      log('User Profile Image: $userProfileImage');
+      final OAuthProvider oAuthProvider = OAuthProvider('apple.com');
+      final OAuthCredential credential = oAuthProvider.credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      final UserCredential authResult =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      final User? userDetail = authResult.user;
+
+      if (userDetail != null) {
+        String? userEmail = userDetail.email;
+        String? userName = userDetail.displayName ??
+            '${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}';
+        String? userProfileImage = userDetail.photoURL;
+
+        log(userDetail.displayName.toString());
+
+        registerUser(
+            userName,
+            '',
+            userEmail ?? '',
+            'apple',
+            '',
+            // ignore: use_build_context_synchronously
+            context,
+            userProfileImage ?? '',
+            '');
+
+        log('User Email: $userEmail');
+        log('User Name: $userName');
+        log('User Profile Image: $userProfileImage');
+      }
+    } catch (error) {
+      log('Error signing in with Apple: $error');
     }
-  } catch (error) {
-    log('Error signing in with Apple: $error');
   }
-}
 
   Future<void> registerUser(
       String firstName,
@@ -205,7 +204,8 @@ class LoginController extends ChangeNotifier {
         'platfrom': platform.toString(),
         'track_my_visits': '1'
       };
-      var response = await http.post(Uri.parse("https://zemfar.com/owl-api/api/social"), body: body);
+      var response = await http
+          .post(Uri.parse("https://zemfar.com/owl-api/api/social"), body: body);
       log(response.statusCode.toString());
       if (response.statusCode == 201) {
         var data = jsonDecode(response.body);
@@ -230,7 +230,6 @@ class LoginController extends ChangeNotifier {
                       user: user,
                     )),
             (route) => false);
-       
       } else {
         log('response status code${response.statusCode}');
         var data = jsonDecode(response.body);
@@ -241,18 +240,16 @@ class LoginController extends ChangeNotifier {
     }
   }
 
-  Future<void> signOutFromSocialPlatforms(context) async{
-     SharedPreferences sp =
-                          await SharedPreferences.getInstance();
+  Future<void> signOutFromSocialPlatforms(context) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
     await _googleSignIn.signOut();
     await _auth.signOut();
-     Navigator.pushAndRemoveUntil(
-                          // ignore: use_build_context_synchronously
-                          context,
-                          PageTransition(
-                              child: const OnboardingOneScreen(),
-                              type: PageTransitionType.fade),
-                          (route) => false);
-                      sp.clear();
+    Navigator.pushAndRemoveUntil(
+        // ignore: use_build_context_synchronously
+        context,
+        PageTransition(
+            child: const OnboardingOneScreen(), type: PageTransitionType.fade),
+        (route) => false);
+    sp.clear();
   }
 }

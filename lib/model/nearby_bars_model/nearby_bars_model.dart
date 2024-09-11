@@ -20,7 +20,8 @@ class NearbyBars {
   Map<String, Object?> toJson() {
     return {
       'html_attributions': htmlAttributions,
-      'results': results?.map<Map<String, dynamic>>((data) => data.toJson()).toList(),
+      'results':
+          results?.map<Map<String, dynamic>>((data) => data.toJson()).toList(),
       'status': status,
     };
   }
@@ -29,10 +30,15 @@ class NearbyBars {
     return NearbyBars(
       htmlAttributions: json['html_attributions'] == null
           ? null
-          : (json['html_attributions'] as List).map((e) => e as String).toList(),
+          : (json['html_attributions'] as List)
+              .map((e) => e as String)
+              .toList(),
       results: json['results'] == null
           ? null
-          : (json['results'] as List).map<Results>((data) => Results.fromJson(data as Map<String, Object?>)).toList(),
+          : (json['results'] as List)
+              .map<Results>(
+                  (data) => Results.fromJson(data as Map<String, Object?>))
+              .toList(),
       status: json['status'] as String?,
     );
   }
@@ -145,7 +151,8 @@ class Results {
       'icon_mask_base_uri': iconMaskBaseUri,
       'name': name,
       'opening_hours': openingHours?.toJson(),
-      'photos': photos?.map<Map<String, dynamic>>((data) => data.toJson()).toList(),
+      'photos':
+          photos?.map<Map<String, dynamic>>((data) => data.toJson()).toList(),
       'place_id': placeId,
       'plus_code': plusCode?.toJson(),
       'price_level': priceLevel,
@@ -170,10 +177,14 @@ class Results {
       name: json['name'] as String?,
       openingHours: json['opening_hours'] == null
           ? null
-          : OpeningHours.fromJson(json['opening_hours'] as Map<String, Object?>),
+          : OpeningHours.fromJson(
+              json['opening_hours'] as Map<String, Object?>),
       photos: json['photos'] == null
           ? null
-          : (json['photos'] as List).map<Photos>((data) => Photos.fromJson(data as Map<String, Object?>)).toList(),
+          : (json['photos'] as List)
+              .map<Photos>(
+                  (data) => Photos.fromJson(data as Map<String, Object?>))
+              .toList(),
       placeId: json['place_id'] as String?,
       plusCode: json['plus_code'] == null
           ? null
@@ -182,7 +193,9 @@ class Results {
       rating: (json['rating'] as num?)?.toDouble(),
       reference: json['reference'] as String?,
       scope: json['scope'] as String?,
-      types: json['types'] == null ? null : (json['types'] as List).map((e) => e as String).toList(),
+      types: json['types'] == null
+          ? null
+          : (json['types'] as List).map((e) => e as String).toList(),
       userRatingsTotal: json['user_ratings_total'] as int?,
       vicinity: json['vicinity'] as String?,
     );
@@ -218,7 +231,25 @@ class Results {
 
   @override
   int get hashCode {
-    return Object.hash(runtimeType, businessStatus, geometry, icon, iconBackgroundColor, iconMaskBaseUri, name, openingHours, photos, placeId, plusCode, priceLevel, rating, reference, scope, types, userRatingsTotal, vicinity);
+    return Object.hash(
+        runtimeType,
+        businessStatus,
+        geometry,
+        icon,
+        iconBackgroundColor,
+        iconMaskBaseUri,
+        name,
+        openingHours,
+        photos,
+        placeId,
+        plusCode,
+        priceLevel,
+        rating,
+        reference,
+        scope,
+        types,
+        userRatingsTotal,
+        vicinity);
   }
 }
 
@@ -253,7 +284,10 @@ class PlusCode {
 
   @override
   bool operator ==(Object other) {
-    return other is PlusCode && other.runtimeType == runtimeType && other.compoundCode == compoundCode && other.globalCode == globalCode;
+    return other is PlusCode &&
+        other.runtimeType == runtimeType &&
+        other.compoundCode == compoundCode &&
+        other.globalCode == globalCode;
   }
 
   @override
@@ -268,9 +302,14 @@ class Photos {
   final String? photoReference;
   final int? width;
 
-  const Photos({this.height, this.htmlAttributions, this.photoReference, this.width});
+  const Photos(
+      {this.height, this.htmlAttributions, this.photoReference, this.width});
 
-  Photos copyWith({int? height, List<String>? htmlAttributions, String? photoReference, int? width}) {
+  Photos copyWith(
+      {int? height,
+      List<String>? htmlAttributions,
+      String? photoReference,
+      int? width}) {
     return Photos(
       height: height ?? this.height,
       htmlAttributions: htmlAttributions ?? this.htmlAttributions,
@@ -291,7 +330,8 @@ class Photos {
   static Photos fromJson(Map<String, Object?> json) {
     return Photos(
       height: json['height'] as int?,
-      htmlAttributions: (json['html_attributions'] as List).map((e) => e as String).toList(),
+      htmlAttributions:
+          (json['html_attributions'] as List).map((e) => e as String).toList(),
       photoReference: json['photo_reference'] as String?,
       width: json['width'] as int?,
     );
@@ -304,12 +344,18 @@ class Photos {
 
   @override
   bool operator ==(Object other) {
-    return other is Photos && other.runtimeType == runtimeType && other.height == height && other.htmlAttributions == htmlAttributions && other.photoReference == photoReference && other.width == width;
+    return other is Photos &&
+        other.runtimeType == runtimeType &&
+        other.height == height &&
+        other.htmlAttributions == htmlAttributions &&
+        other.photoReference == photoReference &&
+        other.width == width;
   }
 
   @override
   int get hashCode {
-    return Object.hash(runtimeType, height, htmlAttributions, photoReference, width);
+    return Object.hash(
+        runtimeType, height, htmlAttributions, photoReference, width);
   }
 }
 
@@ -337,7 +383,9 @@ class OpeningHours {
 
   @override
   bool operator ==(Object other) {
-    return other is OpeningHours && other.runtimeType == runtimeType && other.openNow == openNow;
+    return other is OpeningHours &&
+        other.runtimeType == runtimeType &&
+        other.openNow == openNow;
   }
 
   @override
@@ -365,8 +413,12 @@ class Geometry {
 
   static Geometry fromJson(Map<String, Object?> json) {
     return Geometry(
-      location: json['location'] == null ? null : Location.fromJson(json['location'] as Map<String, Object?>),
-      viewport: json['viewport'] == null ? null : Viewport.fromJson(json['viewport'] as Map<String, Object?>),
+      location: json['location'] == null
+          ? null
+          : Location.fromJson(json['location'] as Map<String, Object?>),
+      viewport: json['viewport'] == null
+          ? null
+          : Viewport.fromJson(json['viewport'] as Map<String, Object?>),
     );
   }
 
@@ -377,7 +429,10 @@ class Geometry {
 
   @override
   bool operator ==(Object other) {
-    return other is Geometry && other.runtimeType == runtimeType && other.location == location && other.viewport == viewport;
+    return other is Geometry &&
+        other.runtimeType == runtimeType &&
+        other.location == location &&
+        other.viewport == viewport;
   }
 
   @override
@@ -393,7 +448,9 @@ class Viewport {
   const Viewport({this.northeast, this.southwest});
 
   Viewport copyWith({Location? northeast, Location? southwest}) {
-    return Viewport(northeast: northeast ?? this.northeast, southwest: southwest ?? this.southwest);
+    return Viewport(
+        northeast: northeast ?? this.northeast,
+        southwest: southwest ?? this.southwest);
   }
 
   Map<String, Object?> toJson() {
@@ -402,8 +459,12 @@ class Viewport {
 
   static Viewport fromJson(Map<String, Object?> json) {
     return Viewport(
-      northeast: json['northeast'] == null ? null : Location.fromJson(json['northeast'] as Map<String, Object?>),
-      southwest: json['southwest'] == null ? null : Location.fromJson(json['southwest'] as Map<String, Object?>),
+      northeast: json['northeast'] == null
+          ? null
+          : Location.fromJson(json['northeast'] as Map<String, Object?>),
+      southwest: json['southwest'] == null
+          ? null
+          : Location.fromJson(json['southwest'] as Map<String, Object?>),
     );
   }
 
@@ -414,7 +475,10 @@ class Viewport {
 
   @override
   bool operator ==(Object other) {
-    return other is Viewport && other.runtimeType == runtimeType && other.northeast == northeast && other.southwest == southwest;
+    return other is Viewport &&
+        other.runtimeType == runtimeType &&
+        other.northeast == northeast &&
+        other.southwest == southwest;
   }
 
   @override
@@ -451,7 +515,10 @@ class Location {
 
   @override
   bool operator ==(Object other) {
-    return other is Location && other.runtimeType == runtimeType && other.lat == lat && other.lng == lng;
+    return other is Location &&
+        other.runtimeType == runtimeType &&
+        other.lat == lat &&
+        other.lng == lng;
   }
 
   @override

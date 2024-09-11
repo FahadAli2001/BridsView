@@ -44,7 +44,7 @@ class DetailScreenController extends ChangeNotifier {
           _randomPopulation = barPopulation - random.nextInt(10);
         }
         await saveBarId(barPlaceId);
-         
+
         notifyListeners();
       }
     } catch (e) {
