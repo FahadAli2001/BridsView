@@ -403,59 +403,63 @@ class _DetailScreenState extends State<DetailScreen>
                             height: size.height * 0.02,
                           ),
 
-                          widget.user!.data!.subscribe == '1'
-                              ? SizedBox(
-                                  width: size.width,
-                                  height: size.height * 0.15,
-                                  child: Stack(
-                                    children: [
-                                      CustomMixCrowdHeadingWidget(size: size),
+                          widget.user == null
+                              ? const SizedBox()
+                              : widget.user!.data!.subscribe == '1'
+                                  ? SizedBox(
+                                      width: size.width,
+                                      height: size.height * 0.15,
+                                      child: Stack(
+                                        children: [
+                                          CustomMixCrowdHeadingWidget(
+                                              size: size),
 
-                                      widget.searchBarDetail![widget.index]
-                                                      .rating !=
-                                                  null &&
-                                              widget
-                                                      .searchBarDetail![
-                                                          widget.index]
-                                                      .rating! >=
-                                                  4.0
-                                          ? CustomBarHotBadgeWidget(
-                                              animation: _animation,
-                                              controller: _controller,
-                                              size: size)
-                                          : const SizedBox(),
-                                      //
+                                          widget.searchBarDetail![widget.index]
+                                                          .rating !=
+                                                      null &&
+                                                  widget
+                                                          .searchBarDetail![
+                                                              widget.index]
+                                                          .rating! >=
+                                                      4.0
+                                              ? CustomBarHotBadgeWidget(
+                                                  animation: _animation,
+                                                  controller: _controller,
+                                                  size: size)
+                                              : const SizedBox(),
+                                          //
 
-                                      //
-                                      CustomBarCrowdImageWidget(size: size),
-                                      //
-                                      CustomBarRandomPopulationWidget(
-                                          size: size),
-                                    ],
-                                  ),
-                                )
-                              : Consumer<PaymentController>(
-                                  builder: (context, value, child) {
-                                    return Align(
-                                      alignment: Alignment.topLeft,
-                                      child: CustomBarSubscribeNowButtonWidget(
-                                          ontap: () {
-                                            if (widget.user == null) {
-                                              showCustomErrorToast(
-                                                  message:
-                                                      "Please Login First");
-                                            } else {
-                                              showProSubscriptionPopup(context,
-                                                  () async {
-                                                await value
-                                                    .makePayment(context);
-                                              });
-                                            }
-                                          },
-                                          size: size),
-                                    );
-                                  },
-                                ),
+                                          //
+                                          CustomBarCrowdImageWidget(size: size),
+                                          //
+                                          CustomBarRandomPopulationWidget(
+                                              size: size),
+                                        ],
+                                      ),
+                                    )
+                                  : Consumer<PaymentController>(
+                                      builder: (context, value, child) {
+                                        return Align(
+                                          alignment: Alignment.topLeft,
+                                          child:
+                                              CustomBarSubscribeNowButtonWidget(
+                                                  ontap: () {
+                                                    if (widget.user == null) {
+                                                      showCustomErrorToast(
+                                                          message:
+                                                              "Please Login First");
+                                                    } else {
+                                                      showProSubscriptionPopup(
+                                                          context, () async {
+                                                        await value.makePayment(
+                                                            context);
+                                                      });
+                                                    }
+                                                  },
+                                                  size: size),
+                                        );
+                                      },
+                                    ),
                           SizedBox(
                             height: size.height * 0.02,
                           ),
@@ -882,55 +886,62 @@ class _DetailScreenState extends State<DetailScreen>
                               ),
                               //
 
-                              widget.user!.data!.subscribe == "1"
-                                  ? SizedBox(
-                                      width: size.width,
-                                      height: size.height * 0.15,
-                                      child: Stack(
-                                        children: [
-                                          CustomMixCrowdHeadingWidget(
-                                              size: size),
-
-                                          barDetail![0].rating != null &&
-                                                  barDetail![0].rating! >= 4.0
-                                              ? CustomBarHotBadgeWidget(
-                                                  animation: _animation,
-                                                  controller: _controller,
-                                                  size: size)
-                                              : const SizedBox(),
-                                          //
-
-                                          //
-                                          CustomBarCrowdImageWidget(size: size),
-                                          //
-                                          CustomBarRandomPopulationWidget(
-                                              size: size),
-                                        ],
-                                      ),
-                                    )
-                                  : Consumer<PaymentController>(
-                                      builder: (context, value, child) {
-                                        return Align(
-                                          alignment: Alignment.topLeft,
-                                          child:
-                                              CustomBarSubscribeNowButtonWidget(
-                                                  ontap: () {
-                                                    if (widget.user == null) {
-                                                      showCustomErrorToast(
-                                                          message:
-                                                              "Please Login First");
-                                                    } else {
-                                                      showProSubscriptionPopup(
-                                                          context, () async {
-                                                        await value.makePayment(
-                                                            context);
-                                                      });
-                                                    }
-                                                  },
+                              widget.user == null
+                                  ? const SizedBox()
+                                  : widget.user!.data!.subscribe == "1"
+                                      ? SizedBox(
+                                          width: size.width,
+                                          height: size.height * 0.15,
+                                          child: Stack(
+                                            children: [
+                                              CustomMixCrowdHeadingWidget(
                                                   size: size),
-                                        );
-                                      },
-                                    ),
+
+                                              barDetail![0].rating != null &&
+                                                      barDetail![0].rating! >=
+                                                          4.0
+                                                  ? CustomBarHotBadgeWidget(
+                                                      animation: _animation,
+                                                      controller: _controller,
+                                                      size: size)
+                                                  : const SizedBox(),
+                                              //
+
+                                              //
+                                              CustomBarCrowdImageWidget(
+                                                  size: size),
+                                              //
+                                              CustomBarRandomPopulationWidget(
+                                                  size: size),
+                                            ],
+                                          ),
+                                        )
+                                      : Consumer<PaymentController>(
+                                          builder: (context, value, child) {
+                                            return Align(
+                                              alignment: Alignment.topLeft,
+                                              child:
+                                                  CustomBarSubscribeNowButtonWidget(
+                                                      ontap: () {
+                                                        if (widget.user ==
+                                                            null) {
+                                                          showCustomErrorToast(
+                                                              message:
+                                                                  "Please Login First");
+                                                        } else {
+                                                          showProSubscriptionPopup(
+                                                              context,
+                                                              () async {
+                                                            await value
+                                                                .makePayment(
+                                                                    context);
+                                                          });
+                                                        }
+                                                      },
+                                                      size: size),
+                                            );
+                                          },
+                                        ),
 
                               //
                               SizedBox(
