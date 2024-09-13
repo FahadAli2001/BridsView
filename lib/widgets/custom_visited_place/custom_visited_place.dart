@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomVisitedPlace extends StatelessWidget {
   final int index;
@@ -54,7 +55,7 @@ class CustomVisitedPlace extends StatelessWidget {
                       width: size.width * 0.3,
                       child: Text(
                         visitedBarsDetailList[index].name!,
-                        style: TextStyle(
+                        style: GoogleFonts.urbanist(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: size.height * 0.02),
@@ -72,13 +73,13 @@ class CustomVisitedPlace extends StatelessWidget {
                         ),
                         Text(
                           visitedBarsDetailList[index].rating.toString(),
-                          style: const TextStyle(
+                          style:   GoogleFonts.urbanist(
                             color: Colors.white,
                           ),
                         ),
                         Text(
                           " (${visitedBarsDetailList[index].userRatingsTotal.toString()} Review's)",
-                          style: TextStyle(
+                          style: GoogleFonts.urbanist(
                             color: primaryColor,
                           ),
                         ),
@@ -93,7 +94,7 @@ class CustomVisitedPlace extends StatelessWidget {
                         visitedBarsDetailList[index].formattedAddress!,
                         maxLines: 3,
                         overflow: TextOverflow.fade,
-                        style: const TextStyle(color: Colors.white),
+                        style:   GoogleFonts.urbanist(color: Colors.white),
                       ),
                     ),
                   ],

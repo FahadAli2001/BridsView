@@ -1,6 +1,7 @@
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomImagePickerBottomSheet extends StatelessWidget {
   final VoidCallback cameraontap;
@@ -24,19 +25,19 @@ class CustomImagePickerBottomSheet extends StatelessWidget {
                 RichText(
                   text: TextSpan(
                     text: "Choose ",
-                    style: TextStyle(
+                    style: GoogleFonts.urbanist(
                         fontSize: size.height * 0.03, color: Colors.white),
                     children: [
                       TextSpan(
                         text: 'Image ',
-                        style: TextStyle(
+                        style: GoogleFonts.urbanist(
                             fontSize: size.height * 0.03,
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
                       ),
                       TextSpan(
                         text: 'Source ',
-                        style: TextStyle(
+                        style: GoogleFonts.urbanist(
                             fontSize: size.height * 0.03,
                             fontWeight: FontWeight.bold,
                             color: primaryColor),

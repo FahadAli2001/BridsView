@@ -4,6 +4,7 @@ import 'package:birds_view/views/home_screen/home_screem.dart';
 import 'package:birds_view/views/login_screen/login_screen.dart';
 import 'package:birds_view/views/signup_screen/signup_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../widgets/custom_button/custom_button.dart';
@@ -69,7 +70,7 @@ class _OnboardingThreeState extends State<OnboardingThree> {
               child: RichText(
                 text: TextSpan(
                   text: "Check the Vibe, ",
-                  style: TextStyle(
+                  style: GoogleFonts.urbanist(
                       fontSize: size.height * 0.025,
                       fontWeight: FontWeight.w900,
                       color: primaryColor),
@@ -83,7 +84,7 @@ class _OnboardingThreeState extends State<OnboardingThree> {
                     // ),
                     TextSpan(
                       text: 'Then Arrive',
-                      style: TextStyle(
+                      style: GoogleFonts.urbanist(
                           fontSize: size.height * 0.025,
                           fontWeight: FontWeight.w900,
                           color: whiteColor),
@@ -135,7 +136,7 @@ class _OnboardingThreeState extends State<OnboardingThree> {
                 },
                 child: Text(
                   "continue as a Guest",
-                  style: TextStyle(
+                  style: GoogleFonts.urbanist(
                       fontSize: size.height * 0.018,
                       decorationColor: Colors.white,
                       decoration: TextDecoration.underline,

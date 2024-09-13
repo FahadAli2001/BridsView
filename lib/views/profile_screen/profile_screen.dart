@@ -4,6 +4,7 @@ import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/views/edit_profile_screen/edit_profile_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -76,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               widget.user!.data!.username == ''
                           ? 'Guest '
                           : widget.user!.data!.username,
-                      style: TextStyle(
+                      style: GoogleFonts.urbanist(
                           fontWeight: FontWeight.bold,
                           fontSize: size.height * 0.026,
                           color: Colors.white),
@@ -86,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   widget.user!.data!.subscribe == '0'
                               ? ""
                               : " Pro",
-                          style: TextStyle(
+                          style: GoogleFonts.urbanist(
                               fontSize: size.height * 0.012,
                               color: primaryColor),
                         ),
@@ -110,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                     child: Text(
                       "Edit Profile",
-                      style: TextStyle(
+                      style: GoogleFonts.urbanist(
                           fontSize: size.height * 0.022,
                           decorationColor: Colors.white,
                           decoration: TextDecoration.underline,
@@ -127,7 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onTap: () {},
                     child: Text(
                       "Bookmarks",
-                      style: TextStyle(
+                      style: GoogleFonts.urbanist(
                           fontSize: size.height * 0.022, color: Colors.white),
                     ),
                   ),
@@ -147,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onTap: () {},
                     child: Text(
                       "Visited Places",
-                      style: TextStyle(
+                      style: GoogleFonts.urbanist(
                           fontSize: size.height * 0.022, color: Colors.white),
                     ),
                   ),

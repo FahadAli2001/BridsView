@@ -86,7 +86,8 @@ dependencies:
   # 
   # flutter_stripe: ^10.2.0
   flutter_stripe:  
-  #
+  # fonts
+  google_fonts: ^6.2.1
    
   
 dev_dependencies:

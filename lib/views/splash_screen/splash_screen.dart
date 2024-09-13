@@ -1,11 +1,10 @@
 import 'dart:developer';
-
 import 'package:birds_view/controller/splash_controller/splash_controller.dart';
-import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/onboarding_screen/onboarding_two_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -131,14 +130,14 @@ class _SplashScreenState extends State<SplashScreen>
                   child: RichText(
                     text: TextSpan(
                       text: "BIRDS",
-                      style: TextStyle(
+                      style: GoogleFonts.urbanist(
                           fontSize: size.height * 0.05,
                           fontWeight: FontWeight.w900,
-                          color: primaryColor),
+                          color: Colors.white),
                       children: [
                         TextSpan(
                           text: 'VIEW',
-                          style: TextStyle(
+                          style: GoogleFonts.urbanist(
                               fontSize: size.height * 0.05,
                               fontWeight: FontWeight.w900,
                               color: Colors.white),

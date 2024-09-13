@@ -1,5 +1,6 @@
 import 'package:birds_view/utils/images.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -20,7 +21,7 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: TextStyle(
+            style: GoogleFonts.urbanist(
                 fontWeight: FontWeight.bold,
                 fontSize: size.height * 0.018,
                 color: Colors.black),

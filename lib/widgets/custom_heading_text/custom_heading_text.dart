@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomHeadingText extends StatelessWidget {
   final String heading;
@@ -9,7 +10,7 @@ class CustomHeadingText extends StatelessWidget {
     Size size = MediaQuery.sizeOf(context);
     return Text(
       heading,
-      style: TextStyle(
+      style: GoogleFonts.urbanist(
           color: Colors.white,
           fontWeight: FontWeight.bold,
           fontSize: size.height * 0.026),

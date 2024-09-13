@@ -2,6 +2,7 @@ import 'package:birds_view/controller/reset_password_controller/reset_password.d
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/custom_button/custom_button.dart';
 import '../../widgets/custom_textfield/custom_textfield.dart';
@@ -65,13 +66,13 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                     child: RichText(
                       text: TextSpan(
                         text: "Verify ",
-                        style: TextStyle(
+                        style: GoogleFonts.urbanist(
                             fontSize: size.height * 0.04,
                             color: Colors.white70),
                         children: [
                           TextSpan(
                             text: 'Email',
-                            style: TextStyle(
+                            style: GoogleFonts.urbanist(
                                 fontSize: size.height * 0.04,
                                 fontWeight: FontWeight.w900,
                                 color: primaryColor),

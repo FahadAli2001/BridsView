@@ -3,6 +3,7 @@ import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../model/bar_details_model/bar_details_model.dart';
 import '../../model/bars_distance_model/bars_distance_model.dart';
@@ -103,7 +104,7 @@ class CustomExploreWidget extends StatelessWidget {
                   width: size.width * 0.85,
                   child: Text(
                     barAndClubsDetails[index].name ?? "",
-                    style: TextStyle(
+                    style: GoogleFonts.urbanist(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: size.height * 0.026,
@@ -120,7 +121,7 @@ class CustomExploreWidget extends StatelessWidget {
                     barAndClubsDetails[index].formattedAddress ?? " ",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: GoogleFonts.urbanist(
                       color: Colors.white,
                       fontSize: size.height * 0.016,
                     ),

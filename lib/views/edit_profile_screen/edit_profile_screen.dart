@@ -4,6 +4,7 @@ import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart'
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -188,7 +189,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 widget.user!.data!.firstName == ''
                             ? "Guest "
                             : '${widget.user!.data!.firstName} ',
-                        style: TextStyle(
+                        style: GoogleFonts.urbanist(
                             fontWeight: FontWeight.bold,
                             fontSize: size.height * 0.026,
                             color: Colors.white),
@@ -198,7 +199,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     widget.user!.data!.lastName == ''
                                 ? ''
                                 : widget.user!.data!.lastName,
-                            style: TextStyle(
+                            style: GoogleFonts.urbanist(
                                 fontSize: size.height * 0.026,
                                 color: Colors.white),
                           ),

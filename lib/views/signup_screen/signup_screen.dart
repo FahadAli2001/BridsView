@@ -6,6 +6,7 @@ import 'package:bottom_picker/bottom_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -81,7 +82,7 @@ class _SignupScreenState extends State<SignupScreen> {
         title: RichText(
           text: TextSpan(
             text: "Create ",
-            style: TextStyle(
+            style: GoogleFonts.urbanist(
                 fontWeight: FontWeight.bold,
                 fontSize: size.height * 0.026,
                 color: whiteColor),
@@ -89,11 +90,11 @@ class _SignupScreenState extends State<SignupScreen> {
               TextSpan(
                 text: 'An ',
                 style:
-                    TextStyle(fontSize: size.height * 0.026, color: whiteColor),
+                    GoogleFonts.urbanist(fontSize: size.height * 0.026, color: whiteColor),
               ),
               TextSpan(
                 text: 'Account ',
-                style: TextStyle(
+                style: GoogleFonts.urbanist(
                     fontSize: size.height * 0.026,
                     fontWeight: FontWeight.bold,
                     color: whiteColor),
@@ -240,7 +241,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       backgroundColor: Colors.black,
                       pickerTitle: Text(
                         'Select Date Of Birth',
-                        style: TextStyle(
+                        style: GoogleFonts.urbanist(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                           color: whiteColor,
@@ -250,14 +251,14 @@ class _SignupScreenState extends State<SignupScreen> {
                       initialDateTime: DateTime(1996, 10, 22),
                       maxDateTime: DateTime.now(),
                       minDateTime: DateTime(1980),
-                      pickerTextStyle: TextStyle(
+                      pickerTextStyle: GoogleFonts.urbanist(
                         color: primaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
                       buttonSingleColor: Colors.black,
                       closeIconColor: primaryColor,
-                      buttonStyle: BoxDecoration(color: primaryColor),
+                      buttonStyle: BoxDecoration(color: primaryColor,borderRadius: BorderRadius.circular(20)),
                       onChange: (index) {},
                       onSubmit: (date) {
                         value.selectedDate = date;
@@ -274,7 +275,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           alignment: Alignment.topLeft,
                           child: Text(
                             'Date Of Birth',
-                            style: TextStyle(
+                            style: GoogleFonts.urbanist(
                               color: Colors.white60,
                               fontSize: value.selectedDate != null
                                   ? size.height * 0.015
@@ -288,7 +289,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             value.selectedDate != null
                                 ? '${value.selectedDate!.year}-${value.selectedDate!.month}-${value.selectedDate!.day}'
                                 : '',
-                            style: TextStyle(
+                            style: GoogleFonts.urbanist(
                               color: Colors.white60,
                               fontSize: size.height * 0.018,
                             ),
@@ -309,7 +310,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   isExpanded: true,
                   hint: Text(
                     'Gender',
-                    style: TextStyle(
+                    style: GoogleFonts.urbanist(
                       fontSize: size.height * 0.02,
                       color: Colors.white60,
                     ),
@@ -319,7 +320,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             value: item,
                             child: Text(
                               item,
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                 color: Colors.white60,
                                 fontSize: size.height * 0.02,
                               ),
@@ -368,22 +369,22 @@ class _SignupScreenState extends State<SignupScreen> {
                     width: size.width * 0.01,
                   ),
                   RichText(
-                    text: const TextSpan(
+                    text:   TextSpan(
                       text: "I accept the term of ",
-                      style: TextStyle(color: Colors.white),
+                      style: GoogleFonts.urbanist(color: Colors.white),
                       children: [
                         TextSpan(
                           text: 'use ',
-                          style: TextStyle(
+                          style: GoogleFonts.urbanist(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
                           text: 'and ',
-                          style: TextStyle(color: Colors.white),
+                          style: GoogleFonts.urbanist(color: Colors.white),
                         ),
                         TextSpan(
                           text: 'privacy policy',
-                          style: TextStyle(
+                          style: GoogleFonts.urbanist(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ],

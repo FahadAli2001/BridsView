@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../controller/deatil_screen_controller/detail_screen_controller.dart';
@@ -16,7 +17,7 @@ class CustomBarRandomPopulationWidget extends StatelessWidget {
           left: size.width * 0.32,
           child: Text(
             value.randomPopulation.toString(),
-            style: TextStyle(
+            style: GoogleFonts.urbanist(
                 fontSize: size.height * 0.026,
                 color: Colors.white,
                 fontWeight: FontWeight.bold),

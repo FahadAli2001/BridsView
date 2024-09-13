@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:birds_view/controller/bookmark_controller/bookmark_controller.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class CustomBookmarkWidget extends StatelessWidget {
@@ -59,7 +60,7 @@ class CustomBookmarkWidget extends StatelessWidget {
                             width: size.width * 0.5,
                             child: Text(
                               bookmarksBarsDetailList[index].name!,
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: size.height * 0.025),
@@ -75,7 +76,7 @@ class CustomBookmarkWidget extends StatelessWidget {
                               bookmarksBarsDetailList[index].formattedAddress!,
                               maxLines: 3,
                               overflow: TextOverflow.fade,
-                              style: const TextStyle(color: Colors.white),
+                              style:   GoogleFonts.urbanist(color: Colors.white),
                             ),
                           ),
                           SizedBox(

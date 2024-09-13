@@ -6,6 +6,7 @@ import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../model/bars_distance_model/bars_distance_model.dart';
 import '../../model/nearby_bars_model/nearby_bars_model.dart';
@@ -91,7 +92,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             centerTitle: true,
             title: Text(
               'Explore',
-              style: TextStyle(
+              style: GoogleFonts.urbanist(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: size.height * 0.03),
@@ -133,7 +134,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                 children: [
                                   Text(
                                     'Clubs',
-                                    style: TextStyle(
+                                    style: GoogleFonts.urbanist(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                         fontSize: size.height * 0.03),
@@ -163,7 +164,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                 children: [
                                   Text(
                                     'Bars',
-                                    style: TextStyle(
+                                    style: GoogleFonts.urbanist(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                         fontSize: size.height * 0.03),
@@ -248,12 +249,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                             ),
                                           )
                                         : value.barDetail.isEmpty
-                                            ? const Padding(
-                                                padding: EdgeInsets.symmetric(
+                                            ?   Padding(
+                                                padding:const EdgeInsets.symmetric(
                                                     vertical: 20),
                                                 child: Text(
                                                   "Search Bars Or Clubs",
-                                                  style: TextStyle(
+                                                  style: GoogleFonts.urbanist(
                                                       color: Colors.white60),
                                                 ),
                                               )

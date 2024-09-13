@@ -21,6 +21,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -292,7 +293,7 @@ class _DetailScreenState extends State<DetailScreen>
                               widget.searchBarDetail![widget.index].name!,
                               maxLines: 2,
                               overflow: TextOverflow.visible,
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   fontWeight: FontWeight.bold,
                                   fontSize: size.height * 0.026,
                                   color: Colors.white),
@@ -361,14 +362,15 @@ class _DetailScreenState extends State<DetailScreen>
                                                       '0') *
                                                   0.621371)
                                               .toStringAsFixed(1),
-                                          style: TextStyle(
+                                          style: GoogleFonts.urbanist(
                                             color: Colors.white,
                                             fontSize: size.width * 0.027,
                                           ),
                                         ),
-                                        const Text(
+                                        Text(
                                           ' Miles',
-                                          style: TextStyle(color: Colors.white),
+                                          style: GoogleFonts.urbanist(
+                                              color: Colors.white),
                                         ),
                                         SizedBox(
                                           width: size.width * 0.1,
@@ -384,7 +386,7 @@ class _DetailScreenState extends State<DetailScreen>
                                           widget.distance[widget.index]
                                               .elements![0].duration!.text
                                               .toString(),
-                                          style: const TextStyle(
+                                          style: GoogleFonts.urbanist(
                                               color: Colors.white),
                                         ),
                                       ],
@@ -474,7 +476,7 @@ class _DetailScreenState extends State<DetailScreen>
                                   child: Text(
                                     widget.searchBarDetail![widget.index]
                                         .editorialSummary!.overview!,
-                                    style: TextStyle(
+                                    style: GoogleFonts.urbanist(
                                         fontSize: size.height * 0.016,
                                         color: Colors.white),
                                   ),
@@ -536,7 +538,7 @@ class _DetailScreenState extends State<DetailScreen>
                                   child: RichText(
                                     text: TextSpan(
                                       text: "Hours of Operation :\n ",
-                                      style: TextStyle(
+                                      style: GoogleFonts.urbanist(
                                           fontSize: size.height * 0.016,
                                           fontWeight: FontWeight.bold,
                                           color: primaryColor),
@@ -553,7 +555,7 @@ class _DetailScreenState extends State<DetailScreen>
                                           TextSpan(
                                             text:
                                                 "\n ${widget.searchBarDetail![widget.index].openingHours!.weekdayText![i]} \n",
-                                            style: TextStyle(
+                                            style: GoogleFonts.urbanist(
                                                 fontSize: size.height * 0.016,
                                                 fontWeight: FontWeight.normal,
                                                 color: whiteColor),
@@ -566,21 +568,21 @@ class _DetailScreenState extends State<DetailScreen>
                           //
 
                           //
-                          widget.searchBarDetail![widget.index]
-                                      .wheelchairAccessibleEntrance ==
-                                  null
-                              ? const Text(' ')
-                              : Align(
-                                  alignment: Alignment.topLeft,
-                                  child: CustomDescriptionRichText(
-                                      title: "Wheel Chair Entrance : ",
-                                      subtitle: widget
-                                                  .searchBarDetail![
-                                                      widget.index]
-                                                  .wheelchairAccessibleEntrance ==
-                                              true
-                                          ? "Available"
-                                          : "Not Available")),
+                          // widget.searchBarDetail![widget.index]
+                          //             .wheelchairAccessibleEntrance ==
+                          //         null
+                          //     ? const Text(' ')
+                          //     : Align(
+                          //         alignment: Alignment.topLeft,
+                          //         child: CustomDescriptionRichText(
+                          //             title: "Wheel Chair Entrance : ",
+                          //             subtitle: widget
+                          //                         .searchBarDetail![
+                          //                             widget.index]
+                          //                         .wheelchairAccessibleEntrance ==
+                          //                     true
+                          //                 ? "Available"
+                          //                 : "Not Available")),
 
                           //
 
@@ -601,14 +603,14 @@ class _DetailScreenState extends State<DetailScreen>
                                       return RichText(
                                         text: TextSpan(
                                           text: "Website : ",
-                                          style: TextStyle(
+                                          style: GoogleFonts.urbanist(
                                               fontSize: size.height * 0.016,
                                               fontWeight: FontWeight.bold,
                                               color: primaryColor),
                                           children: [
                                             TextSpan(
                                               text: "Click To Visit Website !",
-                                              style: TextStyle(
+                                              style: GoogleFonts.urbanist(
                                                   fontWeight: FontWeight.normal,
                                                   fontSize: size.height * 0.016,
                                                   color: Colors.white),
@@ -771,7 +773,7 @@ class _DetailScreenState extends State<DetailScreen>
                                   barDetail![0].name!,
                                   maxLines: 2,
                                   overflow: TextOverflow.visible,
-                                  style: TextStyle(
+                                  style: GoogleFonts.urbanist(
                                       fontWeight: FontWeight.bold,
                                       fontSize: size.height * 0.026,
                                       color: Colors.white),
@@ -838,14 +840,14 @@ class _DetailScreenState extends State<DetailScreen>
                                                           '0') *
                                                       0.621371)
                                                   .toStringAsFixed(1),
-                                              style: TextStyle(
+                                              style: GoogleFonts.urbanist(
                                                 color: Colors.white,
                                                 fontSize: size.width * 0.027,
                                               ),
                                             ),
-                                            const Text(
+                                            Text(
                                               ' Miles',
-                                              style: TextStyle(
+                                              style: GoogleFonts.urbanist(
                                                   color: Colors.white),
                                             ),
                                             SizedBox(
@@ -862,7 +864,7 @@ class _DetailScreenState extends State<DetailScreen>
                                               widget.distance[0].elements![0]
                                                   .duration!.text
                                                   .toString(),
-                                              style: const TextStyle(
+                                              style: GoogleFonts.urbanist(
                                                   color: Colors.white),
                                             ),
                                           ],
@@ -950,7 +952,7 @@ class _DetailScreenState extends State<DetailScreen>
                                         barDetail![0]
                                             .editorialSummary!
                                             .overview!,
-                                        style: TextStyle(
+                                        style: GoogleFonts.urbanist(
                                             fontSize: size.height * 0.016,
                                             color: Colors.white),
                                       ),
@@ -1004,7 +1006,7 @@ class _DetailScreenState extends State<DetailScreen>
                                       child: RichText(
                                         text: TextSpan(
                                           text: "Hours of Operation :\n ",
-                                          style: TextStyle(
+                                          style: GoogleFonts.urbanist(
                                               fontSize: size.height * 0.016,
                                               fontWeight: FontWeight.bold,
                                               color: primaryColor),
@@ -1019,7 +1021,7 @@ class _DetailScreenState extends State<DetailScreen>
                                               TextSpan(
                                                 text:
                                                     "\n ${barDetail![0].openingHours!.weekdayText![i]} \n",
-                                                style: TextStyle(
+                                                style: GoogleFonts.urbanist(
                                                     fontSize:
                                                         size.height * 0.016,
                                                     fontWeight:
@@ -1034,17 +1036,17 @@ class _DetailScreenState extends State<DetailScreen>
                               //
 
                               //
-                              barDetail![0].wheelchairAccessibleEntrance == null
-                                  ? const Text(' ')
-                                  : Align(
-                                      alignment: Alignment.topLeft,
-                                      child: CustomDescriptionRichText(
-                                          title: "Wheel Chair Entrance : ",
-                                          subtitle: barDetail![0]
-                                                      .wheelchairAccessibleEntrance ==
-                                                  true
-                                              ? "Available"
-                                              : "Not Available")),
+                              // barDetail![0].wheelchairAccessibleEntrance == null
+                              //     ? const Text(' ')
+                              //     : Align(
+                              //         alignment: Alignment.topLeft,
+                              //         child: CustomDescriptionRichText(
+                              //             title: "Wheel Chair Entrance : ",
+                              //             subtitle: barDetail![0]
+                              //                         .wheelchairAccessibleEntrance ==
+                              //                     true
+                              //                 ? "Available"
+                              //                 : "Not Available")),
 
                               //
 
@@ -1063,7 +1065,7 @@ class _DetailScreenState extends State<DetailScreen>
                                           return RichText(
                                             text: TextSpan(
                                               text: "Website : ",
-                                              style: TextStyle(
+                                              style: GoogleFonts.urbanist(
                                                   fontSize: size.height * 0.016,
                                                   fontWeight: FontWeight.bold,
                                                   color: primaryColor),
@@ -1071,7 +1073,7 @@ class _DetailScreenState extends State<DetailScreen>
                                                 TextSpan(
                                                   text:
                                                       "Click To Visit Website !",
-                                                  style: TextStyle(
+                                                  style: GoogleFonts.urbanist(
                                                       fontWeight:
                                                           FontWeight.normal,
                                                       fontSize:

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController? textEditingController;
@@ -26,9 +27,9 @@ class CustomTextField extends StatelessWidget {
         controller: textEditingController,
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: const TextStyle(color: Colors.black),
+          hintStyle:   GoogleFonts.urbanist(color: Colors.black),
           labelText: labelText,
-          labelStyle: const TextStyle(color: Colors.white60),
+          labelStyle:   GoogleFonts.urbanist(color: Colors.white60),
           suffixIcon: icon != null
               ? GestureDetector(
                   onTap: iconOnTap,

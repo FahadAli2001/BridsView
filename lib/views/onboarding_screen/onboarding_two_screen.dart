@@ -3,6 +3,7 @@ import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class OnboardTwoScreen extends StatefulWidget {
@@ -66,7 +67,7 @@ class _OnboardTwoScreenState extends State<OnboardTwoScreen> {
             Center(
               child: Text(
                 "Would You Like",
-                style: TextStyle(
+                style: GoogleFonts.urbanist(
                     fontSize: size.height * 0.04,
                     color: whiteColor.withOpacity(.7)),
               ),
@@ -77,14 +78,14 @@ class _OnboardTwoScreenState extends State<OnboardTwoScreen> {
               child: RichText(
                 text: TextSpan(
                   text: "Explore ",
-                  style: TextStyle(
+                  style: GoogleFonts.urbanist(
                       fontSize: size.height * 0.04,
                       fontWeight: FontWeight.w900,
                       color: primaryColor),
                   children: [
                     TextSpan(
                       text: 'Place',
-                      style: TextStyle(
+                      style: GoogleFonts.urbanist(
                           fontSize: size.height * 0.04,
                           fontWeight: FontWeight.w900,
                           color: whiteColor),
@@ -98,7 +99,7 @@ class _OnboardTwoScreenState extends State<OnboardTwoScreen> {
             Center(
               child: Text(
                 'Nearby',
-                style: TextStyle(
+                style: GoogleFonts.urbanist(
                     fontSize: size.height * 0.04,
                     fontWeight: FontWeight.w900,
                     color: whiteColor),

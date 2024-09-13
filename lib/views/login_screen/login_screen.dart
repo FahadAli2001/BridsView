@@ -7,6 +7,7 @@ import 'package:birds_view/widgets/custom_textfield/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -49,12 +50,12 @@ class _LogInScreenState extends State<LogInScreen> {
                   child: RichText(
                     text: TextSpan(
                       text: "Log ",
-                      style: TextStyle(
+                      style: GoogleFonts.urbanist(
                           fontSize: size.height * 0.04, color: Colors.white70),
                       children: [
                         TextSpan(
                           text: 'In',
-                          style: TextStyle(
+                          style: GoogleFonts.urbanist(
                               fontSize: size.height * 0.04,
                               fontWeight: FontWeight.w900,
                               color: primaryColor),
@@ -118,7 +119,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                         }),
                                     Text(
                                       'Remember Me',
-                                      style: TextStyle(color: whiteColor),
+                                      style: GoogleFonts.urbanist(color: whiteColor),
                                     ),
                                   ],
                                 ),
@@ -133,7 +134,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                 },
                                 child: Text(
                                   "Forgot Password ?",
-                                  style: TextStyle(
+                                  style: GoogleFonts.urbanist(
                                       color: whiteColor.withOpacity(.7)),
                                 ),
                               ),
@@ -162,10 +163,10 @@ class _LogInScreenState extends State<LogInScreen> {
                             height: size.height * 0.03,
                           ),
                           //
-                          const Center(
+                            Center(
                             child: Text(
                               "or login with",
-                              style: TextStyle(color: Colors.white70),
+                              style: GoogleFonts.urbanist(color: Colors.white70),
                             ),
                           ),
                           //
@@ -219,7 +220,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   child: RichText(
                     text: TextSpan(
                       text: "Don't have an account? ",
-                      style: TextStyle(
+                      style: GoogleFonts.urbanist(
                           fontSize: size.height * 0.018, color: whiteColor),
                       children: [
                         TextSpan(
@@ -232,7 +233,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                       type: PageTransitionType.fade));
                             },
                           text: 'Create a new one',
-                          style: TextStyle(
+                          style: GoogleFonts.urbanist(
                               decorationColor: Colors.white,
                               decoration: TextDecoration.underline,
                               fontSize: size.height * 0.018,

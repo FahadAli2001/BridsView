@@ -10,6 +10,7 @@ import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:birds_view/views/onboarding_screen/onboarding_three_screen.dart';
@@ -120,16 +121,16 @@ class MapsController extends ChangeNotifier {
                             child: Text(
                               selectedBar[index].name ?? '',
                               maxLines: 2,
-                              style: const TextStyle(
+                              style:   GoogleFonts.urbanist(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                           selectedBar[index].rating == null
-                              ? const Text(
+                              ?   Text(
                                   "Ratings Not Available",
-                                  style: TextStyle(
+                                  style: GoogleFonts.urbanist(
                                     color: Colors.black,
                                     fontSize: 10,
                                     fontWeight: FontWeight.bold,
@@ -154,7 +155,7 @@ class MapsController extends ChangeNotifier {
                             child: Text(
                               selectedBar[index].vicinity ?? '',
                               maxLines: 4,
-                              style: const TextStyle(
+                              style:   GoogleFonts.urbanist(
                                   color: Colors.black, fontSize: 10
                                   // fontWeight: FontWeight.bold,
                                   ),
@@ -219,16 +220,16 @@ class MapsController extends ChangeNotifier {
                                 child: Text(
                                   nearestBar[i].name ?? '',
                                   maxLines: 2,
-                                  style: const TextStyle(
+                                  style:   GoogleFonts.urbanist(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                               nearestBar[i].rating == null
-                                  ? const Text(
+                                  ?   Text(
                                       "Ratings Not Available",
-                                      style: TextStyle(
+                                      style: GoogleFonts.urbanist(
                                         color: Colors.black,
                                         fontSize: 10,
                                         fontWeight: FontWeight.bold,
@@ -253,7 +254,7 @@ class MapsController extends ChangeNotifier {
                                 child: Text(
                                   onMapNearestBar[i].vicinity ?? '',
                                   maxLines: 4,
-                                  style: const TextStyle(
+                                  style:   GoogleFonts.urbanist(
                                       color: Colors.black, fontSize: 10
                                       // fontWeight: FontWeight.bold,
                                       ),
@@ -619,7 +620,7 @@ class MapsController extends ChangeNotifier {
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=96500&type=$type&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=50000&type=$type&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 

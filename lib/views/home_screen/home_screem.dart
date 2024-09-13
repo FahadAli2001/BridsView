@@ -13,6 +13,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,12 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String lastVisitedBar = "";
 
-  Future<void> getLastBar()async{
+  Future<void> getLastBar() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    lastVisitedBar= sp.getString("lastVisitedBar")!;
-    setState(() {
-      
-    });
+    lastVisitedBar = sp.getString("lastVisitedBar")!;
+    setState(() {});
     log(lastVisitedBar);
   }
 
@@ -100,7 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
     exploreBarsDistanceList.clear();
     recomendedBarsDistanceList.clear();
   }
-
 
   Future<void> exploreBarByMap() async {
     final mapController = Provider.of<MapsController>(context, listen: false);
@@ -193,8 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     )
                                   : CircleAvatar(
-                                      backgroundImage: CachedNetworkImageProvider(
-                                          widget.user!.data!.image!),
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(
+                                              widget.user!.data!.image!),
                                     ),
                               SizedBox(
                                 width: size.width * 0.04,
@@ -207,17 +206,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                             widget.user!.data!.username == ''
                                         ? "Guest "
                                         : '${widget.user!.data!.username} ',
-                                    style: TextStyle(
+                                    style: GoogleFonts.urbanist(
                                         fontWeight: FontWeight.bold,
                                         fontSize: size.height * 0.026,
                                         color: Colors.white),
                                     children: [
                                       TextSpan(
                                         text: widget.user == null ||
-                                                widget.user!.data!.subscribe == '0'
+                                                widget.user!.data!.subscribe ==
+                                                    '0'
                                             ? " "
                                             : 'Pro',
-                                        style: TextStyle(
+                                        style: GoogleFonts.urbanist(
                                             fontSize: size.height * 0.013,
                                             color: primaryColor),
                                       ),
@@ -245,157 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       height: size.height * 0.03,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const CustomHeadingText(heading: "Explore"),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    child:   ExploreScreen(
-                                      user: widget.user,
-                                    ),
-                                    type: PageTransitionType.fade));
-                          },
-                          child: Text(
-                            'More > ',
-                            style: TextStyle(
-                                color: primaryColor,
-                                fontSize: size.height * 0.018),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: size.height * 0.03,
-                    ),
-                    exploreBar.isEmpty
-                        ? Shimmer.fromColors(
-                            baseColor: Colors.grey.shade800,
-                            highlightColor: Colors.grey.shade700,
-                            child: Center(
-                                child: Container(
-                              color: Colors.white,
-                              width: size.width,
-                              height: size.height * 0.15,
-                            )),
-                          )
-                        : Container(
-                            width: size.width,
-                            height: size.height * 0.15,
-                            color: Colors.black,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: exploreBarsImages.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 5),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          PageTransition(
-                                              child: DetailScreen(
-                                                user: widget.user,
-                                                fromSearchScreen: false,
-                                                barDetail: exploreBar,
-                                                index: index,
-                                                barImages: exploreBarsImages,
-                                                distance: exploreBarsDistanceList,
-                                              ),
-                                              type: PageTransitionType.fade));
-                                    },
-                                    child: Container(
-                                      width: size.width * 0.35,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        image: DecorationImage(
-                                          image: MemoryImage(
-                                              exploreBarsImages[index]!),
-                                          fit: BoxFit.cover,
-                                          colorFilter: ColorFilter.mode(
-                                            Colors.black.withOpacity(0.3),
-                                            BlendMode.darken,
-                                          ),
-                                        ),
-                                      ),
-                                      child: Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8),
-                                          child: Text(
-                                            exploreBar[index].name ?? "UnKnown",
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: size.height * 0.016),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            )),
-                    SizedBox(
-                      height: size.height * 0.025,
-                    ),
-                    const Align(
-                        alignment: Alignment.topLeft,
-                        child: CustomHeadingText(heading: "Recommended")),
-                    SizedBox(
-                      height: size.height * 0.02,
-                    ),
-                    recomendedBarList.isEmpty
-                        ? Shimmer.fromColors(
-                            baseColor: Colors.grey.shade800,
-                            highlightColor: Colors.grey.shade700,
-                            child: Center(
-                                child: Container(
-                              color: Colors.white,
-                              width: size.width,
-                              height: size.height * 0.25,
-                            )),
-                          )
-                        : Container(
-                            width: size.width,
-                            height: size.height * 0.25,
-                            color: Colors.black,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: recomendedBarList.length,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          PageTransition(
-                                              child: DetailScreen(
-                                                user: widget.user,
-                                                fromSearchScreen: false,
-                                                barDetail: recomendedBarList,
-                                                index: index,
-                                                barImages: recomdedBarsImages,
-                                                distance:
-                                                    recomendedBarsDistanceList,
-                                              ),
-                                              type: PageTransitionType.fade));
-                                    },
-                                    child: CustomRecommendedWidget(
-                                      recomendedBar: recomendedBarList,
-                                      index: index,
-                                      recomdedBarsImages: recomdedBarsImages,
-                                    ));
-                              },
-                            ),
-                          ),
-                    SizedBox(
-                      height: size.height * 0.02,
-                    ),
+                    //
                     const Align(
                         alignment: Alignment.topLeft,
                         child: CustomHeadingText(heading: "Nearest")),
@@ -464,28 +314,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 SizedBox(
                                                   width: size.width * 0.25,
                                                   child: Text(
-                                                    nearestBarList[index].name ??
+                                                    nearestBarList[index]
+                                                            .name ??
                                                         'Unknown',
                                                     maxLines: 1,
                                                     overflow: TextOverflow.fade,
-                                                    style: TextStyle(
+                                                    style: GoogleFonts.urbanist(
                                                         color: Colors.white,
                                                         fontWeight:
                                                             FontWeight.w600,
-                                                        fontSize:
-                                                            size.height * 0.016),
+                                                        fontSize: size.height *
+                                                            0.016),
                                                   ),
                                                 ),
                                                 Row(
                                                   children: [
                                                     SvgPicture.asset(
                                                       locationIcon,
-                                                      height: size.height * 0.015,
+                                                      height:
+                                                          size.height * 0.015,
                                                     ),
                                                     SizedBox(
                                                       width: size.width * 0.01,
@@ -502,7 +355,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   '0') *
                                                               0.621371)
                                                           .toStringAsFixed(1),
-                                                      style: TextStyle(
+                                                      style:
+                                                          GoogleFonts.urbanist(
                                                         color: Colors.white,
                                                         fontSize:
                                                             size.width * 0.027,
@@ -510,7 +364,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ),
                                                     Text(
                                                       ' Miles',
-                                                      style: TextStyle(
+                                                      style:
+                                                          GoogleFonts.urbanist(
                                                         color: primaryColor,
                                                         fontSize:
                                                             size.width * 0.03,
@@ -530,7 +385,164 @@ class _HomeScreenState extends State<HomeScreen> {
                                 }
                               },
                             ),
+                          ),
+
+                    //
+                    SizedBox(
+                      height: size.height * 0.025,
+                    ),
+                    const Align(
+                        alignment: Alignment.topLeft,
+                        child: CustomHeadingText(heading: "Recommended")),
+                    SizedBox(
+                      height: size.height * 0.02,
+                    ),
+                    recomendedBarList.isEmpty
+                        ? Shimmer.fromColors(
+                            baseColor: Colors.grey.shade800,
+                            highlightColor: Colors.grey.shade700,
+                            child: Center(
+                                child: Container(
+                              color: Colors.white,
+                              width: size.width,
+                              height: size.height * 0.25,
+                            )),
                           )
+                        : Container(
+                            width: size.width,
+                            height: size.height * 0.25,
+                            color: Colors.black,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: recomendedBarList.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              child: DetailScreen(
+                                                user: widget.user,
+                                                fromSearchScreen: false,
+                                                barDetail: recomendedBarList,
+                                                index: index,
+                                                barImages: recomdedBarsImages,
+                                                distance:
+                                                    recomendedBarsDistanceList,
+                                              ),
+                                              type: PageTransitionType.fade));
+                                    },
+                                    child: CustomRecommendedWidget(
+                                      recomendedBar: recomendedBarList,
+                                      index: index,
+                                      recomdedBarsImages: recomdedBarsImages,
+                                    ));
+                              },
+                            ),
+                          ),
+                    SizedBox(
+                      height: size.height * 0.02,
+                    ),
+
+                    //
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const CustomHeadingText(heading: "Explore"),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: ExploreScreen(
+                                      user: widget.user,
+                                    ),
+                                    type: PageTransitionType.fade));
+                          },
+                          child: Text(
+                            'More',
+                            style: GoogleFonts.urbanist(
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                                fontSize: size.height * 0.016),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: size.height * 0.03,
+                    ),
+                    exploreBar.isEmpty
+                        ? Shimmer.fromColors(
+                            baseColor: Colors.grey.shade800,
+                            highlightColor: Colors.grey.shade700,
+                            child: Center(
+                                child: Container(
+                              color: Colors.white,
+                              width: size.width,
+                              height: size.height * 0.15,
+                            )),
+                          )
+                        : Container(
+                            width: size.width,
+                            height: size.height * 0.15,
+                            color: Colors.black,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: exploreBarsImages.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 5),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              child: DetailScreen(
+                                                user: widget.user,
+                                                fromSearchScreen: false,
+                                                barDetail: exploreBar,
+                                                index: index,
+                                                barImages: exploreBarsImages,
+                                                distance:
+                                                    exploreBarsDistanceList,
+                                              ),
+                                              type: PageTransitionType.fade));
+                                    },
+                                    child: Container(
+                                      width: size.width * 0.35,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        image: DecorationImage(
+                                          image: MemoryImage(
+                                              exploreBarsImages[index]!),
+                                          fit: BoxFit.cover,
+                                          colorFilter: ColorFilter.mode(
+                                            Colors.black.withOpacity(0.3),
+                                            BlendMode.darken,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: Text(
+                                            exploreBar[index].name ?? "UnKnown",
+                                            maxLines: 2,
+                                            style: GoogleFonts.urbanist(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: size.height * 0.016),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            )),
                   ],
                 ),
               ),
@@ -560,13 +572,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                     )
                                   : value.barDetail.isEmpty
-                                      ? const Padding(
-                                          padding:
-                                              EdgeInsets.symmetric(vertical: 20),
+                                      ? Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 20),
                                           child: Text(
                                             "Search Bars Or Clubs",
-                                            style:
-                                                TextStyle(color: Colors.white60),
+                                            style: GoogleFonts.urbanist(
+                                                color: Colors.white60),
                                           ),
                                         )
                                       : Expanded(
@@ -606,142 +618,144 @@ class _HomeScreenState extends State<HomeScreen> {
                 left: size.width * 0.03,
                 right: size.width * 0.03,
                 child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child:Consumer<ReviewController>(builder:(context, value, child) {
-                    return  Container(
-                    color: Colors.black.withOpacity(0.4),
-                    child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-                        child: Container(
-                          width: size.width,
-                          height: size.height * 0.4,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.black),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Bar/Club Reviews',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: size.height * 0.026),
-                                    ),
-                                    GestureDetector(
-                                      onTap: ()async {
-                                        SharedPreferences sp = await SharedPreferences.getInstance();
-                                        sp.remove("lastVisitedBar");
-                                        lastVisitedBar = 
-                                        "";
-                                        setState(() {});
-                                      },
-                                      child: Icon(
-                                        Icons.cancel_outlined,
-                                        color: primaryColor,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    RatingBar.builder(
-                                      unratedColor: Colors.grey,
-                                      initialRating: 0,
-                                      minRating: 0,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: false,
-                                      itemCount: 5,
-                                      itemPadding: const EdgeInsets.symmetric(
-                                          horizontal: 4.0),
-                                      itemSize: size.height * 0.031,
-                                      itemBuilder: (context, _) => Icon(
-                                        Icons.star,
-                                        color: primaryColor,
-                                      ),
-                                      onRatingUpdate: (rating) {
-                                        // log(reviewController.rating.toString());
-                                        value.rating = rating.toString();
-                                      },
-                                    ),
-                                    if (isTextFieldFocused)
-                                      GestureDetector(
-                                        onTap: () {
-                                          FocusScope.of(context).unfocus();
-                                          setState(() {});
-                                        },
-                                        child: Icon(
-                                          Icons.keyboard,
-                                          color: Colors.grey,
-                                          size:
-                                              MediaQuery.of(context).size.height *
-                                                  0.03,
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 15),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: TextField(
-                                            focusNode: _focusNode,
-                                            controller: value.reviewController,
-                                            maxLines: null,
-                                            expands: true,
-                                            textAlignVertical:
-                                                TextAlignVertical.top,
-                                            decoration: InputDecoration(
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              fillColor: Colors.white,
-                                              filled: true,
-                                              hintText: 'Your Comments',
-                                              hintStyle: const TextStyle(
-                                                  color: Colors.grey),
+                    padding: const EdgeInsets.all(15),
+                    child: Consumer<ReviewController>(
+                      builder: (context, value, child) {
+                        return Container(
+                          color: Colors.black.withOpacity(0.4),
+                          child: BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+                              child: Container(
+                                width: size.width,
+                                height: size.height * 0.4,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.black),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Bar/Club Reviews',
+                                            style: GoogleFonts.urbanist(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: size.height * 0.026),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () async {
+                                              SharedPreferences sp =
+                                                  await SharedPreferences
+                                                      .getInstance();
+                                              sp.remove("lastVisitedBar");
+                                              lastVisitedBar = "";
+                                              setState(() {});
+                                            },
+                                            child: Icon(
+                                              Icons.cancel_outlined,
+                                              color: primaryColor,
                                             ),
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          RatingBar.builder(
+                                            unratedColor: Colors.grey,
+                                            initialRating: 0,
+                                            minRating: 0,
+                                            direction: Axis.horizontal,
+                                            allowHalfRating: false,
+                                            itemCount: 5,
+                                            itemPadding:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 4.0),
+                                            itemSize: size.height * 0.031,
+                                            itemBuilder: (context, _) => Icon(
+                                              Icons.star,
+                                              color: primaryColor,
+                                            ),
+                                            onRatingUpdate: (rating) {
+                                              // log(reviewController.rating.toString());
+                                              value.rating = rating.toString();
+                                            },
+                                          ),
+                                          if (isTextFieldFocused)
+                                            GestureDetector(
+                                              onTap: () {
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                                setState(() {});
+                                              },
+                                              child: Icon(
+                                                Icons.keyboard,
+                                                color: Colors.grey,
+                                                size: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.03,
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 15),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Expanded(
+                                                child: TextField(
+                                                  focusNode: _focusNode,
+                                                  controller:
+                                                      value.reviewController,
+                                                  maxLines: null,
+                                                  expands: true,
+                                                  textAlignVertical:
+                                                      TextAlignVertical.top,
+                                                  decoration: InputDecoration(
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    fillColor: Colors.white,
+                                                    filled: true,
+                                                    hintText: 'Your Comments',
+                                                    hintStyle:
+                                                        GoogleFonts.urbanist(
+                                                            color: Colors.grey),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      CustomButton(
+                                          text: 'Submit',
+                                          ontap: () async {
+                                            value.postReview().then((val) {
+                                              lastVisitedBar = "";
+                                              setState(() {});
+                                            });
+                                          })
+                                    ],
                                   ),
                                 ),
-                                CustomButton(
-                                    text: 'Submit',
-                                    ontap: () async {
-                                      
-                                      value.postReview().then((val){
-                                           lastVisitedBar = 
-                                        "";
-                                        setState(() {
-                                          
-                                        });
-                                      });
-                                      
-                                     
-                                    })
-                              ],
-                            ),
-                          ),
-                        )),
-                  );
-                  },)
-                ),
+                              )),
+                        );
+                      },
+                    )),
               ),
           ],
         ),

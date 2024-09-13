@@ -4,6 +4,7 @@ import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomRecommendedWidget extends StatelessWidget {
   final List<Results> recomendedBar;
@@ -43,7 +44,7 @@ class CustomRecommendedWidget extends StatelessWidget {
                     recomendedBar[index].name!,
                     maxLines: 1,
                     overflow: TextOverflow.fade,
-                    style: TextStyle(
+                    style: GoogleFonts.urbanist(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
                         fontSize: size.height * 0.016),

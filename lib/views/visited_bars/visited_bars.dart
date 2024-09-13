@@ -5,6 +5,7 @@ import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/widgets/custom_visited_place/custom_visited_place.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class VisitedBar extends StatefulWidget {
@@ -57,14 +58,14 @@ class _VisitedBarState extends State<VisitedBar> {
             title: RichText(
               text: TextSpan(
                 text: "Visited ",
-                style: TextStyle(
+                style: GoogleFonts.urbanist(
                     fontSize: size.height * 0.03,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
                 children: [
                   TextSpan(
                     text: 'Places ',
-                    style: TextStyle(
+                    style: GoogleFonts.urbanist(
                         fontSize: size.height * 0.03,
                         fontWeight: FontWeight.bold,
                         color: primaryColor),

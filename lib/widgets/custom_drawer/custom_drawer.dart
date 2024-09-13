@@ -10,6 +10,7 @@ import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -78,7 +79,7 @@ class CustomDrawer extends StatelessWidget {
                           text: user == null || user!.data!.username == ''
                               ? "Guest "
                               : '${user!.data!.username} ',
-                          style: TextStyle(
+                          style: GoogleFonts.urbanist(
                               fontWeight: FontWeight.bold,
                               fontSize: size.height * 0.026,
                               color: Colors.white),
@@ -87,7 +88,7 @@ class CustomDrawer extends StatelessWidget {
                               text: user == null || user!.data!.subscribe == '0'
                                   ? " "
                                   : 'Pro',
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   fontSize: size.height * 0.012,
                                   color: primaryColor),
                             ),
@@ -112,10 +113,10 @@ class CustomDrawer extends StatelessWidget {
                 height: size.height * 0.03,
                 fit: BoxFit.fill,
               ),
-              title: const Text(
+              title:   Text(
                 'Home',
                 style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    GoogleFonts.urbanist(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             ListTile(
@@ -133,10 +134,10 @@ class CustomDrawer extends StatelessWidget {
                 height: size.height * 0.03,
                 fit: BoxFit.fill,
               ),
-              title: const Text(
+              title:   Text(
                 'Profile',
                 style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    GoogleFonts.urbanist(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             ListTile(
@@ -152,10 +153,10 @@ class CustomDrawer extends StatelessWidget {
                 height: size.height * 0.03,
                 fit: BoxFit.fill,
               ),
-              title: const Text(
+              title:   Text(
                 'Bookmarks',
                 style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    GoogleFonts.urbanist(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             ListTile(
@@ -171,10 +172,10 @@ class CustomDrawer extends StatelessWidget {
                 height: size.height * 0.03,
                 fit: BoxFit.fill,
               ),
-              title: const Text(
+              title:   Text(
                 'Visited Places',
                 style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    GoogleFonts.urbanist(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             // ListTile(

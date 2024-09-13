@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void showProSubscriptionPopup(BuildContext context, VoidCallback ontap) {
   showDialog(
@@ -17,11 +18,11 @@ void showProSubscriptionPopup(BuildContext context, VoidCallback ontap) {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         title: Text(
           'BirdsView Pro Benefits',
-          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+          style: GoogleFonts.urbanist(color: primaryColor, fontWeight: FontWeight.bold),
         ),
-        content: const Text(
+        content:   Text(
           '- Get real-time information on how many girls and guys are at the bar or club.\n\n- 100\$ per/year',
-          style: TextStyle(color: Colors.white),
+          style: GoogleFonts.urbanist(color: Colors.white),
         ),
         actions: [
           // TextButton(

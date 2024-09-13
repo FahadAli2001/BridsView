@@ -3,6 +3,7 @@ import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../../widgets/custom_button/custom_button.dart';
@@ -69,12 +70,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 child: RichText(
                   text: TextSpan(
                     text: "Verify ",
-                    style: TextStyle(
+                    style: GoogleFonts.urbanist(
                         fontSize: size.height * 0.04, color: Colors.white70),
                     children: [
                       TextSpan(
                         text: 'OTP',
-                        style: TextStyle(
+                        style: GoogleFonts.urbanist(
                             fontSize: size.height * 0.04,
                             fontWeight: FontWeight.w900,
                             color: primaryColor),
@@ -86,7 +87,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               //
               Text(
                 'send to your registered email',
-                style: TextStyle(
+                style: GoogleFonts.urbanist(
                     fontSize: size.height * 0.015, color: Colors.white70),
               ),
               //
