@@ -1,10 +1,11 @@
-import 'dart:math';
+import 'dart:math' as math;
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailScreenController extends ChangeNotifier {
-  Random random = Random();
+  math.Random random = math.Random();
   int? _randomPopulation;
   int? _female;
 
@@ -20,7 +21,7 @@ class DetailScreenController extends ChangeNotifier {
   Future<void> getRandomNumbers() async {
     // ignore: await_only_futures
     _randomPopulation = await random.nextInt(201) + 100;
-    _female =   random.nextInt(201) + 100;
+    _female = random.nextInt(201) + 100;
 
     notifyListeners();
   }
@@ -38,15 +39,16 @@ class DetailScreenController extends ChangeNotifier {
     try {
       String? barPop = sp.getString(barPlaceId);
       String? barFemale = sp.getString("${barPlaceId}female");
-      if (barPop == null || barPop.isEmpty && barFemale == null || barFemale!.isEmpty) {
+      if (barPop == null ||
+          barPop.isEmpty && barFemale == null ||
+          barFemale!.isEmpty) {
         await getRandomNumbers();
         await saveBarId(barPlaceId);
-        
       } else {
         int barPopulation = int.parse(barPop);
         if (barPopulation % 2 == 0) {
           _randomPopulation = barPopulation + random.nextInt(10);
-          _female = barPopulation + random.nextInt(12);
+          _female = barPopulation + random.nextInt(10);
         } else {
           _randomPopulation = barPopulation - random.nextInt(10);
           _female = barPopulation - random.nextInt(10);
@@ -56,8 +58,7 @@ class DetailScreenController extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      // ignore: avoid_print
-      print(e);
+      log(e.toString());
     }
   }
 }

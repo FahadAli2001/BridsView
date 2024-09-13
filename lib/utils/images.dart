@@ -9,3 +9,5 @@ String goldenHalf = "assets/golden_half.png";
 String goldenCircle = "assets/golden_circle.png";
 String crowdImage = "assets/crowd.png";
 String banner = "assets/banner.png";
+String maleCrowd = "assets/male_crowd.png";
+String femaleCrowd = "assets/female_crowd.png";

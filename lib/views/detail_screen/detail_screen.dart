@@ -13,7 +13,6 @@ import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/map_screen/map_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_hot_badge_widget/custom_bar_hot_badge_widget.dart';
-import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_random_population_widget/custom_bar_random_population_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_mix_crowd_heading_widget/custom_mix_crowd_heading_widget.dart';
 import 'package:birds_view/widgets/custom_error_toast/custom_error_toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -408,7 +407,7 @@ class _DetailScreenState extends State<DetailScreen>
                               : widget.user!.data!.subscribe == '1'
                                   ? SizedBox(
                                       width: size.width,
-                                      height: size.height * 0.15,
+                                      height: size.height * 0.18,
                                       child: Stack(
                                         children: [
                                           CustomMixCrowdHeadingWidget(
@@ -432,8 +431,8 @@ class _DetailScreenState extends State<DetailScreen>
                                           //
                                           CustomBarCrowdImageWidget(size: size),
                                           //
-                                          CustomBarRandomPopulationWidget(
-                                              size: size),
+                                          // CustomBarRandomPopulationWidget(
+                                          //     size: size),
                                         ],
                                       ),
                                     )
@@ -891,7 +890,7 @@ class _DetailScreenState extends State<DetailScreen>
                                   : widget.user!.data!.subscribe == "1"
                                       ? SizedBox(
                                           width: size.width,
-                                          height: size.height * 0.15,
+                                          height: size.height * 0.18,
                                           child: Stack(
                                             children: [
                                               CustomMixCrowdHeadingWidget(
@@ -911,8 +910,8 @@ class _DetailScreenState extends State<DetailScreen>
                                               CustomBarCrowdImageWidget(
                                                   size: size),
                                               //
-                                              CustomBarRandomPopulationWidget(
-                                                  size: size),
+                                              // CustomBarRandomPopulationWidget(
+                                              //     size: size),
                                             ],
                                           ),
                                         )
