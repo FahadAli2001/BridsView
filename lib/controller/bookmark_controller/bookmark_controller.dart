@@ -16,10 +16,13 @@ class BookmarkController extends ChangeNotifier {
   final List<Result> _bookmarksBarsDetailList = [];
   final List<Uint8List?> _bookmarksBarsImagesList = [];
 
+  bool? _loading = false;
+
   String? _userId;
   String? _token;
   String? get userId => _userId;
   String? get token => _token;
+  bool? get loading => _loading;
   List<Result> get bookmarksBarsDetailList => _bookmarksBarsDetailList;
   List<Uint8List?> get bookmarksBarsImagesList => _bookmarksBarsImagesList;
 
@@ -33,6 +36,8 @@ class BookmarkController extends ChangeNotifier {
   }
 
   Future<void> addBookmark(String placeId) async {
+    _loading = true;
+    notifyListeners();
     try {
       var header = {"Authorization": "Bearer $token"};
       var body = {"user_id": userId, "bar_type_id": placeId};
@@ -40,11 +45,17 @@ class BookmarkController extends ChangeNotifier {
           headers: header, body: body);
       if (response.statusCode == 200) {
         showCustomSuccessToast(message: "Bookmark Added");
+        _loading = false;
+        notifyListeners();
       } else {
         log("error ${response.body}");
+        _loading = false;
+        notifyListeners();
       }
     } catch (e) {
       log("add Bookmak call error : ${e.toString()}");
+      _loading = false;
+      notifyListeners();
     }
   }
 
@@ -74,17 +85,25 @@ class BookmarkController extends ChangeNotifier {
   }
 
   Future<void> deleteBookmark(String placeId) async {
+    _loading = true;
+    notifyListeners();
     try {
       var header = {"Authorization": "Bearer $token"};
       var body = {"user_id": userId, "bar_place_id": placeId};
       var response = await http.post(Uri.parse(deleteBookmarkApi),
           headers: header, body: body);
       if (response.statusCode == 200) {
+        _loading = false;
+        notifyListeners();
         showCustomSuccessToast(message: "Bookmark Removed");
       } else {
+        _loading = false;
+        notifyListeners();
         log("error ${response.body}");
       }
     } catch (e) {
+      _loading = false;
+      notifyListeners();
       log("delete Bookmak call error : ${e.toString()}");
     }
   }

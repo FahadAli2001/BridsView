@@ -121,14 +121,14 @@ class MapsController extends ChangeNotifier {
                             child: Text(
                               selectedBar[index].name ?? '',
                               maxLines: 2,
-                              style:   GoogleFonts.urbanist(
+                              style: GoogleFonts.urbanist(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                           selectedBar[index].rating == null
-                              ?   Text(
+                              ? Text(
                                   "Ratings Not Available",
                                   style: GoogleFonts.urbanist(
                                     color: Colors.black,
@@ -155,7 +155,7 @@ class MapsController extends ChangeNotifier {
                             child: Text(
                               selectedBar[index].vicinity ?? '',
                               maxLines: 4,
-                              style:   GoogleFonts.urbanist(
+                              style: GoogleFonts.urbanist(
                                   color: Colors.black, fontSize: 10
                                   // fontWeight: FontWeight.bold,
                                   ),
@@ -220,14 +220,14 @@ class MapsController extends ChangeNotifier {
                                 child: Text(
                                   nearestBar[i].name ?? '',
                                   maxLines: 2,
-                                  style:   GoogleFonts.urbanist(
+                                  style: GoogleFonts.urbanist(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
                               nearestBar[i].rating == null
-                                  ?   Text(
+                                  ? Text(
                                       "Ratings Not Available",
                                       style: GoogleFonts.urbanist(
                                         color: Colors.black,
@@ -254,7 +254,7 @@ class MapsController extends ChangeNotifier {
                                 child: Text(
                                   onMapNearestBar[i].vicinity ?? '',
                                   maxLines: 4,
-                                  style:   GoogleFonts.urbanist(
+                                  style: GoogleFonts.urbanist(
                                       color: Colors.black, fontSize: 10
                                       // fontWeight: FontWeight.bold,
                                       ),
@@ -609,45 +609,94 @@ class MapsController extends ChangeNotifier {
     return result;
   }
 
+  // Future<List<Results>> exploreBarsOrClubs(String type) async {
+  //   List<Results> nearestBars = [];
+  //   nearestBars.clear();
+  //   barsAndClubImages.clear();
+  //   barsAndClubsDistanceList.clear();
+
+  //   try {
+  //     SharedPreferences sp = await SharedPreferences.getInstance();
+  //     String latitude = sp.getString('latitude') ?? '';
+  //     String longitude = sp.getString('longitude') ?? '';
+  //     String url =
+  //         'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=2000&type=$type&key=$googleMapApiKey';
+  //     http.Response response = await http.get(Uri.parse(url));
+  //     final values = jsonDecode(response.body);
+
+  //     if (response.statusCode == 200) {
+  //       var list = values['results'] as List;
+  //       nearestBars = list.map((i) => Results.fromJson(i)).toList();
+
+  //       for (var bar in nearestBars) {
+  //         if (bar.photos != null && bar.photos!.isNotEmpty) {
+  //           var nearestBardata =
+  //               await exploreImages(bar.photos![0].photoReference!);
+  //           barsAndClubImages.addAll(nearestBardata);
+  //         }
+  //         var distanceData = await getDistanceBetweenPoints(
+  //             bar.geometry!.location!.lat.toString(),
+  //             bar.geometry!.location!.lng.toString(),
+  //             latitude,
+  //             longitude);
+  //         barsAndClubsDistanceList.addAll(distanceData);
+  //       }
+  //     } else {
+  //       log("Error");
+  //     }
+  //   } catch (e) {
+  //     log(e.toString());
+  //   }
+
+  //   return nearestBars;
+  // }
+
   Future<List<Results>> exploreBarsOrClubs(String type) async {
-    List<Results> nearestBars = [];
-    nearestBars.clear();
-    barsAndClubImages.clear();
-    barsAndClubsDistanceList.clear();
+  List<Results> nearestBars = [];
+  barsAndClubImages.clear();
+  barsAndClubsDistanceList.clear();
 
-    try {
-      SharedPreferences sp = await SharedPreferences.getInstance();
-      String latitude = sp.getString('latitude') ?? '';
-      String longitude = sp.getString('longitude') ?? '';
-      String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=50000&type=$type&key=$googleMapApiKey';
-      http.Response response = await http.get(Uri.parse(url));
-      final values = jsonDecode(response.body);
+  try {
+    // Fetch latitude and longitude once, not in every function
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String latitude = sp.getString('latitude') ?? '';
+    String longitude = sp.getString('longitude') ?? '';
 
-      if (response.statusCode == 200) {
-        var list = values['results'] as List;
-        nearestBars = list.map((i) => Results.fromJson(i)).toList();
+    // Google Maps Places API URL
+    String url =
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=2000&type=$type&key=$googleMapApiKey';
+    http.Response response = await http.get(Uri.parse(url));
+    final values = jsonDecode(response.body);
 
-        for (var bar in nearestBars) {
-          if (bar.photos != null && bar.photos!.isNotEmpty) {
-            var nearestBardata =
-                await exploreImages(bar.photos![0].photoReference!);
-            barsAndClubImages.addAll(nearestBardata);
-          }
-          var distanceData = await getDistanceBetweenPoints(
-              bar.geometry!.location!.lat.toString(),
-              bar.geometry!.location!.lng.toString(),
-              latitude,
-              longitude);
-          barsAndClubsDistanceList.addAll(distanceData);
+    if (response.statusCode == 200) {
+      var list = values['results'] as List;
+      nearestBars = list.map((i) => Results.fromJson(i)).toList();
+
+      // Parallelize fetching image and distance data
+      await Future.wait(nearestBars.map((bar) async {
+        // Fetch image data for bars with photos
+        if (bar.photos != null && bar.photos!.isNotEmpty) {
+          var imageResults =
+              await exploreImages(bar.photos![0].photoReference!);
+          barsAndClubImages.addAll(imageResults);
         }
-      } else {
-        log("Error");
-      }
-    } catch (e) {
-      log(e.toString());
-    }
 
-    return nearestBars;
+        // Fetch distance data
+        var distanceData = await getDistanceBetweenPoints(
+            bar.geometry!.location!.lat.toString(),
+            bar.geometry!.location!.lng.toString(),
+            latitude,
+            longitude);
+        barsAndClubsDistanceList.addAll(distanceData);
+      }));
+    } else {
+      log("Error: ${response.statusCode}");
+    }
+  } catch (e) {
+    log(e.toString());
   }
+
+  return nearestBars;
+}
+
 }

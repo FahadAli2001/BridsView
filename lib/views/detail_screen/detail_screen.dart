@@ -739,21 +739,32 @@ class _DetailScreenState extends State<DetailScreen>
                                                                             .placeId!);
                                                                   }
                                                                 },
-                                                                child: snapshot.data[
-                                                                            "status"] ==
-                                                                        1
-                                                                    ? const Icon(
-                                                                        CupertinoIcons
-                                                                            .bookmark_fill,
-                                                                        color: Colors
-                                                                            .black,
+                                                                child: value.loading ==
+                                                                        true
+                                                                    ? Shimmer
+                                                                        .fromColors(
+                                                                        baseColor:
+                                                                            primaryColor,
+                                                                        highlightColor:
+                                                                            Colors.white10,
+                                                                        child: Center(
+                                                                            child: Container(
+                                                                          color:
+                                                                              Colors.white,
+                                                                        )),
                                                                       )
-                                                                    : const Icon(
-                                                                        CupertinoIcons
-                                                                            .bookmark,
-                                                                        color: Colors
-                                                                            .black,
-                                                                      ));
+                                                                    : snapshot.data["status"] ==
+                                                                            1
+                                                                        ? const Icon(
+                                                                            CupertinoIcons.bookmark_fill,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          )
+                                                                        : const Icon(
+                                                                            CupertinoIcons.bookmark,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ));
                                                           }
                                                         },
                                                       );
