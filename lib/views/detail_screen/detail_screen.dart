@@ -215,14 +215,16 @@ class _DetailScreenState extends State<DetailScreen>
                                               right: size.width * 0.035,
                                               child: widget.user == null
                                                   ? GestureDetector(
-                                                    onTap: () {
-                                                      showCustomErrorToast(message: "Login First");
-                                                    },
-                                                    child: const Icon(
+                                                      onTap: () {
+                                                        showCustomErrorToast(
+                                                            message:
+                                                                "Login First");
+                                                      },
+                                                      child: const Icon(
                                                         CupertinoIcons.bookmark,
                                                         color: Colors.black,
                                                       ),
-                                                  )
+                                                    )
                                                   : Consumer<
                                                       BookmarkController>(
                                                       builder: (context, value,
@@ -730,15 +732,17 @@ class _DetailScreenState extends State<DetailScreen>
                                                   right: size.width * 0.035,
                                                   child: widget.user == null
                                                       ? GestureDetector(
-                                                        onTap: () {
-                                                          showCustomErrorToast(message: "Login First");
-                                                        },
-                                                        child: const Icon(
+                                                          onTap: () {
+                                                            showCustomErrorToast(
+                                                                message:
+                                                                    "Login First");
+                                                          },
+                                                          child: const Icon(
                                                             CupertinoIcons
                                                                 .bookmark,
                                                             color: Colors.black,
                                                           ),
-                                                      )
+                                                        )
                                                       : Consumer<
                                                           BookmarkController>(
                                                           builder: (context,

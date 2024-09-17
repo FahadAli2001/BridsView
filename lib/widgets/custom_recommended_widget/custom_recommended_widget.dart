@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
 import 'package:birds_view/utils/colors.dart';
+import 'package:birds_view/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +19,14 @@ class CustomRecommendedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     bool hasImage = index <
+                                            
+                                                  recomendedBar
+                                                  .length &&
+                                          recomdedBarsImages
+                                                      [
+                                                  index] !=
+                                              null;
     Size size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -31,9 +40,11 @@ class CustomRecommendedWidget extends StatelessWidget {
               width: size.width * 0.8,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
+                  image:
+                  hasImage ? DecorationImage(
                       image: MemoryImage(recomdedBarsImages[index]!),
-                      fit: BoxFit.cover)),
+                      fit: BoxFit.cover):DecorationImage(image: AssetImage(emptyImage))
+                      ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
