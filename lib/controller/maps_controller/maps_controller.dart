@@ -43,6 +43,16 @@ class MapsController extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<Uint8List?> exploreScreenbarsOrClubsImages = [];
+  List<Results>? exploreScreenbarsOrClubsData = [];
+  List<Rows> exploreScreenbarsOrClubsDistanceList = [];
+  List<Result> exploreScreenbarAndClubsDetails = [];
+
+  List<Uint8List?> homeScreenbarsOrClubsImages = [];
+  List<Results>? homeScreenbarsOrClubsData = [];
+  List<Rows> homeScreenbarsOrClubsDistanceList = [];
+  List<Result> homeScreenbarAndClubsDetails = [];
+
   List<Uint8List?> exploreBarsImages = [];
   List<Uint8List?> barsAndClubImages = [];
   List<Uint8List?> recomdedBarsImages = [];
@@ -435,6 +445,7 @@ class MapsController extends ChangeNotifier {
       log("getImageFromMap error: $e");
     }
     notifyListeners();
+    log("${exploreNearbyBarsImagesList.length}explore images method");
     return exploreNearbyBarsImagesList;
   }
 
@@ -609,55 +620,15 @@ class MapsController extends ChangeNotifier {
     return result;
   }
 
-  // Future<List<Results>> exploreBarsOrClubs(String type) async {
-  //   List<Results> nearestBars = [];
-  //   nearestBars.clear();
-  //   barsAndClubImages.clear();
-  //   barsAndClubsDistanceList.clear();
+   
 
-  //   try {
-  //     SharedPreferences sp = await SharedPreferences.getInstance();
-  //     String latitude = sp.getString('latitude') ?? '';
-  //     String longitude = sp.getString('longitude') ?? '';
-  //     String url =
-  //         'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=2000&type=$type&key=$googleMapApiKey';
-  //     http.Response response = await http.get(Uri.parse(url));
-  //     final values = jsonDecode(response.body);
-
-  //     if (response.statusCode == 200) {
-  //       var list = values['results'] as List;
-  //       nearestBars = list.map((i) => Results.fromJson(i)).toList();
-
-  //       for (var bar in nearestBars) {
-  //         if (bar.photos != null && bar.photos!.isNotEmpty) {
-  //           var nearestBardata =
-  //               await exploreImages(bar.photos![0].photoReference!);
-  //           barsAndClubImages.addAll(nearestBardata);
-  //         }
-  //         var distanceData = await getDistanceBetweenPoints(
-  //             bar.geometry!.location!.lat.toString(),
-  //             bar.geometry!.location!.lng.toString(),
-  //             latitude,
-  //             longitude);
-  //         barsAndClubsDistanceList.addAll(distanceData);
-  //       }
-  //     } else {
-  //       log("Error");
-  //     }
-  //   } catch (e) {
-  //     log(e.toString());
-  //   }
-
-  //   return nearestBars;
-  // }
-
-  Future<List<Results>> exploreBarsOrClubs(String type) async {
-  List<Results> nearestBars = [];
-  barsAndClubImages.clear();
-  barsAndClubsDistanceList.clear();
+ Future<void> exploreBarsOrClubs(String type) async {
+  log('exploreBarsOrClubs: Started');
+  clearExploreScreenList();
+  // Clear previous data
 
   try {
-    // Fetch latitude and longitude once, not in every function
+    // Fetch latitude and longitude once from SharedPreferences
     SharedPreferences sp = await SharedPreferences.getInstance();
     String latitude = sp.getString('latitude') ?? '';
     String longitude = sp.getString('longitude') ?? '';
@@ -670,33 +641,93 @@ class MapsController extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       var list = values['results'] as List;
-      nearestBars = list.map((i) => Results.fromJson(i)).toList();
+      exploreScreenbarsOrClubsData =
+          list.map((i) => Results.fromJson(i)).toList();
 
-      // Parallelize fetching image and distance data
-      await Future.wait(nearestBars.map((bar) async {
+      for (var element in exploreScreenbarsOrClubsData!) {
+        log(element.toString());
+      }
+
+      // Log data size
+      log('Number of bars/clubs found: ${exploreScreenbarsOrClubsData!.length}');
+
+      // Initialize a list to hold details, with null values allowed
+      List<Result?> detailsList = List.filled(exploreScreenbarsOrClubsData!.length, null);
+
+      // Parallelize fetching of details, images, and distances
+      await Future.wait(exploreScreenbarsOrClubsData!.asMap().entries.map((entry) async {
+        int index = entry.key;
+        Results bar = entry.value;
+
+        List<Future> fetchTasks = [];
+
         // Fetch image data for bars with photos
         if (bar.photos != null && bar.photos!.isNotEmpty) {
-          var imageResults =
-              await exploreImages(bar.photos![0].photoReference!);
-          barsAndClubImages.addAll(imageResults);
+          fetchTasks.add(exploreImages(bar.photos![0].photoReference!)
+              .then((imageResults) {
+            if (index < exploreScreenbarsOrClubsImages.length) {
+              exploreScreenbarsOrClubsImages[index] = imageResults.isNotEmpty ? imageResults[0] : null;
+            } else {
+              exploreScreenbarsOrClubsImages.addAll(imageResults);
+            }
+          }));
+        } else {
+          // Ensure the images list has enough entries for the current index
+          if (index >= exploreScreenbarsOrClubsImages.length) {
+            exploreScreenbarsOrClubsImages.add(null);
+          }
         }
 
-        // Fetch distance data
-        var distanceData = await getDistanceBetweenPoints(
-            bar.geometry!.location!.lat.toString(),
-            bar.geometry!.location!.lng.toString(),
-            latitude,
-            longitude);
-        barsAndClubsDistanceList.addAll(distanceData);
+        // Fetch bar details in parallel
+        fetchTasks.add(barsDetailMethod(bar.reference!).then((detail) {
+          if (detail != null) {
+            detailsList[index] = detail;
+          }
+        }));
+
+        // Fetch distance data in parallel
+        fetchTasks.add(getDistanceBetweenPoints(
+          bar.geometry!.location!.lat.toString(),
+          bar.geometry!.location!.lng.toString(),
+          latitude,
+          longitude,
+        ).then((distanceData) {
+          if (index < exploreScreenbarsOrClubsDistanceList.length) {
+            exploreScreenbarsOrClubsDistanceList[index] = (distanceData.isNotEmpty ? distanceData[0] : null)!;
+          } else {
+            exploreScreenbarsOrClubsDistanceList.addAll(distanceData);
+          }
+        }));
+
+        // Wait for all tasks to complete
+        await Future.wait(fetchTasks);
       }));
+
+      // Remove null values from detailsList and assign to exploreScreenbarAndClubsDetails
+      exploreScreenbarAndClubsDetails = detailsList.whereType<Result>().toList();
+
+      log('All tasks completed.');
+      log('details: ${exploreScreenbarAndClubsDetails.isNotEmpty ? exploreScreenbarAndClubsDetails[0].name : 'No details available'}');
+      log('Total details: ${exploreScreenbarAndClubsDetails.length}');
+      log('Total images: ${exploreScreenbarsOrClubsImages.length}');
     } else {
       log("Error: ${response.statusCode}");
     }
+
+    // Notify the listeners after all data has been fetched
+    notifyListeners();
   } catch (e) {
     log(e.toString());
   }
-
-  return nearestBars;
 }
 
+  // 
+   
+  void clearExploreScreenList() {
+    exploreScreenbarsOrClubsDistanceList.clear();
+    exploreScreenbarAndClubsDetails.clear();
+    exploreScreenbarsOrClubsData?.clear();
+    exploreScreenbarsOrClubsImages.clear();
+    notifyListeners();
+  }
 }

@@ -11,3 +11,4 @@ String crowdImage = "assets/crowd.png";
 String banner = "assets/banner.png";
 String maleCrowd = "assets/male_crowd.png";
 String femaleCrowd = "assets/female_crowd.png";
+String emptyImage = "assets/empty_image.png";

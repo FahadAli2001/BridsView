@@ -73,6 +73,11 @@ class _DetailScreenState extends State<DetailScreen>
       checkBarId();
       getUserCredential();
     }
+    // else {
+    //   getBarsDetails(widget.searchBarDetail![widget.index].placeId!);
+    //   checkBarId();
+    //   getUserCredential();
+    // }
     log("${barDetail!.length} bar detail length");
   }
 
@@ -105,6 +110,8 @@ class _DetailScreenState extends State<DetailScreen>
 
   @override
   Widget build(BuildContext context) {
+    bool hasImage = widget.index < widget.barImages.length &&
+        widget.barImages[widget.index] != null;
     Size size = MediaQuery.sizeOf(context);
     return Dismissible(
         key: const Key('barClubScreen'),
@@ -177,10 +184,14 @@ class _DetailScreenState extends State<DetailScreen>
                               decoration: BoxDecoration(
                                 color: Colors.grey,
                                 borderRadius: BorderRadius.circular(12),
-                                image: DecorationImage(
-                                    image: MemoryImage(
-                                        widget.barImages[widget.index]!),
-                                    fit: BoxFit.cover),
+                                image: hasImage
+                                    ? DecorationImage(
+                                        image: MemoryImage(
+                                            widget.barImages[widget.index]!),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : DecorationImage(
+                                        image: AssetImage(emptyImage)),
                               ),
                               child: Stack(
                                 children: [
@@ -202,79 +213,90 @@ class _DetailScreenState extends State<DetailScreen>
                                           Positioned(
                                               top: size.height * 0.015,
                                               right: size.width * 0.035,
-                                              child:
-                                                  Consumer<BookmarkController>(
-                                                builder:
-                                                    (context, value, child) {
-                                                  return StreamBuilder(
-                                                    stream: value
-                                                        .getBookMarkStream(widget
-                                                            .searchBarDetail![
-                                                                widget.index]
-                                                            .placeId!),
-                                                    builder:
-                                                        (context, snapshot) {
-                                                      if (snapshot
-                                                              .connectionState ==
-                                                          ConnectionState
-                                                              .waiting) {
-                                                        return Shimmer
-                                                            .fromColors(
-                                                          baseColor:
-                                                              primaryColor,
-                                                          highlightColor:
-                                                              Colors.white10,
-                                                          child: Center(
-                                                              child: Container(
-                                                            color: Colors.white,
-                                                          )),
-                                                        );
-                                                      } else if (snapshot
-                                                          .hasError) {
-                                                        return Text(
-                                                            'Error: ${snapshot.error}');
-                                                      } else {
-                                                        return GestureDetector(
-                                                            onTap: () {
-                                                              if (snapshot.data[
-                                                                      "status"] ==
-                                                                  0) {
-                                                                value.addBookmark(widget
-                                                                    .searchBarDetail![
-                                                                        widget
-                                                                            .index]
-                                                                    .placeId!);
-                                                              } else if (snapshot
-                                                                          .data[
-                                                                      "status"] ==
-                                                                  1) {
-                                                                value.deleteBookmark(widget
-                                                                    .searchBarDetail![
-                                                                        widget
-                                                                            .index]
-                                                                    .placeId!);
-                                                              }
-                                                            },
-                                                            child: snapshot.data[
-                                                                        "status"] ==
-                                                                    1
-                                                                ? const Icon(
-                                                                    CupertinoIcons
-                                                                        .bookmark_fill,
-                                                                    color: Colors
-                                                                        .black,
-                                                                  )
-                                                                : const Icon(
-                                                                    CupertinoIcons
-                                                                        .bookmark,
-                                                                    color: Colors
-                                                                        .black,
-                                                                  ));
-                                                      }
+                                              child: widget.user == null
+                                                  ? GestureDetector(
+                                                    onTap: () {
+                                                      showCustomErrorToast(message: "Login First");
                                                     },
-                                                  );
-                                                },
-                                              ))
+                                                    child: const Icon(
+                                                        CupertinoIcons.bookmark,
+                                                        color: Colors.black,
+                                                      ),
+                                                  )
+                                                  : Consumer<
+                                                      BookmarkController>(
+                                                      builder: (context, value,
+                                                          child) {
+                                                        return StreamBuilder(
+                                                          stream: value
+                                                              .getBookMarkStream(widget
+                                                                  .searchBarDetail![
+                                                                      widget
+                                                                          .index]
+                                                                  .placeId!),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            if (snapshot
+                                                                    .connectionState ==
+                                                                ConnectionState
+                                                                    .waiting) {
+                                                              return Shimmer
+                                                                  .fromColors(
+                                                                baseColor:
+                                                                    primaryColor,
+                                                                highlightColor:
+                                                                    Colors
+                                                                        .white10,
+                                                                child: Center(
+                                                                    child:
+                                                                        Container(
+                                                                  color: Colors
+                                                                      .white,
+                                                                )),
+                                                              );
+                                                            } else if (snapshot
+                                                                .hasError) {
+                                                              return Text(
+                                                                  'Error: ${snapshot.error}');
+                                                            } else {
+                                                              return GestureDetector(
+                                                                  onTap: () {
+                                                                    if (snapshot.data[
+                                                                            "status"] ==
+                                                                        0) {
+                                                                      value.addBookmark(widget
+                                                                          .searchBarDetail![
+                                                                              widget.index]
+                                                                          .placeId!);
+                                                                    } else if (snapshot
+                                                                            .data["status"] ==
+                                                                        1) {
+                                                                      value.deleteBookmark(widget
+                                                                          .searchBarDetail![
+                                                                              widget.index]
+                                                                          .placeId!);
+                                                                    }
+                                                                  },
+                                                                  child: snapshot
+                                                                              .data["status"] ==
+                                                                          1
+                                                                      ? const Icon(
+                                                                          CupertinoIcons
+                                                                              .bookmark_fill,
+                                                                          color:
+                                                                              Colors.black,
+                                                                        )
+                                                                      : const Icon(
+                                                                          CupertinoIcons
+                                                                              .bookmark,
+                                                                          color:
+                                                                              Colors.black,
+                                                                        ));
+                                                            }
+                                                          },
+                                                        );
+                                                      },
+                                                    ))
                                         ],
                                       ),
                                     ),
@@ -383,10 +405,23 @@ class _DetailScreenState extends State<DetailScreen>
                                         ),
                                         Text(
                                           widget.distance[widget.index]
-                                              .elements![0].duration!.text
-                                              .toString(),
+                                                          .elements !=
+                                                      null &&
+                                                  widget.distance[widget.index]
+                                                      .elements!.isNotEmpty &&
+                                                  widget
+                                                          .distance[
+                                                              widget.index]
+                                                          .elements![0]
+                                                          .duration !=
+                                                      null
+                                              ? widget.distance[widget.index]
+                                                  .elements![0].duration!.text
+                                                  .toString()
+                                              : "N/A", // Fallback if duration or elements is null
                                           style: GoogleFonts.urbanist(
-                                              color: Colors.white),
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -663,10 +698,15 @@ class _DetailScreenState extends State<DetailScreen>
                                   decoration: BoxDecoration(
                                     color: Colors.grey,
                                     borderRadius: BorderRadius.circular(12),
-                                    image: DecorationImage(
-                                        image: MemoryImage(
-                                            widget.barImages[widget.index]!),
-                                        fit: BoxFit.cover),
+                                    image: hasImage
+                                        ? DecorationImage(
+                                            image: MemoryImage(widget
+                                                .barImages[widget.index]!),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : DecorationImage(
+                                            image: AssetImage(
+                                                emptyImage)), // No image if `hasImage` is false
                                   ),
                                   child: Stack(
                                     children: [
@@ -688,88 +728,89 @@ class _DetailScreenState extends State<DetailScreen>
                                               Positioned(
                                                   top: size.height * 0.015,
                                                   right: size.width * 0.035,
-                                                  child: Consumer<
-                                                      BookmarkController>(
-                                                    builder: (context, value,
-                                                        child) {
-                                                      return StreamBuilder(
-                                                        stream: value
-                                                            .getBookMarkStream(
-                                                                barDetail![0]
-                                                                    .placeId!),
-                                                        builder: (context,
-                                                            snapshot) {
-                                                          if (snapshot
-                                                                  .connectionState ==
-                                                              ConnectionState
-                                                                  .waiting) {
-                                                            return Shimmer
-                                                                .fromColors(
-                                                              baseColor:
-                                                                  primaryColor,
-                                                              highlightColor:
-                                                                  Colors
-                                                                      .white10,
-                                                              child: Center(
-                                                                  child:
-                                                                      Container(
-                                                                color: Colors
-                                                                    .white,
-                                                              )),
-                                                            );
-                                                          } else if (snapshot
-                                                              .hasError) {
-                                                            return Text(
-                                                                'Error: ${snapshot.error}');
-                                                          } else {
-                                                            return GestureDetector(
-                                                                onTap: () {
-                                                                  if (snapshot.data[
-                                                                          "status"] ==
-                                                                      0) {
-                                                                    value.addBookmark(
-                                                                        barDetail![0]
-                                                                            .placeId!);
-                                                                  } else if (snapshot
-                                                                              .data[
-                                                                          "status"] ==
-                                                                      1) {
-                                                                    value.deleteBookmark(
-                                                                        barDetail![0]
-                                                                            .placeId!);
-                                                                  }
-                                                                },
-                                                                child: value.loading ==
-                                                                        true
-                                                                    ? Shimmer
-                                                                        .fromColors(
-                                                                        baseColor:
-                                                                            primaryColor,
-                                                                        highlightColor:
-                                                                            Colors.white10,
-                                                                        child: Center(
-                                                                            child: Container(
-                                                                          color:
-                                                                              Colors.white,
-                                                                        )),
-                                                                      )
-                                                                    : snapshot.data["status"] ==
-                                                                            1
-                                                                        ? const Icon(
-                                                                            CupertinoIcons.bookmark_fill,
-                                                                            color:
-                                                                                Colors.black,
-                                                                          )
-                                                                        : const Icon(
-                                                                            CupertinoIcons.bookmark,
-                                                                            color:
-                                                                                Colors.black,
-                                                                          ));
-                                                          }
+                                                  child: widget.user == null
+                                                      ? GestureDetector(
+                                                        onTap: () {
+                                                          showCustomErrorToast(message: "Login First");
                                                         },
-                                                      );
-                                                    },
-                                                  ))
+                                                        child: const Icon(
+                                                            CupertinoIcons
+                                                                .bookmark,
+                                                            color: Colors.black,
+                                                          ),
+                                                      )
+                                                      : Consumer<
+                                                          BookmarkController>(
+                                                          builder: (context,
+                                                              value, child) {
+                                                            return StreamBuilder(
+                                                              stream: value
+                                                                  .getBookMarkStream(
+                                                                      barDetail![
+                                                                              0]
+                                                                          .placeId!),
+                                                              builder: (context,
+                                                                  snapshot) {
+                                                                if (snapshot
+                                                                        .connectionState ==
+                                                                    ConnectionState
+                                                                        .waiting) {
+                                                                  return Shimmer
+                                                                      .fromColors(
+                                                                    baseColor:
+                                                                        primaryColor,
+                                                                    highlightColor:
+                                                                        Colors
+                                                                            .white10,
+                                                                    child: Center(
+                                                                        child: Container(
+                                                                      color: Colors
+                                                                          .white,
+                                                                    )),
+                                                                  );
+                                                                } else if (snapshot
+                                                                    .hasError) {
+                                                                  return Text(
+                                                                      'Error: ${snapshot.error}');
+                                                                } else {
+                                                                  return GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        if (snapshot.data["status"] ==
+                                                                            0) {
+                                                                          value.addBookmark(
+                                                                              barDetail![0].placeId!);
+                                                                        } else if (snapshot.data["status"] ==
+                                                                            1) {
+                                                                          value.deleteBookmark(
+                                                                              barDetail![0].placeId!);
+                                                                        }
+                                                                      },
+                                                                      child: value.loading ==
+                                                                              true
+                                                                          ? Shimmer
+                                                                              .fromColors(
+                                                                              baseColor: primaryColor,
+                                                                              highlightColor: Colors.white10,
+                                                                              child: Center(
+                                                                                  child: Container(
+                                                                                color: Colors.white,
+                                                                              )),
+                                                                            )
+                                                                          : snapshot.data["status"] == 1
+                                                                              ? const Icon(
+                                                                                  CupertinoIcons.bookmark_fill,
+                                                                                  color: Colors.black,
+                                                                                )
+                                                                              : const Icon(
+                                                                                  CupertinoIcons.bookmark,
+                                                                                  color: Colors.black,
+                                                                                ));
+                                                                }
+                                                              },
+                                                            );
+                                                          },
+                                                        ))
                                             ],
                                           ),
                                         ),
