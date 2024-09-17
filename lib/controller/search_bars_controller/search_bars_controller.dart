@@ -86,47 +86,91 @@ class SearchBarsController extends ChangeNotifier {
     context,
   ) async {
     final mapController = Provider.of<MapsController>(context, listen: false);
-    log("get search bar detail method :  ${searchResult.length.toString()}");
+    List<Future<void>> fetchTasks = [];
+
     try {
-      for (var i = 0; i < searchResult.length; i++) {
-        var data =
-            await mapController.barsDetailMethod(searchResult[i].placeId!);
-        barDetail.add(data);
-        log("bar detail : ${barDetail.length}");
-        if (data != null) {
-          // Check if the item already exists in the list
-          if (!barDetail.any((item) => item?.placeId == data.placeId)) {
+      for (var prediction in searchResult) {
+        fetchTasks.add(Future(() async {
+          var data = await mapController.barsDetailMethod(prediction.placeId!);
+
+          if (data != null &&
+              !barDetail.any((item) => item?.placeId == data.placeId)) {
             barDetail.add(data);
-            log("Added to barDetail: ${data.name}");
-          } else {
-            log("Item already exists in barDetail: ${data.name}");
-          }
 
-          if (data.photos != null && data.photos!.isNotEmpty) {
-            var imageData = await mapController
-                .exploreImages(data.photos![0].photoReference!);
-            searcbarsImage.addAll(imageData);
-          }
+            if (data.photos != null && data.photos!.isNotEmpty) {
+              var imageData = await mapController
+                  .exploreImages(data.photos![0].photoReference!);
+              searcbarsImage.addAll(imageData);
+            }
 
-          if (data.geometry != null && data.geometry!.location != null) {
-            var distanceData = await mapController.getDistanceBetweenPoints(
-              data.geometry!.location!.lat.toString(),
-              data.geometry!.location!.lng.toString(),
-              lat,
-              lon,
-            );
-
-            searcbarsDistance.addAll(distanceData);
+            if (data.geometry != null && data.geometry!.location != null) {
+              var distanceData = await mapController.getDistanceBetweenPoints(
+                data.geometry!.location!.lat.toString(),
+                data.geometry!.location!.lng.toString(),
+                lat,
+                lon,
+              );
+              searcbarsDistance.addAll(distanceData);
+            }
           }
-        } else {
-          log("Received null data from barsDetailMethod for placeId: ${searchResult[i].placeId.toString()}");
-        }
+        }));
       }
+
+      // Wait for all fetch tasks to complete concurrently
+      await Future.wait(fetchTasks);
+
       notifyListeners();
     } catch (e) {
-      log("get detail method error: ${e.toString()}");
+      log("get detail method error: $e");
     }
   }
+
+  // Future<void> getSearchBarsDetail(
+  //   List<Predictions> searchResult,
+  //   context,
+  // ) async {
+  //   final mapController = Provider.of<MapsController>(context, listen: false);
+  //   log("get search bar detail method :  ${searchResult.length.toString()}");
+  //   try {
+  //     for (var i = 0; i < searchResult.length; i++) {
+  //       var data =
+  //           await mapController.barsDetailMethod(searchResult[i].placeId!);
+  //       barDetail.add(data);
+  //       log("bar detail : ${barDetail.length}");
+  //       if (data != null) {
+  //         // Check if the item already exists in the list
+  //         if (!barDetail.any((item) => item?.placeId == data.placeId)) {
+  //           barDetail.add(data);
+  //           log("Added to barDetail: ${data.name}");
+  //         } else {
+  //           log("Item already exists in barDetail: ${data.name}");
+  //         }
+
+  //         if (data.photos != null && data.photos!.isNotEmpty) {
+  //           var imageData = await mapController
+  //               .exploreImages(data.photos![0].photoReference!);
+  //           searcbarsImage.addAll(imageData);
+  //         }
+
+  //         if (data.geometry != null && data.geometry!.location != null) {
+  //           var distanceData = await mapController.getDistanceBetweenPoints(
+  //             data.geometry!.location!.lat.toString(),
+  //             data.geometry!.location!.lng.toString(),
+  //             lat,
+  //             lon,
+  //           );
+
+  //           searcbarsDistance.addAll(distanceData);
+  //         }
+  //       } else {
+  //         log("Received null data from barsDetailMethod for placeId: ${searchResult[i].placeId.toString()}");
+  //       }
+  //     }
+  //     notifyListeners();
+  //   } catch (e) {
+  //     log("get detail method error: ${e.toString()}");
+  //   }
+  // }
 
   void clearFields() {
     barDetail.clear();

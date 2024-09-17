@@ -272,6 +272,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       .homeScreennearsetbarsOrClubsImages[
                                                   index] !=
                                               null;
+
+                                              
                                       if (index <
                                               mapController
                                                   .homeScreennearsetbarsOrClubsImages
@@ -318,7 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           BorderRadius.circular(
                                                               10),
                                                       image: hasImage
-                                                          ? DecorationImage(
+                                                          ?  DecorationImage(
                                                               image: MemoryImage(
                                                                   mapController
                                                                           .homeScreennearsetbarsOrClubsImages[

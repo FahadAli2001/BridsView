@@ -46,7 +46,7 @@ class _MapScreenState extends State<MapScreen> {
         final mapController =
             Provider.of<MapsController>(context, listen: false);
         mapController.getCordinateds().then((value) async {
-          mapController.loadData(mapController.lat, mapController.lon,
+          mapController.loadData(mapController.lat!, mapController.lon!,
               widget.bar, widget.index, widget.barImage, context);
           mapController.clearPolylines();
           CameraPosition cameraPosition = CameraPosition(
