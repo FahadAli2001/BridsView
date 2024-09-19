@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final searchController =
         Provider.of<SearchBarsController>(context, listen: false);
     searchController.getCordinateds();
- 
+
     exploreBarByMap();
     recomendedBars();
     nearestBar();
@@ -83,13 +83,11 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  
-
   Future<void> exploreBarByMap() async {
     final mapController = Provider.of<MapsController>(context, listen: false);
 
     // var data =
-     await mapController.exploreNearbyBarsMethod();
+    await mapController.exploreNearbyBarsMethod();
     // exploreBar.addAll(data as Iterable<Results>);
     // exploreBarsImages = mapController.exploreBarsImages;
     // exploreBarsDistanceList = mapController.exploreBarsDistanceList;
@@ -98,16 +96,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> nearestBar() async {
     final mapController = Provider.of<MapsController>(context, listen: false);
-   
+
     await mapController.nearsetBarsMethod();
-    
+
     setState(() {});
   }
 
   Future<void> recomendedBars() async {
     final mapController = Provider.of<MapsController>(context, listen: false);
 
-    // var data = 
+    // var data =
     await mapController.recommendedBarsMethod();
     // recomendedBarList.addAll(data as Iterable<Results>);
     // recomdedBarsImages = mapController.recomdedBarsImages;
@@ -116,7 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> refreshData() async {
-   
     await Future.wait([
       exploreBarByMap(),
       recomendedBars(),
@@ -242,7 +239,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             height: size.height * 0.02,
                           ),
-                          mapController.homeScreennearestbarsOrClubsData!.isEmpty
+                          mapController
+                                  .homeScreennearestbarsOrClubsData!.isEmpty
                               ? Shimmer.fromColors(
                                   baseColor: Colors.grey.shade800,
                                   highlightColor: Colors.grey.shade700,
@@ -273,7 +271,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   index] !=
                                               null;
 
-                                              
                                       if (index <
                                               mapController
                                                   .homeScreennearsetbarsOrClubsImages
@@ -320,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           BorderRadius.circular(
                                                               10),
                                                       image: hasImage
-                                                          ?  DecorationImage(
+                                                          ? DecorationImage(
                                                               image: MemoryImage(
                                                                   mapController
                                                                           .homeScreennearsetbarsOrClubsImages[
@@ -429,7 +426,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             height: size.height * 0.02,
                           ),
-                          mapController.homeScreenRecommendedbarsOrClubsData!.isEmpty
+                          mapController
+                                  .homeScreenRecommendedbarsOrClubsData!.isEmpty
                               ? Shimmer.fromColors(
                                   baseColor: Colors.grey.shade800,
                                   highlightColor: Colors.grey.shade700,
@@ -446,7 +444,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: Colors.black,
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: mapController.homeScreenRecommendedbarsOrClubsData!.length,
+                                    itemCount: mapController
+                                        .homeScreenRecommendedbarsOrClubsData!
+                                        .length,
                                     itemBuilder: (context, index) {
                                       return GestureDetector(
                                           onTap: () {
@@ -456,22 +456,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     child: DetailScreen(
                                                       user: widget.user,
                                                       fromSearchScreen: false,
-                                                      barDetail:
-                                                        mapController.homeScreenRecommendedbarsOrClubsData,
+                                                      barDetail: mapController
+                                                          .homeScreenRecommendedbarsOrClubsData,
                                                       index: index,
-                                                      barImages:mapController.homeScreenRecommendedbarsOrClubsImages
-                                                           ,
-                                                      distance:
-                                                          mapController.homeScreenRecommendedbarsOrClubsDistanceList,
+                                                      barImages: mapController
+                                                          .homeScreenRecommendedbarsOrClubsImages,
+                                                      distance: mapController
+                                                          .homeScreenRecommendedbarsOrClubsDistanceList,
                                                     ),
                                                     type: PageTransitionType
                                                         .fade));
                                           },
                                           child: CustomRecommendedWidget(
-                                            recomendedBar: mapController.homeScreenRecommendedbarsOrClubsData!,
+                                            recomendedBar: mapController
+                                                .homeScreenRecommendedbarsOrClubsData!,
                                             index: index,
-                                            recomdedBarsImages:
-                                                mapController.homeScreenRecommendedbarsOrClubsImages,
+                                            recomdedBarsImages: mapController
+                                                .homeScreenRecommendedbarsOrClubsImages,
                                           ));
                                     },
                                   ),
@@ -508,7 +509,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             height: size.height * 0.03,
                           ),
-                         mapController.homeScreenExplorebarsOrClubsData! .isEmpty
+                          mapController
+                                  .homeScreenExplorebarsOrClubsData!.isEmpty
                               ? Shimmer.fromColors(
                                   baseColor: Colors.grey.shade800,
                                   highlightColor: Colors.grey.shade700,
@@ -525,9 +527,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: Colors.black,
                                   child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: mapController.homeScreenExplorebarsOrClubsData! .length,
+                                    itemCount: mapController
+                                        .homeScreenExplorebarsOrClubsData!
+                                        .length,
                                     itemBuilder: (context, index) {
-                                       bool hasImage = index <
+                                      bool hasImage = index <
                                               mapController
                                                   .homeScreenExplorebarsOrClubsImages
                                                   .length &&
@@ -546,12 +550,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     child: DetailScreen(
                                                       user: widget.user,
                                                       fromSearchScreen: false,
-                                                      barDetail: mapController.homeScreenExplorebarsOrClubsData,
+                                                      barDetail: mapController
+                                                          .homeScreenExplorebarsOrClubsData,
                                                       index: index,
-                                                      barImages:
-                                                          mapController.homeScreenExplorebarsOrClubsImages,
-                                                      distance:
-                                                          mapController.homeScreenExplorebarsOrClubsDistanceList,
+                                                      barImages: mapController
+                                                          .homeScreenExplorebarsOrClubsImages,
+                                                      distance: mapController
+                                                          .homeScreenExplorebarsOrClubsDistanceList,
                                                     ),
                                                     type: PageTransitionType
                                                         .fade));
@@ -561,15 +566,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                             decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(10),
-                                              image:hasImage ? DecorationImage(
-                                                image: MemoryImage(
-                                                    mapController.homeScreenExplorebarsOrClubsImages[index]!),
-                                                fit: BoxFit.cover,
-                                                colorFilter: ColorFilter.mode(
-                                                  Colors.black.withOpacity(0.3),
-                                                  BlendMode.darken,
-                                                ),
-                                              ):DecorationImage(image: AssetImage(emptyImage)),
+                                              image: hasImage
+                                                  ? DecorationImage(
+                                                      image: MemoryImage(
+                                                          mapController
+                                                                  .homeScreenExplorebarsOrClubsImages[
+                                                              index]!),
+                                                      fit: BoxFit.cover,
+                                                      colorFilter:
+                                                          ColorFilter.mode(
+                                                        Colors.black
+                                                            .withOpacity(0.3),
+                                                        BlendMode.darken,
+                                                      ),
+                                                    )
+                                                  : DecorationImage(
+                                                      image: AssetImage(
+                                                          emptyImage)),
                                             ),
                                             child: Align(
                                               alignment: Alignment.bottomLeft,
@@ -577,7 +590,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 padding:
                                                     const EdgeInsets.all(8),
                                                 child: Text(
-                                                  mapController.homeScreenExplorebarsOrClubsData! [index].name ??
+                                                  mapController
+                                                          .homeScreenExplorebarsOrClubsData![
+                                                              index]
+                                                          .name ??
                                                       "UnKnown",
                                                   maxLines: 2,
                                                   style: GoogleFonts.urbanist(

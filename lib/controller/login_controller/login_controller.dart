@@ -40,12 +40,15 @@ class LoginController extends ChangeNotifier {
   }
 
   void loginWithEmailAndPassword(context) async {
+    // Input validation
     if (!EmailValidator.validate(emailController.text)) {
       showCustomErrorToast(message: 'Invalid Email Format');
+      return; // Return to stop further execution
     }
 
-    if (emailController.text == "" || passwordController.text == "") {
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       showCustomErrorToast(message: "Enter Email And Password");
+      return; // Return to stop further execution
     }
 
     _isLoging = true;
@@ -57,14 +60,23 @@ class LoginController extends ChangeNotifier {
     };
 
     try {
-      var response = await http.post(Uri.parse(loginApi), body: body);
-      var data = jsonDecode(response.body);
+      // Setting headers with content type
+      var response = await http.post(
+        Uri.parse(loginApi),
+        body: body,
+      );
 
-      if (response.statusCode == 201) {
+      var data = jsonDecode(response.body);
+      log("Login Response: $data");
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        // Successful response (Status 200-299)
         UserModel user = UserModel.fromJson(data);
 
+        // Save user ID and token
         saveUserIdAndToken(user.data!.id.toString(), user.token.toString());
 
+        // Navigate to HomeScreen
         Navigator.pushAndRemoveUntil(
           context,
           PageTransition(
@@ -74,23 +86,74 @@ class LoginController extends ChangeNotifier {
               type: PageTransitionType.fade),
           (route) => false,
         );
+
+        // Clear text fields
         clearTextField();
-
-        _isLoging = false;
-        notifyListeners();
       } else {
+        // Handle invalid login
         showCustomErrorToast(message: 'Invalid Email or Password');
-
-        _isLoging = false;
-        notifyListeners();
       }
     } catch (e) {
-      log(e.toString());
-
-      _isLoging = false;
+      log("catch login error: ${e.toString()}");
+      showCustomErrorToast(message: 'Network Error, Please try again.');
+    } finally {
+      _isLoging = false; // Ensure this runs even if an exception occurs
       notifyListeners();
     }
   }
+
+  // void loginWithEmailAndPassword(context) async {
+  //   if (!EmailValidator.validate(emailController.text)) {
+  //     showCustomErrorToast(message: 'Invalid Email Format');
+  //   }
+
+  //   if (emailController.text == "" || passwordController.text == "") {
+  //     showCustomErrorToast(message: "Enter Email And Password");
+  //   }
+
+  //   _isLoging = true;
+  //   notifyListeners();
+
+  //   var body = {
+  //     "email": emailController.text,
+  //     "password": passwordController.text
+  //   };
+
+  //   try {
+  //     var response = await http.post(Uri.parse(loginApi), body: body);
+  //     var data = jsonDecode(response.body);
+  //     log("Login Response : $data");
+  //     if (response.statusCode == 201) {
+  //       UserModel user = UserModel.fromJson(data);
+
+  //       saveUserIdAndToken(user.data!.id.toString(), user.token.toString());
+
+  //       Navigator.pushAndRemoveUntil(
+  //         context,
+  //         PageTransition(
+  //             child: HomeScreen(
+  //               user: user,
+  //             ),
+  //             type: PageTransitionType.fade),
+  //         (route) => false,
+  //       );
+  //       clearTextField();
+
+  //       _isLoging = false;
+  //       notifyListeners();
+  //     } else {
+  //       showCustomErrorToast(message: 'Invalid Email or Password');
+
+  //       _isLoging = false;
+  //       notifyListeners();
+  //     }
+  //   } catch (e) {
+  //     log("catch login error :  ${e.toString()}");
+
+  //     _isLoging = false;
+  //     notifyListeners();
+  //   }
+  // }
 
   void saveUserIdAndToken(String id, String token) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
