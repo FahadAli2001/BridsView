@@ -82,19 +82,7 @@ class CustomBookmarkWidget extends StatelessWidget {
                           SizedBox(
                             height: size.height * 0.015,
                           ),
-                          // Row(
-                          //   children: [
-                          //     SvgPicture.asset(personsIcon),
-                          //     SizedBox(
-                          //       width: size.width * 0.02,
-                          //     ),
-                          //     SvgPicture.asset(musicIcon),
-                          //     SizedBox(
-                          //       width: size.width * 0.02,
-                          //     ),
-                          //     SvgPicture.asset(glassIcon)
-                          //   ],
-                          // )
+                          
                         ],
                       ),
                     )

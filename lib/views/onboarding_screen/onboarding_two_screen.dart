@@ -66,7 +66,7 @@ class _OnboardTwoScreenState extends State<OnboardTwoScreen> {
             //
             Center(
               child: Text(
-                "Would You Like",
+                "Would You Like To",
                 style: GoogleFonts.urbanist(
                     fontSize: size.height * 0.04,
                     color: whiteColor.withOpacity(.7)),
@@ -74,21 +74,42 @@ class _OnboardTwoScreenState extends State<OnboardTwoScreen> {
             ),
             //
 
-            Center(
+                        Center(
               child: RichText(
                 text: TextSpan(
-                  text: "Explore ",
-                  style: GoogleFonts.urbanist(
-                      fontSize: size.height * 0.04,
-                      fontWeight: FontWeight.w900,
-                      color: primaryColor),
                   children: [
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.baseline,
+                      baseline: TextBaseline.alphabetic,
+                      child: ShaderMask(
+                        shaderCallback: (bounds) => const LinearGradient(
+                          colors: [
+                            Color(0xFFC59241),
+                            Color(0xFFFEF6D1),
+                            Color(0xFFC49138),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          stops: [0.0, 0.5, 1.0],
+                        ).createShader(
+                            Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+                        child: Text(
+                          'Explore ',
+                          style: GoogleFonts.poppins(
+                            fontSize: size.height * 0.04,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
                     TextSpan(
-                      text: 'Place',
-                      style: GoogleFonts.urbanist(
-                          fontSize: size.height * 0.04,
-                          fontWeight: FontWeight.w900,
-                          color: whiteColor),
+                      text: 'Nearby',
+                      style: GoogleFonts.poppins(
+                        fontSize: size.height * 0.04,
+                        fontWeight: FontWeight.w900,
+                        color: whiteColor,
+                      ),
                     ),
                   ],
                 ),
@@ -98,7 +119,7 @@ class _OnboardTwoScreenState extends State<OnboardTwoScreen> {
             //
             Center(
               child: Text(
-                'Nearby',
+                'Places?',
                 style: GoogleFonts.urbanist(
                     fontSize: size.height * 0.04,
                     fontWeight: FontWeight.w900,

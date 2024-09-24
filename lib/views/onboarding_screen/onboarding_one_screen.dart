@@ -3,6 +3,7 @@ import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/views/onboarding_screen/onboarding_two_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 class OnboardingOneScreen extends StatefulWidget {
@@ -47,27 +48,49 @@ class _OnboardingOneScreenState extends State<OnboardingOneScreen> {
               ),
             ),
             //
-
             Center(
               child: RichText(
                 text: TextSpan(
-                  text: "BIRDS",
-                  style: TextStyle(
-                      fontSize: size.height * 0.04,
-                      fontWeight: FontWeight.w900,
-                      color: primaryColor),
                   children: [
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.baseline,
+                      baseline: TextBaseline.alphabetic,
+                      child: ShaderMask(
+                        shaderCallback: (bounds) => const LinearGradient(
+                          colors: [
+                            Color(0xFFC59241),
+                            Color(0xFFFEF6D1),
+                            Color(0xFFC49138),
+                          ],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          stops: [0.0, 0.5, 1.0],
+                        ).createShader(
+                            Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+                        child: Text(
+                          'BIRDS',
+                          style: GoogleFonts.urbanist(
+                            fontSize: size.height * 0.04,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
                     TextSpan(
                       text: 'VIEW',
-                      style: TextStyle(
-                          fontSize: size.height * 0.04,
-                          fontWeight: FontWeight.w900,
-                          color: whiteColor),
+                      style: GoogleFonts.urbanist(
+                        fontSize: size.height * 0.04,
+                        fontWeight: FontWeight.w900,
+                        color: whiteColor,
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
+
+         
             //
             SizedBox(
               height: size.height * 0.03,

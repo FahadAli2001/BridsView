@@ -12,3 +12,5 @@ String banner = "assets/banner.png";
 String maleCrowd = "assets/male_crowd.png";
 String femaleCrowd = "assets/female_crowd.png";
 String emptyImage = "assets/empty_image.png";
+String directionBtn = "assets/direction_btn.png";
+String subscribeBtn = "assets/subs_btn.png";

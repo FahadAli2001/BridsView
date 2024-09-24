@@ -1,6 +1,6 @@
 // ignore: file_names
+import 'package:birds_view/widgets/custom_gradient_text/custom_gradient_text.dart';
 import 'package:flutter/material.dart';
-import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,10 +16,7 @@ void showProSubscriptionPopup(BuildContext context, VoidCallback ontap) {
           height: 70,
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        title: Text(
-          'BirdsView Pro Benefits',
-          style: GoogleFonts.urbanist(color: primaryColor, fontWeight: FontWeight.bold),
-        ),
+        title:const GradientText(text: "BirdsView Pro Benefits", fontSize: 0.026, fontWeight: FontWeight.bold),
         content:   Text(
           '- Get real-time information on how many girls and guys are at the bar or club.\n\n- 100\$ per/year',
           style: GoogleFonts.urbanist(color: Colors.white),

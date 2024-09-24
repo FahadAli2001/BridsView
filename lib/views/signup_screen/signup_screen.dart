@@ -79,29 +79,51 @@ class _SignupScreenState extends State<SignupScreen> {
               color: whiteColor,
             )),
         centerTitle: true,
-        title: RichText(
-          text: TextSpan(
-            text: "Create ",
-            style: GoogleFonts.urbanist(
-                fontWeight: FontWeight.bold,
-                fontSize: size.height * 0.026,
-                color: whiteColor),
-            children: [
-              TextSpan(
-                text: 'An ',
-                style:
-                    GoogleFonts.urbanist(fontSize: size.height * 0.026, color: whiteColor),
-              ),
-              TextSpan(
-                text: 'Account ',
-                style: GoogleFonts.urbanist(
-                    fontSize: size.height * 0.026,
-                    fontWeight: FontWeight.bold,
-                    color: whiteColor),
-              ),
-            ],
+        title: Center(
+          child: RichText(
+            text: TextSpan(
+              text: "Create ",
+              style: GoogleFonts.urbanist(
+                  fontWeight: FontWeight.bold,
+                  fontSize: size.height * 0.026,
+                  color: Colors.white),
+              children: [
+                WidgetSpan(
+                    child: Text(
+                  'An ',
+                  style: GoogleFonts.urbanist(
+                      fontSize: size.height * 0.026, color: Colors.white70),
+                )),
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.baseline,
+                  baseline: TextBaseline.alphabetic,
+                  child: ShaderMask(
+                    shaderCallback: (bounds) => const LinearGradient(
+                      colors: [
+                        Color(0xFFC59241),
+                        Color(0xFFFEF6D1),
+                        Color(0xFFC49138),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      stops: [0.0, 0.5, 1.0],
+                    ).createShader(
+                        Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+                    child: Text(
+                      'Account ',
+                      style: GoogleFonts.urbanist(
+                          fontSize: size.height * 0.026,
+                          fontWeight: FontWeight.w900,
+                          color: whiteColor),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
+
+ 
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -156,13 +178,20 @@ class _SignupScreenState extends State<SignupScreen> {
                                       },
                                     ));
                           },
-                          child: const CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Icon(
-                              CupertinoIcons.camera,
-                              color: Colors.black,
-                            ),
-                          ),
+                          child: Container(
+                                    width: 45,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        gradient: gradientColor),
+                                    child: const Center(
+                                      child: Icon(
+                                        CupertinoIcons.camera,
+                                        size: 25,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  )
                         ),
                       )
                     ],
@@ -258,7 +287,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       buttonSingleColor: Colors.black,
                       closeIconColor: primaryColor,
-                      buttonStyle: BoxDecoration(color: primaryColor,borderRadius: BorderRadius.circular(20)),
+                      buttonStyle: BoxDecoration(
+                          color: primaryColor,
+                          borderRadius: BorderRadius.circular(20)),
                       onChange: (index) {},
                       onSubmit: (date) {
                         value.selectedDate = date;
@@ -369,7 +400,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     width: size.width * 0.01,
                   ),
                   RichText(
-                    text:   TextSpan(
+                    text: TextSpan(
                       text: "I accept the term of ",
                       style: GoogleFonts.urbanist(color: Colors.white),
                       children: [

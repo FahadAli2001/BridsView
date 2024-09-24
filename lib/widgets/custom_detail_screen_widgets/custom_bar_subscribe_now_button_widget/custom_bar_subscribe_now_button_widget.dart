@@ -1,3 +1,4 @@
+import 'package:birds_view/widgets/custom_gradient_text/custom_gradient_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/images.dart';
@@ -10,27 +11,24 @@ class CustomBarSubscribeNowButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-        top: size.height * 0.11,
-        left: size.width * 0.2,
-        child: GestureDetector(
-          onTap: ontap,
-          child: Container(
-            width: size.width * 0.35,
-            height: size.height * 0.04,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(button), fit: BoxFit.fill)),
-            child: Center(
-              child: Text(
-                "Subscribe Now",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: size.height * 0.015,
-                    color: Colors.black),
-              ),
+    return GestureDetector(
+      onTap: ontap,
+      child:  SizedBox(
+        width: size.width,
+        height: size.height*0.1,
+        child: Row(
+          children: [
+            Image.asset(subscribeBtn),
+            SizedBox(
+              width: size.width*0.02,
             ),
-          ),
-        ));
+           const GradientText(text: "Subscribe Now", fontSize: 0.026, fontWeight: FontWeight.bold),
+           
+           
+        
+          ],
+        ),
+      )
+    );
   }
 }

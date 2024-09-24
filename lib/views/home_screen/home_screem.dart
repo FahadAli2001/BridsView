@@ -8,6 +8,7 @@ import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/detail_screen/detail_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
+import 'package:birds_view/widgets/custom_gradient_text/custom_gradient_text.dart';
 import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -197,16 +198,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                               fontSize: size.height * 0.026,
                                               color: Colors.white),
                                           children: [
-                                            TextSpan(
-                                              text: widget.user == null ||
-                                                      widget.user!.data!
-                                                              .subscribe ==
-                                                          '0'
-                                                  ? " "
-                                                  : 'Pro',
-                                              style: GoogleFonts.urbanist(
-                                                  fontSize: size.height * 0.013,
-                                                  color: primaryColor),
+                                            WidgetSpan(
+                                              alignment:
+                                                  PlaceholderAlignment.baseline,
+                                              baseline: TextBaseline.alphabetic,
+                                              child: ShaderMask(
+                                                shaderCallback: (bounds) =>
+                                                    const LinearGradient(
+                                                  colors: [
+                                                    Color(0xFFC59241),
+                                                    Color(0xFFFEF6D1),
+                                                    Color(0xFFC49138),
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                  stops: [0.0, 0.5, 1.0],
+                                                ).createShader(Rect.fromLTWH(
+                                                        0,
+                                                        0,
+                                                        bounds.width,
+                                                        bounds.height)),
+                                                child: Text(
+                                                  widget.user == null ||
+                                                          widget.user!.data!
+                                                                  .subscribe ==
+                                                              '0'
+                                                      ? " "
+                                                      : 'Pro',
+                                                  style: GoogleFonts.urbanist(
+                                                      fontSize:
+                                                          size.height * 0.013,
+                                                      color: whiteColor),
+                                                ),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -259,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     scrollDirection: Axis.horizontal,
                                     itemCount: mapController
                                         .homeScreennearestbarsOrClubsData!
-                                        .length,
+                                        .length ,
                                     itemBuilder: (context, index) {
                                       // Ensure that all lists have valid data for the current index
                                       bool hasImage = index <
@@ -389,16 +413,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       0.027,
                                                             ),
                                                           ),
-                                                          Text(
-                                                            ' Miles',
-                                                            style: GoogleFonts
-                                                                .urbanist(
-                                                              color:
-                                                                  primaryColor,
-                                                              fontSize:
-                                                                  size.width *
-                                                                      0.03,
-                                                            ),
+                                                          const GradientText(
+                                                            text: " Miles",
+                                                            fontSize: 0.013,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
                                                           )
                                                         ],
                                                       ),
@@ -724,9 +744,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                               lastVisitedBar = "";
                                               setState(() {});
                                             },
-                                            child: Icon(
-                                              Icons.cancel_outlined,
-                                              color: primaryColor,
+                                            child: ShaderMask(
+                                              shaderCallback: (bounds) =>
+                                                  gradientColor
+                                                      .createShader(bounds),
+                                              child: const Icon(
+                                                Icons.cancel_outlined,
+                                                size: 50,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           )
                                         ],
@@ -746,12 +772,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 const EdgeInsets.symmetric(
                                                     horizontal: 4.0),
                                             itemSize: size.height * 0.031,
-                                            itemBuilder: (context, _) => Icon(
-                                              Icons.star,
-                                              color: primaryColor,
-                                            ),
+                                            itemBuilder: (context, _) {
+                                              return ShaderMask(
+                                                shaderCallback: (bounds) =>
+                                                    const LinearGradient(
+                                                  colors: [
+                                                    Color(0xFFC59241),
+                                                    Color(0xFFFEF6D1),
+                                                    Color(0xFFC49138),
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                ).createShader(bounds),
+                                                child: const Icon(
+                                                  Icons.star,
+                                                  color: Colors
+                                                      .white, // Temporary color; masked by gradient
+                                                ),
+                                              );
+                                            },
                                             onRatingUpdate: (rating) {
-                                              // log(reviewController.rating.toString());
                                               value.rating = rating.toString();
                                             },
                                           ),

@@ -35,12 +35,29 @@ class CustomImagePickerBottomSheet extends StatelessWidget {
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
                       ),
-                      TextSpan(
-                        text: 'Source ',
-                        style: GoogleFonts.urbanist(
-                            fontSize: size.height * 0.03,
-                            fontWeight: FontWeight.bold,
-                            color: primaryColor),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.baseline,
+                        baseline: TextBaseline.alphabetic,
+                        child: ShaderMask(
+                          shaderCallback: (bounds) => const LinearGradient(
+                            colors: [
+                              Color(0xFFC59241),
+                              Color(0xFFFEF6D1),
+                              Color(0xFFC49138),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            stops: [0.0, 0.5, 1.0],
+                          ).createShader(
+                              Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+                          child: Text(
+                            'Source ',
+                            style: GoogleFonts.urbanist(
+                                fontSize: size.height * 0.03,
+                                fontWeight: FontWeight.bold,
+                                color: whiteColor),
+                          ),
+                        ),
                       ),
                     ],
                   ),

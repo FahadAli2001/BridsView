@@ -337,18 +337,28 @@ class _DetailScreenState extends State<DetailScreen>
                                         .searchBarDetail![widget.index].rating
                                         ?.toDouble() ??
                                     0.0,
-                                itemBuilder: (context, index) => Icon(
-                                  Icons.star,
-                                  color: primaryColor,
-                                ),
+                                itemBuilder: (context, index) {
+                                  return ShaderMask(
+                                    shaderCallback: (bounds) =>
+                                        const LinearGradient(
+                                      colors: [
+                                        Color(0xFFC59241),
+                                        Color(0xFFFEF6D1),
+                                        Color(0xFFC49138),
+                                      ],
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                    ).createShader(bounds),
+                                    child: const Icon(
+                                      Icons.star,
+                                      color: Colors.white,
+                                    ),
+                                  );
+                                },
                                 itemCount: 5,
                                 itemSize: size.width * 0.06,
                                 direction: Axis.horizontal,
-                              ),
-                              // GestureDetector(
-                              //     onTap: () {},
-                              //     child: Image.asset(instaLink,
-                              //         width: size.height * 0.04))
+                              )
                             ],
                           ),
 
@@ -575,56 +585,106 @@ class _DetailScreenState extends State<DetailScreen>
                               ? const Text('')
                               : Align(
                                   alignment: Alignment.topLeft,
-                                  child: RichText(
-                                    text: TextSpan(
-                                      text: "Hours of Operation :\n ",
-                                      style: GoogleFonts.urbanist(
-                                          fontSize: size.height * 0.016,
-                                          fontWeight: FontWeight.bold,
-                                          color: primaryColor),
-                                      children: [
-                                        for (var i = 0;
-                                            i <
-                                                widget
-                                                    .searchBarDetail![
-                                                        widget.index]
-                                                    .openingHours!
-                                                    .weekdayText!
-                                                    .length;
-                                            i++) ...[
-                                          TextSpan(
-                                            text:
-                                                "\n ${widget.searchBarDetail![widget.index].openingHours!.weekdayText![i]} \n",
-                                            style: GoogleFonts.urbanist(
-                                                fontSize: size.height * 0.016,
-                                                fontWeight: FontWeight.normal,
-                                                color: whiteColor),
+                                  child: Stack(
+                                    children: [
+                                      // Gradient border
+                                      Container(
+                                        width: size.width,
+                                        height: size.height * 0.32,
+                                        decoration: const BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(1)),
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Color(
+                                                  0xFFC59241), // Left side color
+                                              Color(0xFFFEF6D1), // Center color
+                                              Color(
+                                                  0xFFC49138), // Right side color
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
                                           ),
-                                        ]
-                                      ],
-                                    ),
+                                        ),
+                                      ),
+
+                                      // RichText inside the container
+                                      Padding(
+                                        padding: const EdgeInsets.all(
+                                            5), // Padding for content
+                                        child: Container(
+                                          width: size.width,
+                                          color: Colors.black,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(3),
+                                            child: RichText(
+                                              text: TextSpan(
+                                                children: [
+                                                  WidgetSpan(
+                                                    child: ShaderMask(
+                                                      shaderCallback: (bounds) =>
+                                                          const LinearGradient(
+                                                        colors: [
+                                                          Color(
+                                                              0xFFC59241), // Left side color
+                                                          Color(
+                                                              0xFFFEF6D1), // Center color
+                                                          Color(
+                                                              0xFFC49138), // Right side color
+                                                        ],
+                                                        begin: Alignment
+                                                            .centerLeft,
+                                                        end: Alignment
+                                                            .centerRight,
+                                                      ).createShader(bounds),
+                                                      child: Text(
+                                                        "Hours Of Operation: ",
+                                                        style: GoogleFonts
+                                                            .urbanist(
+                                                          fontSize:
+                                                              size.height *
+                                                                  0.016,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          height: 2,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  for (var i = 0;
+                                                      i <
+                                                          widget
+                                                              .searchBarDetail![
+                                                                  widget.index]
+                                                              .openingHours!
+                                                              .weekdayText!
+                                                              .length;
+                                                      i++) ...[
+                                                    TextSpan(
+                                                      text:
+                                                          "\n ${widget.searchBarDetail![widget.index].openingHours!.weekdayText![i]} \n",
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                              fontSize:
+                                                                  size.height *
+                                                                      0.016,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              color:
+                                                                  whiteColor),
+                                                    ),
+                                                  ],
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                          //
-
-                          //
-                          // widget.searchBarDetail![widget.index]
-                          //             .wheelchairAccessibleEntrance ==
-                          //         null
-                          //     ? const Text(' ')
-                          //     : Align(
-                          //         alignment: Alignment.topLeft,
-                          //         child: CustomDescriptionRichText(
-                          //             title: "Wheel Chair Entrance : ",
-                          //             subtitle: widget
-                          //                         .searchBarDetail![
-                          //                             widget.index]
-                          //                         .wheelchairAccessibleEntrance ==
-                          //                     true
-                          //                 ? "Available"
-                          //                 : "Not Available")),
-
-                          //
 
                           widget.searchBarDetail![widget.index]
                                       .wheelchairAccessibleEntrance ==
@@ -642,12 +702,37 @@ class _DetailScreenState extends State<DetailScreen>
                                     builder: (context, value, child) {
                                       return RichText(
                                         text: TextSpan(
-                                          text: "Website : ",
-                                          style: GoogleFonts.urbanist(
-                                              fontSize: size.height * 0.016,
-                                              fontWeight: FontWeight.bold,
-                                              color: primaryColor),
                                           children: [
+                                            WidgetSpan(
+                                              alignment:
+                                                  PlaceholderAlignment.baseline,
+                                              baseline: TextBaseline.alphabetic,
+                                              child: ShaderMask(
+                                                shaderCallback: (bounds) =>
+                                                    const LinearGradient(
+                                                  colors: [
+                                                    Color(
+                                                        0xFFC59241), // Left side color
+                                                    Color(
+                                                        0xFFFEF6D1), // Center color
+                                                    Color(
+                                                        0xFFC49138), // Right side color
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                ).createShader(bounds),
+                                                child: Text(
+                                                  "Website : ",
+                                                  style: GoogleFonts.urbanist(
+                                                      fontSize:
+                                                          size.height * 0.016,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      height: 2,
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            ),
                                             TextSpan(
                                               text: "Click To Visit Website !",
                                               style: GoogleFonts.urbanist(
@@ -852,18 +937,28 @@ class _DetailScreenState extends State<DetailScreen>
                                     unratedColor: Colors.white,
                                     rating:
                                         barDetail![0].rating?.toDouble() ?? 0.0,
-                                    itemBuilder: (context, index) => Icon(
-                                      Icons.star,
-                                      color: primaryColor,
-                                    ),
+                                    itemBuilder: (context, index) {
+                                      return ShaderMask(
+                                        shaderCallback: (bounds) =>
+                                            const LinearGradient(
+                                          colors: [
+                                            Color(0xFFC59241),
+                                            Color(0xFFFEF6D1),
+                                            Color(0xFFC49138),
+                                          ],
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                        ).createShader(bounds),
+                                        child: const Icon(
+                                          Icons.star,
+                                          color: Colors.white,
+                                        ),
+                                      );
+                                    },
                                     itemCount: 5,
                                     itemSize: size.width * 0.06,
                                     direction: Axis.horizontal,
-                                  ),
-                                  // GestureDetector(
-                                  //     onTap: () {},
-                                  //     child: Image.asset(instaLink,
-                                  //         width: size.height * 0.04))
+                                  )
                                 ],
                               ),
 
@@ -1033,21 +1128,12 @@ class _DetailScreenState extends State<DetailScreen>
                                   title: "Address : ",
                                   subtitle: barDetail![0].formattedAddress!),
 
-                              // SizedBox(
-                              //   height: size.height * 0.02,
-                              // ),
-                              // barDetail![0].formattedPhoneNumber == null
-                              //     ? const Text('')
-                              //     : Align(
-                              //         alignment: Alignment.topLeft,
-                              //         child: CustomDescriptionRichText(
-                              //             title: "Phone : ",
-                              //             subtitle: barDetail![0]
-                              //                 .formattedPhoneNumber!)),
                               //
-                              SizedBox(
-                                height: size.height * 0.02,
-                              ),
+                              barDetail![0].editorialSummary == null
+                                  ? Container()
+                                  : SizedBox(
+                                      height: size.height * 0.02,
+                                    ),
                               barDetail![0].openingHours == null
                                   ? const Text('')
                                   : Align(
@@ -1062,65 +1148,126 @@ class _DetailScreenState extends State<DetailScreen>
                                               : "Closed")),
                               //
                               //
-                              SizedBox(
-                                height: size.height * 0.02,
-                              ),
                               barDetail![0].openingHours == null
-                                  ? const Text('')
-                                  : Align(
-                                      alignment: Alignment.topLeft,
-                                      child: RichText(
-                                        text: TextSpan(
-                                          text: "Hours of Operation :\n ",
-                                          style: GoogleFonts.urbanist(
-                                              fontSize: size.height * 0.016,
-                                              fontWeight: FontWeight.bold,
-                                              color: primaryColor),
-                                          children: [
-                                            for (var i = 0;
-                                                i <
-                                                    barDetail![0]
-                                                        .openingHours!
-                                                        .weekdayText!
-                                                        .length;
-                                                i++) ...[
-                                              TextSpan(
-                                                text:
-                                                    "\n ${barDetail![0].openingHours!.weekdayText![i]} \n",
-                                                style: GoogleFonts.urbanist(
-                                                    fontSize:
-                                                        size.height * 0.016,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    color: whiteColor),
-                                              ),
-                                            ]
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                              //
-
-                              //
-                              // barDetail![0].wheelchairAccessibleEntrance == null
-                              //     ? const Text(' ')
-                              //     : Align(
-                              //         alignment: Alignment.topLeft,
-                              //         child: CustomDescriptionRichText(
-                              //             title: "Wheel Chair Entrance : ",
-                              //             subtitle: barDetail![0]
-                              //                         .wheelchairAccessibleEntrance ==
-                              //                     true
-                              //                 ? "Available"
-                              //                 : "Not Available")),
-
-                              //
-
-                              barDetail![0].wheelchairAccessibleEntrance == null
                                   ? const SizedBox()
                                   : SizedBox(
                                       height: size.height * 0.02,
                                     ),
+                              barDetail![0].openingHours == null
+                                  ? const Text('')
+                                  : Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Stack(
+                                        children: [
+                                          // Gradient border
+                                          Container(
+                                            width: size.width,
+                                            height: size.height * 0.32,
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(1)),
+                                              gradient: LinearGradient(
+                                                colors: [
+                                                  Color(
+                                                      0xFFC59241), // Left side color
+                                                  Color(
+                                                      0xFFFEF6D1), // Center color
+                                                  Color(
+                                                      0xFFC49138), // Right side color
+                                                ],
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                              ),
+                                            ),
+                                          ),
+
+                                          // RichText inside the container
+                                          Padding(
+                                            padding: const EdgeInsets.all(
+                                                5), // Padding for content
+                                            child: Container(
+                                              width: size.width,
+                                              color: Colors.black,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(3),
+                                                child: RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      WidgetSpan(
+                                                        child: ShaderMask(
+                                                          shaderCallback:
+                                                              (bounds) =>
+                                                                  const LinearGradient(
+                                                            colors: [
+                                                              Color(
+                                                                  0xFFC59241), // Left side color
+                                                              Color(
+                                                                  0xFFFEF6D1), // Center color
+                                                              Color(
+                                                                  0xFFC49138), // Right side color
+                                                            ],
+                                                            begin: Alignment
+                                                                .centerLeft,
+                                                            end: Alignment
+                                                                .centerRight,
+                                                          ).createShader(
+                                                                      bounds),
+                                                          child: Text(
+                                                            "Hours Of Operation: ",
+                                                            style: GoogleFonts
+                                                                .urbanist(
+                                                              fontSize:
+                                                                  size.height *
+                                                                      0.016,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              height: 2,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      for (var i = 0;
+                                                          i <
+                                                              barDetail![0]
+                                                                  .openingHours!
+                                                                  .weekdayText!
+                                                                  .length;
+                                                          i++) ...[
+                                                        TextSpan(
+                                                          text:
+                                                              "\n ${barDetail![0].openingHours!.weekdayText![i]} \n",
+                                                          style: GoogleFonts
+                                                              .urbanist(
+                                                            fontSize:
+                                                                size.height *
+                                                                    0.016,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                              //
+                              // barDetail![0].wheelchairAccessibleEntrance == null
+                              //     ? const SizedBox()
+                              //     : SizedBox(
+                              //         height: size.height * 0.02,
+                              //       ),
                               //
                               barDetail![0].website == null
                                   ? const Text('')
@@ -1130,12 +1277,42 @@ class _DetailScreenState extends State<DetailScreen>
                                         builder: (context, value, child) {
                                           return RichText(
                                             text: TextSpan(
-                                              text: "Website : ",
-                                              style: GoogleFonts.urbanist(
-                                                  fontSize: size.height * 0.016,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: primaryColor),
                                               children: [
+                                                WidgetSpan(
+                                                  alignment:
+                                                      PlaceholderAlignment
+                                                          .baseline,
+                                                  baseline:
+                                                      TextBaseline.alphabetic,
+                                                  child: ShaderMask(
+                                                    shaderCallback: (bounds) =>
+                                                        const LinearGradient(
+                                                      colors: [
+                                                        Color(0xFFC59241),
+                                                        Color(0xFFFEF6D1),
+                                                        Color(0xFFC49138),
+                                                      ],
+                                                      begin:
+                                                          Alignment.centerLeft,
+                                                      end:
+                                                          Alignment.centerRight,
+                                                    ).createShader(bounds),
+                                                    child: Text(
+                                                      "Website : ",
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                              fontSize:
+                                                                  size.height *
+                                                                      0.016,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              height: 2,
+                                                              color:
+                                                                  Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
                                                 TextSpan(
                                                   text:
                                                       "Click To Visit Website !",

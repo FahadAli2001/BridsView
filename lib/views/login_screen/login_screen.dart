@@ -53,17 +53,36 @@ class _LogInScreenState extends State<LogInScreen> {
                       style: GoogleFonts.urbanist(
                           fontSize: size.height * 0.04, color: Colors.white70),
                       children: [
-                        TextSpan(
-                          text: 'In',
-                          style: GoogleFonts.urbanist(
-                              fontSize: size.height * 0.04,
-                              fontWeight: FontWeight.w900,
-                              color: primaryColor),
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.baseline,
+                          baseline: TextBaseline.alphabetic,
+                          child: ShaderMask(
+                            shaderCallback: (bounds) => const LinearGradient(
+                              colors: [
+                                Color(0xFFC59241),
+                                Color(0xFFFEF6D1),
+                                Color(0xFFC49138),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              stops: [0.0, 0.5, 1.0],
+                            ).createShader(Rect.fromLTWH(
+                                0, 0, bounds.width, bounds.height)),
+                            child: Text(
+                              'In ',
+                              style: GoogleFonts.urbanist(
+                                  fontSize: size.height * 0.04,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white),
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
+               
+               
                 //
                 SizedBox(
                   height: size.height * 0.03,
@@ -119,7 +138,8 @@ class _LogInScreenState extends State<LogInScreen> {
                                         }),
                                     Text(
                                       'Remember Me',
-                                      style: GoogleFonts.urbanist(color: whiteColor),
+                                      style: GoogleFonts.urbanist(
+                                          color: whiteColor),
                                     ),
                                   ],
                                 ),
@@ -163,10 +183,11 @@ class _LogInScreenState extends State<LogInScreen> {
                             height: size.height * 0.03,
                           ),
                           //
-                            Center(
+                          Center(
                             child: Text(
                               "or login with",
-                              style: GoogleFonts.urbanist(color: Colors.white70),
+                              style:
+                                  GoogleFonts.urbanist(color: Colors.white70),
                             ),
                           ),
                           //
@@ -177,34 +198,36 @@ class _LogInScreenState extends State<LogInScreen> {
 
                           SizedBox(
                               width: size.width * 0.6,
-                              child: Consumer<LoginController>(builder:(context, value, child) {
-                                return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  GestureDetector(
-                                      onTap: () {
-                                        value.signInWithGoogle(context);
-                                      },
-                                      child: Image.asset(googleLoginIcon,
-                                          width: size.height * 0.05)),
-                                  GestureDetector(
-                                    onTap: () {
-                                      value.signInWithApple(context);
-                                    },
-                                    child: Image.asset(appleLoginIcon,
-                                        width: size.height * 0.05),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: Image.asset(
-                                      facebookLoginIcon,
-                                      width: size.height * 0.05,
-                                    ),
-                                  ),
-                                ],
-                              );
-                              },)),
+                              child: Consumer<LoginController>(
+                                builder: (context, value, child) {
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      GestureDetector(
+                                          onTap: () {
+                                            value.signInWithGoogle(context);
+                                          },
+                                          child: Image.asset(googleLoginIcon,
+                                              width: size.height * 0.05)),
+                                      GestureDetector(
+                                        onTap: () {
+                                          value.signInWithApple(context);
+                                        },
+                                        child: Image.asset(appleLoginIcon,
+                                            width: size.height * 0.05),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: Image.asset(
+                                          facebookLoginIcon,
+                                          width: size.height * 0.05,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              )),
                         ],
                       ),
                     );

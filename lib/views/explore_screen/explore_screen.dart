@@ -109,11 +109,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                               fontWeight: FontWeight.bold,
                                               fontSize: size.height * 0.03),
                                         ),
-                                        Divider(
-                                          color: isClubs == true
-                                              ? primaryColor
-                                              : Colors.white,
-                                          thickness: size.height * 0.006,
+                                        Container(
+                                          height: size.height * 0.006,
+                                          decoration: BoxDecoration(
+                                            gradient: isClubs == true
+                                                ? gradientColor
+                                                : null,
+                                            color: isClubs == false
+                                                ? Colors.white
+                                                : null,
+                                          ),
                                         )
                                       ],
                                     ),
@@ -139,11 +144,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                               fontWeight: FontWeight.bold,
                                               fontSize: size.height * 0.03),
                                         ),
-                                        Divider(
-                                          color: isClubs == true
-                                              ? Colors.white
-                                              : primaryColor,
-                                          thickness: size.height * 0.006,
+                                        Container(
+                                          height: size.height * 0.006,
+                                          decoration: BoxDecoration(
+                                            gradient: isClubs == false
+                                                ? gradientColor
+                                                : null,
+                                            color: isClubs == true
+                                                ? Colors.white
+                                                : null,
+                                          ),
                                         )
                                       ],
                                     ),

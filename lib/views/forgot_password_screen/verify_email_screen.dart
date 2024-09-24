@@ -28,7 +28,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
           resizeToAvoidBottomInset: false,
           body: Padding(
             padding: const EdgeInsets.all(15),
-            child: SingleChildScrollView( 
+            child: SingleChildScrollView(
               child: Column(
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 // mainAxisAlignment: MainAxisAlignment.center,
@@ -70,17 +70,37 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                             fontSize: size.height * 0.04,
                             color: Colors.white70),
                         children: [
-                          TextSpan(
-                            text: 'Email',
-                            style: GoogleFonts.urbanist(
-                                fontSize: size.height * 0.04,
-                                fontWeight: FontWeight.w900,
-                                color: primaryColor),
+                          WidgetSpan(
+                            alignment: PlaceholderAlignment.baseline,
+                            baseline: TextBaseline.alphabetic,
+                            child: ShaderMask(
+                              shaderCallback: (bounds) => const LinearGradient(
+                                colors: [
+                                  Color(0xFFC59241),
+                                  Color(0xFFFEF6D1),
+                                  Color(0xFFC49138),
+                                ],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                stops: [0.0, 0.5, 1.0],
+                              ).createShader(Rect.fromLTWH(
+                                  0, 0, bounds.width, bounds.height)),
+                              child: Text(
+                                'Email ',
+                                style: GoogleFonts.urbanist(
+                                    fontSize: size.height * 0.04,
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.white),
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ),
+
+                  
+                  
                   //
                   SizedBox(
                     height: size.height * 0.05,

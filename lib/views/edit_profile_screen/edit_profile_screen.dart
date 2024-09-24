@@ -42,7 +42,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         key: const Key("Edit Profile"),
         direction: DismissDirection.horizontal,
         onDismissed: (direction) {
-            Navigator.pop(context);
+          Navigator.pop(context);
         },
         child: Scaffold(
           bottomNavigationBar: Consumer<EditProfileController>(
@@ -144,36 +144,42 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               top: size.height * 0.1,
                               left: size.width * 0.17,
                               child: GestureDetector(
-                                onTap: () {
-                                  if (widget.user == null) {
-                                    showCustomErrorToast(
-                                        message: 'Sign In To Continue');
-                                  } else {
-                                    showCupertinoModalBottomSheet(
-                                        context: context,
-                                        builder: (context) =>
-                                            CustomImagePickerBottomSheet(
-                                              cameraontap: () {
-                                                value.pickedProfileImage(
-                                                    ImageSource.camera,
-                                                    context);
-                                              },
-                                              galleryontap: () {
-                                                value.pickedProfileImage(
-                                                    ImageSource.gallery,
-                                                    context);
-                                              },
-                                            ));
-                                  }
-                                },
-                                child: CircleAvatar(
-                                  backgroundColor: primaryColor,
-                                  child: const Icon(
-                                    CupertinoIcons.camera,
-                                    size: 25,
-                                  ),
-                                ),
-                              ),
+                                  onTap: () {
+                                    if (widget.user == null) {
+                                      showCustomErrorToast(
+                                          message: 'Sign In To Continue');
+                                    } else {
+                                      showCupertinoModalBottomSheet(
+                                          context: context,
+                                          builder: (context) =>
+                                              CustomImagePickerBottomSheet(
+                                                cameraontap: () {
+                                                  value.pickedProfileImage(
+                                                      ImageSource.camera,
+                                                      context);
+                                                },
+                                                galleryontap: () {
+                                                  value.pickedProfileImage(
+                                                      ImageSource.gallery,
+                                                      context);
+                                                },
+                                              ));
+                                    }
+                                  },
+                                  child: Container(
+                                    width: 45,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        gradient: gradientColor),
+                                    child: const Center(
+                                      child: Icon(
+                                        CupertinoIcons.camera,
+                                        size: 25,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  )),
                             )
                           ],
                         ),
@@ -223,19 +229,45 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         hintText: "Last Name",
                         labelText: "Last Name"),
                     //
-                    TextField(
-                      enabled: false,
-                      style: const TextStyle(color: Colors.white60),
-                      controller: value.emailController,
-                      decoration: InputDecoration(
-                        fillColor: primaryColor.withOpacity(0.4),
-                        filled: true,
-                        hintText: 'Email',
-                        hintStyle: const TextStyle(color: Colors.black),
-                        labelText: 'Email',
-                        labelStyle: const TextStyle(color: Colors.white60),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color(0xFFC59241).withOpacity(0.4),
+                            const Color(0xFFFEF6D1).withOpacity(0.4),
+                            const Color(0xFFC49138).withOpacity(0.4),
+                          ],
+                        ),
+                      ),
+                      child: TextField(
+                        enabled: false,
+                        style: const TextStyle(color: Colors.white60),
+                        controller: value.emailController,
+                        decoration: const InputDecoration(
+                          filled: true,
+                          hintText: 'Email',
+                          hintStyle: TextStyle(color: Colors.black),
+                          labelText: 'Email',
+                          labelStyle: TextStyle(color: Colors.white60),
+                          border: InputBorder.none, // Remove the default border
+                          contentPadding:
+                              EdgeInsets.all(16), // Optional: adjust padding
+                        ),
                       ),
                     ),
+                    // TextField(
+                    //   enabled: false,
+                    //   style: const TextStyle(color: Colors.white60),
+                    //   controller: value.emailController,
+                    //   decoration: InputDecoration(
+                    //     fillColor: gradientColor,
+                    //     filled: true,
+                    //     hintText: 'Email',
+                    //     hintStyle: const TextStyle(color: Colors.black),
+                    //     labelText: 'Email',
+                    //     labelStyle: const TextStyle(color: Colors.white60),
+                    //   ),
+                    // ),
                     SizedBox(
                         width: size.width,
                         child: const Divider(

@@ -84,13 +84,31 @@ class CustomDrawer extends StatelessWidget {
                               fontSize: size.height * 0.026,
                               color: Colors.white),
                           children: [
-                            TextSpan(
-                              text: user == null || user!.data!.subscribe == '0'
-                                  ? " "
-                                  : 'Pro',
-                              style: GoogleFonts.urbanist(
-                                  fontSize: size.height * 0.012,
-                                  color: primaryColor),
+                            WidgetSpan(
+                              alignment: PlaceholderAlignment.baseline,
+                              baseline: TextBaseline.alphabetic,
+                              child: ShaderMask(
+                                shaderCallback: (bounds) =>
+                                    const LinearGradient(
+                                  colors: [
+                                    Color(0xFFC59241),
+                                    Color(0xFFFEF6D1),
+                                    Color(0xFFC49138),
+                                  ],
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  stops: [0.0, 0.5, 1.0],
+                                ).createShader(Rect.fromLTWH(
+                                        0, 0, bounds.width, bounds.height)),
+                                child: Text(
+                                  user == null || user!.data!.subscribe == '0'
+                                      ? " "
+                                      : 'Pro',
+                                  style: GoogleFonts.urbanist(
+                                      fontSize: size.height * 0.012,
+                                      color: whiteColor),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -108,15 +126,15 @@ class CustomDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
               },
-              leading: SvgPicture.asset(
+              leading: Image.asset(
                 homeIcon,
                 height: size.height * 0.03,
                 fit: BoxFit.fill,
               ),
-              title:   Text(
+              title: Text(
                 'Home',
-                style:
-                    GoogleFonts.urbanist(color: Colors.white, fontWeight: FontWeight.bold),
+                style: GoogleFonts.urbanist(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             ListTile(
@@ -134,10 +152,10 @@ class CustomDrawer extends StatelessWidget {
                 height: size.height * 0.03,
                 fit: BoxFit.fill,
               ),
-              title:   Text(
+              title: Text(
                 'Profile',
-                style:
-                    GoogleFonts.urbanist(color: Colors.white, fontWeight: FontWeight.bold),
+                style: GoogleFonts.urbanist(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             ListTile(
@@ -153,10 +171,10 @@ class CustomDrawer extends StatelessWidget {
                 height: size.height * 0.03,
                 fit: BoxFit.fill,
               ),
-              title:   Text(
+              title: Text(
                 'Bookmarks',
-                style:
-                    GoogleFonts.urbanist(color: Colors.white, fontWeight: FontWeight.bold),
+                style: GoogleFonts.urbanist(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             ListTile(
@@ -167,15 +185,15 @@ class CustomDrawer extends StatelessWidget {
                         child: const VisitedBar(),
                         type: PageTransitionType.fade));
               },
-              leading: SvgPicture.asset(
+              leading: Image.asset(
                 visitedLocationIcon,
                 height: size.height * 0.03,
                 fit: BoxFit.fill,
               ),
-              title:   Text(
+              title: Text(
                 'Visited Places',
-                style:
-                    GoogleFonts.urbanist(color: Colors.white, fontWeight: FontWeight.bold),
+                style: GoogleFonts.urbanist(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
             // ListTile(

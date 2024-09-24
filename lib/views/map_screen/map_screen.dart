@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/utils/colors.dart';
+import 'package:birds_view/utils/images.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../model/bar_details_model/bar_details_model.dart';
-import '../../widgets/custom_button/custom_button.dart';
 
 class MapScreen extends StatefulWidget {
   final List<Uint8List> barImage;
@@ -69,7 +69,9 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return SafeArea(
-      child: Scaffold(body: Consumer<MapsController>(
+      child: Scaffold(
+        
+        body: Consumer<MapsController>(
         builder: (context, value, child) {
           return Stack(
             children: [
@@ -125,18 +127,20 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                     )
                   : Positioned(
-                      left: 0,
-                      right: 0,
+                    left: size.width
+                    *0.3,
+                    right:size.width
+                    *0.3 ,
                       bottom: 0,
                       child: Padding(
                         padding: const EdgeInsets.all(15),
-                        child: CustomButton(
-                            text: 'Direction',
-                            ontap: () {
+                        child:  GestureDetector(
+                          onTap: () {
                               value.isGettingDirection = false;
                               value.clearPolylines();
                               value.getPolyline(widget.bar, widget.index);
-                            }),
+                          },
+                          child: Image.asset(directionBtn))
                       ),
                     ),
               Positioned(
