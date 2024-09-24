@@ -90,7 +90,6 @@ class _OnboardingOneScreenState extends State<OnboardingOneScreen> {
               ),
             ),
 
-         
             //
             SizedBox(
               height: size.height * 0.03,

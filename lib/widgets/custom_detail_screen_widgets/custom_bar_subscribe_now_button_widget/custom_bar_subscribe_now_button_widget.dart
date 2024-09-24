@@ -12,23 +12,22 @@ class CustomBarSubscribeNowButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: ontap,
-      child:  SizedBox(
-        width: size.width,
-        height: size.height*0.1,
-        child: Row(
-          children: [
-            Image.asset(subscribeBtn),
-            SizedBox(
-              width: size.width*0.02,
-            ),
-           const GradientText(text: "Subscribe Now", fontSize: 0.026, fontWeight: FontWeight.bold),
-           
-           
-        
-          ],
-        ),
-      )
-    );
+        onTap: ontap,
+        child: SizedBox(
+          width: size.width,
+          height: size.height * 0.1,
+          child: Row(
+            children: [
+              Image.asset(subscribeBtn),
+              SizedBox(
+                width: size.width * 0.02,
+              ),
+              const GradientText(
+                  text: "Subscribe Now",
+                  fontSize: 0.026,
+                  fontWeight: FontWeight.bold),
+            ],
+          ),
+        ));
   }
 }

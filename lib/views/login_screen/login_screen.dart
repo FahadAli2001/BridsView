@@ -81,8 +81,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     ),
                   ),
                 ),
-               
-               
+
                 //
                 SizedBox(
                   height: size.height * 0.03,

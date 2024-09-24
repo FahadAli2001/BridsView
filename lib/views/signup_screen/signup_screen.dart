@@ -122,8 +122,6 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
           ),
         ),
-
- 
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -163,36 +161,35 @@ class _SignupScreenState extends State<SignupScreen> {
                         right: size.width * 0.06,
                         top: size.height * 0.1,
                         child: GestureDetector(
-                          onTap: () {
-                            showCupertinoModalBottomSheet(
-                                context: context,
-                                builder: (context) =>
-                                    CustomImagePickerBottomSheet(
-                                      cameraontap: () {
-                                        value.pickedProfileImage(
-                                            ImageSource.camera, context);
-                                      },
-                                      galleryontap: () {
-                                        value.pickedProfileImage(
-                                            ImageSource.gallery, context);
-                                      },
-                                    ));
-                          },
-                          child: Container(
-                                    width: 45,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        gradient: gradientColor),
-                                    child: const Center(
-                                      child: Icon(
-                                        CupertinoIcons.camera,
-                                        size: 25,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  )
-                        ),
+                            onTap: () {
+                              showCupertinoModalBottomSheet(
+                                  context: context,
+                                  builder: (context) =>
+                                      CustomImagePickerBottomSheet(
+                                        cameraontap: () {
+                                          value.pickedProfileImage(
+                                              ImageSource.camera, context);
+                                        },
+                                        galleryontap: () {
+                                          value.pickedProfileImage(
+                                              ImageSource.gallery, context);
+                                        },
+                                      ));
+                            },
+                            child: Container(
+                              width: 45,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  gradient: gradientColor),
+                              child: const Center(
+                                child: Icon(
+                                  CupertinoIcons.camera,
+                                  size: 25,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            )),
                       )
                     ],
                   ),

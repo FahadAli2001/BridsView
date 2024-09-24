@@ -27,9 +27,9 @@ class CustomTextField extends StatelessWidget {
         controller: textEditingController,
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle:   GoogleFonts.urbanist(color: Colors.black),
+          hintStyle: GoogleFonts.urbanist(color: Colors.black),
           labelText: labelText,
-          labelStyle:   GoogleFonts.urbanist(color: Colors.white60),
+          labelStyle: GoogleFonts.urbanist(color: Colors.white60),
           suffixIcon: icon != null
               ? GestureDetector(
                   onTap: iconOnTap,

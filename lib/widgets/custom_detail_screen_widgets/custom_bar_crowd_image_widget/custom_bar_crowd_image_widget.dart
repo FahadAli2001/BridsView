@@ -11,28 +11,37 @@ class CustomBarCrowdImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: size.height * 0.07,
-      child: Consumer<DetailScreenController>(builder:(context, value, child) {
-        return Row(
-        children: [
-          Column(
-            children: [
-              Image.asset(maleCrowd,height: size.height * 0.08,),
-              CustomBarRandomPopulationWidget(size: size, text: value.randomPopulation.toString())
-            ],
-          ),
-          SizedBox(
-            width: size.width *0.06,
-          ),
-           Column(
-            children: [
-              Image.asset(femaleCrowd,height: size.height * 0.08,),
-              CustomBarRandomPopulationWidget(size: size, text: value.female.toString())
-            ],
-          ),
-        ],
-      );
-      },)
-    );
+        top: size.height * 0.07,
+        child: Consumer<DetailScreenController>(
+          builder: (context, value, child) {
+            return Row(
+              children: [
+                Column(
+                  children: [
+                    Image.asset(
+                      maleCrowd,
+                      height: size.height * 0.08,
+                    ),
+                    CustomBarRandomPopulationWidget(
+                        size: size, text: value.randomPopulation.toString())
+                  ],
+                ),
+                SizedBox(
+                  width: size.width * 0.06,
+                ),
+                Column(
+                  children: [
+                    Image.asset(
+                      femaleCrowd,
+                      height: size.height * 0.08,
+                    ),
+                    CustomBarRandomPopulationWidget(
+                        size: size, text: value.female.toString())
+                  ],
+                ),
+              ],
+            );
+          },
+        ));
   }
 }

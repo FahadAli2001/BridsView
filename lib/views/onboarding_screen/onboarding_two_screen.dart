@@ -74,7 +74,7 @@ class _OnboardTwoScreenState extends State<OnboardTwoScreen> {
             ),
             //
 
-                        Center(
+            Center(
               child: RichText(
                 text: TextSpan(
                   children: [

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class CustomBarRandomPopulationWidget extends StatelessWidget {
   final String text;
   final Size size;
-  const CustomBarRandomPopulationWidget({super.key, required this.size ,required this.text});
+  const CustomBarRandomPopulationWidget(
+      {super.key, required this.size, required this.text});
 
   @override
   Widget build(BuildContext context) {

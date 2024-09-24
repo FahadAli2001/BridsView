@@ -70,8 +70,7 @@ class CustomRecommendedWidget extends StatelessWidget {
                       ).createShader(bounds),
                       child: const Icon(
                         Icons.star,
-                        color: Colors
-                            .white,  
+                        color: Colors.white,
                       ),
                     );
                   },

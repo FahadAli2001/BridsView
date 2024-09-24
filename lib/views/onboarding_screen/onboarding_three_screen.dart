@@ -66,7 +66,7 @@ class _OnboardingThreeState extends State<OnboardingThree> {
               height: size.height * 0.1,
             ),
             //
-              Center(
+            Center(
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -87,10 +87,10 @@ class _OnboardingThreeState extends State<OnboardingThree> {
                             Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
                         child: Text(
                           'Check the Vibe, ',
-                              style: GoogleFonts.urbanist(
-                      fontSize: size.height * 0.025,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white),
+                          style: GoogleFonts.urbanist(
+                              fontSize: size.height * 0.025,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white),
                         ),
                       ),
                     ),

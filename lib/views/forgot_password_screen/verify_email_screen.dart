@@ -99,8 +99,6 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                     ),
                   ),
 
-                  
-                  
                   //
                   SizedBox(
                     height: size.height * 0.05,

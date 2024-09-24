@@ -69,9 +69,7 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return SafeArea(
-      child: Scaffold(
-        
-        body: Consumer<MapsController>(
+      child: Scaffold(body: Consumer<MapsController>(
         builder: (context, value, child) {
           return Stack(
             children: [
@@ -127,21 +125,18 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                     )
                   : Positioned(
-                    left: size.width
-                    *0.3,
-                    right:size.width
-                    *0.3 ,
+                      left: size.width * 0.3,
+                      right: size.width * 0.3,
                       bottom: 0,
                       child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child:  GestureDetector(
-                          onTap: () {
-                              value.isGettingDirection = false;
-                              value.clearPolylines();
-                              value.getPolyline(widget.bar, widget.index);
-                          },
-                          child: Image.asset(directionBtn))
-                      ),
+                          padding: const EdgeInsets.all(15),
+                          child: GestureDetector(
+                              onTap: () {
+                                value.isGettingDirection = false;
+                                value.clearPolylines();
+                                value.getPolyline(widget.bar, widget.index);
+                              },
+                              child: Image.asset(directionBtn))),
                     ),
               Positioned(
                   top: size.height * 0.05,

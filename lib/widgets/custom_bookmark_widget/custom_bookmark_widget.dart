@@ -76,13 +76,12 @@ class CustomBookmarkWidget extends StatelessWidget {
                               bookmarksBarsDetailList[index].formattedAddress!,
                               maxLines: 3,
                               overflow: TextOverflow.fade,
-                              style:   GoogleFonts.urbanist(color: Colors.white),
+                              style: GoogleFonts.urbanist(color: Colors.white),
                             ),
                           ),
                           SizedBox(
                             height: size.height * 0.015,
                           ),
-                          
                         ],
                       ),
                     )

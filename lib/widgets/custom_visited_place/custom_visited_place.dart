@@ -73,7 +73,7 @@ class CustomVisitedPlace extends StatelessWidget {
                         ),
                         Text(
                           visitedBarsDetailList[index].rating.toString(),
-                          style:   GoogleFonts.urbanist(
+                          style: GoogleFonts.urbanist(
                             color: Colors.white,
                           ),
                         ),
@@ -94,7 +94,7 @@ class CustomVisitedPlace extends StatelessWidget {
                         visitedBarsDetailList[index].formattedAddress!,
                         maxLines: 3,
                         overflow: TextOverflow.fade,
-                        style:   GoogleFonts.urbanist(color: Colors.white),
+                        style: GoogleFonts.urbanist(color: Colors.white),
                       ),
                     ),
                   ],

@@ -16,8 +16,11 @@ void showProSubscriptionPopup(BuildContext context, VoidCallback ontap) {
           height: 70,
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        title:const GradientText(text: "BirdsView Pro Benefits", fontSize: 0.026, fontWeight: FontWeight.bold),
-        content:   Text(
+        title: const GradientText(
+            text: "BirdsView Pro Benefits",
+            fontSize: 0.026,
+            fontWeight: FontWeight.bold),
+        content: Text(
           '- Get real-time information on how many girls and guys are at the bar or club.\n\n- 100\$ per/year',
           style: GoogleFonts.urbanist(color: Colors.white),
         ),

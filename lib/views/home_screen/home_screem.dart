@@ -283,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     scrollDirection: Axis.horizontal,
                                     itemCount: mapController
                                         .homeScreennearestbarsOrClubsData!
-                                        .length ,
+                                        .length,
                                     itemBuilder: (context, index) {
                                       // Ensure that all lists have valid data for the current index
                                       bool hasImage = index <
