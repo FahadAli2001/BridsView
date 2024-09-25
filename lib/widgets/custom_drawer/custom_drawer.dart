@@ -197,17 +197,34 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
             // ListTile(
-            //   leading: Image.asset(
-            //     vendorIcon,
-            //     height: size.height * 0.03,
-            //     fit: BoxFit.fill,
+            //   onTap: () {
+            //       Navigator.push(
+            //         context,
+            //         PageTransition(
+            //             child: const SearchUserScreen(),
+            //             type: PageTransitionType.fade));
+            //   },
+            //   leading: ShaderMask(
+            //     shaderCallback: (Rect bounds) {
+            //       return gradientColor.createShader(bounds);
+            //     },
+            //     child: Icon(
+            //       CupertinoIcons.chat_bubble_2,
+            //       size: size.height * 0.03,
+            //       color: Colors.white,
+            //     ),
             //   ),
             //   title: Text(
-            //     'Become A Vendor',
-            //     style:
-            //         TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            //     'Friends',
+            //     style: GoogleFonts.urbanist(
+            //       color: Colors.white,
+            //       fontWeight: FontWeight.bold,
+            //     ),
             //   ),
             // ),
+
+           
+           
             const Spacer(),
 
             user == null || user!.data!.id == null

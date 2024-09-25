@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/apis.dart';
 import 'package:birds_view/views/login_screen/login_screen.dart';
 import 'package:birds_view/widgets/custom_error_toast/custom_error_toast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,6 +15,7 @@ import 'package:page_transition/page_transition.dart';
 import '../../widgets/custom_success_toast/custom_success_toast.dart';
 
 class SignUpController extends ChangeNotifier {
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -114,8 +117,9 @@ class SignUpController extends ChangeNotifier {
       request.fields['track_my_visit'] = '1';
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
-
+      log(response.body);
       if (response.statusCode == 201) {
+
         _isCreatingAccount = false;
         clearAllFields();
         _selectedDate;
@@ -123,8 +127,11 @@ class SignUpController extends ChangeNotifier {
         String jsonDataString =
             responseBody.substring(responseBody.indexOf('{'));
         var jsonData = json.decode(jsonDataString);
+          // UserModel user = UserModel.fromJson(jsonData);
         showCustomSuccessToast(message: 'User Created Successfully');
-
+      
+        // log(user.toString());
+        // await storeUserDataToFirestore(user);
         log(jsonData.toString());
         Navigator.pushAndRemoveUntil(
             context,
@@ -157,6 +164,24 @@ class SignUpController extends ChangeNotifier {
     }
   }
 
+  // save data to firebase
+
+  Future<void> storeUserDataToFirestore(UserModel user)async{
+   try {
+      await _fireStore.doc(user.data!.id .toString()).set({
+      "first_name":user.data!.firstName,
+      "last_name":user.data!.lastName,
+      "email":user.data!.email,
+      "date_of_birth":user.data!.dateOfBirth,
+      "gender":user.data!.gender,
+      "image":user.data!.image,
+      "status":"unavailable"
+    }); 
+   } catch (e) {
+     log("firebase firestore : $e"); 
+   }
+  }
+
   void clearAllFields() {
     firstNameController.clear();
     lastNameController.clear();
@@ -167,4 +192,6 @@ class SignUpController extends ChangeNotifier {
     _pickedFile = null;
     notifyListeners();
   }
+
+
 }

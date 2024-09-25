@@ -37,12 +37,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FocusNode _focusNode = FocusNode();
-  // List<Uint8List?> exploreBarsImages = [];
-  // List<Results> exploreBar = [];
-  // List<Results> recomendedBarList = [];
-  // List<Uint8List?> recomdedBarsImages = [];
-  // List<Rows> exploreBarsDistanceList = [];
-  // List<Rows> recomendedBarsDistanceList = [];
+ 
 
   bool isSearchBarOpen = false;
   bool isReview = true;
@@ -87,11 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> exploreBarByMap() async {
     final mapController = Provider.of<MapsController>(context, listen: false);
 
-    // var data =
+  
     await mapController.exploreNearbyBarsMethod();
-    // exploreBar.addAll(data as Iterable<Results>);
-    // exploreBarsImages = mapController.exploreBarsImages;
-    // exploreBarsDistanceList = mapController.exploreBarsDistanceList;
+   
     setState(() {});
   }
 
@@ -106,11 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> recomendedBars() async {
     final mapController = Provider.of<MapsController>(context, listen: false);
 
-    // var data =
+    
     await mapController.recommendedBarsMethod();
-    // recomendedBarList.addAll(data as Iterable<Results>);
-    // recomdedBarsImages = mapController.recomdedBarsImages;
-    // recomendedBarsDistanceList = mapController.recomendedBarsDistanceList;
+ 
     setState(() {});
   }
 
