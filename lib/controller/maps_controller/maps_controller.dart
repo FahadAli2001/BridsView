@@ -602,7 +602,7 @@ class MapsController extends ChangeNotifier {
             homeScreennearsetbarsOrClubsImages.add(imageData ??
                 Uint8List(0)); // If no image, add an empty Uint8List
             homeScreennearestbarsOrClubsDistanceList.add(distanceData ??
-                Rows()); // If no distance, add an empty Rows object
+              const  Rows()); // If no distance, add an empty Rows object
           }());
         }
 

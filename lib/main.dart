@@ -12,7 +12,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:provider/provider.dart';
 import 'controller/bookmark_controller/bookmark_controller.dart';
-import 'controller/chat_controller/chat_controller.dart';
 import 'controller/deatil_screen_controller/detail_screen_controller.dart';
 import 'controller/login_controller/login_controller.dart';
 import 'controller/review_controller/review_controller.dart';
@@ -66,7 +65,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ReviewController()),
         ChangeNotifierProvider(create: (_) => VisitedBarsController()),
         ChangeNotifierProvider(create: (_) => PaymentController()),
-        ChangeNotifierProvider(create: (_)=>ChatController())
+        // ChangeNotifierProvider(create: (_)=>ChatController())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
