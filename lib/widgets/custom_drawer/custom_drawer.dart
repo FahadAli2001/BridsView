@@ -3,6 +3,7 @@ import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/views/bookmark_screen/bookmark_screen.dart';
+import 'package:birds_view/views/chat_screens/search_user_screen/search_user_screen.dart';
 import 'package:birds_view/views/login_screen/login_screen.dart';
 import 'package:birds_view/views/profile_screen/profile_screen.dart';
 import 'package:birds_view/views/visited_bars/visited_bars.dart';
@@ -196,35 +197,27 @@ class CustomDrawer extends StatelessWidget {
                     color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
-            // ListTile(
-            //   onTap: () {
-            //       Navigator.push(
-            //         context,
-            //         PageTransition(
-            //             child: const SearchUserScreen(),
-            //             type: PageTransitionType.fade));
-            //   },
-            //   leading: ShaderMask(
-            //     shaderCallback: (Rect bounds) {
-            //       return gradientColor.createShader(bounds);
-            //     },
-            //     child: Icon(
-            //       CupertinoIcons.chat_bubble_2,
-            //       size: size.height * 0.03,
-            //       color: Colors.white,
-            //     ),
-            //   ),
-            //   title: Text(
-            //     'Friends',
-            //     style: GoogleFonts.urbanist(
-            //       color: Colors.white,
-            //       fontWeight: FontWeight.bold,
-            //     ),
-            //   ),
-            // ),
-
-           
-           
+            //
+             ListTile(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: const SearchUserScreen(),
+                        type: PageTransitionType.fade));
+              },
+              leading: SvgPicture.asset(
+                addFriendIcon,
+                height: size.height * 0.03,
+                fit: BoxFit.fill,
+              ),
+              title: Text(
+                'Friends',
+                style: GoogleFonts.urbanist(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+            //
             const Spacer(),
 
             user == null || user!.data!.id == null

@@ -1,3 +1,4 @@
+import 'package:birds_view/controller/chat_controller/chat_controller.dart';
 import 'package:birds_view/controller/edit_profile_controller/edit_profile_controller.dart';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/controller/payment_controller/payment_controller.dart';
@@ -65,7 +66,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ReviewController()),
         ChangeNotifierProvider(create: (_) => VisitedBarsController()),
         ChangeNotifierProvider(create: (_) => PaymentController()),
-        // ChangeNotifierProvider(create: (_)=>ChatController())
+        ChangeNotifierProvider(create: (_)=>ChatController())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

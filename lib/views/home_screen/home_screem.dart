@@ -24,6 +24,7 @@ import '../../model/bar_details_model/bar_details_model.dart';
 import '../../widgets/custom_drawer/custom_drawer.dart';
 import '../../widgets/custom_explore_widget/custom_explore_widget.dart';
 import '../../widgets/custom_recommended_widget/custom_recommended_widget.dart';
+import '../chat_screens/search_user_screen/search_user_screen.dart';
 import '../explore_screen/explore_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,7 +38,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FocusNode _focusNode = FocusNode();
- 
 
   bool isSearchBarOpen = false;
   bool isReview = true;
@@ -82,9 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> exploreBarByMap() async {
     final mapController = Provider.of<MapsController>(context, listen: false);
 
-  
     await mapController.exploreNearbyBarsMethod();
-   
+
     setState(() {});
   }
 
@@ -99,9 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> recomendedBars() async {
     final mapController = Provider.of<MapsController>(context, listen: false);
 
-    
     await mapController.recommendedBarsMethod();
- 
+
     setState(() {});
   }
 
@@ -119,22 +117,37 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-          backgroundColor: Colors.black,
-          leading: GestureDetector(
-            onTap: () {
-              _scaffoldKey.currentState?.openDrawer();
-            },
-            child: const Icon(
-              Icons.menu,
-              size: 30,
-              color: Colors.white,
-            ),
+        backgroundColor: Colors.black,
+        leading: GestureDetector(
+          onTap: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+          child: const Icon(
+            Icons.menu,
+            size: 30,
+            color: Colors.white,
           ),
-          centerTitle: true,
-          title: CircleAvatar(
-            backgroundColor: Colors.black,
-            backgroundImage: AssetImage(whiteLogo),
-          )),
+        ),
+        centerTitle: true,
+        title: CircleAvatar(
+          backgroundColor: Colors.black,
+          backgroundImage: AssetImage(whiteLogo),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: const SearchUserScreen(),
+                          type: PageTransitionType.fade));
+                },
+                child: SvgPicture.asset(chatIcon)),
+          )
+        ],
+      ),
       drawer: CustomDrawer(
         user: widget.user,
       ),

@@ -17,3 +17,5 @@ String exploreIcon = "assets/explore_icon.png";
 String watchIcon = "assets/watch_icon.svg";
 String currentLocationIcon = "assets/current_location_icon.png";
 String whiteLogo = "assets/logo.png";
+String addFriendIcon = "assets/add_friend_icon.svg";
+String chatIcon = "assets/chat_icon.svg";
