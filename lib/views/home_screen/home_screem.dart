@@ -13,6 +13,7 @@ import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart'
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
@@ -133,20 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.black,
           backgroundImage: AssetImage(whiteLogo),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          child: const SearchUserScreen(),
-                          type: PageTransitionType.fade));
-                },
-                child: SvgPicture.asset(chatIcon)),
-          )
-        ],
+         
       ),
       drawer: CustomDrawer(
         user: widget.user,
@@ -164,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Column(
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               SizedBox(
                                 child: Row(
@@ -243,6 +231,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                               ),
+                              const Spacer(),
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            child: const SearchUserScreen(),
+                                            type: PageTransitionType.fade));
+                                  },
+                                  child: SvgPicture.asset(chatIcon,
+                                      height: size.height * 0.028)),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: Container(
+                                  color: whiteColor.withOpacity(0.5),
+                                  height: size.height * 0.028,
+                                  width: 2,
+                                ),
+                              ),
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -254,9 +262,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: Colors.white,
                                   size: size.height * 0.04,
                                 ),
-                              )
+                              ),
                             ],
                           ),
+                          //
                           SizedBox(
                             height: size.height * 0.03,
                           ),
@@ -892,29 +901,30 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           onChanged: (val) {},
           decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              fillColor: Colors.white,
-              filled: true,
-              prefixIcon: Icon(
-                Icons.search,
-                color: Colors.grey.shade900,
-                size: 30,
-              ),
-              suffixIcon: GestureDetector(
-                  onTap: () {
-                    value.barDetail.clear();
-                    value.searchTextFieldController.clear();
-                    setState(() {
-                      isSearchBarOpen = false;
-                    });
-                  },
-                  child: Icon(
-                    Icons.cancel_outlined,
-                    color: Colors.grey.shade900,
-                    size: 30,
-                  ))),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            fillColor: Colors.white,
+            filled: true,
+            prefixIcon: Icon(
+              Icons.search,
+              color: Colors.grey.shade900,
+              size: 30,
+            ),
+            suffixIcon: GestureDetector(
+                onTap: () {
+                  value.barDetail.clear();
+                  value.searchTextFieldController.clear();
+                  setState(() {
+                    isSearchBarOpen = false;
+                  });
+                },
+                child: Icon(
+                  Icons.cancel_outlined,
+                  color: Colors.grey.shade900,
+                  size: 30,
+                )),
+          ),
         );
       },
     );

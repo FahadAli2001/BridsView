@@ -123,6 +123,9 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       ),
+     
+     
+     
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: SingleChildScrollView(

@@ -19,3 +19,5 @@ String currentLocationIcon = "assets/current_location_icon.png";
 String whiteLogo = "assets/logo.png";
 String addFriendIcon = "assets/add_friend_icon.svg";
 String chatIcon = "assets/chat_icon.svg";
+String acceptIcon = "assets/accept.svg";
+String rejectIcon = "assets/reject.svg";

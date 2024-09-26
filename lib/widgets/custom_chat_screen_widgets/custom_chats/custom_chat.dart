@@ -1,11 +1,8 @@
-import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/views/chat_screens/chatroom_screen/chatroom_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
 
-class CustomMyFriends extends StatelessWidget {
-  const CustomMyFriends({super.key});
+class CustomChat extends StatelessWidget {
+  const CustomChat({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +10,6 @@ class CustomMyFriends extends StatelessWidget {
     return SizedBox(
       width: size.width,
       child: ListTile(
-        onTap: () {
-          Navigator.push(
-              context,
-              PageTransition(
-                  child: const ChatroomScreen(),
-                  type: PageTransitionType.fade));
-        },
         leading: const CircleAvatar(),
         title: Text(
           "Name",
@@ -29,14 +19,16 @@ class CustomMyFriends extends StatelessWidget {
               fontSize: size.height * 0.02),
         ),
         subtitle: Text(
-          "test@gmail.com",
+          "last msg sent by you",
           style: GoogleFonts.urbanist(
             color: Colors.white,
           ),
         ),
-        trailing: Icon(
-          Icons.more_vert,
-          color: whiteColor,
+        trailing: Text(
+          "9:30",
+          style: GoogleFonts.urbanist(
+            color: Colors.white,
+          ),
         ),
       ),
     );

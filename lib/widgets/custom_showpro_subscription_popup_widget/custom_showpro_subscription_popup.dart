@@ -21,7 +21,9 @@ void showProSubscriptionPopup(BuildContext context, VoidCallback ontap) {
             fontSize: 0.026,
             fontWeight: FontWeight.bold),
         content: Text(
-          '- Get real-time information on how many girls and guys are at the bar or club.\n\n- 100\$ per/year',
+          'Upgrade to Premium for just \$9.99/month and gain real-time access to the number of guys and girls in any establishment. Maximize your night with exclusive crowd insights and more!',
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.ltr,
           style: GoogleFonts.urbanist(color: Colors.white),
         ),
         actions: [

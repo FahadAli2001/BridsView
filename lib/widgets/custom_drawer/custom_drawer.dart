@@ -8,6 +8,7 @@ import 'package:birds_view/views/login_screen/login_screen.dart';
 import 'package:birds_view/views/profile_screen/profile_screen.dart';
 import 'package:birds_view/views/visited_bars/visited_bars.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
+import 'package:birds_view/widgets/custom_register_alertbox/custom_register_alertbox.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -161,11 +162,16 @@ class CustomDrawer extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                Navigator.push(
+                if (user == null) {
+                  customRegisterAlertBox(context);
+                } else {
+                    Navigator.push(
                     context,
                     PageTransition(
                         child: const BookmarkScreen(),
                         type: PageTransitionType.fade));
+                }
+              
               },
               leading: SvgPicture.asset(
                 bookmarksIcon,
@@ -180,11 +186,15 @@ class CustomDrawer extends StatelessWidget {
             ),
             ListTile(
               onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: const VisitedBar(),
-                        type: PageTransitionType.fade));
+                if (user == null) {
+                  customRegisterAlertBox(context);
+                } else {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: const VisitedBar(),
+                          type: PageTransitionType.fade));
+                }
               },
               leading: Image.asset(
                 visitedLocationIcon,
@@ -217,6 +227,9 @@ class CustomDrawer extends StatelessWidget {
                     color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
+
+           
+           
             //
             const Spacer(),
 
