@@ -1,4 +1,4 @@
-const   String googleMapApiKey = "";
+const   String googleMapApiKey = "AIzaSyAl8_GZb77k5io7_DCkAFYJHgGqDnzeH2k";
 
 
 // AIzaSyAl8_GZb77k5io7_DCkAFYJHgGqDnzeH2k

@@ -63,7 +63,7 @@ class _OnboardingThreeState extends State<OnboardingThree> {
             )),
             //
             SizedBox(
-              height: size.height * 0.1,
+              height: size.height * 0.05,
             ),
             //
             Center(

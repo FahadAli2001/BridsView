@@ -102,58 +102,7 @@ class LoginController extends ChangeNotifier {
     }
   }
 
-  // void loginWithEmailAndPassword(context) async {
-  //   if (!EmailValidator.validate(emailController.text)) {
-  //     showCustomErrorToast(message: 'Invalid Email Format');
-  //   }
-
-  //   if (emailController.text == "" || passwordController.text == "") {
-  //     showCustomErrorToast(message: "Enter Email And Password");
-  //   }
-
-  //   _isLoging = true;
-  //   notifyListeners();
-
-  //   var body = {
-  //     "email": emailController.text,
-  //     "password": passwordController.text
-  //   };
-
-  //   try {
-  //     var response = await http.post(Uri.parse(loginApi), body: body);
-  //     var data = jsonDecode(response.body);
-  //     log("Login Response : $data");
-  //     if (response.statusCode == 201) {
-  //       UserModel user = UserModel.fromJson(data);
-
-  //       saveUserIdAndToken(user.data!.id.toString(), user.token.toString());
-
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         PageTransition(
-  //             child: HomeScreen(
-  //               user: user,
-  //             ),
-  //             type: PageTransitionType.fade),
-  //         (route) => false,
-  //       );
-  //       clearTextField();
-
-  //       _isLoging = false;
-  //       notifyListeners();
-  //     } else {
-  //       showCustomErrorToast(message: 'Invalid Email or Password');
-
-  //       _isLoging = false;
-  //       notifyListeners();
-  //     }
-  //   } catch (e) {
-  //     log("catch login error :  ${e.toString()}");
-
-  //     _isLoging = false;
-  //     notifyListeners();
-  //   }
-  // }
+ 
 
   void saveUserIdAndToken(String id, String token) async {
     SharedPreferences sp = await SharedPreferences.getInstance();

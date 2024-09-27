@@ -121,7 +121,7 @@ class _DetailScreenState extends State<DetailScreen>
         },
         child: Scaffold(
             bottomNavigationBar: Padding(
-              padding: const EdgeInsets.all(15),
+              padding:   EdgeInsets.only(top: 15,bottom: 15,right: size.width*0.25,left:size.width*0.25 ),
               child: CustomButton(
                   text: 'Locate',
                   ontap: () async {
@@ -397,12 +397,14 @@ class _DetailScreenState extends State<DetailScreen>
                                               .toStringAsFixed(1),
                                           style: GoogleFonts.urbanist(
                                             color: Colors.white,
+                                            fontWeight: FontWeight.bold,
                                             fontSize: size.width * 0.027,
                                           ),
                                         ),
                                         Text(
                                           ' Miles',
                                           style: GoogleFonts.urbanist(
+                                            fontWeight: FontWeight.bold,
                                               color: Colors.white),
                                         ),
                                         SizedBox(
@@ -452,37 +454,42 @@ class _DetailScreenState extends State<DetailScreen>
                           widget.user == null
                               ? const SizedBox()
                               : widget.user!.data!.subscribe == '1'
-                                  ? SizedBox(
-                                      width: size.width,
-                                      height: size.height * 0.18,
-                                      child: Stack(
-                                        children: [
-                                          CustomMixCrowdHeadingWidget(
-                                              size: size),
-
-                                          widget.searchBarDetail![widget.index]
-                                                          .rating !=
-                                                      null &&
-                                                  widget
-                                                          .searchBarDetail![
-                                                              widget.index]
-                                                          .rating! >=
-                                                      4.0
-                                              ? CustomBarHotBadgeWidget(
-                                                  animation: _animation,
-                                                  controller: _controller,
-                                                  size: size)
-                                              : const SizedBox(),
-                                          //
-
-                                          //
-                                          CustomBarCrowdImageWidget(size: size),
-                                          //
-                                          // CustomBarRandomPopulationWidget(
-                                          //     size: size),
-                                        ],
-                                      ),
-                                    )
+                                  ? Column(
+                                    children: [
+                                      SizedBox(
+                                          width: size.width,
+                                          height: size.height * 0.06,
+                                          child: Stack(
+                                            children: [
+                                              CustomMixCrowdHeadingWidget(
+                                                  size: size),
+                                      
+                                              widget.searchBarDetail![widget.index]
+                                                              .rating !=
+                                                          null &&
+                                                      widget
+                                                              .searchBarDetail![
+                                                                  widget.index]
+                                                              .rating! >=
+                                                          4.0
+                                                  ? CustomBarHotBadgeWidget(
+                                                      animation: _animation,
+                                                      controller: _controller,
+                                                      size: size)
+                                                  : const SizedBox(),
+                                              //
+                                      
+                                              //
+                                             
+                                              //
+                                              // CustomBarRandomPopulationWidget(
+                                              //     size: size),
+                                            ],
+                                          ),
+                                        ),
+                                         CustomBarCrowdImageWidget(size: size),
+                                    ],
+                                  )
                                   : Consumer<PaymentController>(
                                       builder: (context, value, child) {
                                         return Align(
@@ -996,12 +1003,14 @@ class _DetailScreenState extends State<DetailScreen>
                                                   .toStringAsFixed(1),
                                               style: GoogleFonts.urbanist(
                                                 color: Colors.white,
+                                                fontWeight: FontWeight.bold,
                                                 fontSize: size.width * 0.027,
                                               ),
                                             ),
                                             Text(
                                               ' Miles',
                                               style: GoogleFonts.urbanist(
+                                                fontWeight: FontWeight.bold,
                                                   color: Colors.white),
                                             ),
                                             SizedBox(
@@ -1039,33 +1048,37 @@ class _DetailScreenState extends State<DetailScreen>
                               widget.user == null
                                   ? const SizedBox()
                                   : widget.user!.data!.subscribe == "1"
-                                      ? SizedBox(
-                                          width: size.width,
-                                          height: size.height * 0.18,
-                                          child: Stack(
-                                            children: [
-                                              CustomMixCrowdHeadingWidget(
-                                                  size: size),
-
-                                              barDetail![0].rating != null &&
-                                                      barDetail![0].rating! >=
-                                                          4.0
-                                                  ? CustomBarHotBadgeWidget(
-                                                      animation: _animation,
-                                                      controller: _controller,
-                                                      size: size)
-                                                  : const SizedBox(),
-                                              //
-
-                                              //
-                                              CustomBarCrowdImageWidget(
-                                                  size: size),
-                                              //
-                                              // CustomBarRandomPopulationWidget(
-                                              //     size: size),
-                                            ],
-                                          ),
-                                        )
+                                      ? Column(
+                                        children: [
+                                          SizedBox(
+                                            // color: Colors.orange,
+                                              width: size.width *0.9,
+                                              height: size.height * 0.06,
+                                              child: 
+                                                  Stack(
+                                                    children: [
+                                                      CustomMixCrowdHeadingWidget(
+                                                          size: size),
+                                                  
+                                                      barDetail![0].rating != null &&
+                                                              barDetail![0].rating! >=
+                                                                  4.0
+                                                          ? CustomBarHotBadgeWidget(
+                                                              animation: _animation,
+                                                              controller: _controller,
+                                                              size: size)
+                                                          : const SizedBox(),
+                                                      //
+                                                  
+                                                    ],
+                                                  ),
+                                                   
+                                            ),
+                                            //
+           
+                                           CustomBarCrowdImageWidget(size: size)
+                                        ],
+                                      )
                                       : Consumer<PaymentController>(
                                           builder: (context, value, child) {
                                             return Align(
@@ -1093,6 +1106,8 @@ class _DetailScreenState extends State<DetailScreen>
                                           },
                                         ),
 
+                           
+                           
                               //
                               SizedBox(
                                 height: size.height * 0.02,

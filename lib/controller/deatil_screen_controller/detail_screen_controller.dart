@@ -8,8 +8,10 @@ class DetailScreenController extends ChangeNotifier {
   math.Random random = math.Random();
   int? _randomPopulation;
   int? _female;
+  int? _totalPerson;
 
   int? get randomPopulation => _randomPopulation;
+  int? get totalPerson => _totalPerson;
   int? get female => _female;
 
   Future<void> socialLaunchUrl(String url) async {
@@ -49,12 +51,16 @@ class DetailScreenController extends ChangeNotifier {
         if (barPopulation % 2 == 0) {
           _randomPopulation = barPopulation + random.nextInt(10);
           _female = barPopulation + random.nextInt(10);
+          _totalPerson = _randomPopulation!+_female!;
+          notifyListeners();
         } else {
           _randomPopulation = barPopulation - random.nextInt(10);
           _female = barPopulation - random.nextInt(10);
+          _totalPerson = _randomPopulation!+_female!;
+          notifyListeners();
         }
         await saveBarId(barPlaceId);
-
+        
         notifyListeners();
       }
     } catch (e) {

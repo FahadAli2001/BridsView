@@ -36,7 +36,7 @@ class _OnboardingOneScreenState extends State<OnboardingOneScreen> {
             ),
             //
             SizedBox(
-              height: size.height * 0.1,
+              height: size.height * 0.05,
             ),
             //
             Center(

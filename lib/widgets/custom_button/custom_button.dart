@@ -1,4 +1,4 @@
-import 'package:birds_view/utils/images.dart';
+import 'package:birds_view/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,11 +13,12 @@ class CustomButton extends StatelessWidget {
     return GestureDetector(
       onTap: ontap,
       child: Container(
-        width: size.width,
+        width: size.width*0.5   ,
         height: size.height * 0.06,
         decoration: BoxDecoration(
-            image:
-                DecorationImage(image: AssetImage(button), fit: BoxFit.fill)),
+          borderRadius: BorderRadius.circular(30),
+            gradient: gradientColor
+                ),
         child: Center(
           child: Text(
             text,

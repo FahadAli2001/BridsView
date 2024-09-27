@@ -61,7 +61,7 @@ class _OnboardTwoScreenState extends State<OnboardTwoScreen> {
             ),
             //
             SizedBox(
-              height: size.height * 0.1,
+              height: size.height * 0.05,
             ),
             //
             Center(

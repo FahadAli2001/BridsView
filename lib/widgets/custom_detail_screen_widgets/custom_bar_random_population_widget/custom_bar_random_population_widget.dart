@@ -11,7 +11,7 @@ class CustomBarRandomPopulationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       top: size.height * 0.07,
-      left: size.width * 0.32,
+      left: 0,
       child: Text(
         text,
         style: GoogleFonts.urbanist(

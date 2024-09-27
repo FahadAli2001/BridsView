@@ -165,13 +165,12 @@ class CustomDrawer extends StatelessWidget {
                 if (user == null) {
                   customRegisterAlertBox(context);
                 } else {
-                    Navigator.push(
-                    context,
-                    PageTransition(
-                        child: const BookmarkScreen(),
-                        type: PageTransitionType.fade));
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: const BookmarkScreen(),
+                          type: PageTransitionType.fade));
                 }
-              
               },
               leading: SvgPicture.asset(
                 bookmarksIcon,
@@ -208,49 +207,53 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
             //
-             ListTile(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: const SearchUserScreen(),
-                        type: PageTransitionType.fade));
-              },
-              leading: SvgPicture.asset(
-                addFriendIcon,
-                height: size.height * 0.03,
-                fit: BoxFit.fill,
-              ),
-              title: Text(
-                'Friends',
-                style: GoogleFonts.urbanist(
-                    color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
+            //  ListTile(
+            //   onTap: () {
+            //     Navigator.push(
+            //         context,
+            //         PageTransition(
+            //             child:   SearchUserScreen(
+            //               userModel: user,
+            //             ),
+            //             type: PageTransitionType.fade));
+            //   },
+            //   leading: SvgPicture.asset(
+            //     addFriendIcon,
+            //     height: size.height * 0.03,
+            //     fit: BoxFit.fill,
+            //   ),
+            //   title: Text(
+            //     'Friends',
+            //     style: GoogleFonts.urbanist(
+            //         color: Colors.white, fontWeight: FontWeight.bold),
+            //   ),
+            // ),
 
-           
-           
             //
             const Spacer(),
 
             user == null || user!.data!.id == null
-                ? CustomButton(
-                    text: 'Log In',
-                    ontap: () async {
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          PageTransition(
-                              child: const LogInScreen(),
-                              type: PageTransitionType.fade),
-                          (route) => false);
-                    })
+                ? Center(
+                  child: CustomButton(
+                      text: 'Log In',
+                      ontap: () async {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            PageTransition(
+                                child: const LogInScreen(),
+                                type: PageTransitionType.fade),
+                            (route) => false);
+                      }),
+                )
                 : Consumer<LoginController>(
                     builder: (context, value, child) {
-                      return CustomButton(
-                          text: 'Log Out',
-                          ontap: () async {
-                            value.signOutFromSocialPlatforms(context);
-                          });
+                      return Center(
+                        child: CustomButton(
+                            text: 'Log Out',
+                            ontap: () async {
+                              value.signOutFromSocialPlatforms(context);
+                            }),
+                      );
                     },
                   )
           ],

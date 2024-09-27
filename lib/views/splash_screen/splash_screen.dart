@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        log("Animation completed, checking user status");
+      
         checkRoute();
       }
     });
@@ -103,12 +103,12 @@ class _SplashScreenState extends State<SplashScreen>
         width: size.width,
         height: size.height,
         decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.99),
+            color: Colors.black.withOpacity(0.9),
             image: DecorationImage(
               image: AssetImage(splashBackground),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.99),
+                Colors.black.withOpacity(0.9),
                 BlendMode.srcOver,
               ),
             )),
