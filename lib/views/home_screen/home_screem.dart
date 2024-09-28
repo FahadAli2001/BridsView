@@ -232,27 +232,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               const Spacer(),
-                              // GestureDetector(
-                              //     onTap: () {
-                              //       Navigator.push(
-                              //           context,
-                              //           PageTransition(
-                              //               child:   SearchUserScreen(
-                              //                 userModel: widget.user,
-                              //               ),
-                              //               type: PageTransitionType.fade));
-                              //     },
-                              //     child: SvgPicture.asset(chatIcon,
-                              //         height: size.height * 0.028)),
-                              // Padding(
-                              //   padding:
-                              //       const EdgeInsets.symmetric(horizontal: 5),
-                              //   child: Container(
-                              //     color: whiteColor.withOpacity(0.5),
-                              //     height: size.height * 0.028,
-                              //     width: 2,
-                              //   ),
-                              // ),
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            child:   SearchUserScreen(
+                                              userModel: widget.user,
+                                            ),
+                                            type: PageTransitionType.fade));
+                                  },
+                                  child: SvgPicture.asset(chatIcon,
+                                      height: size.height * 0.028)),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: Container(
+                                  color: whiteColor.withOpacity(0.5),
+                                  height: size.height * 0.028,
+                                  width: 2,
+                                ),
+                              ),
                               GestureDetector(
                                 onTap: () {
                                   setState(() {

@@ -168,6 +168,7 @@ class SignUpController extends ChangeNotifier {
   Future<void> storeUserDataToFirestore(UserModel user) async {
     try {
       await _fireStore.collection("users").doc(user.data!.id.toString()).set({
+        "id":user.data!.id.toString(),
         "first_name": user.data!.firstName,
         "last_name": user.data!.lastName,
         "email": user.data!.email,

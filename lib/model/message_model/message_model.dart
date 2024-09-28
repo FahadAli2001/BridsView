@@ -26,7 +26,7 @@ class MessageModel {
       sender: json['sender'],
       text: json['text'],
       seen: json['seen'],
-      createdOn: json['createdOn'].toDate(),
+      createdOn: json['createdOn'],
       messageId: json['messageId'],
       imageUrl: json['imageUrl'],
       videoUrl: json['videoUrl'],

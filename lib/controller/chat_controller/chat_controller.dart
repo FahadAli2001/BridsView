@@ -1,21 +1,26 @@
 import 'dart:developer';
-
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:birds_view/model/firebase_friendreq_model/firebase_friendreq_model.dart';
 import 'package:birds_view/model/firebase_user_model/firebase_user_model.dart';
 import 'package:birds_view/model/friend_model/friend_model.dart';
 import 'package:birds_view/model/message_model/message_model.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
-import 'package:birds_view/views/chat_screens/chatroom_screen/chatroom_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../model/chat_room_model/chat_room_model.dart';
 
 class ChatController extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController messageController = TextEditingController();
-  var uuid =const Uuid();
+  var uuid = const Uuid();
+  // ignore: prefer_typing_uninitialized_variables
+  var imageUrl;
   List<MessageModel> messages = [];
   List<FirebaseUserModel>? firebaseUserModel = [];
   List<FriendRequestModel?> friendRequests = [];
@@ -91,7 +96,7 @@ class ChatController extends ChangeNotifier {
           .toList();
 
       notifyListeners();
-
+      log(firebaseUserModel.toString());
       _isSearching = false;
       notifyListeners();
     }).catchError((error) {
@@ -103,23 +108,19 @@ class ChatController extends ChangeNotifier {
 
   Future<void> sendFriendRequest(
       List<FirebaseUserModel> userModel, int index) async {
-    // Get the recipient's user ID
-
-    // Check if already friends
-    if (await isFriend(userModel[index].id!)) {
+ 
+     if (await isFriend(userModel[index].id!)) {
       log("You are already friends.");
       return; // Exit if they are already friends
     }
 
-    // Check if a request has already been sent
-    if (await hasSentRequest(userModel[index].id!)) {
+     if (await hasSentRequest(userModel[index].id!)) {
       log("Friend request already sent.");
       return; // Exit if a request is already pending
     }
 
     try {
-      // Send a friend request
-      await _firestore
+       await _firestore
           .collection("users")
           .doc(userModel[index].id!)
           .collection("friendRequests")
@@ -190,66 +191,131 @@ class ChatController extends ChangeNotifier {
       log("Error fetching friend requests: $error");
     });
   }
-
+  // issue
   void acceptFriendRequest(List<FriendRequestModel?> requesterModel, int index,
-      UserModel? currentUser) async {
-    // Delete the friend request from the current user's friend requests collection
-    await _firestore
-        .collection("users")
-        .doc(userId)
-        .collection("friendRequests")
-        .doc(requesterModel[index]!.requesterId)
-        .delete()
-        .then((_) {
-      log("Friend request deleted from current user.");
-    }).catchError((error) {
-      log("Error deleting friend request: $error");
-    });
+    UserModel? currentUser) async {
+  
+  String requesterId = requesterModel[index]!.requesterId!; // Requester's ID
+  String currentUserId = currentUser!.data!.id!.toString(); // Current User's ID
 
-    // Add the requester to the current user's friend list
-    await _firestore
-        .collection("users")
-        .doc(userId)
-        .collection("friendList")
-        .doc(requesterModel[index]!.requesterId)
-        .set({
-      "friendId": requesterModel[index]!.requesterId,
-      "firstName": requesterModel[index]!.requesterFirstName,
-      "lastName": requesterModel[index]!.requesterLastName,
-      "email": requesterModel[index]!.requesterEmail,
-      "image": requesterModel[index]!.requesterImage,
-      "status": "friends",
-    }).then((_) {
-      log("Requester added to current user's friend list.");
-    }).catchError((error) {
-      log("Error adding requester to friend list: $error");
-    });
+  // Step 1: Delete the friend request from the current user's friendRequests collection
+  await _firestore
+      .collection("users")
+      .doc(currentUserId)
+      .collection("friendRequests")
+      .doc(requesterId)
+      .delete()
+      .then((_) {
+    log("Friend request deleted from current user.");
+  }).catchError((error) {
+    log("Error deleting friend request: $error");
+  });
 
-    // Now, add the current user to the requester's friend list
-    await _firestore
-        .collection("users")
-        .doc(requesterModel[index]!.requesterId)
-        .collection("friendList")
-        .doc(userId)
-        .set({
-      "friendId": currentUser!.data!.id,
-      "firstName": currentUser.data!.firstName,
-      "lastName": currentUser.data!.lastName,
-      "email": currentUser.data!.email,
-      "image": currentUser.data!.image,
-      "status": "friends",
-    }).then((_) {
-      log("Current user added to requester's friend list.");
-    }).catchError((error) {
-      log("Error adding current user to requester's friend list: $error");
-    });
+  // Step 2: Add the requester to the current user's friend list
+  await _firestore
+      .collection("users")
+      .doc(currentUserId)
+      .collection("friendList")
+      .doc(requesterId)
+      .set({
+    "friendId": requesterId,
+    "firstName": requesterModel[index]!.requesterFirstName,
+    "lastName": requesterModel[index]!.requesterLastName,
+    "email": requesterModel[index]!.requesterEmail,
+    "image": requesterModel[index]!.requesterImage,
+    "status": "friends",
+  }).then((_) {
+    log("Requester added to current user's friend list.");
+  }).catchError((error) {
+    log("Error adding requester to friend list: $error");
+  });
 
-    // Remove the accepted request from the list and update UI
-    friendRequests.removeAt(index);
-    notifyListeners();
+  // Step 3: Add the current user to the requester's friend list
+  await _firestore
+      .collection("users")
+      .doc(requesterId) // Requester's document
+      .collection("friendList")
+      .doc(currentUserId) // Use the current user's ID here
+      .set({
+    "friendId": currentUserId,
+    "firstName": currentUser.data!.firstName,
+    "lastName": currentUser.data!.lastName,
+    "email": currentUser.data!.email,
+    "image": currentUser.data!.image,
+    "status": "friends",
+  }).then((_) {
+    log("Current user added to requester's friend list.");
+  }).catchError((error) {
+    log("Error adding current user to requester's friend list: $error");
+  });
 
-    log("Friend request accepted.");
-  }
+  // Step 4: Remove the friend request from the local list and notify listeners
+  friendRequests.removeAt(index);
+  notifyListeners();
+
+  log("Friend request accepted.");
+}
+
+
+  // void acceptFriendRequest(List<FriendRequestModel?> requesterModel, int index,
+  //     UserModel? currentUser) async {
+    
+  //   await _firestore
+  //       .collection("users")
+  //       .doc(userId)
+  //       .collection("friendRequests")
+  //       .doc(requesterModel[index]!.requesterId)
+  //       .delete()
+  //       .then((_) {
+  //     log("Friend request deleted from current user.");
+  //   }).catchError((error) {
+  //     log("Error deleting friend request: $error");
+  //   });
+
+  //   // Add the requester to the current user's friend list
+  //   await _firestore
+  //       .collection("users")
+  //       .doc(userId)
+  //       .collection("friendList")
+  //       .doc(requesterModel[index]!.requesterId)
+  //       .set({
+  //     "friendId": requesterModel[index]!.requesterId,
+  //     "firstName": requesterModel[index]!.requesterFirstName,
+  //     "lastName": requesterModel[index]!.requesterLastName,
+  //     "email": requesterModel[index]!.requesterEmail,
+  //     "image": requesterModel[index]!.requesterImage,
+  //     "status": "friends",
+  //   }).then((_) {
+  //     log("Requester added to current user's friend list.");
+  //   }).catchError((error) {
+  //     log("Error adding requester to friend list: $error");
+  //   });
+
+     
+  //   await _firestore
+  //       .collection("users")
+  //       .doc(requesterModel[index]!.requesterId)
+  //       .collection("friendList")
+  //       .doc(userId)
+  //       .set({
+  //     "friendId": currentUser!.data!.id,
+  //     "firstName": currentUser.data!.firstName,
+  //     "lastName": currentUser.data!.lastName,
+  //     "email": currentUser.data!.email,
+  //     "image": currentUser.data!.image,
+  //     "status": "friends",
+  //   }).then((_) {
+  //     log("Current user added to requester's friend list.");
+  //   }).catchError((error) {
+  //     log("Error adding current user to requester's friend list: $error");
+  //   });
+
+    
+  //   friendRequests.removeAt(index);
+  //   notifyListeners();
+
+  //   log("Friend request accepted.");
+  // }
 
   void rejectFriendRequest(
       List<FriendRequestModel?> requesterModel, int index) async {
@@ -298,130 +364,176 @@ class ChatController extends ChangeNotifier {
     }
   }
 
-  String generateChatId(String userId1, String userId2) {
-    // Sort the user IDs to ensure consistent chat ID creation
-    List<String> userIds = [userId1, userId2]..sort();
-    return '${userIds[0]}_${userIds[1]}'; // Combine with an underscore or another delimiter
-  }
-
-  Future<String> getChatId(String userId1, String userId2) async {
-    String chatId = generateChatId(userId1, userId2);
-    // Check if the chat ID already exists
-    final chatSnapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(chatId)
-        .collection('chats')
-        .doc(chatId) // Optionally, you can store chat metadata here
+  Future<ChatRoomModel?> getChatRoomModel(String targetUser) async {
+    ChatRoomModel? chatRoom;
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('chatrooms')
+        .where('participants.$userId', isEqualTo: true)
+        .where('participants.$targetUser', isEqualTo: true)
         .get();
 
-    if (chatSnapshot.exists) {
-      return chatId; // Existing chat found
-    } else {
-      // Create a new chat document if it does not exist
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(chatId)
-          .collection('chats')
-          .doc(chatId)
-          .set({'createdAt': FieldValue.serverTimestamp()});
+    if (snapshot.docs.isNotEmpty) {
+      // fetch exsisting
+      var docs = snapshot.docs[0].data();
 
-      return chatId; // Return new chat ID
+      ChatRoomModel exsistingRoom =
+          ChatRoomModel.fromJson(docs as Map<String, dynamic>);
+
+      chatRoom = exsistingRoom;
+    } else {
+      // create new one
+
+      ChatRoomModel newChatRoomModel = ChatRoomModel(
+          roomId: uuid.v1(),
+          lastMessage: '',
+          participants: {userId.toString(): true, targetUser.toString(): true});
+
+      await FirebaseFirestore.instance
+          .collection('chatrooms')
+          .doc(newChatRoomModel.roomId)
+          .set(newChatRoomModel.toJson());
+
+      chatRoom = newChatRoomModel;
+    }
+
+    return chatRoom;
+  }
+
+  void sendMessage(
+      [String? imageUrl,
+      ChatRoomModel? chatRoomModel,
+      String? messageType,
+      String? videoUrl]) async {
+    String msg = messageController.text.trim();
+    messageController.clear();
+
+    if (msg.isNotEmpty || imageUrl != null) {
+      String? textToSend;
+      if (messageType == "video") {
+        textToSend = "";
+      } else if (messageType == "image") {
+        textToSend = " ";
+      } else {
+        textToSend = msg;
+      }
+
+      MessageModel newMessage = MessageModel(
+          messageId: uuid.v1(),
+          sender: userId,
+          createdOn: DateTime.now().microsecondsSinceEpoch,
+          text: textToSend,
+          seen: false, // Set seen to false for new messages
+          imageUrl: imageUrl,
+          videoUrl: videoUrl);
+
+      try {
+        await FirebaseFirestore.instance
+            .collection("chatrooms")
+            .doc(chatRoomModel!.roomId)
+            .collection("messages")
+            .doc(newMessage.messageId)
+            .set(newMessage.toJson())
+            .then((value) {});
+
+        chatRoomModel.lastMessage = msg;
+        await FirebaseFirestore.instance
+            .collection("chatrooms")
+            .doc(chatRoomModel.roomId)
+            .set(chatRoomModel.toJson());
+
+        log("Message Sent!");
+      } catch (e) {
+        log("Error sending message: $e");
+      }
     }
   }
 
-  void startChat(String userId2, context, int index,
-      List<FriendModel?> friendModel) async {
-    String chatId = await getChatId(userId!, userId2);
-    Navigator.push(
-      context,
-      PageTransition(
-          child: ChatroomScreen(
-            chatId: chatId,
-            friendId: userId2,
-            index: index,
-            friendModel: friendModel,
-          ),
-          type: PageTransitionType.fade),
-    );
+  String formatTime(String createdOn) {
+    int timestamp = int.parse(createdOn);
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+
+    // Format time as HH:mm (24-hour format) or hh:mm a (12-hour format)
+    return DateFormat('hh:mm ').format(dateTime);
   }
 
-  // Fetch messages from Firestore
-  Future<void> fetchMessages(String friendId, String chatId) async {
-    final messageSnapshots = await _firestore
-        .collection('users')
-        .doc(friendId)
-        .collection('chats')
-        .doc(chatId)
-        .collection('messages')
-        .orderBy('timestamp', descending: true)
-        .get();
-
-    messages = messageSnapshots.docs
-        .map((doc) => MessageModel.fromJson(doc.data()))
-        .toList();
-    notifyListeners();
+  void pickImage(ChatRoomModel? chatRoomModel) async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    log("picked file : $pickedImage");
+    if (pickedImage != null) {
+      uploadImage(File(pickedImage.path), chatRoomModel);
+    }
   }
 
-  Future<void> sendMessage(
-    String content,
-    String type,
-    String friendId,
-    String chatId, [
-    String? imageUrl,
-    String? videoUrl,
-  ]) async {
-  if (content.trim().isEmpty && imageUrl == null && videoUrl == null) {
-    return;
+  void uploadImage(File imageFile, ChatRoomModel? chatRoomModel) async {
+    try {
+      var reference =
+          FirebaseStorage.instance.ref().child('chat_images/${uuid.v1()}');
+
+      var uploadTask = reference.putFile(imageFile);
+
+      // Listen to the task events to get progress or capture failure
+      uploadTask.snapshotEvents.listen((event) {
+        switch (event.state) {
+          case TaskState.running:
+            log("Upload is running...");
+            break;
+          case TaskState.paused:
+            log("Upload is paused.");
+            break;
+          case TaskState.success:
+            log("Upload completed successfully.");
+            break;
+          case TaskState.canceled:
+            log("Upload was canceled.");
+            break;
+          case TaskState.error:
+            log("An error occurred during upload.");
+            break;
+        }
+      });
+
+      // Get the image URL after upload completes
+      imageUrl = await uploadTask.then((taskSnapshot) {
+        return taskSnapshot.ref.getDownloadURL();
+      });
+
+      log("Image uploaded: $imageUrl");
+      sendMessage(imageUrl, chatRoomModel, "image", null);
+    } catch (e) {
+      log("Error uploading image: $e");
+    }
   }
 
-  // Determine the text to display based on the message type
-  String? textToSend = content.trim();
-  if (type == "image") {
-    textToSend = "Image Message";
-  } else if (type == "video") {
-    textToSend = "Video Message";
+  void pickVideo(ChatRoomModel? chatRoomModel) async {
+    final picker = ImagePicker();
+    final pickedVideo = await picker.pickVideo(source: ImageSource.gallery);
+    log("Picked video: $pickedVideo");
+
+    if (pickedVideo != null) {
+      uploadVideo(File(pickedVideo.path), chatRoomModel);
+    }
   }
 
-  // Create the message object
-  MessageModel newMessage = MessageModel(
-    messageId: uuid.v1(),  
-    sender: userId!, // Use the current logged-in user's ID
-    text: textToSend,
-    seen: false, // Set to false since it's a new message
-    createdOn: DateTime.now().microsecondsSinceEpoch, // Timestamp
-    imageUrl: imageUrl, // Null for text message
-    videoUrl: videoUrl, // Null for text message
-  );
+  void uploadVideo(File videoFile, ChatRoomModel? chatRoomModel) async {
+    
+    try {
+       var reference =
+          FirebaseStorage.instance.ref().child('chat_videos/${uuid.v1()}');
 
-  try {
-    // Save the message in the current user's chat collection
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId) // Current user's ID
-        .collection('chats')
-        .doc(chatId)
-        .collection('messages')
-        .doc(newMessage.messageId) // Message document with the unique message ID
-        .set(newMessage.toJson());
+       UploadTask uploadTask = reference.putFile(videoFile);
 
-    // Save the message in the friend's chat collection
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(friendId) // Friend's ID
-        .collection('chats')
-        .doc(chatId)
-        .collection('messages')
-        .doc(newMessage.messageId) // Message document with the unique message ID
-        .set(newMessage.toJson());
+       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => {});
 
-    // Clear the message input field
-    messageController.clear();
+       String videoUrl = await taskSnapshot.ref.getDownloadURL();
 
-    // Optionally, send push notifications or refresh the messages
-    fetchMessages(friendId, chatId); // Update the message list
-  } catch (e) {
-    log("Error sending message: $e");
+       log("Video uploaded successfully: $videoUrl");
+
+       notifyListeners();
+      sendMessage(null, chatRoomModel, 'video', videoUrl);
+    } catch (e) {
+      // Catch and log any errors
+      log("Error uploading video: $e");
+    }
   }
-}
-
 }

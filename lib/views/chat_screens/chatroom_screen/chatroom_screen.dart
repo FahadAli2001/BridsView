@@ -1,6 +1,8 @@
 import 'package:birds_view/controller/chat_controller/chat_controller.dart';
+import 'package:birds_view/model/chat_room_model/chat_room_model.dart';
 import 'package:birds_view/model/friend_model/friend_model.dart';
 import 'package:birds_view/model/message_model/message_model.dart';
+import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -8,15 +10,18 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../../../widgets/video_player_widget/video_player_widget.dart';
+
 class ChatroomScreen extends StatefulWidget {
-  final String chatId;
-  final String friendId;
+  final ChatRoomModel? chatRoomModel;
+  final UserModel? user;
+
   final int index;
   final List<FriendModel?> friendModel;
   const ChatroomScreen(
       {super.key,
-      required this.chatId,
-      required this.friendId,
+      required this.user,
+      required this.chatRoomModel,
       required this.index,
       required this.friendModel});
 
@@ -25,17 +30,6 @@ class ChatroomScreen extends StatefulWidget {
 }
 
 class _ChatroomScreenState extends State<ChatroomScreen> {
-  @override
-  void initState() {
-    super.initState();
-    getMessages();
-  }
-
-  Future<void> getMessages() async {
-    final chatController = Provider.of<ChatController>(context);
-    chatController.fetchMessages(widget.friendId, widget.chatId);
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
@@ -101,7 +95,7 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                       child: StreamBuilder(
                         stream: FirebaseFirestore.instance
                             .collection("chatrooms")
-                            .doc(widget.chatId)
+                            .doc(widget.chatRoomModel!.roomId)
                             .collection("messages")
                             .orderBy("createdOn", descending: true)
                             .snapshots(),
@@ -123,10 +117,11 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                                   );
 
                                   bool isCurrentUserMessage =
-                                      currentMessage.sender == value.userId;
+                                      currentMessage.sender ==
+                                          widget.user!.data!.id.toString();
 
                                   return InkWell(
-                                     
+                                    onLongPress: () {},
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8, vertical: 4),
@@ -135,96 +130,99 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                                             ? CrossAxisAlignment.end
                                             : CrossAxisAlignment.start,
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                isCurrentUserMessage
-                                                    ? MainAxisAlignment.end
-                                                    : MainAxisAlignment.start,
-                                            children: [
-                                              if (!isCurrentUserMessage)
-                                                const SizedBox(
-                                                    width:
-                                                        48), // Spacer for non-user messages
-                                              Flexible(
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.all(12),
-                                                  decoration: BoxDecoration(
-                                                    color: isCurrentUserMessage
-                                                        ? Colors.blue.shade100
-                                                        : Colors.grey.shade200,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            16),
-                                                  ),
-                                                  child: Text(
-                                                    currentMessage.text!,
-                                                    style: const TextStyle(
-                                                        fontSize: 16),
-                                                  ),
+                                          currentMessage.text == null
+                                              ? const SizedBox.shrink()
+                                              : Row(
+                                                  mainAxisAlignment:
+                                                      isCurrentUserMessage
+                                                          ? MainAxisAlignment
+                                                              .end
+                                                          : MainAxisAlignment
+                                                              .start,
+                                                  children: [
+                                                    if (!isCurrentUserMessage)
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                    Flexible(
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(horizontal: 12,vertical: 5),
+                                                        decoration: BoxDecoration(
+                                                            color: isCurrentUserMessage
+                                                                ? const Color(
+                                                                    0xffc18e3c)
+                                                                : const Color(
+                                                                        0xff232323)
+                                                                    .withOpacity(
+                                                                        0.9),
+                                                            borderRadius: isCurrentUserMessage
+                                                                ? const BorderRadius.only(
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            8),
+                                                                    topLeft:
+                                                                        Radius.circular(
+                                                                            8),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            8))
+                                                                : const BorderRadius.only(
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            8),
+                                                                    topRight:
+                                                                        Radius.circular(8),
+                                                                    bottomRight: Radius.circular(8))),
+                                                        child: Text(
+                                                          currentMessage.text!,
+                                                          style: GoogleFonts
+                                                              .urbanist(
+                                                                  fontSize: 16,
+                                                                  color:
+                                                                      whiteColor),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    if (isCurrentUserMessage)
+                                                      const SizedBox(
+                                                        width:
+                                                            5, // Adjust as needed
+                                                      ),
+                                                  ],
                                                 ),
-                                              ),
-                                              if (isCurrentUserMessage)
-                                                const SizedBox(
-                                                    width:
-                                                        48), // Spacer for user messages
-                                            ],
-                                          ),
-
-                                          // Display Image if imageUrl exists
-                                          // if (currentMessage.imageUrl != null)
-                                          //   Padding(
-                                          //     padding: const EdgeInsets.only(top: 8.0),
-                                          //     child: FullScreenWidget(
-                                          //       disposeLevel: DisposeLevel.Medium,
-                                          //       child: Image.network(
-                                          //         currentMessage.imageUrl!,
-                                          //         width: 200,
-                                          //         height: 300,
-                                          //         fit: BoxFit.cover,
-                                          //       ),
-                                          //     ),
-                                          //   ),
-
-                                          // Display Video if videoUrl exists
-                                          // if (currentMessage.videoUrl != null)
-                                          //   Padding(
-                                          //     padding: const EdgeInsets.only(top: 8.0),
-                                          //     child: GestureDetector(
-                                          //       onTap: () {
-                                          //         Navigator.push(
-                                          //           context,
-                                          //           MaterialPageRoute(
-                                          //             builder: (context) => VideoPlayerScreen(
-                                          //               videoUrl: currentMessage.videoUrl!,
-                                          //             ),
-                                          //           ),
-                                          //         );
-                                          //       },
-                                          //       child: Icon(
-                                          //         Icons.play_circle_fill,
-                                          //         color: Colors.grey.shade700,
-                                          //         size: 50,
-                                          //       ),
-                                          //     ),
-                                          //   ),
-
-                                          // Seen/Unseen Icon for user's messages
-                                          if (isCurrentUserMessage)
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 8),
-                                              child: Icon(
-                                                currentMessage.seen == true
-                                                    ? Icons.done_all
-                                                    : Icons.done,
-                                                color:
-                                                    currentMessage.seen == true
-                                                        ? Colors.blue
-                                                        : Colors.black,
-                                                size: 18,
-                                              ),
+                                          if (currentMessage.videoUrl != null &&
+                                              currentMessage
+                                                  .videoUrl!.isNotEmpty)
+                                            VideoPlayerWidget(
+                                                videoUrl:
+                                                    currentMessage.videoUrl!)
+                                          else
+                                            const SizedBox.shrink(),
+                                          if (currentMessage.imageUrl != null &&
+                                              currentMessage
+                                                  .imageUrl!.isNotEmpty)
+                                            Image.network(
+                                              currentMessage.imageUrl!,
+                                              width: 200,
+                                              height: 300,
+                                              fit: BoxFit.fill,
+                                            )
+                                          else
+                                            const SizedBox.shrink(),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5),
+                                            child: Text(
+                                              value.formatTime(currentMessage
+                                                  .createdOn
+                                                  .toString()),
+                                              style: GoogleFonts.urbanist(
+                                                  fontSize: 10,
+                                                  color: whiteColor),
                                             ),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -232,13 +230,16 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                                 },
                               );
                             } else if (snapshot.hasError) {
-                              return const Center(
+                              return   Center(
                                 child: Text(
-                                    "An error occurred! Please check your internet connection."),
+                                    "An error occurred! Please check your internet connection.",
+                                    style: GoogleFonts.urbanist(color: whiteColor),),
                               );
                             } else {
-                              return const Center(
-                                child: Text("Say hi to your new friend"),
+                              return   Center(
+                                child: Text("Say hi to your new friend",
+                                  style: GoogleFonts.urbanist(color: whiteColor)
+                                ),
                               );
                             }
                           } else {
@@ -249,8 +250,8 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                         },
                       ),
                     ),
-                    //
 
+                    //
                     Padding(
                       padding: const EdgeInsets.all(15),
                       child: TextField(
@@ -279,15 +280,19 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                             children: [
                               SpeedDialChild(
                                 elevation: 20,
-                                child:
-                                    Icon(Icons.camera_alt, color: whiteColor),
+                                child: Icon(Icons.video_camera_back_outlined,
+                                    color: whiteColor),
                                 backgroundColor: Colors.black,
-                                onTap: () {},
+                                onTap: () {
+                                  value.pickVideo(widget.chatRoomModel);
+                                },
                               ),
                               SpeedDialChild(
                                 backgroundColor: Colors.black,
                                 child: Icon(Icons.photo, color: whiteColor),
-                                onTap: () {},
+                                onTap: () {
+                                  value.pickImage(widget.chatRoomModel);
+                                },
                               ),
                             ],
                           ),
@@ -299,8 +304,8 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                             icon: const Icon(Icons.send,
                                 color: Color(0xffE5B569)),
                             onPressed: () {
-                              value.sendMessage(value.messageController.text,
-                                  'text', widget.friendId, widget.chatId);
+                              value.sendMessage(
+                                  "", widget.chatRoomModel, "text", "");
                             },
                           ),
                         ),

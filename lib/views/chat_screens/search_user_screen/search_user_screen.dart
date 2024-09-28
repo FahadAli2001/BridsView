@@ -75,23 +75,24 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                       type: PageTransitionType.fade));
             }, child: Consumer<ChatController>(
               builder: (context, value, child) {
-                return value.friendReqCount == 0 ? Icon(
-                    CupertinoIcons.person_2,
-                    color: whiteColor,
-                  )
-                : badges.Badge(
-                  badgeStyle: badges.BadgeStyle(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  badgeContent: Text(
-                    value.friendReqCount.toString(),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  child: Icon(
-                    CupertinoIcons.person_2,
-                    color: whiteColor,
-                  ),
-                );
+                return value.friendReqCount == 0
+                    ? Icon(
+                        CupertinoIcons.person_2,
+                        color: whiteColor,
+                      )
+                    : badges.Badge(
+                        badgeStyle: badges.BadgeStyle(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        badgeContent: Text(
+                          value.friendReqCount.toString(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        child: Icon(
+                          CupertinoIcons.person_2,
+                          color: whiteColor,
+                        ),
+                      );
               },
             )),
           )
@@ -117,19 +118,22 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                           });
                         },
                         decoration: InputDecoration(
-                            border: const OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30))),
-                            fillColor: const Color(0xff252525),
-                            filled: true,
-                            prefixIcon: const Icon(CupertinoIcons.search),
-                            prefixIconColor: Colors.white,
-                            hintText: "Search Friends",
-                            hintStyle: TextStyle(
-                                color: whiteColor.withOpacity(0.9),
-                                fontSize: 14)),
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.all(Radius.circular(30)),
+                          ),
+                          fillColor: const Color(0xff252525),
+                          filled: true,
+                          prefixIcon: const Icon(CupertinoIcons.search),
+                          prefixIconColor: Colors.white,
+                          hintText: "Search Friends",
+                          hintStyle: TextStyle(
+                            color: whiteColor.withOpacity(0.9),
+                            fontSize: 14,
+                          ),
+                        ),
                       ),
+
                       // Divider
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -142,53 +146,139 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                         ),
                       ),
 
+                      // Tabs (My Friends, Chats, Groups)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
                             onTap: () {
-                              value.handleMyFriends();
+                              value
+                                  .handleMyFriends(); // Update the state for My Friends
                             },
                             child: Column(
                               children: [
-                                Text("My Friends",
-                                    style: GoogleFonts.urbanist(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: size.height * 0.022)),
+                                Text(
+                                  "My Friends",
+                                  style: GoogleFonts.urbanist(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: size.height * 0.022,
+                                  ),
+                                ),
                                 SizedBox(height: size.height * 0.01),
                                 value.myFriends
                                     ? Container(
                                         height: 3,
                                         width: size.width / 4,
                                         decoration: BoxDecoration(
-                                            gradient: gradientColor))
-                                    : SizedBox(height: 3, width: size.width / 4)
+                                          gradient: gradientColor,
+                                        ),
+                                      )
+                                    : SizedBox(
+                                        height: 3, width: size.width / 4),
                               ],
                             ),
                           ),
-                          // Repeat for Chats and Groups...
+                          GestureDetector(
+                            onTap: () {
+                              value.handleChats(); // Update the state for Chats
+                            },
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Chats",
+                                  style: GoogleFonts.urbanist(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: size.height * 0.022,
+                                  ),
+                                ),
+                                SizedBox(height: size.height * 0.01),
+                                value.chats
+                                    ? Container(
+                                        height: 3,
+                                        width: size.width / 4,
+                                        decoration: BoxDecoration(
+                                          gradient: gradientColor,
+                                        ),
+                                      )
+                                    : SizedBox(
+                                        height: 3, width: size.width / 4),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              value
+                                  .handleGroups(); // Update the state for Groups
+                            },
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Groups",
+                                  style: GoogleFonts.urbanist(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: size.height * 0.022,
+                                  ),
+                                ),
+                                SizedBox(height: size.height * 0.01),
+                                value.groups
+                                    ? Container(
+                                        height: 3,
+                                        width: size.width / 4,
+                                        decoration: BoxDecoration(
+                                          gradient: gradientColor,
+                                        ),
+                                      )
+                                    : SizedBox(
+                                        height: 3, width: size.width / 4),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
+
                       SizedBox(height: size.height * 0.02),
 
+                      // Conditional Rendering for My Friends
                       if (value.myFriends) ...[
                         if (value.friendsList.isEmpty)
-                          Container()
+                         const Center(
+                            child: Text(
+                              'No friends found',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          )
                         else
                           for (var i = 0;
                               i < value.friendsList.length;
                               i++) ...[
                             CustomMyFriends(
-                                index: i, friendModel: value.friendsList),
+                              index: i,
+                              friendModel: value.friendsList,
+                              userModel: widget.userModel,
+                            ),
                           ]
                       ],
 
-                      if (value.chats) const CustomChat(),
-                      if (value.groups) const CustomGroups(),
+                      // Conditional Rendering for Chats
+                      if (value.chats) ...[
+                        SizedBox(height: size.height * 0.02),
+                        const CustomChat(),
+                      ],
+
+                      // Conditional Rendering for Groups
+                      if (value.groups) ...[
+                        SizedBox(height: size.height * 0.02),
+                        const CustomGroups(),
+                      ],
                     ],
                   ),
                 ),
+
+                 
+
                 if (isSearchBarOpen)
                   Positioned.fill(
                     child: Padding(
@@ -262,7 +352,10 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
 
                                           if (snapshot.hasError) {
                                             return Text(
-                                                'Error: ${snapshot.error}');
+                                                'NetWork Issue',
+                                                style: TextStyle(
+                                                  color: whiteColor
+                                                ),);
                                           }
 
                                           final isFriend = snapshot.data![0];
@@ -271,7 +364,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
 
                                           return SizedBox(
                                             width: size.width * 0.9,
-                                            height: 200,
+                                           
                                             child: ListTile(
                                               leading: const CircleAvatar(),
                                               title: Text(user.firstName!,
