@@ -33,7 +33,7 @@ void showProSubscriptionPopup(BuildContext context, VoidCallback ontap) {
           // ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: CustomButton(text: 'Proceed to Purchase', ontap: ontap),
+            child: Center(child: CustomButton(text: 'Proceed to Purchase', ontap: ontap)),
           )
         ],
       );

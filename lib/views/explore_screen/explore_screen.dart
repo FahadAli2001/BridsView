@@ -232,7 +232,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                           sigmaX: 5, sigmaY: 5),
                                       child: Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                            MainAxisAlignment.start,
                                         children: [
                                           customSearchBarWidget(),
                                           value.searchingBar

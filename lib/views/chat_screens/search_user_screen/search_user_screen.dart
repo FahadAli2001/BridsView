@@ -1,10 +1,10 @@
-import 'dart:developer';
 import 'dart:ui';
 import 'package:badges/badges.dart' as badges;
 import 'package:birds_view/controller/chat_controller/chat_controller.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
+import 'package:birds_view/views/chat_screens/add_members_to_group/add_members_to_group_screen.dart';
 import 'package:birds_view/views/chat_screens/friend_request_screen/friend_request_screen.dart';
 import 'package:birds_view/widgets/custom_chat_screen_widgets/custom_chats/custom_chat.dart';
 import 'package:birds_view/widgets/custom_chat_screen_widgets/custom_groups/custom_groups.dart';
@@ -31,8 +31,6 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
     Future.delayed(Duration.zero, () {
       getCredentials();
     });
-
-    log("----------------");
   }
 
   Future<void> getCredentials() async {
@@ -46,6 +44,34 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
+      floatingActionButton: Consumer<ChatController>(
+        builder: (context, value, child) {
+          return value.groups == true
+              ? GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          child: const AddMembersToGroupScreen(),
+                          type: PageTransitionType.fade),
+                    );
+                  },
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        gradient: gradientColor, shape: BoxShape.circle),
+                    child: const Center(
+                      child: Icon(
+                        Icons.group_add,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink();
+        },
+      ),
       appBar: AppBar(
         backgroundColor: Colors.black,
         leading: GestureDetector(
@@ -75,7 +101,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                       type: PageTransitionType.fade));
             }, child: Consumer<ChatController>(
               builder: (context, value, child) {
-                return value.friendReqCount == 0
+                return value.friendReqCount == 0 || value.friendReqCount == null
                     ? Icon(
                         CupertinoIcons.person_2,
                         color: whiteColor,
@@ -180,8 +206,9 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              value.handleChats(); // Update the state for Chats
+                            onTap: () async {
+                              await value
+                                  .handleChats(); // Update the state for Chats
                             },
                             child: Column(
                               children: [
@@ -244,10 +271,10 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                       // Conditional Rendering for My Friends
                       if (value.myFriends) ...[
                         if (value.friendsList.isEmpty)
-                         const Center(
+                          Center(
                             child: Text(
                               'No friends found',
-                              style: TextStyle(color: Colors.white),
+                              style: GoogleFonts.urbanist(color: Colors.white),
                             ),
                           )
                         else
@@ -264,21 +291,48 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
 
                       // Conditional Rendering for Chats
                       if (value.chats) ...[
-                        SizedBox(height: size.height * 0.02),
-                        const CustomChat(),
+                        if (value.friendsChatList.isEmpty)
+                          Center(
+                            child: Text(
+                              'No Available Chat',
+                              style: GoogleFonts.urbanist(color: Colors.white),
+                            ),
+                          )
+                        else
+                          for (var i = 0;
+                              i < value.friendsChatList.length;
+                              i++) ...[
+                            CustomChat(
+                              index: i,
+                              userModel: widget.userModel,
+                              friendModel: value.friendsChatList,
+                            )
+                          ]
                       ],
 
                       // Conditional Rendering for Groups
-                      if (value.groups) ...[
-                        SizedBox(height: size.height * 0.02),
-                        const CustomGroups(),
+                       if (value.groups) ...[
+                        if (value.groupsDetail.isEmpty)
+                          Center(
+                            child: Text(
+                              'No Groups Chat',
+                              style: GoogleFonts.urbanist(color: Colors.white),
+                            ),
+                          )
+                        else
+                          for (var i = 0;
+                              i < value.groupsDetail.length;
+                              i++) ...[
+                            CustomGroups(
+                              index: i,
+                              userModel: widget.userModel,
+                              groupDetail: value.groupsDetail,
+                            )
+                          ]
                       ],
                     ],
                   ),
                 ),
-
-                 
-
                 if (isSearchBarOpen)
                   Positioned.fill(
                     child: Padding(
@@ -294,7 +348,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                                 onSubmitted: (val) {
                                   value.searchUser();
                                 },
-                                style: TextStyle(color: whiteColor),
+                                style: GoogleFonts.urbanist(color: whiteColor),
                                 controller: value.searchController,
                                 decoration: InputDecoration(
                                   border: const OutlineInputBorder(
@@ -318,7 +372,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                                   ),
                                   prefixIconColor: Colors.white,
                                   hintText: "Search Friends",
-                                  hintStyle: TextStyle(
+                                  hintStyle: GoogleFonts.urbanist(
                                       color: whiteColor, fontSize: 14),
                                 ),
                               ),
@@ -342,20 +396,20 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                                           value.hasSentRequest(user.id!),
                                         ]),
                                         builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                                        color: primaryColor));
-                                          }
+                                          // if (snapshot.connectionState ==
+                                          //     ConnectionState.waiting) {
+                                          //   return Center(
+                                          //       child:
+                                          //           CircularProgressIndicator(
+                                          //               color: primaryColor));
+                                          // }
 
                                           if (snapshot.hasError) {
                                             return Text(
-                                                'NetWork Issue',
-                                                style: TextStyle(
-                                                  color: whiteColor
-                                                ),);
+                                              'NetWork Issue',
+                                              style:
+                                                  TextStyle(color: whiteColor),
+                                            );
                                           }
 
                                           final isFriend = snapshot.data![0];
@@ -364,9 +418,13 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
 
                                           return SizedBox(
                                             width: size.width * 0.9,
-                                           
                                             child: ListTile(
-                                              leading: const CircleAvatar(),
+                                              leading: CircleAvatar(
+                                                backgroundColor:
+                                                    Colors.grey.shade500,
+                                                backgroundImage:
+                                                    NetworkImage(user.image!),
+                                              ),
                                               title: Text(user.firstName!,
                                                   style: GoogleFonts.urbanist(
                                                       color: Colors.white,
@@ -390,7 +448,9 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                                                           value.sendFriendRequest(
                                                               value
                                                                   .firebaseUserModel!,
-                                                              index);
+                                                              index,
+                                                              widget.userModel
+                                                              );
                                                         },
                                                         child: Icon(Icons.add,
                                                             color: whiteColor,

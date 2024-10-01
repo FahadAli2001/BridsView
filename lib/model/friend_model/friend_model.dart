@@ -1,30 +1,40 @@
 class FriendModel {
-  final String email;
-  final String firstName;
-  final String lastName;
-  final int friendId; // Change to String if needed
-  final String image;
-  final String status;
+  final String? friendId;
+  final String? firstName;
+  final String? lastName;
+  final String? email;
+  final String? image;
+  final String? status;
 
   FriendModel({
-    required this.email,
+    required this.friendId,
     required this.firstName,
     required this.lastName,
-    required this.friendId,
+    required this.email,
     required this.image,
     required this.status,
   });
 
+  // Updated fromJson method to handle null values
   factory FriendModel.fromJson(Map<String, dynamic> json) {
     return FriendModel(
-      email: json['email'] as String,
-      firstName: json['firstName'] as String,
-      lastName: json['lastName'] as String,
-      friendId: json['friendId'] is int 
-          ? json['friendId'] 
-          : int.parse(json['friendId'] as String), // Convert if necessary
-      image: json['image'] as String,
-      status: json['status'] as String,
+      friendId: json['friendId'] as String? ?? '', // Handle null safely
+      firstName: json['firstName'] as String? ?? '', // Handle null safely
+      lastName: json['lastName'] as String? ?? '', // Handle null safely
+      email: json['email'] as String? ?? '', // Handle null safely
+      image: json['image'] as String? ?? '', // Handle null safely
+      status: json['status'] as String? ?? 'unknown', // Default status if null
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'friendId': friendId,
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'image': image,
+      'status': status,
+    };
   }
 }

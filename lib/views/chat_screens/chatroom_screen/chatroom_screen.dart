@@ -56,7 +56,7 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
             CircleAvatar(
               backgroundColor: Colors.grey.shade500,
               backgroundImage:
-                  NetworkImage(widget.friendModel[widget.index]!.image),
+                  NetworkImage(widget.friendModel[widget.index]!.image!),
             ),
             SizedBox(
               width: size.width * 0.02,
@@ -65,7 +65,7 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.friendModel[widget.index]!.firstName,
+                  widget.friendModel[widget.index]!.firstName!,
                   style: GoogleFonts.urbanist(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

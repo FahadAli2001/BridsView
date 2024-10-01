@@ -55,11 +55,13 @@ class _SignupScreenState extends State<SignupScreen> {
                           )
                         : Padding(
                             padding: const EdgeInsets.all(15),
-                            child: CustomButton(
-                              text: 'Create Account',
-                              ontap: () {
-                                value.checkSignUpConditions(context);
-                              },
+                            child: Center(
+                              child: CustomButton(
+                                text: 'Create Account',
+                                ontap: () {
+                                  value.checkSignUpConditions(context);
+                                },
+                              ),
                             ),
                           ),
                   ],

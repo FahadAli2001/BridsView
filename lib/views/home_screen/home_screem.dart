@@ -84,24 +84,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final mapController = Provider.of<MapsController>(context, listen: false);
 
     await mapController.exploreNearbyBarsMethod();
-
-    setState(() {});
   }
 
   Future<void> nearestBar() async {
     final mapController = Provider.of<MapsController>(context, listen: false);
 
     await mapController.nearsetBarsMethod();
-
-    setState(() {});
   }
 
   Future<void> recomendedBars() async {
     final mapController = Provider.of<MapsController>(context, listen: false);
 
     await mapController.recommendedBarsMethod();
-
-    setState(() {});
   }
 
   Future<void> refreshData() async {
@@ -134,7 +128,6 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.black,
           backgroundImage: AssetImage(whiteLogo),
         ),
-         
       ),
       drawer: CustomDrawer(
         user: widget.user,
@@ -237,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Navigator.push(
                                         context,
                                         PageTransition(
-                                            child:   SearchUserScreen(
+                                            child: SearchUserScreen(
                                               userModel: widget.user,
                                             ),
                                             type: PageTransitionType.fade));
@@ -661,7 +654,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: BackdropFilter(
                           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               customSearchBarWidget(),
                               value.searchingBar
@@ -801,8 +794,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ).createShader(bounds),
                                                 child: const Icon(
                                                   Icons.star,
-                                                  color: Colors
-                                                      .white, // Temporary color; masked by gradient
+                                                  color: Colors.white,
                                                 ),
                                               );
                                             },

@@ -31,16 +31,18 @@ void customRegisterAlertBox(context) {
           actions: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: CustomButton(
-                  text: 'Register',
-                  ontap: () {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        PageTransition(
-                            child: const SignupScreen(),
-                            type: PageTransitionType.fade),
-                        (route) => false);
-                  }),
+              child: Center(
+                child: CustomButton(
+                    text: 'Register',
+                    ontap: () {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          PageTransition(
+                              child: const SignupScreen(),
+                              type: PageTransitionType.fade),
+                          (route) => false);
+                    }),
+              ),
             )
           ],
         );

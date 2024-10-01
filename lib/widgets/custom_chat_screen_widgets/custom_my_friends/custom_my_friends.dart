@@ -47,7 +47,7 @@ class CustomMyFriends extends StatelessWidget {
               },
               leading: CircleAvatar(
                 backgroundColor: Colors.grey.withOpacity(0.5),
-                backgroundImage: NetworkImage(friendModel[index]!.image),
+                backgroundImage: NetworkImage(friendModel[index]!.image!),
               ),
               title: Text(
                 "${friendModel[index]!.firstName} ${friendModel[index]!.lastName}",
@@ -57,7 +57,7 @@ class CustomMyFriends extends StatelessWidget {
                     fontSize: size.height * 0.02),
               ),
               subtitle: Text(
-                friendModel[index]!.email,
+                friendModel[index]!.email!,
                 style: GoogleFonts.urbanist(
                   color: Colors.white,
                 ),

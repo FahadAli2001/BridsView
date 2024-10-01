@@ -1,8 +1,13 @@
+import 'package:birds_view/model/group_model/group_model.dart';
+import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomGroups extends StatelessWidget {
-  const CustomGroups({super.key});
+  final UserModel? userModel;
+  final int index;
+  final List<GroupModel> groupDetail;
+  const CustomGroups({super.key,required this.index,required this.groupDetail,required this.userModel});
 
   @override
   Widget build(BuildContext context) {
@@ -10,9 +15,12 @@ class CustomGroups extends StatelessWidget {
     return SizedBox(
       width: size.width,
       child: ListTile(
-        leading: const CircleAvatar(),
+        leading:   CircleAvatar(
+          backgroundColor: Colors.grey.shade500,
+          backgroundImage: NetworkImage(groupDetail[index].groupImage),
+        ),
         title: Text(
-          "Night Club Friends",
+          groupDetail[index].groupName,
           style: GoogleFonts.urbanist(
               color: Colors.white,
               fontWeight: FontWeight.bold,

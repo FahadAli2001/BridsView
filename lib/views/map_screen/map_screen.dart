@@ -139,8 +139,8 @@ class _MapScreenState extends State<MapScreen> {
                               child: Image.asset(directionBtn))),
                     ),
               Positioned(
-                  top: size.height * 0.05,
-                  left: size.width * 0.05,
+                  top: size.height * 0.015,
+                  left: size.width * 0.03,
                   child: GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
