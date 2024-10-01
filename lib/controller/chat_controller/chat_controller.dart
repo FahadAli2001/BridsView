@@ -553,7 +553,7 @@ class ChatController extends ChangeNotifier {
   Future<void> fetchChattingFriendDetails() async {
     if (userId == null) {
       log("Error: userId is null.");
-      return; // Return early if userId is null
+      return;
     }
 
     try {
@@ -583,8 +583,7 @@ class ChatController extends ChangeNotifier {
 
             if (roomId != null) {
               log("Fetching last message and time for roomId: $roomId");
-              await fetchLastMessageAndTime(
-                  roomId, friendId); // Pass friendId to associate
+              await fetchLastMessageAndTime(roomId, friendId);
             } else {
               log("Error: roomId is null for doc: ${doc.id}");
               continue;

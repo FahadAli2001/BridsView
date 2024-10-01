@@ -55,16 +55,16 @@ class CustomChat extends StatelessWidget {
                     fontSize: size.height * 0.02),
               ),
               subtitle: Text(
-                value.lastMessagesAndTime!["sender"] ==
+             value.lastMessagesAndTime != null ?    value.lastMessagesAndTime!["sender"] ==
                         userModel!.data!.id.toString()
                     ? "You : ${value.lastMessagesAndTime!["text"]}"
-                    : "${friendModel[index]!.firstName!} : ${value.lastMessagesAndTime!["text"]}",
+                    : "${friendModel[index]!.firstName!} : ${value.lastMessagesAndTime!["text"]}" :"",
                 style: GoogleFonts.urbanist(
                   color: Colors.white,
                 ),
               ),
               trailing: Text(
-                value.formatTime(value.lastMessagesAndTime!['createdOn'].toString()).toString(),
+             value.lastMessagesAndTime?['createdOn'] != null?   value.formatTime(value.lastMessagesAndTime!['createdOn'].toString()).toString():"",
                 style: GoogleFonts.urbanist(
                   color: Colors.white,
                 ),
