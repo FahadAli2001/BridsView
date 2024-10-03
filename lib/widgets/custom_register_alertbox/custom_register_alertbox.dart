@@ -22,7 +22,6 @@ void customRegisterAlertBox(context) {
           title: const GradientText(
               text: "BirdsView", fontSize: 0.026, fontWeight: FontWeight.bold),
           content: Text(
-
             'To view your bookmarked and visited spots, please create an account or upgrade to our premium option for full access. Stay connected to all your favorite places and enjoy exclusive features!',
             textAlign: TextAlign.center,
             textDirection: TextDirection.ltr,

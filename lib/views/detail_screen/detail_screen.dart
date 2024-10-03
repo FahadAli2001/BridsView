@@ -16,6 +16,7 @@ import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_hot_badge_widget/custom_bar_hot_badge_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_mix_crowd_heading_widget/custom_mix_crowd_heading_widget.dart';
 import 'package:birds_view/widgets/custom_error_toast/custom_error_toast.dart';
+import 'package:birds_view/widgets/custom_register_alertbox/custom_register_alertbox.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -221,9 +222,7 @@ class _DetailScreenState extends State<DetailScreen>
                                               child: widget.user == null
                                                   ? GestureDetector(
                                                       onTap: () {
-                                                        showCustomErrorToast(
-                                                            message:
-                                                                "Login First");
+                                                        customRegisterAlertBox(context);
                                                       },
                                                       child: const Icon(
                                                         CupertinoIcons.bookmark,

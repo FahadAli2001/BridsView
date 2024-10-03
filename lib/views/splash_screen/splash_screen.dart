@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:birds_view/controller/splash_controller/splash_controller.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/utils/images.dart';
-import 'package:birds_view/views/onboarding_screen/onboarding_two_screen.dart';
+import 'package:birds_view/views/onboarding_screen/onboarding_three_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
@@ -63,10 +63,9 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> checkRoute() async {
     try {
       SharedPreferences sp = await SharedPreferences.getInstance();
-      // ignore: use_build_context_synchronously
-      final splashController =
-          // ignore: use_build_context_synchronously
-          Provider.of<SplashController>(context, listen: false);
+       final splashController =
+           // ignore: use_build_context_synchronously
+           Provider.of<SplashController>(context, listen: false);
       String? id = sp.getString('user_id') ?? '';
       String? token = sp.getString('token') ?? '';
       log('User ID: $id, Token: $token');
@@ -76,7 +75,7 @@ class _SplashScreenState extends State<SplashScreen>
         // ignore: use_build_context_synchronously
         Navigator.of(context).pushReplacement(PageTransition(
             duration: const Duration(seconds: 1),
-            child: const OnboardTwoScreen(),
+            child: const OnboardingThree(),
             type: PageTransitionType.fade));
       } else {
         log('Fetching user profile');
