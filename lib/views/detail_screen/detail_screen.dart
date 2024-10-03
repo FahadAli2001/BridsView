@@ -11,6 +11,7 @@ import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/utils/images.dart';
 import 'package:birds_view/views/map_screen/map_screen.dart';
+import 'package:birds_view/widgets/custom_bookmark_alert/custom_bookmark_alert.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_bar_hot_badge_widget/custom_bar_hot_badge_widget.dart';
 import 'package:birds_view/widgets/custom_detail_screen_widgets/custom_mix_crowd_heading_widget/custom_mix_crowd_heading_widget.dart';
@@ -121,7 +122,11 @@ class _DetailScreenState extends State<DetailScreen>
         },
         child: Scaffold(
             bottomNavigationBar: Padding(
-              padding:   EdgeInsets.only(top: 15,bottom: 15,right: size.width*0.25,left:size.width*0.25 ),
+              padding: EdgeInsets.only(
+                  top: 15,
+                  bottom: 15,
+                  right: size.width * 0.25,
+                  left: size.width * 0.25),
               child: CustomButton(
                   text: 'Locate',
                   ontap: () async {
@@ -225,80 +230,84 @@ class _DetailScreenState extends State<DetailScreen>
                                                         color: Colors.black,
                                                       ),
                                                     )
-                                                  : Consumer<
-                                                      BookmarkController>(
-                                                      builder: (context, value,
-                                                          child) {
-                                                        return StreamBuilder(
-                                                          stream: value
-                                                              .getBookMarkStream(widget
+                                                  : widget.user!.data!
+                                                              .subscribe ==
+                                                          "0"
+                                                      ? GestureDetector(
+                                                          onTap: () {
+                                                            customBookmarkAlertBox(
+                                                                context);
+                                                          },
+                                                          child: const Icon(
+                                                            CupertinoIcons
+                                                                .bookmark,
+                                                            color: Colors.black,
+                                                          ),
+                                                        )
+                                                      : Consumer<
+                                                          BookmarkController>(
+                                                          builder: (context,
+                                                              value, child) {
+                                                            return StreamBuilder(
+                                                              stream: value.getBookMarkStream(widget
                                                                   .searchBarDetail![
                                                                       widget
                                                                           .index]
                                                                   .placeId!),
-                                                          builder: (context,
-                                                              snapshot) {
-                                                            if (snapshot
-                                                                    .connectionState ==
-                                                                ConnectionState
-                                                                    .waiting) {
-                                                              return Shimmer
-                                                                  .fromColors(
-                                                                baseColor:
-                                                                    primaryColor,
-                                                                highlightColor:
-                                                                    Colors
-                                                                        .white10,
-                                                                child: Center(
-                                                                    child:
-                                                                        Container(
-                                                                  color: Colors
-                                                                      .white,
-                                                                )),
-                                                              );
-                                                            } else if (snapshot
-                                                                .hasError) {
-                                                              return Text(
-                                                                  'Error: ${snapshot.error}');
-                                                            } else {
-                                                              return GestureDetector(
-                                                                  onTap: () {
-                                                                    if (snapshot.data[
-                                                                            "status"] ==
-                                                                        0) {
-                                                                      value.addBookmark(widget
-                                                                          .searchBarDetail![
-                                                                              widget.index]
-                                                                          .placeId!);
-                                                                    } else if (snapshot
-                                                                            .data["status"] ==
-                                                                        1) {
-                                                                      value.deleteBookmark(widget
-                                                                          .searchBarDetail![
-                                                                              widget.index]
-                                                                          .placeId!);
-                                                                    }
-                                                                  },
-                                                                  child: snapshot
-                                                                              .data["status"] ==
-                                                                          1
-                                                                      ? const Icon(
-                                                                          CupertinoIcons
-                                                                              .bookmark_fill,
-                                                                          color:
-                                                                              Colors.black,
-                                                                        )
-                                                                      : const Icon(
-                                                                          CupertinoIcons
-                                                                              .bookmark,
-                                                                          color:
-                                                                              Colors.black,
-                                                                        ));
-                                                            }
+                                                              builder: (context,
+                                                                  snapshot) {
+                                                                if (snapshot
+                                                                        .connectionState ==
+                                                                    ConnectionState
+                                                                        .waiting) {
+                                                                  return Shimmer
+                                                                      .fromColors(
+                                                                    baseColor:
+                                                                        primaryColor,
+                                                                    highlightColor:
+                                                                        Colors
+                                                                            .white10,
+                                                                    child: Center(
+                                                                        child: Container(
+                                                                      color: Colors
+                                                                          .white,
+                                                                    )),
+                                                                  );
+                                                                } else if (snapshot
+                                                                    .hasError) {
+                                                                  return Text(
+                                                                      'Error: ${snapshot.error}');
+                                                                } else {
+                                                                  return GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        if (snapshot.data["status"] ==
+                                                                            0) {
+                                                                          value.addBookmark(widget
+                                                                              .searchBarDetail![widget.index]
+                                                                              .placeId!);
+                                                                        } else if (snapshot.data["status"] ==
+                                                                            1) {
+                                                                          value.deleteBookmark(widget
+                                                                              .searchBarDetail![widget.index]
+                                                                              .placeId!);
+                                                                        }
+                                                                      },
+                                                                      child: snapshot.data["status"] ==
+                                                                              1
+                                                                          ? const Icon(
+                                                                              CupertinoIcons.bookmark_fill,
+                                                                              color: Colors.black,
+                                                                            )
+                                                                          : const Icon(
+                                                                              CupertinoIcons.bookmark,
+                                                                              color: Colors.black,
+                                                                            ));
+                                                                }
+                                                              },
+                                                            );
                                                           },
-                                                        );
-                                                      },
-                                                    ))
+                                                        ))
                                         ],
                                       ),
                                     ),
@@ -404,7 +413,7 @@ class _DetailScreenState extends State<DetailScreen>
                                         Text(
                                           ' Miles',
                                           style: GoogleFonts.urbanist(
-                                            fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.bold,
                                               color: Colors.white),
                                         ),
                                         SizedBox(
@@ -455,16 +464,18 @@ class _DetailScreenState extends State<DetailScreen>
                               ? const SizedBox()
                               : widget.user!.data!.subscribe == '1'
                                   ? Column(
-                                    children: [
-                                      SizedBox(
+                                      children: [
+                                        SizedBox(
                                           width: size.width,
                                           height: size.height * 0.06,
                                           child: Stack(
                                             children: [
                                               CustomMixCrowdHeadingWidget(
                                                   size: size),
-                                      
-                                              widget.searchBarDetail![widget.index]
+
+                                              widget
+                                                              .searchBarDetail![
+                                                                  widget.index]
                                                               .rating !=
                                                           null &&
                                                       widget
@@ -478,18 +489,18 @@ class _DetailScreenState extends State<DetailScreen>
                                                       size: size)
                                                   : const SizedBox(),
                                               //
-                                      
+
                                               //
-                                             
+
                                               //
                                               // CustomBarRandomPopulationWidget(
                                               //     size: size),
                                             ],
                                           ),
                                         ),
-                                         CustomBarCrowdImageWidget(size: size),
-                                    ],
-                                  )
+                                        CustomBarCrowdImageWidget(size: size),
+                                      ],
+                                    )
                                   : Consumer<PaymentController>(
                                       builder: (context, value, child) {
                                         return Align(
@@ -1010,7 +1021,7 @@ class _DetailScreenState extends State<DetailScreen>
                                             Text(
                                               ' Miles',
                                               style: GoogleFonts.urbanist(
-                                                fontWeight: FontWeight.bold,
+                                                  fontWeight: FontWeight.bold,
                                                   color: Colors.white),
                                             ),
                                             SizedBox(
@@ -1049,36 +1060,38 @@ class _DetailScreenState extends State<DetailScreen>
                                   ? const SizedBox()
                                   : widget.user!.data!.subscribe == "1"
                                       ? Column(
-                                        children: [
-                                          SizedBox(
-                                            // color: Colors.orange,
-                                              width: size.width *0.9,
+                                          children: [
+                                            SizedBox(
+                                              // color: Colors.orange,
+                                              width: size.width * 0.9,
                                               height: size.height * 0.06,
-                                              child: 
-                                                  Stack(
-                                                    children: [
-                                                      CustomMixCrowdHeadingWidget(
-                                                          size: size),
-                                                  
-                                                      barDetail![0].rating != null &&
-                                                              barDetail![0].rating! >=
-                                                                  4.0
-                                                          ? CustomBarHotBadgeWidget(
-                                                              animation: _animation,
-                                                              controller: _controller,
-                                                              size: size)
-                                                          : const SizedBox(),
-                                                      //
-                                                  
-                                                    ],
-                                                  ),
-                                                   
+                                              child: Stack(
+                                                children: [
+                                                  CustomMixCrowdHeadingWidget(
+                                                      size: size),
+
+                                                  barDetail![0].rating !=
+                                                              null &&
+                                                          barDetail![
+                                                                      0]
+                                                                  .rating! >=
+                                                              4.0
+                                                      ? CustomBarHotBadgeWidget(
+                                                          animation: _animation,
+                                                          controller:
+                                                              _controller,
+                                                          size: size)
+                                                      : const SizedBox(),
+                                                  //
+                                                ],
+                                              ),
                                             ),
                                             //
-           
-                                           CustomBarCrowdImageWidget(size: size)
-                                        ],
-                                      )
+
+                                            CustomBarCrowdImageWidget(
+                                                size: size)
+                                          ],
+                                        )
                                       : Consumer<PaymentController>(
                                           builder: (context, value, child) {
                                             return Align(
@@ -1106,8 +1119,6 @@ class _DetailScreenState extends State<DetailScreen>
                                           },
                                         ),
 
-                           
-                           
                               //
                               SizedBox(
                                 height: size.height * 0.02,

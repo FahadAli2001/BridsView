@@ -1,6 +1,7 @@
 import 'package:birds_view/controller/chat_controller/chat_controller.dart';
 import 'package:birds_view/model/chat_room_model/chat_room_model.dart';
 import 'package:birds_view/model/friend_model/friend_model.dart';
+import 'package:birds_view/model/group_model/group_model.dart';
 import 'package:birds_view/model/message_model/message_model.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
@@ -13,17 +14,19 @@ import 'package:provider/provider.dart';
 import '../../../widgets/video_player_widget/video_player_widget.dart';
 
 class ChatroomScreen extends StatefulWidget {
+  final List<GroupModel?>? groupModel;
   final ChatRoomModel? chatRoomModel;
   final UserModel? user;
 
   final int index;
-  final List<FriendModel?> friendModel;
+  final List<FriendModel?>? friendModel;
   const ChatroomScreen(
       {super.key,
       required this.user,
-      required this.chatRoomModel,
+      this.chatRoomModel,
+      this.groupModel,
       required this.index,
-      required this.friendModel});
+      this.friendModel});
 
   @override
   State<ChatroomScreen> createState() => _ChatroomScreenState();
@@ -43,43 +46,58 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
         title: Row(
           children: [
             GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                )),
-            SizedBox(
-              width: size.width * 0.02,
-            ),
-            CircleAvatar(
-              backgroundColor: Colors.grey.shade500,
-              backgroundImage:
-                  NetworkImage(widget.friendModel[widget.index]!.image!),
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              ),
             ),
             SizedBox(
               width: size.width * 0.02,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.friendModel[widget.index]!.firstName!,
-                  style: GoogleFonts.urbanist(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: size.height * 0.022),
-                ),
-                // Text(
-                //   "",
-                //   style: GoogleFonts.urbanist(
-                //     fontSize: size.height * 0.015,
-                //     color: Colors.white,
-                //   ),
-                // ),
-              ],
-            ),
+            // If it's a group chat, show group details, otherwise show friend's details
+            widget.groupModel != null ||
+                    widget.groupModel![widget.index] != null
+                ? Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.grey.shade500,
+                        backgroundImage: NetworkImage(
+                            widget.groupModel![widget.index]!.groupImage),
+                      ),
+                      SizedBox(
+                        width: size.width * 0.02,
+                      ),
+                      Text(
+                        widget.groupModel![widget.index]!.groupName,
+                        style: GoogleFonts.urbanist(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: size.height * 0.022),
+                      ),
+                    ],
+                  )
+                : Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.grey.shade500,
+                        backgroundImage: NetworkImage(
+                            widget.friendModel![widget.index]!.image!),
+                      ),
+                      SizedBox(
+                        width: size.width * 0.02,
+                      ),
+                      Text(
+                        widget.friendModel![widget.index]!.firstName!,
+                        style: GoogleFonts.urbanist(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: size.height * 0.022),
+                      ),
+                    ],
+                  ),
             const Spacer(),
           ],
         ),
@@ -87,6 +105,9 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
+            String roomId = widget.groupModel != null
+                ? widget.groupModel![widget.index]!.groupId
+                : widget.chatRoomModel!.roomId!;
             return Consumer<ChatController>(
               builder: (context, value, child) {
                 return Column(
@@ -95,7 +116,7 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                       child: StreamBuilder(
                         stream: FirebaseFirestore.instance
                             .collection("chatrooms")
-                            .doc(widget.chatRoomModel!.roomId)
+                            .doc(roomId)
                             .collection("messages")
                             .orderBy("createdOn", descending: true)
                             .snapshots(),
@@ -121,7 +142,6 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                                           widget.user!.data!.id.toString();
 
                                   return InkWell(
-                                    onLongPress: () {},
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8, vertical: 4),
@@ -130,76 +150,120 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                                             ? CrossAxisAlignment.end
                                             : CrossAxisAlignment.start,
                                         children: [
-                                          currentMessage.text == null
-                                              ? const SizedBox.shrink()
-                                              : Row(
-                                                  mainAxisAlignment:
-                                                      isCurrentUserMessage
-                                                          ? MainAxisAlignment
-                                                              .end
-                                                          : MainAxisAlignment
-                                                              .start,
-                                                  children: [
-                                                    if (!isCurrentUserMessage)
-                                                      const SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                    Flexible(
-                                                      child: Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(horizontal: 12,vertical: 5),
-                                                        decoration: BoxDecoration(
-                                                            color: isCurrentUserMessage
-                                                                ? const Color(
-                                                                    0xffc18e3c)
-                                                                : const Color(
-                                                                        0xff232323)
-                                                                    .withOpacity(
-                                                                        0.9),
-                                                            borderRadius: isCurrentUserMessage
-                                                                ? const BorderRadius.only(
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            8),
-                                                                    topLeft:
-                                                                        Radius.circular(
-                                                                            8),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            8))
-                                                                : const BorderRadius.only(
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            8),
-                                                                    topRight:
-                                                                        Radius.circular(8),
-                                                                    bottomRight: Radius.circular(8))),
-                                                        child: Text(
-                                                          currentMessage.text!,
-                                                          style: GoogleFonts
-                                                              .urbanist(
-                                                                  fontSize: 16,
-                                                                  color:
-                                                                      whiteColor),
-                                                        ),
+                                          if (!isCurrentUserMessage &&
+                                              widget.groupModel![widget.index]!
+                                                      .groupName !=
+                                                  "")
+                                            FutureBuilder<DocumentSnapshot>(
+                                              future: FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(currentMessage.sender)
+                                                  .get(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return const SizedBox
+                                                      .shrink();
+                                                }
+                                                if (snapshot.hasData &&
+                                                    snapshot.data != null) {
+                                                  var senderData = snapshot
+                                                          .data!
+                                                          .data()
+                                                      as Map<String, dynamic>;
+                                                  String? senderName =
+                                                      senderData['first_name'];
+
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 4.0),
+                                                    child: Text(
+                                                      senderName ?? "Unknown",
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                        fontSize: 12,
+                                                        color: Colors.white
+                                                            .withOpacity(0.7),
                                                       ),
                                                     ),
-                                                    if (isCurrentUserMessage)
-                                                      const SizedBox(
-                                                        width:
-                                                            5, // Adjust as needed
-                                                      ),
-                                                  ],
+                                                  );
+                                                } else {
+                                                  return const SizedBox
+                                                      .shrink();
+                                                }
+                                              },
+                                            ),
+
+                                          if (currentMessage.text != null &&
+                                              currentMessage.text!.isNotEmpty &&
+                                              currentMessage.imageUrl == "" &&
+                                              currentMessage.videoUrl == "")
+                                            Row(
+                                              mainAxisAlignment:
+                                                  isCurrentUserMessage
+                                                      ? MainAxisAlignment.end
+                                                      : MainAxisAlignment.start,
+                                              children: [
+                                                if (!isCurrentUserMessage)
+                                                  const SizedBox(width: 5),
+                                                Flexible(
+                                                  child: Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 12,
+                                                        vertical: 5),
+                                                    decoration: BoxDecoration(
+                                                      color: isCurrentUserMessage
+                                                          ? const Color(
+                                                              0xffc18e3c)
+                                                          : const Color(
+                                                                  0xff232323)
+                                                              .withOpacity(1),
+                                                      borderRadius: isCurrentUserMessage
+                                                          ? const BorderRadius
+                                                              .only(
+                                                              bottomLeft: Radius
+                                                                  .circular(8),
+                                                              topLeft: Radius
+                                                                  .circular(8),
+                                                              bottomRight: Radius
+                                                                  .circular(8))
+                                                          : const BorderRadius
+                                                              .only(
+                                                              bottomLeft: Radius
+                                                                  .circular(8),
+                                                              topRight: Radius
+                                                                  .circular(8),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          8)),
+                                                    ),
+                                                    child: Text(
+                                                      currentMessage.text!,
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                              fontSize: 16,
+                                                              color:
+                                                                  whiteColor),
+                                                    ),
+                                                  ),
                                                 ),
+                                                if (isCurrentUserMessage)
+                                                  const SizedBox(width: 5),
+                                              ],
+                                            ),
+
+                                          // Video Player widget for video messages
                                           if (currentMessage.videoUrl != null &&
                                               currentMessage
                                                   .videoUrl!.isNotEmpty)
                                             VideoPlayerWidget(
                                                 videoUrl:
-                                                    currentMessage.videoUrl!)
-                                          else
-                                            const SizedBox.shrink(),
+                                                    currentMessage.videoUrl!),
+
+                                          // Image widget for image messages
                                           if (currentMessage.imageUrl != null &&
                                               currentMessage
                                                   .imageUrl!.isNotEmpty)
@@ -208,9 +272,9 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                                               width: 200,
                                               height: 300,
                                               fit: BoxFit.fill,
-                                            )
-                                          else
-                                            const SizedBox.shrink(),
+                                            ),
+
+                                          // Display timestamp for all messages
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 5),
@@ -230,16 +294,18 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                                 },
                               );
                             } else if (snapshot.hasError) {
-                              return   Center(
+                              return Center(
                                 child: Text(
-                                    "An error occurred! Please check your internet connection.",
-                                    style: GoogleFonts.urbanist(color: whiteColor),),
+                                  "An error occurred! Please check your internet connection.",
+                                  style:
+                                      GoogleFonts.urbanist(color: whiteColor),
+                                ),
                               );
                             } else {
-                              return   Center(
+                              return Center(
                                 child: Text("Say hi to your new friend",
-                                  style: GoogleFonts.urbanist(color: whiteColor)
-                                ),
+                                    style: GoogleFonts.urbanist(
+                                        color: whiteColor)),
                               );
                             }
                           } else {
@@ -284,14 +350,16 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                                     color: whiteColor),
                                 backgroundColor: Colors.black,
                                 onTap: () {
-                                  value.pickVideo(widget.chatRoomModel);
+                                  value.pickVideo(widget.chatRoomModel,
+                                      widget.groupModel![widget.index]);
                                 },
                               ),
                               SpeedDialChild(
                                 backgroundColor: Colors.black,
                                 child: Icon(Icons.photo, color: whiteColor),
                                 onTap: () {
-                                  value.pickImage(widget.chatRoomModel);
+                                  value.pickImage(widget.chatRoomModel,
+                                      widget.groupModel![widget.index]);
                                 },
                               ),
                             ],
@@ -304,8 +372,14 @@ class _ChatroomScreenState extends State<ChatroomScreen> {
                             icon: const Icon(Icons.send,
                                 color: Color(0xffE5B569)),
                             onPressed: () {
-                              value.sendMessage(
-                                  "", widget.chatRoomModel, "text", "");
+                              if (widget.groupModel != null ||
+                                  widget.groupModel![widget.index] != null) {
+                                value.sendMessage("", null, "text",
+                                    widget.groupModel![widget.index], "");
+                              } else {
+                                value.sendMessage(
+                                    "", widget.chatRoomModel, "text", null, "");
+                              }
                             },
                           ),
                         ),

@@ -1,10 +1,11 @@
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
-import 'package:birds_view/views/onboarding_screen/onboarding_two_screen.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+
+import 'onboarding_three_screen.dart';
 
 class OnboardingOneScreen extends StatefulWidget {
   const OnboardingOneScreen({super.key});
@@ -113,7 +114,7 @@ class _OnboardingOneScreenState extends State<OnboardingOneScreen> {
                   Navigator.push(
                       context,
                       PageTransition(
-                          child: const OnboardTwoScreen(),
+                          child: const OnboardingThree(),
                           type: PageTransitionType.fade));
                 })
           ],

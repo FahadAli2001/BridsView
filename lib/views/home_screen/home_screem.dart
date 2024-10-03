@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> getLastBar() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    lastVisitedBar = sp.getString("lastVisitedBar")!;
+    lastVisitedBar =   sp.getString("lastVisitedBar")!;
     setState(() {});
     log(lastVisitedBar);
   }
@@ -58,13 +58,17 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     final searchController =
         Provider.of<SearchBarsController>(context, listen: false);
-    searchController.getCordinateds();
+    final mapController = Provider.of<MapsController>(context, listen: false);
 
-    exploreBarByMap();
-    recomendedBars();
-    nearestBar();
-    getLastBar();
-    isSearchBarOpen;
+    mapController.getCurrentLocation(context).then((val) {
+      searchController.getCordinateds();
+
+      exploreBarByMap();
+      recomendedBars();
+      nearestBar();
+      getLastBar();
+      isSearchBarOpen;
+    });
 
     _focusNode.addListener(() {
       setState(() {
@@ -403,15 +407,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 0.01,
                                                           ),
                                                           Text(
-                                                            (double.parse(mapController
-                                                                            .homeScreennearestbarsOrClubsDistanceList[index]
-                                                                            .elements![0]
-                                                                            .distance
-                                                                            ?.text
-                                                                            ?.split(" ")[0] ??
-                                                                        '0') *
-                                                                    0.621371)
-                                                                .toStringAsFixed(1),
+                                                            mapController
+                                                                            .homeScreennearestbarsOrClubsDistanceList[
+                                                                                index]
+                                                                            .elements![
+                                                                        0] ==
+                                                                    ""
+                                                                ? ""
+                                                                : (double.parse(mapController.homeScreennearestbarsOrClubsDistanceList[index].elements![0].distance?.text?.split(" ")[0] ??
+                                                                            '0') *
+                                                                        0.621371)
+                                                                    .toStringAsFixed(
+                                                                        1),
                                                             style: GoogleFonts
                                                                 .urbanist(
                                                               color:

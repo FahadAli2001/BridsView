@@ -14,10 +14,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:birds_view/views/onboarding_screen/onboarding_three_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MapsController extends ChangeNotifier {
@@ -378,10 +376,10 @@ class MapsController extends ChangeNotifier {
 
         log(currentPosition.latitude.toString());
         log(currentPosition.longitude.toString());
-        Navigator.push(
-            context,
-            PageTransition(
-                child: const OnboardingThree(), type: PageTransitionType.fade));
+        // Navigator.push(
+        //     context,
+        //     PageTransition(
+        //         child: const OnboardingThree(), type: PageTransitionType.fade));
       } else if (locationPermission == LocationPermission.deniedForever) {
         await Geolocator.openLocationSettings();
         log('denied forever');

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/apis.dart';
-import 'package:birds_view/views/onboarding_screen/onboarding_one_screen.dart';
+import 'package:birds_view/views/login_screen/login_screen.dart';
 import 'package:birds_view/widgets/custom_error_toast/custom_error_toast.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -260,7 +260,7 @@ class LoginController extends ChangeNotifier {
         // ignore: use_build_context_synchronously
         context,
         PageTransition(
-            child: const OnboardingOneScreen(), type: PageTransitionType.fade),
+            child: const LogInScreen(), type: PageTransitionType.fade),
         (route) => false);
     sp.clear();
   }

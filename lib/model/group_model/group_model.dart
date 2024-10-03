@@ -11,7 +11,7 @@ class GroupModel {
     required this.memberIds,
   });
 
-  // Factory constructor to create a GroupModel instance from JSON
+ 
   factory GroupModel.fromJson(Map<String, dynamic> json) {
     return GroupModel(
       groupId: json['groupId'],

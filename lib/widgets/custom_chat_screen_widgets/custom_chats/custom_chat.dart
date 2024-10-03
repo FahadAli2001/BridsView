@@ -41,7 +41,7 @@ class CustomChat extends StatelessWidget {
                                 index: index,
                                 chatRoomModel: chatRoomModel,
                               )));
-              };
+              }
               },
               leading: CircleAvatar(
                 backgroundColor: Colors.grey.withOpacity(0.5),
