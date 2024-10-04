@@ -1,7 +1,9 @@
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
+import 'package:birds_view/views/bookmark_screen/bookmark_screen.dart';
 import 'package:birds_view/views/edit_profile_screen/edit_profile_screen.dart';
+import 'package:birds_view/views/visited_bars/visited_bars.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -142,7 +144,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              child:   BookmarkScreen(userModel: widget.user,),
+                              type: PageTransitionType.fade));
+                    },
                     child: Text(
                       "Bookmarks",
                       style: GoogleFonts.urbanist(
@@ -162,7 +170,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              child: const VisitedBar(),
+                              type: PageTransitionType.fade));
+                    },
                     child: Text(
                       "Visited Places",
                       style: GoogleFonts.urbanist(

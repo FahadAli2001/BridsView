@@ -1,18 +1,24 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:birds_view/controller/bookmark_controller/bookmark_controller.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
+import 'package:birds_view/model/user_model/user_model.dart';
+import 'package:birds_view/views/detail_screen/detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class CustomBookmarkWidget extends StatelessWidget {
+  final UserModel? userModel;
   final int index;
   final List<Result> bookmarksBarsDetailList;
   final List<Uint8List>? bookmarksBarsImagesList;
   const CustomBookmarkWidget(
       {super.key,
+      required this.userModel,
       required this.bookmarksBarsDetailList,
       required this.bookmarksBarsImagesList,
       required this.index});
@@ -25,9 +31,28 @@ class CustomBookmarkWidget extends StatelessWidget {
         child: Consumer<BookmarkController>(
           builder: (context, bookmarkController, child) {
             return GestureDetector(
+              onTap: () {
+                log(bookmarksBarsDetailList[index].placeId.toString());
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: DetailScreen(
+                          fromBookmark: true,
+                          searchBarDetail: bookmarksBarsDetailList,
+                          index: index,
+                          barImages: bookmarksBarsImagesList!,
+                          fromSearchScreen: false,
+                          user: userModel,
+                          distance:
+                              bookmarkController.bookmarksBarsDistanceList,
+                        ),
+                        type: PageTransitionType.fade));
+              },
               onLongPress: () {
-                bookmarkController.deleteBookmark(
-                    bookmarksBarsDetailList[index].plusCode.toString());
+                bookmarkController.deleteBookmarks(
+                    bookmarksBarsDetailList[index].placeId.toString(),
+                    context,
+                    index);
               },
               child: Container(
                 width: size.width,

@@ -10,6 +10,7 @@ import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/utils/images.dart';
+import 'package:birds_view/views/bookmark_screen/bookmark_screen.dart';
 import 'package:birds_view/views/map_screen/map_screen.dart';
 import 'package:birds_view/widgets/custom_bookmark_alert/custom_bookmark_alert.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
@@ -35,6 +36,7 @@ import '../../widgets/custom_showpro_subscription_popup_widget/custom_showpro_su
 
 class DetailScreen extends StatefulWidget {
   final UserModel? user;
+  final bool fromBookmark;
   final List<Result>? searchBarDetail;
   final bool fromSearchScreen;
   final List<Rows> distance;
@@ -45,6 +47,7 @@ class DetailScreen extends StatefulWidget {
       {super.key,
       this.searchBarDetail,
       this.barDetail,
+      required this.fromBookmark,
       required this.index,
       required this.barImages,
       required this.fromSearchScreen,
@@ -70,17 +73,15 @@ class _DetailScreenState extends State<DetailScreen>
     )..repeat(reverse: true);
     _animation = Tween<double>(begin: 1.0, end: 1.2).animate(_controller);
 
-    if (widget.fromSearchScreen == false) {
+    if (widget.fromSearchScreen == false && widget.fromBookmark == false) {
       getBarsDetails(widget.barDetail![widget.index].placeId!);
-      checkBarId();
+      checkBarId(widget.barDetail![widget.index].placeId!);
+      getUserCredential();
+    } else if (widget.fromBookmark == true) {
+      getBarsDetails(widget.searchBarDetail![widget.index].placeId!);
+      checkBarId(widget.searchBarDetail![widget.index].placeId!);
       getUserCredential();
     }
-    // else {
-    //   getBarsDetails(widget.searchBarDetail![widget.index].placeId!);
-    //   checkBarId();
-    //   getUserCredential();
-    // }
-    log("${barDetail!.length} bar detail length");
   }
 
   @override
@@ -95,12 +96,11 @@ class _DetailScreenState extends State<DetailScreen>
     await bookmarkController.getUserCredential();
   }
 
-  Future<void> checkBarId() async {
+  Future<void> checkBarId(String placeId) async {
     final detailController =
         Provider.of<DetailScreenController>(context, listen: false);
 
-    await detailController
-        .checkBarPlaceIdExist(widget.barDetail![widget.index].placeId!);
+    await detailController.checkBarPlaceIdExist(placeId);
   }
 
   Future<void> getBarsDetails(String placeId) async {
@@ -137,7 +137,8 @@ class _DetailScreenState extends State<DetailScreen>
                         .cast<Uint8List>()
                         .toList();
                     try {
-                      if (widget.fromSearchScreen == true) {
+                      if (widget.fromSearchScreen == true ||
+                          widget.fromBookmark == true) {
                         Navigator.push(
                             context,
                             PageTransition(
@@ -167,7 +168,19 @@ class _DetailScreenState extends State<DetailScreen>
                 backgroundColor: Colors.black,
                 leading: GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      if (widget.fromBookmark == true) {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                BookmarkScreen(userModel: widget.user),
+                          ),
+                          (Route<dynamic> route) =>
+                              false, 
+                        );
+                      } else {
+                        Navigator.pop(context);
+                      }
                     },
                     child: const Icon(
                       Icons.arrow_back_ios,
@@ -178,7 +191,7 @@ class _DetailScreenState extends State<DetailScreen>
                   backgroundColor: Colors.black,
                   backgroundImage: AssetImage(whiteLogo),
                 )),
-            body: widget.fromSearchScreen == true
+            body: widget.fromSearchScreen == true || widget.fromBookmark == true
                 ? SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.all(15),
@@ -222,7 +235,8 @@ class _DetailScreenState extends State<DetailScreen>
                                               child: widget.user == null
                                                   ? GestureDetector(
                                                       onTap: () {
-                                                        customRegisterAlertBox(context);
+                                                        customRegisterAlertBox(
+                                                            context);
                                                       },
                                                       child: const Icon(
                                                         CupertinoIcons.bookmark,
@@ -285,11 +299,17 @@ class _DetailScreenState extends State<DetailScreen>
                                                                           value.addBookmark(widget
                                                                               .searchBarDetail![widget.index]
                                                                               .placeId!);
+                                                                              setState(() {
+                                                                                
+                                                                              });
                                                                         } else if (snapshot.data["status"] ==
                                                                             1) {
                                                                           value.deleteBookmark(widget
                                                                               .searchBarDetail![widget.index]
                                                                               .placeId!);
+                                                                                setState(() {
+                                                                                
+                                                                              });
                                                                         }
                                                                       },
                                                                       child: snapshot.data["status"] ==
@@ -307,6 +327,8 @@ class _DetailScreenState extends State<DetailScreen>
                                                             );
                                                           },
                                                         ))
+                                       
+                                       
                                         ],
                                       ),
                                     ),
@@ -406,7 +428,6 @@ class _DetailScreenState extends State<DetailScreen>
                                           style: GoogleFonts.urbanist(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: size.width * 0.027,
                                           ),
                                         ),
                                         Text(
@@ -552,30 +573,17 @@ class _DetailScreenState extends State<DetailScreen>
                           widget.searchBarDetail![widget.index]
                                       .editorialSummary ==
                                   null
-                              ? Container()
+                              ? const SizedBox.shrink()
                               : SizedBox(
                                   height: size.height * 0.01,
                                 ),
-                          CustomDescriptionRichText(
+                        
+                        CustomDescriptionRichText(
                               title: "Address : ",
                               subtitle: widget.searchBarDetail![widget.index]
                                   .formattedAddress!),
 
-                          // SizedBox(
-                          //   height: size.height * 0.02,
-                          // ),
-                          // widget.searchBarDetail![widget.index]
-                          //             .formattedPhoneNumber ==
-                          //         null
-                          //     ? const Text('')
-                          //     : Align(
-                          //         alignment: Alignment.topLeft,
-                          //         child: CustomDescriptionRichText(
-                          //             title: "Phone : ",
-                          //             subtitle: widget
-                          //                 .searchBarDetail![widget.index]
-                          //                 .formattedPhoneNumber!)),
-                          //
+                           
                           SizedBox(
                             height: size.height * 0.02,
                           ),
@@ -728,12 +736,9 @@ class _DetailScreenState extends State<DetailScreen>
                                                 shaderCallback: (bounds) =>
                                                     const LinearGradient(
                                                   colors: [
-                                                    Color(
-                                                        0xFFC59241), // Left side color
-                                                    Color(
-                                                        0xFFFEF6D1), // Center color
-                                                    Color(
-                                                        0xFFC49138), // Right side color
+                                                    Color(0xFFC59241),
+                                                    Color(0xFFFEF6D1),
+                                                    Color(0xFFC49138),
                                                   ],
                                                   begin: Alignment.centerLeft,
                                                   end: Alignment.centerRight,
@@ -751,7 +756,7 @@ class _DetailScreenState extends State<DetailScreen>
                                               ),
                                             ),
                                             TextSpan(
-                                              text: "Click To Visit Website !",
+                                              text: "Click To Visit Website!",
                                               style: GoogleFonts.urbanist(
                                                   fontWeight: FontWeight.normal,
                                                   fontSize: size.height * 0.016,
@@ -809,8 +814,7 @@ class _DetailScreenState extends State<DetailScreen>
                                             fit: BoxFit.cover,
                                           )
                                         : DecorationImage(
-                                            image: AssetImage(
-                                                emptyImage)), // No image if `hasImage` is false
+                                            image: AssetImage(emptyImage)),
                                   ),
                                   child: Stack(
                                     children: [
@@ -857,6 +861,15 @@ class _DetailScreenState extends State<DetailScreen>
                                                                           .placeId!),
                                                               builder: (context,
                                                                   snapshot) {
+                                                                int currentStatus = snapshot.data !=
+                                                                            null &&
+                                                                        snapshot.data["status"] !=
+                                                                            null
+                                                                    ? snapshot
+                                                                            .data[
+                                                                        "status"]
+                                                                    : 0;
+
                                                                 if (snapshot
                                                                         .connectionState ==
                                                                     ConnectionState
@@ -868,11 +881,14 @@ class _DetailScreenState extends State<DetailScreen>
                                                                     highlightColor:
                                                                         Colors
                                                                             .white10,
-                                                                    child: Center(
-                                                                        child: Container(
-                                                                      color: Colors
-                                                                          .white,
-                                                                    )),
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          Container(
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                    ),
                                                                   );
                                                                 } else if (snapshot
                                                                     .hasError) {
@@ -880,43 +896,126 @@ class _DetailScreenState extends State<DetailScreen>
                                                                       'Error: ${snapshot.error}');
                                                                 } else {
                                                                   return GestureDetector(
-                                                                      onTap:
-                                                                          () {
-                                                                        if (snapshot.data["status"] ==
-                                                                            0) {
-                                                                          value.addBookmark(
-                                                                              barDetail![0].placeId!);
-                                                                        } else if (snapshot.data["status"] ==
-                                                                            1) {
-                                                                          value.deleteBookmark(
-                                                                              barDetail![0].placeId!);
-                                                                        }
-                                                                      },
-                                                                      child: value.loading ==
-                                                                              true
-                                                                          ? Shimmer
-                                                                              .fromColors(
-                                                                              baseColor: primaryColor,
-                                                                              highlightColor: Colors.white10,
-                                                                              child: Center(
-                                                                                  child: Container(
+                                                                    onTap:
+                                                                        () async {
+                                                                      if (currentStatus ==
+                                                                          0) {
+                                                                        currentStatus =
+                                                                            1;
+                                                                        value.addBookmark(
+                                                                            barDetail![0].placeId!);
+                                                                      } else if (currentStatus ==
+                                                                          1) {
+                                                                        currentStatus =
+                                                                            0;
+                                                                        value.deleteBookmark(
+                                                                            barDetail![0].placeId!);
+                                                                      }
+                                                                    },
+                                                                    child: value.loading ==
+                                                                            true
+                                                                        ? Shimmer
+                                                                            .fromColors(
+                                                                            baseColor:
+                                                                                primaryColor,
+                                                                            highlightColor:
+                                                                                Colors.white10,
+                                                                            child:
+                                                                                Center(
+                                                                              child: Container(
                                                                                 color: Colors.white,
-                                                                              )),
-                                                                            )
-                                                                          : snapshot.data["status"] == 1
-                                                                              ? const Icon(
-                                                                                  CupertinoIcons.bookmark_fill,
-                                                                                  color: Colors.black,
-                                                                                )
-                                                                              : const Icon(
-                                                                                  CupertinoIcons.bookmark,
-                                                                                  color: Colors.black,
-                                                                                ));
+                                                                              ),
+                                                                            ),
+                                                                          )
+                                                                        : currentStatus ==
+                                                                                1
+                                                                            ? const Icon(
+                                                                                CupertinoIcons.bookmark_fill,
+                                                                                color: Colors.black,
+                                                                              )
+                                                                            : const Icon(
+                                                                                CupertinoIcons.bookmark,
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                  );
                                                                 }
                                                               },
                                                             );
                                                           },
                                                         ))
+
+                                              // Consumer<
+                                              //     BookmarkController>(
+                                              //     builder: (context,
+                                              //         value, child) {
+                                              //       return StreamBuilder(
+                                              //         stream: value
+                                              //             .getBookMarkStream(
+                                              //                 barDetail![
+                                              //                         0]
+                                              //                     .placeId!),
+                                              //         builder: (context,
+                                              //             snapshot) {
+                                              //           if (snapshot
+                                              //                   .connectionState ==
+                                              //               ConnectionState
+                                              //                   .waiting) {
+                                              //             return Shimmer
+                                              //                 .fromColors(
+                                              //               baseColor:
+                                              //                   primaryColor,
+                                              //               highlightColor:
+                                              //                   Colors
+                                              //                       .white10,
+                                              //               child: Center(
+                                              //                   child: Container(
+                                              //                 color: Colors
+                                              //                     .white,
+                                              //               )),
+                                              //             );
+                                              //           } else if (snapshot
+                                              //               .hasError) {
+                                              //             return Text(
+                                              //                 'Error: ${snapshot.error}');
+                                              //           } else {
+                                              //             return GestureDetector(
+                                              //                 onTap:
+                                              //                     () {
+                                              //                   if (snapshot.data["status"] ==
+                                              //                       0) {
+                                              //                     value.addBookmark(
+                                              //                         barDetail![0].placeId!);
+                                              //                   } else if (snapshot.data["status"] ==
+                                              //                       1) {
+                                              //                     value.deleteBookmark(
+                                              //                         barDetail![0].placeId!);
+                                              //                   }
+                                              //                 },
+                                              //                 child: value.loading ==
+                                              //                         true
+                                              //                     ? Shimmer
+                                              //                         .fromColors(
+                                              //                         baseColor: primaryColor,
+                                              //                         highlightColor: Colors.white10,
+                                              //                         child: Center(
+                                              //                             child: Container(
+                                              //                           color: Colors.white,
+                                              //                         )),
+                                              //                       )
+                                              //                     : snapshot.data["status"] == 1
+                                              //                         ? const Icon(
+                                              //                             CupertinoIcons.bookmark_fill,
+                                              //                             color: Colors.black,
+                                              //                           )
+                                              //                         : const Icon(
+                                              //                             CupertinoIcons.bookmark,
+                                              //                             color: Colors.black,
+                                              //                           ));
+                                              //           }
+                                              //         },
+                                              //       );
+                                              //     },
+                                              //   ))
                                             ],
                                           ),
                                         ),
@@ -1014,7 +1113,6 @@ class _DetailScreenState extends State<DetailScreen>
                                               style: GoogleFonts.urbanist(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: size.width * 0.027,
                                               ),
                                             ),
                                             Text(
@@ -1033,13 +1131,22 @@ class _DetailScreenState extends State<DetailScreen>
                                             SizedBox(
                                               width: size.width * 0.03,
                                             ),
-                                            Text(
-                                              widget.distance[0].elements![0]
-                                                  .duration!.text
-                                                  .toString(),
-                                              style: GoogleFonts.urbanist(
-                                                  color: Colors.white),
-                                            ),
+                                            widget.distance[0].elements![0]
+                                                        .duration!.text ==
+                                                    null
+                                                ?const Text(" ")
+                                                : Text(
+                                                    widget
+                                                            .distance[0]
+                                                            .elements![0]
+                                                            .duration!
+                                                            .text ??
+                                                        "",
+                                                    style: GoogleFonts.urbanist(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.white),
+                                                  ),
                                           ],
                                         ),
                                         // GestureDetector(
@@ -1184,32 +1291,26 @@ class _DetailScreenState extends State<DetailScreen>
                                       alignment: Alignment.topLeft,
                                       child: Stack(
                                         children: [
-                                          // Gradient border
                                           Container(
                                             width: size.width,
-                                            height: size.height * 0.32,
+                                            height: size.height * 0.318,
                                             decoration: const BoxDecoration(
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(1)),
                                               gradient: LinearGradient(
                                                 colors: [
-                                                  Color(
-                                                      0xFFC59241), // Left side color
-                                                  Color(
-                                                      0xFFFEF6D1), // Center color
-                                                  Color(
-                                                      0xFFC49138), // Right side color
+                                                  Color(0xFFC59241),
+                                                  Color(0xFFFEF6D1),
+                                                  Color(0xFFC49138),
                                                 ],
                                                 begin: Alignment.topLeft,
                                                 end: Alignment.bottomRight,
                                               ),
                                             ),
                                           ),
-
-                                          // RichText inside the container
                                           Padding(
                                             padding: const EdgeInsets.all(
-                                                5), // Padding for content
+                                                3), // Padding for content
                                             child: Container(
                                               width: size.width,
                                               color: Colors.black,
@@ -1340,7 +1441,7 @@ class _DetailScreenState extends State<DetailScreen>
                                                 ),
                                                 TextSpan(
                                                   text:
-                                                      "Click To Visit Website !",
+                                                      "Click To Visit Website!",
                                                   style: GoogleFonts.urbanist(
                                                       fontWeight:
                                                           FontWeight.normal,

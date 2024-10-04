@@ -1,8 +1,7 @@
-import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/widgets/custom_button/custom_button.dart';
+ import 'package:birds_view/widgets/custom_button/custom_button.dart';
+import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+ 
 class CustomImagePickerBottomSheet extends StatelessWidget {
   final VoidCallback cameraontap;
   final VoidCallback galleryontap;
@@ -22,46 +21,48 @@ class CustomImagePickerBottomSheet extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                RichText(
-                  text: TextSpan(
-                    text: "Choose ",
-                    style: GoogleFonts.urbanist(
-                        fontSize: size.height * 0.03, color: Colors.white),
-                    children: [
-                      TextSpan(
-                        text: 'Image ',
-                        style: GoogleFonts.urbanist(
-                            fontSize: size.height * 0.03,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.baseline,
-                        baseline: TextBaseline.alphabetic,
-                        child: ShaderMask(
-                          shaderCallback: (bounds) => const LinearGradient(
-                            colors: [
-                              Color(0xFFC59241),
-                              Color(0xFFFEF6D1),
-                              Color(0xFFC49138),
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            stops: [0.0, 0.5, 1.0],
-                          ).createShader(
-                              Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
-                          child: Text(
-                            'Source ',
-                            style: GoogleFonts.urbanist(
-                                fontSize: size.height * 0.03,
-                                fontWeight: FontWeight.bold,
-                                color: whiteColor),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                const CustomHeadingText(heading: 'Choose Image Source'),
+                // RichText(
+                //   text: TextSpan(
+                //     text: "Choose ",
+                //     style: GoogleFonts.urbanist(
+                //         fontSize: size.height * 0.03, color: Colors.white),
+                //     children: [
+                //       TextSpan(
+                //         text: 'Image ',
+                //         style: GoogleFonts.urbanist(
+                //             fontSize: size.height * 0.03,
+                //             color: Colors.white,
+                //             fontWeight: FontWeight.bold),
+                //       ),
+                //       WidgetSpan(
+                //         alignment: PlaceholderAlignment.baseline,
+                //         baseline: TextBaseline.alphabetic,
+                //         child: ShaderMask(
+                //           shaderCallback: (bounds) => const LinearGradient(
+                //             colors: [
+                //               Color(0xFFC59241),
+                //               Color(0xFFFEF6D1),
+                //               Color(0xFFC49138),
+                //             ],
+                //             begin: Alignment.centerLeft,
+                //             end: Alignment.centerRight,
+                //             stops: [0.0, 0.5, 1.0],
+                //           ).createShader(
+                //               Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+                //           child: Text(
+                //             'Source ',
+                //             style: GoogleFonts.urbanist(
+                //                 fontSize: size.height * 0.03,
+                //                 fontWeight: FontWeight.bold,
+                //                 color: whiteColor),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+
                 const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

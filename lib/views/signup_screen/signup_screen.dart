@@ -1,6 +1,7 @@
 import 'package:birds_view/controller/signup_controller/signup_controller.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
+import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
 import 'package:birds_view/widgets/custom_textfield/custom_textfield.dart';
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -81,53 +82,53 @@ class _SignupScreenState extends State<SignupScreen> {
               color: whiteColor,
             )),
         centerTitle: true,
-        title: Center(
-          child: RichText(
-            text: TextSpan(
-              text: "Create ",
-              style: GoogleFonts.urbanist(
-                  fontWeight: FontWeight.bold,
-                  fontSize: size.height * 0.026,
-                  color: Colors.white),
-              children: [
-                WidgetSpan(
-                    child: Text(
-                  'An ',
-                  style: GoogleFonts.urbanist(
-                      fontSize: size.height * 0.026, color: Colors.white70),
-                )),
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.baseline,
-                  baseline: TextBaseline.alphabetic,
-                  child: ShaderMask(
-                    shaderCallback: (bounds) => const LinearGradient(
-                      colors: [
-                        Color(0xFFC59241),
-                        Color(0xFFFEF6D1),
-                        Color(0xFFC49138),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      stops: [0.0, 0.5, 1.0],
-                    ).createShader(
-                        Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
-                    child: Text(
-                      'Account ',
-                      style: GoogleFonts.urbanist(
-                          fontSize: size.height * 0.026,
-                          fontWeight: FontWeight.w900,
-                          color: whiteColor),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+        title: const CustomHeadingText(
+          heading: 'Create An Account',
         ),
+        //  Center(
+        //   child: RichText(
+        //     text: TextSpan(
+        //       text: "Create ",
+        //       style: GoogleFonts.urbanist(
+        //           fontWeight: FontWeight.bold,
+        //           fontSize: size.height * 0.026,
+        //           color: Colors.white),
+        //       children: [
+        //         WidgetSpan(
+        //             child: Text(
+        //           'An ',
+        //           style: GoogleFonts.urbanist(
+        //               fontSize: size.height * 0.026, color: Colors.white70),
+        //         )),
+        //         WidgetSpan(
+        //           alignment: PlaceholderAlignment.baseline,
+        //           baseline: TextBaseline.alphabetic,
+        //           child: ShaderMask(
+        //             shaderCallback: (bounds) => const LinearGradient(
+        //               colors: [
+        //                 Color(0xFFC59241),
+        //                 Color(0xFFFEF6D1),
+        //                 Color(0xFFC49138),
+        //               ],
+        //               begin: Alignment.centerLeft,
+        //               end: Alignment.centerRight,
+        //               stops: [0.0, 0.5, 1.0],
+        //             ).createShader(
+        //                 Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+        //             child: Text(
+        //               'Account ',
+        //               style: GoogleFonts.urbanist(
+        //                   fontSize: size.height * 0.026,
+        //                   fontWeight: FontWeight.w900,
+        //                   color: whiteColor),
+        //             ),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ),
-     
-     
-     
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: SingleChildScrollView(

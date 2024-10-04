@@ -44,6 +44,7 @@ class CustomExploreWidget extends StatelessWidget {
             context,
             PageTransition(
               child: DetailScreen(
+                fromBookmark: false,
                 user: user,
                 fromSearchScreen: true,
                 searchBarDetail: barAndClubsDetails,
@@ -59,6 +60,7 @@ class CustomExploreWidget extends StatelessWidget {
             context,
             PageTransition(
               child: DetailScreen(
+                fromBookmark: false,
                 user: user,
                 fromSearchScreen: false,
                 barDetail: barsOrClubsData!,

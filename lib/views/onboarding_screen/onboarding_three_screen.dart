@@ -3,6 +3,7 @@ import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/views/home_screen/home_screem.dart';
 import 'package:birds_view/views/login_screen/login_screen.dart';
 import 'package:birds_view/views/signup_screen/signup_screen.dart';
+import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
@@ -66,45 +67,48 @@ class _OnboardingThreeState extends State<OnboardingThree> {
               height: size.height * 0.05,
             ),
             //
-            Center(
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    WidgetSpan(
-                      alignment: PlaceholderAlignment.baseline,
-                      baseline: TextBaseline.alphabetic,
-                      child: ShaderMask(
-                        shaderCallback: (bounds) => const LinearGradient(
-                          colors: [
-                            Color(0xFFC59241),
-                            Color(0xFFFEF6D1),
-                            Color(0xFFC49138),
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          stops: [0.0, 0.5, 1.0],
-                        ).createShader(
-                            Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
-                        child: Text(
-                          'Check the Vibe, ',
-                          style: GoogleFonts.urbanist(
-                              fontSize: size.height * 0.025,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'Then Arrive',
-                      style: GoogleFonts.urbanist(
-                          fontSize: size.height * 0.025,
-                          fontWeight: FontWeight.w900,
-                          color: whiteColor),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            const Center(
+                child:
+                    CustomHeadingText(heading: "Check The Vibe, Then Arrive")),
+            // Center(
+            //   child: RichText(
+            //     text: TextSpan(
+            //       children: [
+            //         WidgetSpan(
+            //           alignment: PlaceholderAlignment.baseline,
+            //           baseline: TextBaseline.alphabetic,
+            //           child: ShaderMask(
+            //             shaderCallback: (bounds) => const LinearGradient(
+            //               colors: [
+            //                 Color(0xFFC59241),
+            //                 Color(0xFFFEF6D1),
+            //                 Color(0xFFC49138),
+            //               ],
+            //               begin: Alignment.centerLeft,
+            //               end: Alignment.centerRight,
+            //               stops: [0.0, 0.5, 1.0],
+            //             ).createShader(
+            //                 Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+            //             child: Text(
+            //               'Check the Vibe, ',
+            //               style: GoogleFonts.urbanist(
+            //                   fontSize: size.height * 0.026,
+            //                   fontWeight: FontWeight.w900,
+            //                   color: Colors.white),
+            //             ),
+            //           ),
+            //         ),
+            //         TextSpan(
+            //           text: 'Then Arrive',
+            //           style: GoogleFonts.urbanist(
+            //               fontSize: size.height * 0.026,
+            //               fontWeight: FontWeight.w900,
+            //               color: whiteColor),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
 
             //
             SizedBox(

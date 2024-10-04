@@ -3,6 +3,7 @@ import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/views/forgot_password_screen/verify_email_screen.dart';
 import 'package:birds_view/views/signup_screen/signup_screen.dart';
+import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
 import 'package:birds_view/widgets/custom_textfield/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -46,41 +47,42 @@ class _LogInScreenState extends State<LogInScreen> {
                   height: size.height * 0.03,
                 ),
                 //
-                Center(
-                  child: RichText(
-                    text: TextSpan(
-                      text: "Log ",
-                      style: GoogleFonts.urbanist(
-                          fontSize: size.height * 0.04, color: Colors.white70),
-                      children: [
-                        WidgetSpan(
-                          alignment: PlaceholderAlignment.baseline,
-                          baseline: TextBaseline.alphabetic,
-                          child: ShaderMask(
-                            shaderCallback: (bounds) => const LinearGradient(
-                              colors: [
-                                Color(0xFFC59241),
-                                Color(0xFFFEF6D1),
-                                Color(0xFFC49138),
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              stops: [0.0, 0.5, 1.0],
-                            ).createShader(Rect.fromLTWH(
-                                0, 0, bounds.width, bounds.height)),
-                            child: Text(
-                              'In ',
-                              style: GoogleFonts.urbanist(
-                                  fontSize: size.height * 0.04,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                const Center(child: CustomHeadingText(heading: "Log In")),
+                // Center(
+                //   child: RichText(
+                //     text: TextSpan(
+                //       text: "Log ",
+                //       style: GoogleFonts.urbanist(
+                //           fontSize: size.height * 0.04, color: Colors.white70),
+                //       children: [
+                //         WidgetSpan(
+                //           alignment: PlaceholderAlignment.baseline,
+                //           baseline: TextBaseline.alphabetic,
+                //           child: ShaderMask(
+                //             shaderCallback: (bounds) => const LinearGradient(
+                //               colors: [
+                //                 Color(0xFFC59241),
+                //                 Color(0xFFFEF6D1),
+                //                 Color(0xFFC49138),
+                //               ],
+                //               begin: Alignment.centerLeft,
+                //               end: Alignment.centerRight,
+                //               stops: [0.0, 0.5, 1.0],
+                //             ).createShader(Rect.fromLTWH(
+                //                 0, 0, bounds.width, bounds.height)),
+                //             child: Text(
+                //               'In ',
+                //               style: GoogleFonts.urbanist(
+                //                   fontSize: size.height * 0.04,
+                //                   fontWeight: FontWeight.w900,
+                //                   color: Colors.white),
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
 
                 //
                 SizedBox(
@@ -196,7 +198,7 @@ class _LogInScreenState extends State<LogInScreen> {
                           //
 
                           SizedBox(
-                              width: size.width * 0.6,
+                              width: size.width * 0.3,
                               child: Consumer<LoginController>(
                                 builder: (context, value, child) {
                                   return Row(
@@ -216,13 +218,13 @@ class _LogInScreenState extends State<LogInScreen> {
                                         child: Image.asset(appleLoginIcon,
                                             width: size.height * 0.05),
                                       ),
-                                      GestureDetector(
-                                        onTap: () {},
-                                        child: Image.asset(
-                                          facebookLoginIcon,
-                                          width: size.height * 0.05,
-                                        ),
-                                      ),
+                                      // GestureDetector(
+                                      //   onTap: () {},
+                                      //   child: Image.asset(
+                                      //     facebookLoginIcon,
+                                      //     width: size.height * 0.05,
+                                      //   ),
+                                      // ),
                                     ],
                                   );
                                 },

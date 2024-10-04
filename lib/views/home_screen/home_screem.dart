@@ -25,7 +25,6 @@ import '../../model/bar_details_model/bar_details_model.dart';
 import '../../widgets/custom_drawer/custom_drawer.dart';
 import '../../widgets/custom_explore_widget/custom_explore_widget.dart';
 import '../../widgets/custom_recommended_widget/custom_recommended_widget.dart';
-import '../chat_screens/search_user_screen/search_user_screen.dart';
 import '../explore_screen/explore_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -297,8 +296,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .homeScreennearestbarsOrClubsData!
                                         .length,
                                     itemBuilder: (context, index) {
-                                      // Ensure that all lists have valid data for the current index
-                                      bool hasImage = index <
+                                       bool hasImage = index <
                                               mapController
                                                   .homeScreennearsetbarsOrClubsImages
                                                   .length &&
@@ -324,6 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 context,
                                                 PageTransition(
                                                   child: DetailScreen(
+                                                    fromBookmark: false,
                                                     user: widget.user,
                                                     fromSearchScreen: false,
                                                     index: index,
@@ -411,6 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             .homeScreennearestbarsOrClubsDistanceList[
                                                                                 index]
                                                                             .elements![
+                                                                        // ignore: unrelated_type_equality_checks
                                                                         0] ==
                                                                     ""
                                                                 ? ""
@@ -489,6 +489,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 context,
                                                 PageTransition(
                                                     child: DetailScreen(
+                                                      fromBookmark: false,
                                                       user: widget.user,
                                                       fromSearchScreen: false,
                                                       barDetail: mapController
@@ -583,6 +584,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 context,
                                                 PageTransition(
                                                     child: DetailScreen(
+                                                      fromBookmark: false,
                                                       user: widget.user,
                                                       fromSearchScreen: false,
                                                       barDetail: mapController
@@ -893,6 +895,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onSubmitted: (val) {
             if (val.isEmpty || isSearchBarOpen == false) {
               value.clearFields();
+              value.searchingBar = false;
               setState(() {});
             } else {
               value.searchBarsOrClubs(val, context);

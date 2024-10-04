@@ -3,7 +3,7 @@ import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
 import 'package:birds_view/views/bookmark_screen/bookmark_screen.dart';
- import 'package:birds_view/views/login_screen/login_screen.dart';
+import 'package:birds_view/views/login_screen/login_screen.dart';
 import 'package:birds_view/views/profile_screen/profile_screen.dart';
 import 'package:birds_view/views/visited_bars/visited_bars.dart';
 import 'package:birds_view/widgets/custom_button/custom_button.dart';
@@ -167,7 +167,7 @@ class CustomDrawer extends StatelessWidget {
                   Navigator.push(
                       context,
                       PageTransition(
-                          child: const BookmarkScreen(),
+                          child:   BookmarkScreen(userModel: user,),
                           type: PageTransitionType.fade));
                 }
               },
@@ -233,25 +233,43 @@ class CustomDrawer extends StatelessWidget {
 
             user == null || user!.data!.id == null
                 ? Center(
-                  child: CustomButton(
-                      text: 'Log In',
-                      ontap: () async {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            PageTransition(
-                                child: const LogInScreen(),
-                                type: PageTransitionType.fade),
-                            (route) => false);
-                      }),
-                )
+                    child: CustomButton(
+                        text: 'Log In',
+                        ontap: () async {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              PageTransition(
+                                  child: const LogInScreen(),
+                                  type: PageTransitionType.fade),
+                              (route) => false);
+                        }),
+                  )
                 : Consumer<LoginController>(
                     builder: (context, value, child) {
                       return Center(
-                        child: CustomButton(
-                            text: 'Log Out',
-                            ontap: () async {
-                              value.signOutFromSocialPlatforms(context);
-                            }),
+                        child:
+                            //     Container(
+                            //   height: size.height * 0.06,
+                            //   width: size.width * 0.5,
+                            //   decoration: BoxDecoration(
+                            //     color: Colors.white,
+                            //     borderRadius: BorderRadius.circular(30),
+                            //   ),
+                            //   child: Center(
+                            //     child: Text(
+                            //       "Log Out",
+                            //       style: GoogleFonts.urbanist(
+                            //           fontWeight: FontWeight.bold,
+                            //           fontSize: size.height * 0.019,
+                            //           color: Colors.black),
+                            //     ),
+                            //   ),
+                            // )
+                            CustomButton(
+                                text: 'Log Out',
+                                ontap: () async {
+                                  value.signOutFromSocialPlatforms(context);
+                                }),
                       );
                     },
                   )

@@ -42,6 +42,7 @@ class VisitedBarsController extends ChangeNotifier {
         GetBookmarksModel getBookmarksModel = GetBookmarksModel.fromJson(data);
         log(data.toString());
         await getVisitedBarDetails(getBookmarksModel, context);
+        notifyListeners();
       } else {
         log(response.statusCode.toString());
       }

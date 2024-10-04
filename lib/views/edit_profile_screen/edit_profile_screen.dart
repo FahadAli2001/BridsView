@@ -70,17 +70,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           )
                         : Padding(
                             padding: const EdgeInsets.all(15),
-                            child: CustomButton(
-                              text: 'Update Profile',
-                              ontap: () {
-                                if (widget.user != null) {
-                                  editController.updateUser(
-                                      widget.user, context);
-                                } else {
-                                  showCustomErrorToast(
-                                      message: 'Sign In To Continue');
-                                }
-                              },
+                            child: Center(
+                              child: CustomButton(
+                                text: 'Update Profile',
+                                ontap: () {
+                                  if (widget.user != null) {
+                                    editController.updateUser(
+                                        widget.user, context);
+                                  } else {
+                                    showCustomErrorToast(
+                                        message: 'Sign In To Continue');
+                                  }
+                                },
+                              ),
                             ),
                           ),
                   ],
@@ -229,45 +231,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         hintText: "Last Name",
                         labelText: "Last Name"),
                     //
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            const Color(0xFFC59241).withOpacity(0.4),
-                            const Color(0xFFFEF6D1).withOpacity(0.4),
-                            const Color(0xFFC49138).withOpacity(0.4),
-                          ],
-                        ),
-                      ),
-                      child: TextField(
-                        enabled: false,
-                        style: const TextStyle(color: Colors.white60),
-                        controller: value.emailController,
-                        decoration: const InputDecoration(
-                          filled: true,
-                          hintText: 'Email',
-                          hintStyle: TextStyle(color: Colors.black),
-                          labelText: 'Email',
-                          labelStyle: TextStyle(color: Colors.white60),
-                          border: InputBorder.none, // Remove the default border
-                          contentPadding:
-                              EdgeInsets.all(16), // Optional: adjust padding
-                        ),
+                    //
+                    TextField(
+                      enabled: false,
+                      style: const TextStyle(color: Colors.white60),
+                      controller: value.emailController,
+                      decoration: const InputDecoration(
+                        hintText: 'Email',
+                        hintStyle: TextStyle(color: Colors.black),
+                        labelText: 'Email',
+                        labelStyle: TextStyle(color: Colors.white60),
                       ),
                     ),
-                    // TextField(
-                    //   enabled: false,
-                    //   style: const TextStyle(color: Colors.white60),
-                    //   controller: value.emailController,
-                    //   decoration: InputDecoration(
-                    //     fillColor: gradientColor,
-                    //     filled: true,
-                    //     hintText: 'Email',
-                    //     hintStyle: const TextStyle(color: Colors.black),
-                    //     labelText: 'Email',
-                    //     labelStyle: const TextStyle(color: Colors.white60),
-                    //   ),
-                    // ),
                     SizedBox(
                         width: size.width,
                         child: const Divider(

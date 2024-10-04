@@ -15,6 +15,7 @@ class CustomDescriptionRichText extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return RichText(
+       
       text: TextSpan(
         children: [
           WidgetSpan(
@@ -23,16 +24,18 @@ class CustomDescriptionRichText extends StatelessWidget {
             child: ShaderMask(
               shaderCallback: (bounds) => const LinearGradient(
                 colors: [
-                  Color(0xFFC59241), // Left side color
-                  Color(0xFFFEF6D1), // Center color
-                  Color(0xFFC49138), // Right side color
+                  Color(0xFFC59241),  
+                  Color(0xFFFEF6D1),  
+                  Color(0xFFC49138), 
                 ],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ).createShader(bounds),
               child: Text(
                 title,
+                textAlign: TextAlign.left,
                 style: GoogleFonts.urbanist(
+                  
                     fontSize: size.height * 0.016,
                     fontWeight: FontWeight.bold,
                     height: 2,

@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
-import 'package:birds_view/model/search_bars_model/search_bars_model.dart';
+import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
 import 'package:birds_view/utils/api_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -23,6 +23,11 @@ class SearchBarsController extends ChangeNotifier {
   double? get lon => _lon;
   bool get searchingBar => _searchingBar;
 
+   set searchingBar(val){
+    _searchingBar = val;
+    notifyListeners();
+   } 
+
   Future<void> getCordinateds() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     _lat = double.tryParse(sp.getString('latitude') ?? '');
@@ -35,21 +40,24 @@ class SearchBarsController extends ChangeNotifier {
     _searchingBar = true;
     notifyListeners();
     log(searchingBar.toString());
-    List<Predictions> searchResultList = [];
+    List<Results> searchResultList = [];
     searchResultList.clear();
     clearFields();
 
     try {
       var response = await http.get(Uri.parse(
-          "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$lat,$lon&radius=2500&type=bar|night_club&key=$googleMapApiKey"));
+          "https://maps.googleapis.com/maps/api/place/textsearch/json?query=$placeName&type=bar|night_club&location=$lat,$lon&radius=7500&key=$googleMapApiKey"
+          // "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$lat,$lon&radius=2500&type=bar|night_club&key=$googleMapApiKey"
+          ));
+      // log(response.body.toString());
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
-        //  log(data['predictions'].toString());
+        log(data['results'].toString());
 
-        if (data['predictions'] != null && data['predictions'] is List) {
-          var list = data['predictions'] as List;
-          searchResultList = list.map((e) => Predictions.fromJson(e)).toList();
-          log("search bar method :  ${searchResultList.length.toString()}");
+        if (data['results'] != null && data['results'] is List) {
+          var list = data['results'] as List;
+          searchResultList = list.map((e) => Results.fromJson(e)).toList();
+          // log("search bar method :  ${searchResultList.length.toString()}");
           if (searchResultList.isNotEmpty) {
             await getSearchBarsDetail(
               searchResultList,
@@ -82,7 +90,7 @@ class SearchBarsController extends ChangeNotifier {
   }
 
   Future<void> getSearchBarsDetail(
-    List<Predictions> searchResult,
+    List<Results> searchResult,
     context,
   ) async {
     final mapController = Provider.of<MapsController>(context, listen: false);
@@ -116,7 +124,7 @@ class SearchBarsController extends ChangeNotifier {
         }));
       }
 
-      // Wait for all fetch tasks to complete concurrently
+     
       await Future.wait(fetchTasks);
 
       notifyListeners();
