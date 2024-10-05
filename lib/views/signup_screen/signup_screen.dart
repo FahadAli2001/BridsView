@@ -261,11 +261,12 @@ class _SignupScreenState extends State<SignupScreen> {
                   labelText: "Password"),
 
               SizedBox(
-                height: size.height * 0.02,
+                height: size.height * 0.01,
               ),
-              SizedBox(
+              Container(
+                color: Colors.transparent,
                 width: size.width,
-                height: size.height * 0.09,
+                height: size.height * 0.071,
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {
@@ -286,7 +287,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       pickerTextStyle: GoogleFonts.urbanist(
                         color: primaryColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: 18,
                       ),
                       buttonSingleColor: Colors.black,
                       closeIconColor: primaryColor,
@@ -299,9 +300,10 @@ class _SignupScreenState extends State<SignupScreen> {
                       },
                     ).show(context);
                   },
-                  child: SizedBox(
+                  child: Container(
+                    color: Colors.transparent,
                     width: size.width,
-                    height: size.height * 0.07,
+                   
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -329,7 +331,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: size.height * 0.015),
+                         
                         const Divider(color: Colors.white60),
                       ],
                     ),
@@ -377,7 +379,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
               SizedBox(
-                height: size.height * 0.01,
+                height: size.height * 0.001,
               ),
               SizedBox(
                   width: size.width,

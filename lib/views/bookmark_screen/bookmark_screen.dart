@@ -50,14 +50,14 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           backgroundColor: Colors.black,
           leading: GestureDetector(
             onTap: () {
-              Navigator.pop(context);
-              // Navigator.pushAndRemoveUntil(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => HomeScreen(user: widget.userModel),
-              //   ),
-              //   (Route<dynamic> route) => false,
-              // );
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(user: widget.userModel),
+                ),
+                (Route<dynamic> route) => false,
+              );
+              
             },
             child: const Icon(
               Icons.arrow_back_ios,
@@ -71,13 +71,12 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           padding: const EdgeInsets.all(15),
           child: Consumer<BookmarkController>(
             builder: (context, bookmarkController, child) {
-               
               final bookmarksBarsDetailList =
                   bookmarkController.bookmarksBarsDetailList;
               final bookmarksBarsImagesList =
                   bookmarkController.bookmarksBarsImagesList.cast<Uint8List>();
 
-              return bookmarksBarsDetailList.isEmpty  
+              return bookmarksBarsDetailList.isEmpty
                   ? Center(
                       child: Text(
                         "No Bookmarks",

@@ -53,7 +53,7 @@ class BookmarkController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Stream getBookMarkStream(String placeId) async* {
+  Future<Map<String, dynamic>> getBookMarkStatus(String placeId) async {
     var headers = {'Authorization': 'Bearer $token'};
     try {
       var response = await http.get(
@@ -61,15 +61,75 @@ class BookmarkController extends ChangeNotifier {
         headers: headers,
       );
 
-      var bookmark = jsonDecode(response.body);
-      log(bookmark.toString());
-      yield bookmark;
-
-      await Future.delayed(const Duration(milliseconds: 5));
+      if (response.statusCode == 200) {
+        var bookmark = jsonDecode(response.body);
+        log(bookmark.toString());
+        return bookmark;
+      } else {
+        throw Exception("Failed to load bookmark status");
+      }
     } catch (e) {
       log("Error fetching bookmark status: $e");
+      return {"status": -1, "error": e.toString()};
     }
   }
+
+  Future<bool> handleBookmarkAction(String placeId, bool isAdding) async {
+    _setLoading(true);
+    try {
+      var header = {"Authorization": "Bearer $token"};
+      var body = {"user_id": userId, "bar_type_id": placeId};
+      var url = isAdding ? addBookmarkApi : deleteBookmarkApi;
+
+      if (!isAdding) {
+        body["bar_place_id"] = placeId;
+        body.remove("bar_type_id");
+      }
+
+      var response = await http.post(
+        Uri.parse(url),
+        headers: header,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        notifyListeners();
+        return true;
+      } else {
+        log("Error ${isAdding ? 'adding' : 'deleting'} bookmark: ${response.body}");
+        return false;
+      }
+    } catch (e) {
+      log("${isAdding ? 'Add' : 'Delete'} Bookmark call error: $e");
+      return false;
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  // Stream getBookMarkStream(String placeId) async* {
+  //   var headers = {'Authorization': 'Bearer $token'};
+  //   try {
+  //     var response = await http.get(
+  //       Uri.parse('$checkBookmarkApi$userId&bar_type_id=$placeId'),
+  //       headers: headers,
+  //     );
+
+  //     if (response.statusCode == 200) {
+  //       var bookmark = jsonDecode(response.body);
+  //       log(bookmark.toString());
+  //       yield bookmark;
+  //     } else {
+  //       throw Exception("Failed to load bookmark status");
+  //     }
+
+  //     await Future.delayed(const Duration(
+  //         milliseconds: 1000)); // Slight delay to control polling frequency
+  //   } catch (e) {
+  //     log("Error fetching bookmark status: $e");
+  //     yield {};
+  //   }
+  // }
 
   Future<void> addBookmark(String placeId) async {
     _setLoading(true);
@@ -85,8 +145,8 @@ class BookmarkController extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         notifyListeners();
+        // await Future.delayed(const Duration(seconds: 5));
 
-        await Future.delayed(const Duration(milliseconds: 5));
         showCustomSuccessToast(message: "Bookmark Added");
       } else {
         log("Error adding bookmark: ${response.body}");
@@ -112,8 +172,8 @@ class BookmarkController extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         notifyListeners();
+        // await Future.delayed(const Duration(seconds: 5));
 
-        await Future.delayed(const Duration(milliseconds: 5));
         showCustomSuccessToast(message: "Bookmark Removed");
       } else {
         log("Error deleting bookmark: ${response.body}");

@@ -33,6 +33,7 @@ import '../../widgets/custom_detail_screen_widgets/custom_bar_crowd_image_widget
 import '../../widgets/custom_detail_screen_widgets/custom_bar_description_heading_widget/custom_bar_description_heading_widget.dart';
 import '../../widgets/custom_detail_screen_widgets/custom_bar_subscribe_now_button_widget/custom_bar_subscribe_now_button_widget.dart';
 import '../../widgets/custom_showpro_subscription_popup_widget/custom_showpro_subscription_popup.dart';
+import '../../widgets/custom_success_toast/custom_success_toast.dart';
 
 class DetailScreen extends StatefulWidget {
   final UserModel? user;
@@ -149,18 +150,20 @@ class _DetailScreenState extends State<DetailScreen>
                                 ),
                                 type: PageTransitionType.fade));
                       } else {
+                        log(barDetail![0].geometry!.location!.lat.toString());
+                        log(barDetail![0].geometry!.location!.lng.toString());
                         Navigator.push(
                             context,
                             PageTransition(
                                 child: MapScreen(
                                   bar: barDetail!,
-                                  index: widget.index,
+                                  index: 0,
                                   barImage: nonNullableList,
                                 ),
                                 type: PageTransitionType.fade));
                       }
                     } catch (e) {
-                      log(e.toString());
+                      log("Detail Screen : $e");
                     }
                   }),
             ),
@@ -175,8 +178,7 @@ class _DetailScreenState extends State<DetailScreen>
                             builder: (context) =>
                                 BookmarkScreen(userModel: widget.user),
                           ),
-                          (Route<dynamic> route) =>
-                              false, 
+                          (Route<dynamic> route) => false,
                         );
                       } else {
                         Navigator.pop(context);
@@ -260,75 +262,140 @@ class _DetailScreenState extends State<DetailScreen>
                                                       : Consumer<
                                                           BookmarkController>(
                                                           builder: (context,
-                                                              value, child) {
-                                                            return StreamBuilder(
-                                                              stream: value.getBookMarkStream(widget
-                                                                  .searchBarDetail![
-                                                                      widget
-                                                                          .index]
-                                                                  .placeId!),
+                                                              controller,
+                                                              child) {
+                                                            return FutureBuilder<
+                                                                Map<String,
+                                                                    dynamic>>(
+                                                              future: controller
+                                                                  .getBookMarkStatus(widget
+                                                                      .searchBarDetail![
+                                                                          widget
+                                                                              .index]
+                                                                      .placeId!),
                                                               builder: (context,
                                                                   snapshot) {
                                                                 if (snapshot
                                                                         .connectionState ==
                                                                     ConnectionState
                                                                         .waiting) {
-                                                                  return Shimmer
-                                                                      .fromColors(
-                                                                    baseColor:
-                                                                        primaryColor,
-                                                                    highlightColor:
-                                                                        Colors
-                                                                            .white10,
-                                                                    child: Center(
-                                                                        child: Container(
-                                                                      color: Colors
-                                                                          .white,
-                                                                    )),
-                                                                  );
+                                                                  return const Text(
+                                                                      " ");
                                                                 } else if (snapshot
-                                                                    .hasError) {
-                                                                  return Text(
-                                                                      'Error: ${snapshot.error}');
+                                                                        .hasError ||
+                                                                    snapshot.data?[
+                                                                            "status"] ==
+                                                                        -1) {
+                                                                  return const Text(
+                                                                      " ");
                                                                 } else {
+                                                                  bool
+                                                                      isBookmarked =
+                                                                      snapshot.data?[
+                                                                              "status"] ==
+                                                                          1;
                                                                   return GestureDetector(
-                                                                      onTap:
-                                                                          () {
-                                                                        if (snapshot.data["status"] ==
-                                                                            0) {
-                                                                          value.addBookmark(widget
+                                                                    onTap:
+                                                                        () async {
+                                                                      bool success = await controller.handleBookmarkAction(
+                                                                          widget
                                                                               .searchBarDetail![widget.index]
-                                                                              .placeId!);
-                                                                              setState(() {
-                                                                                
-                                                                              });
-                                                                        } else if (snapshot.data["status"] ==
-                                                                            1) {
-                                                                          value.deleteBookmark(widget
-                                                                              .searchBarDetail![widget.index]
-                                                                              .placeId!);
-                                                                                setState(() {
-                                                                                
-                                                                              });
-                                                                        }
-                                                                      },
-                                                                      child: snapshot.data["status"] ==
-                                                                              1
-                                                                          ? const Icon(
-                                                                              CupertinoIcons.bookmark_fill,
-                                                                              color: Colors.black,
-                                                                            )
-                                                                          : const Icon(
-                                                                              CupertinoIcons.bookmark,
-                                                                              color: Colors.black,
-                                                                            ));
+                                                                              .placeId!,
+                                                                          !isBookmarked);
+                                                                      if (success) {
+                                                                        Future.delayed(
+                                                                            const Duration(seconds: 1),
+                                                                            () {
+                                                                          showCustomSuccessToast(
+                                                                              message: isBookmarked ? "Bookmark Removed" : "Bookmark Added");
+                                                                        });
+                                                                      } else {
+                                                                        showCustomErrorToast(
+                                                                            message:
+                                                                                "Action failed");
+                                                                      }
+                                                                    },
+                                                                    child: Icon(
+                                                                      isBookmarked
+                                                                          ? CupertinoIcons
+                                                                              .bookmark_fill
+                                                                          : CupertinoIcons
+                                                                              .bookmark,
+                                                                      color: Colors
+                                                                          .black,
+                                                                    ),
+                                                                  );
                                                                 }
                                                               },
                                                             );
                                                           },
-                                                        ))
-                                       
-                                       
+                                                        )
+
+                                              // Consumer<
+                                              //     BookmarkController>(
+                                              //     builder: (context,
+                                              //         value, child) {
+                                              //       return StreamBuilder(
+                                              //         stream: value.getBookMarkStream(widget
+                                              //             .searchBarDetail![
+                                              //                 widget
+                                              //                     .index]
+                                              //             .placeId!),
+                                              //         builder: (context,
+                                              //             snapshot) {
+                                              //           if (snapshot
+                                              //                   .connectionState ==
+                                              //               ConnectionState
+                                              //                   .waiting) {
+                                              //             return Shimmer
+                                              //                 .fromColors(
+                                              //               baseColor:
+                                              //                   primaryColor,
+                                              //               highlightColor:
+                                              //                   Colors
+                                              //                       .white10,
+                                              //               child: Center(
+                                              //                   child: Container(
+                                              //                 color: Colors
+                                              //                     .white,
+                                              //               )),
+                                              //             );
+                                              //           } else if (snapshot
+                                              //               .hasError) {
+                                              //             return Text(
+                                              //                 'Error: ${snapshot.error}');
+                                              //           } else {
+                                              //             return GestureDetector(
+                                              //                 onTap:
+                                              //                     () {
+                                              //                   if (snapshot.data["status"] ==
+                                              //                       0) {
+                                              //                     value.addBookmark(widget
+                                              //                         .searchBarDetail![widget.index]
+                                              //                         .placeId!);
+                                              //                   } else if (snapshot.data["status"] ==
+                                              //                       1) {
+                                              //                     value.deleteBookmark(widget
+                                              //                         .searchBarDetail![widget.index]
+                                              //                         .placeId!);
+                                              //                   }
+                                              //                 },
+                                              //                 child: snapshot.data["status"] ==
+                                              //                         1
+                                              //                     ? const Icon(
+                                              //                         CupertinoIcons.bookmark_fill,
+                                              //                         color: Colors.black,
+                                              //                       )
+                                              //                     : const Icon(
+                                              //                         CupertinoIcons.bookmark,
+                                              //                         color: Colors.black,
+                                              //                       ));
+                                              //           }
+                                              //         },
+                                              //       );
+                                              //     },
+                                              //   )
+                                              )
                                         ],
                                       ),
                                     ),
@@ -577,13 +644,12 @@ class _DetailScreenState extends State<DetailScreen>
                               : SizedBox(
                                   height: size.height * 0.01,
                                 ),
-                        
-                        CustomDescriptionRichText(
+
+                          CustomDescriptionRichText(
                               title: "Address : ",
                               subtitle: widget.searchBarDetail![widget.index]
                                   .formattedAddress!),
 
-                           
                           SizedBox(
                             height: size.height * 0.02,
                           ),
@@ -621,11 +687,9 @@ class _DetailScreenState extends State<DetailScreen>
                                               Radius.circular(1)),
                                           gradient: LinearGradient(
                                             colors: [
-                                              Color(
-                                                  0xFFC59241), // Left side color
-                                              Color(0xFFFEF6D1), // Center color
-                                              Color(
-                                                  0xFFC49138), // Right side color
+                                              Color(0xFFC59241),
+                                              Color(0xFFFEF6D1),
+                                              Color(0xFFC49138),
                                             ],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
@@ -634,9 +698,11 @@ class _DetailScreenState extends State<DetailScreen>
                                       ),
 
                                       // RichText inside the container
-                                      Padding(
-                                        padding: const EdgeInsets.all(
-                                            5), // Padding for content
+                                      Positioned(
+                                        right: 3,
+                                        left: 3,
+                                        bottom: 3,
+                                        top: 3,
                                         child: Container(
                                           width: size.width,
                                           color: Colors.black,
@@ -688,7 +754,7 @@ class _DetailScreenState extends State<DetailScreen>
                                                       i++) ...[
                                                     TextSpan(
                                                       text:
-                                                          "\n ${widget.searchBarDetail![widget.index].openingHours!.weekdayText![i]} \n",
+                                                          "\n${widget.searchBarDetail![widget.index].openingHours!.weekdayText![i]} \n",
                                                       style:
                                                           GoogleFonts.urbanist(
                                                               fontSize:
@@ -852,170 +918,169 @@ class _DetailScreenState extends State<DetailScreen>
                                                       : Consumer<
                                                           BookmarkController>(
                                                           builder: (context,
-                                                              value, child) {
-                                                            return StreamBuilder(
-                                                              stream: value
-                                                                  .getBookMarkStream(
+                                                              controller,
+                                                              child) {
+                                                            return FutureBuilder<
+                                                                Map<String,
+                                                                    dynamic>>(
+                                                              future: controller
+                                                                  .getBookMarkStatus(
                                                                       barDetail![
                                                                               0]
                                                                           .placeId!),
                                                               builder: (context,
                                                                   snapshot) {
-                                                                int currentStatus = snapshot.data !=
-                                                                            null &&
-                                                                        snapshot.data["status"] !=
-                                                                            null
-                                                                    ? snapshot
-                                                                            .data[
-                                                                        "status"]
-                                                                    : 0;
-
                                                                 if (snapshot
                                                                         .connectionState ==
                                                                     ConnectionState
                                                                         .waiting) {
-                                                                  return Shimmer
-                                                                      .fromColors(
-                                                                    baseColor:
-                                                                        primaryColor,
-                                                                    highlightColor:
-                                                                        Colors
-                                                                            .white10,
-                                                                    child:
-                                                                        Center(
-                                                                      child:
-                                                                          Container(
-                                                                        color: Colors
-                                                                            .white,
-                                                                      ),
-                                                                    ),
-                                                                  );
+                                                                  return const Text(
+                                                                      " ");
                                                                 } else if (snapshot
-                                                                    .hasError) {
-                                                                  return Text(
-                                                                      'Error: ${snapshot.error}');
+                                                                        .hasError ||
+                                                                    snapshot.data?[
+                                                                            "status"] ==
+                                                                        -1) {
+                                                                  return const Text(
+                                                                      " ");
                                                                 } else {
+                                                                  bool
+                                                                      isBookmarked =
+                                                                      snapshot.data?[
+                                                                              "status"] ==
+                                                                          1;
                                                                   return GestureDetector(
                                                                     onTap:
                                                                         () async {
-                                                                      if (currentStatus ==
-                                                                          0) {
-                                                                        currentStatus =
-                                                                            1;
-                                                                        value.addBookmark(
-                                                                            barDetail![0].placeId!);
-                                                                      } else if (currentStatus ==
-                                                                          1) {
-                                                                        currentStatus =
-                                                                            0;
-                                                                        value.deleteBookmark(
-                                                                            barDetail![0].placeId!);
+                                                                      bool success = await controller.handleBookmarkAction(
+                                                                          barDetail![0]
+                                                                              .placeId!,
+                                                                          !isBookmarked);
+                                                                      if (success) {
+                                                                        Future.delayed(
+                                                                            const Duration(seconds: 1),
+                                                                            () {
+                                                                          showCustomSuccessToast(
+                                                                              message: isBookmarked ? "Bookmark Removed" : "Bookmark Added");
+                                                                        });
+                                                                      } else {
+                                                                        showCustomErrorToast(
+                                                                            message:
+                                                                                "Action failed");
                                                                       }
                                                                     },
-                                                                    child: value.loading ==
-                                                                            true
-                                                                        ? Shimmer
-                                                                            .fromColors(
-                                                                            baseColor:
-                                                                                primaryColor,
-                                                                            highlightColor:
-                                                                                Colors.white10,
-                                                                            child:
-                                                                                Center(
-                                                                              child: Container(
-                                                                                color: Colors.white,
-                                                                              ),
-                                                                            ),
-                                                                          )
-                                                                        : currentStatus ==
-                                                                                1
-                                                                            ? const Icon(
-                                                                                CupertinoIcons.bookmark_fill,
-                                                                                color: Colors.black,
-                                                                              )
-                                                                            : const Icon(
-                                                                                CupertinoIcons.bookmark,
-                                                                                color: Colors.black,
-                                                                              ),
+                                                                    child: Icon(
+                                                                      isBookmarked
+                                                                          ? CupertinoIcons
+                                                                              .bookmark_fill
+                                                                          : CupertinoIcons
+                                                                              .bookmark,
+                                                                      color: Colors
+                                                                          .black,
+                                                                    ),
                                                                   );
                                                                 }
                                                               },
                                                             );
                                                           },
-                                                        ))
+                                                        )
 
-                                              // Consumer<
-                                              //     BookmarkController>(
-                                              //     builder: (context,
-                                              //         value, child) {
-                                              //       return StreamBuilder(
-                                              //         stream: value
-                                              //             .getBookMarkStream(
-                                              //                 barDetail![
-                                              //                         0]
-                                              //                     .placeId!),
-                                              //         builder: (context,
-                                              //             snapshot) {
-                                              //           if (snapshot
-                                              //                   .connectionState ==
-                                              //               ConnectionState
-                                              //                   .waiting) {
-                                              //             return Shimmer
-                                              //                 .fromColors(
-                                              //               baseColor:
-                                              //                   primaryColor,
-                                              //               highlightColor:
-                                              //                   Colors
-                                              //                       .white10,
-                                              //               child: Center(
-                                              //                   child: Container(
-                                              //                 color: Colors
-                                              //                     .white,
-                                              //               )),
-                                              //             );
-                                              //           } else if (snapshot
-                                              //               .hasError) {
-                                              //             return Text(
-                                              //                 'Error: ${snapshot.error}');
-                                              //           } else {
-                                              //             return GestureDetector(
-                                              //                 onTap:
-                                              //                     () {
-                                              //                   if (snapshot.data["status"] ==
-                                              //                       0) {
-                                              //                     value.addBookmark(
-                                              //                         barDetail![0].placeId!);
-                                              //                   } else if (snapshot.data["status"] ==
-                                              //                       1) {
-                                              //                     value.deleteBookmark(
-                                              //                         barDetail![0].placeId!);
-                                              //                   }
-                                              //                 },
-                                              //                 child: value.loading ==
-                                              //                         true
-                                              //                     ? Shimmer
-                                              //                         .fromColors(
-                                              //                         baseColor: primaryColor,
-                                              //                         highlightColor: Colors.white10,
-                                              //                         child: Center(
-                                              //                             child: Container(
-                                              //                           color: Colors.white,
-                                              //                         )),
-                                              //                       )
-                                              //                     : snapshot.data["status"] == 1
-                                              //                         ? const Icon(
-                                              //                             CupertinoIcons.bookmark_fill,
-                                              //                             color: Colors.black,
-                                              //                           )
-                                              //                         : const Icon(
-                                              //                             CupertinoIcons.bookmark,
-                                              //                             color: Colors.black,
-                                              //                           ));
-                                              //           }
-                                              //         },
-                                              //       );
-                                              //     },
-                                              //   ))
+                                                  // Consumer<
+                                                  //     BookmarkController>(
+                                                  //     builder: (context,
+                                                  //         value, child) {
+                                                  //       return StreamBuilder(
+                                                  //         stream: value
+                                                  //             .getBookMarkStream(
+                                                  //                 barDetail![
+                                                  //                         0]
+                                                  //                     .placeId!),
+                                                  //         builder: (context,
+                                                  //             snapshot) {
+                                                  //           int currentStatus = snapshot.data !=
+                                                  //                       null &&
+                                                  //                   snapshot.data["status"] !=
+                                                  //                       null
+                                                  //               ? snapshot
+                                                  //                       .data[
+                                                  //                   "status"]
+                                                  //               : 0;
+
+                                                  //           if (snapshot
+                                                  //                   .connectionState ==
+                                                  //               ConnectionState
+                                                  //                   .waiting) {
+                                                  //             return Shimmer
+                                                  //                 .fromColors(
+                                                  //               baseColor:
+                                                  //                   primaryColor,
+                                                  //               highlightColor:
+                                                  //                   Colors
+                                                  //                       .white10,
+                                                  //               child:
+                                                  //                   Center(
+                                                  //                 child:
+                                                  //                     Container(
+                                                  //                   color: Colors
+                                                  //                       .white,
+                                                  //                 ),
+                                                  //               ),
+                                                  //             );
+                                                  //           } else if (snapshot
+                                                  //               .hasError) {
+                                                  //             return Text(
+                                                  //                 'Error: ${snapshot.error}');
+                                                  //           } else {
+                                                  //             return GestureDetector(
+                                                  //               onTap:
+                                                  //                   () async {
+                                                  //                 if (currentStatus ==
+                                                  //                     0) {
+                                                  //                   currentStatus =
+                                                  //                       1;
+                                                  //                   value.addBookmark(
+                                                  //                       barDetail![0].placeId!);
+                                                  //                 } else if (currentStatus ==
+                                                  //                     1) {
+                                                  //                   currentStatus =
+                                                  //                       0;
+                                                  //                   value.deleteBookmark(
+                                                  //                       barDetail![0].placeId!);
+                                                  //                 }
+                                                  //               },
+                                                  //               child: value.loading ==
+                                                  //                       true
+                                                  //                   ? Shimmer
+                                                  //                       .fromColors(
+                                                  //                       baseColor:
+                                                  //                           primaryColor,
+                                                  //                       highlightColor:
+                                                  //                           Colors.white10,
+                                                  //                       child:
+                                                  //                           Center(
+                                                  //                         child: Container(
+                                                  //                           color: Colors.white,
+                                                  //                         ),
+                                                  //                       ),
+                                                  //                     )
+                                                  //                   : currentStatus ==
+                                                  //                           1
+                                                  //                       ? const Icon(
+                                                  //                           CupertinoIcons.bookmark_fill,
+                                                  //                           color: Colors.black,
+                                                  //                         )
+                                                  //                       : const Icon(
+                                                  //                           CupertinoIcons.bookmark,
+                                                  //                           color: Colors.black,
+                                                  //                         ),
+                                                  //             );
+                                                  //           }
+                                                  //         },
+                                                  //       );
+                                                  //     },
+                                                  //   ))
+
+                                                  )
                                             ],
                                           ),
                                         ),
@@ -1134,7 +1199,7 @@ class _DetailScreenState extends State<DetailScreen>
                                             widget.distance[0].elements![0]
                                                         .duration!.text ==
                                                     null
-                                                ?const Text(" ")
+                                                ? const Text(" ")
                                                 : Text(
                                                     widget
                                                             .distance[0]
@@ -1308,9 +1373,11 @@ class _DetailScreenState extends State<DetailScreen>
                                               ),
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(
-                                                3), // Padding for content
+                                          Positioned(
+                                            right: 3,
+                                            left: 3,
+                                            bottom: 3,
+                                            top: 3,
                                             child: Container(
                                               width: size.width,
                                               color: Colors.black,
@@ -1365,7 +1432,7 @@ class _DetailScreenState extends State<DetailScreen>
                                                           i++) ...[
                                                         TextSpan(
                                                           text:
-                                                              "\n ${barDetail![0].openingHours!.weekdayText![i]} \n",
+                                                              "\n${barDetail![0].openingHours!.weekdayText![i]} \n",
                                                           style: GoogleFonts
                                                               .urbanist(
                                                             fontSize:

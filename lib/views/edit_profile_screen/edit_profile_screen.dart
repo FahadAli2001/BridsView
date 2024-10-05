@@ -231,23 +231,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         hintText: "Last Name",
                         labelText: "Last Name"),
                     //
-                    //
-                    TextField(
-                      enabled: false,
-                      style: const TextStyle(color: Colors.white60),
-                      controller: value.emailController,
-                      decoration: const InputDecoration(
-                        hintText: 'Email',
-                        hintStyle: TextStyle(color: Colors.black),
-                        labelText: 'Email',
-                        labelStyle: TextStyle(color: Colors.white60),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: TextField(
+                        readOnly: true,
+                        style: const TextStyle(color: Colors.white60),
+                        controller: value.emailController,
+                        decoration: InputDecoration(
+                          hintText: "Email",
+                          hintStyle: GoogleFonts.urbanist(color: Colors.black),
+                          labelText: "Email",
+                          labelStyle:
+                              GoogleFonts.urbanist(color: Colors.white60),
+                        ),
                       ),
                     ),
-                    SizedBox(
-                        width: size.width,
-                        child: const Divider(
-                          color: Colors.white54,
-                        )),
+                    //
+                   
 
                     //
                     CustomTextField(

@@ -319,29 +319,34 @@ class MapsController extends ChangeNotifier {
   }
 
   getPolyline(List<Result> bars, int index) async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    _isGettingDirection = true;
-    notifyListeners();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleApiKey: googleMapApiKey,
-      request: PolylineRequest(
-        origin: PointLatLng(lat!, lon!),
-        destination: PointLatLng(bars[index].geometry!.location!.lat!,
-            bars[index].geometry!.location!.lng!),
-        mode: TravelMode.driving,
-      ),
-    );
-    sp.setString("lastVisitedBar", bars[index].placeId.toString());
-    if (result.points.isNotEmpty) {
-      _isGettingDirection = false;
-      notifyListeners();
-      for (var point in result.points) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+    log("Getting polyLines");
+    log("lat : ${bars[index].geometry!.location!.lat!} lon :  ${bars[index].geometry!.location!.lng!.toString()}");
+    try {
+      SharedPreferences sp = await SharedPreferences.getInstance();
+  
+      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        googleApiKey: googleMapApiKey,
+        request: PolylineRequest(
+          origin: PointLatLng(lat!, lon!),
+          destination: PointLatLng(bars[index].geometry!.location!.lat!,
+              bars[index].geometry!.location!.lng!),
+          mode: TravelMode.driving,
+        ),
+      );
+      sp.setString("lastVisitedBar", bars[index].placeId.toString());
+      if (result.points.isNotEmpty) {
+       
+        notifyListeners();
+        for (var point in result.points) {
+          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+        }
       }
-    }
-    _addPolyLine();
+      _addPolyLine();
 
-    notifyListeners();
+      notifyListeners();
+    } catch (e) {
+      log("polyline error : $e");
+    }
   }
 
   void updateLiveLocationMarker(double latitude, double longitude) {
@@ -454,7 +459,7 @@ class MapsController extends ChangeNotifier {
             ]));
           }
         }
-         await Future.wait(fetchTasks);
+        await Future.wait(fetchTasks);
       } else {
         log('Error response: ${response.body}');
       }
@@ -562,79 +567,79 @@ class MapsController extends ChangeNotifier {
     return distanceList;
   }
 
-   
-
   Future<void> nearsetBarsMethod() async {
-  clearHomeScreenList();  // Clear lists before fetching new data
+    clearHomeScreenList(); // Clear lists before fetching new data
 
-  List<Future> fetchTasks = [];
+    List<Future> fetchTasks = [];
 
-  try {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String latitude = sp.getString('latitude') ?? '';
-    String longitude = sp.getString('longitude') ?? '';
+    try {
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      String latitude = sp.getString('latitude') ?? '';
+      String longitude = sp.getString('longitude') ?? '';
 
-    String url =
-        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=5000&type=bar|night_club&key=$googleMapApiKey';
-    http.Response response = await http.get(Uri.parse(url));
-    final values = jsonDecode(response.body);
+      String url =
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=5000&type=bar|night_club&key=$googleMapApiKey';
+      http.Response response = await http.get(Uri.parse(url));
+      final values = jsonDecode(response.body);
 
-    if (response.statusCode == 200) {
-      var list = values['results'] as List;
-      var bars = list.map((i) => Results.fromJson(i)).toList();
-      log('Total nearest bars: ${bars.length}');
+      if (response.statusCode == 200) {
+        var list = values['results'] as List;
+        var bars = list.map((i) => Results.fromJson(i)).toList();
+        log('Total nearest bars: ${bars.length}');
 
-      // Iterate through each bar and fetch image and distance in parallel
-      for (var bar in bars) {
-        fetchTasks.add(() async {
-          Uint8List? imageData;
-          Rows? distanceData;
+        // Iterate through each bar and fetch image and distance in parallel
+        for (var bar in bars) {
+          fetchTasks.add(() async {
+            Uint8List? imageData;
+            Rows? distanceData;
 
-          // Fetch image if available, otherwise keep it empty
-          if (bar.photos != null && bar.photos!.isNotEmpty) {
-            var imageResults =
-                await exploreImages(bar.photos![0].photoReference!);
-            if (imageResults.isNotEmpty) {
-              imageData = imageResults[0];
+            // Fetch image if available, otherwise keep it empty
+            if (bar.photos != null && bar.photos!.isNotEmpty) {
+              var imageResults =
+                  await exploreImages(bar.photos![0].photoReference!);
+              if (imageResults.isNotEmpty) {
+                imageData = imageResults[0];
+              } else {
+                imageData =
+                    Uint8List(0); // Empty image data for bars without images
+              }
             } else {
-              imageData = Uint8List(0); // Empty image data for bars without images
+              imageData =
+                  Uint8List(0); // Empty image data for bars without images
             }
-          } else {
-            imageData = Uint8List(0); // Empty image data for bars without images
-          }
 
-          // Fetch distance if the bar's geometry is available
-          if (bar.geometry != null && bar.geometry!.location != null) {
-            var distanceResults = await getDistanceBetweenPoints(
-              bar.geometry!.location!.lat.toString(),
-              bar.geometry!.location!.lng.toString(),
-              latitude,
-              longitude,
-            );
-            if (distanceResults.isNotEmpty) {
-              distanceData = distanceResults[0];
+            // Fetch distance if the bar's geometry is available
+            if (bar.geometry != null && bar.geometry!.location != null) {
+              var distanceResults = await getDistanceBetweenPoints(
+                bar.geometry!.location!.lat.toString(),
+                bar.geometry!.location!.lng.toString(),
+                latitude,
+                longitude,
+              );
+              if (distanceResults.isNotEmpty) {
+                distanceData = distanceResults[0];
+              }
             }
-          }
 
-          // Add the bar, image, and distance to their respective lists
-          homeScreennearestbarsOrClubsData!.add(bar);
-          homeScreennearsetbarsOrClubsImages.add(imageData ?? Uint8List(0));
-          homeScreennearestbarsOrClubsDistanceList.add(distanceData ?? const Rows());
-        }());
+            // Add the bar, image, and distance to their respective lists
+            homeScreennearestbarsOrClubsData!.add(bar);
+            homeScreennearsetbarsOrClubsImages.add(imageData ?? Uint8List(0));
+            homeScreennearestbarsOrClubsDistanceList
+                .add(distanceData ?? const Rows());
+          }());
+        }
+
+        // Wait for all fetching tasks to complete
+        await Future.wait(fetchTasks);
+      } else {
+        log("Error: ${response.statusCode}");
       }
 
-      // Wait for all fetching tasks to complete
-      await Future.wait(fetchTasks);
-    } else {
-      log("Error: ${response.statusCode}");
+      notifyListeners();
+    } catch (e) {
+      log("Error in fetching nearest bars: $e");
     }
-
-    notifyListeners();
-  } catch (e) {
-    log("Error in fetching nearest bars: $e");
   }
-}
-
 
   Future<List<Result>> nearsetBarsMethodForMap() async {
     log("nearsetBarsMethodForMap");
