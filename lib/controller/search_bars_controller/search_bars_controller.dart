@@ -23,10 +23,10 @@ class SearchBarsController extends ChangeNotifier {
   double? get lon => _lon;
   bool get searchingBar => _searchingBar;
 
-   set searchingBar(val){
+  set searchingBar(val) {
     _searchingBar = val;
     notifyListeners();
-   } 
+  }
 
   Future<void> getCordinateds() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -124,7 +124,6 @@ class SearchBarsController extends ChangeNotifier {
         }));
       }
 
-     
       await Future.wait(fetchTasks);
 
       notifyListeners();

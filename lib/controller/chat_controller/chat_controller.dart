@@ -23,8 +23,8 @@ class ChatController extends ChangeNotifier {
   final TextEditingController groupNameController = TextEditingController();
   var uuid = const Uuid();
   File? groupImageFile;
-  
-  String? _groupLastMessage = '' ;
+
+  String? _groupLastMessage = '';
 
   // ignore: prefer_typing_uninitialized_variables
   var imageUrl;
@@ -40,12 +40,13 @@ class ChatController extends ChangeNotifier {
   int? _friendReqCount;
   String? get userId => _userId;
   int? get friendReqCount => _friendReqCount;
-  String? get groupLastMessage =>_groupLastMessage;
+  String? get groupLastMessage => _groupLastMessage;
 
-  set groupLastMessage(val){
+  set groupLastMessage(val) {
     _groupLastMessage = val;
     notifyListeners();
   }
+
   bool _myFriends = true;
   bool get myFriends => _myFriends;
 
@@ -410,80 +411,78 @@ class ChatController extends ChangeNotifier {
   }
 
   void sendMessage(
-    [String? imageUrl,
-    ChatRoomModel? chatRoomModel,
-    String? messageType,
-    GroupModel? groupModel,
-    String? videoUrl]) async {
-  
-  String msg = messageController.text.trim();
-  messageController.clear();
+      [String? imageUrl,
+      ChatRoomModel? chatRoomModel,
+      String? messageType,
+      GroupModel? groupModel,
+      String? videoUrl]) async {
+    String msg = messageController.text.trim();
+    messageController.clear();
 
-  // Check if it's a group or individual chat
-  if (msg.isNotEmpty || imageUrl != null || videoUrl != null) {
-    String? textToSend;
-    if (messageType == "video") {
-      textToSend = "";  // For video, send an empty message body
-    } else if (messageType == "image") {
-      textToSend = " "; // For images, send a space as a placeholder
-    } else {
-      textToSend = msg; // For text messages, send the actual message
-    }
-
-    // Create the message model
-    MessageModel newMessage = MessageModel(
-      messageId: uuid.v1(),
-      sender: userId,
-      createdOn: DateTime.now().microsecondsSinceEpoch,
-      text: textToSend,
-      seen: false,
-      imageUrl: imageUrl,
-      videoUrl: videoUrl,
-    );
-
-    // Determine the room ID (group or individual)
-    String roomId;
-    if (groupModel != null) {
-      roomId = groupModel.groupId;
-    } else if (chatRoomModel != null && chatRoomModel.roomId != null) {
-      roomId = chatRoomModel.roomId!;
-    } else {
-      log("Error: No valid room ID found for chat.");
-      return;
-    }
-
-    try {
-      // Store the message in the corresponding chat room
-      await FirebaseFirestore.instance
-          .collection("chatrooms")
-          .doc(roomId)
-          .collection("messages")
-          .doc(newMessage.messageId)
-          .set(newMessage.toJson());
-
-      // Update the last message in the chat room (individual or group)
-      if (chatRoomModel != null) {
-        chatRoomModel.lastMessage = textToSend;
-        await FirebaseFirestore.instance
-            .collection("chatrooms")
-            .doc(roomId)
-            .set(chatRoomModel.toJson());
-      } else if (groupModel != null) {
-        // groupModel.lastMessage = textToSend;
-        await FirebaseFirestore.instance
-            .collection("chatrooms")
-            .doc(roomId)
-            .set(groupModel.toJson());
+    // Check if it's a group or individual chat
+    if (msg.isNotEmpty || imageUrl != null || videoUrl != null) {
+      String? textToSend;
+      if (messageType == "video") {
+        textToSend = ""; // For video, send an empty message body
+      } else if (messageType == "image") {
+        textToSend = " "; // For images, send a space as a placeholder
+      } else {
+        textToSend = msg; // For text messages, send the actual message
       }
 
-      log("Message Sent!");
-    } catch (e) {
-      log("Error sending message: $e");
+      // Create the message model
+      MessageModel newMessage = MessageModel(
+        messageId: uuid.v1(),
+        sender: userId,
+        createdOn: DateTime.now().microsecondsSinceEpoch,
+        text: textToSend,
+        seen: false,
+        imageUrl: imageUrl,
+        videoUrl: videoUrl,
+      );
+
+      // Determine the room ID (group or individual)
+      String roomId;
+      if (groupModel != null) {
+        roomId = groupModel.groupId;
+      } else if (chatRoomModel != null && chatRoomModel.roomId != null) {
+        roomId = chatRoomModel.roomId!;
+      } else {
+        log("Error: No valid room ID found for chat.");
+        return;
+      }
+
+      try {
+        // Store the message in the corresponding chat room
+        await FirebaseFirestore.instance
+            .collection("chatrooms")
+            .doc(roomId)
+            .collection("messages")
+            .doc(newMessage.messageId)
+            .set(newMessage.toJson());
+
+        // Update the last message in the chat room (individual or group)
+        if (chatRoomModel != null) {
+          chatRoomModel.lastMessage = textToSend;
+          await FirebaseFirestore.instance
+              .collection("chatrooms")
+              .doc(roomId)
+              .set(chatRoomModel.toJson());
+        } else if (groupModel != null) {
+          // groupModel.lastMessage = textToSend;
+          await FirebaseFirestore.instance
+              .collection("chatrooms")
+              .doc(roomId)
+              .set(groupModel.toJson());
+        }
+
+        log("Message Sent!");
+      } catch (e) {
+        log("Error sending message: $e");
+      }
     }
   }
-}
 
-  
   String formatTime(String createdOn) {
     int timestamp;
 

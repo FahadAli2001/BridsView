@@ -24,7 +24,7 @@ class DetailScreenController extends ChangeNotifier {
     // ignore: await_only_futures
     _randomPopulation = await random.nextInt(201) + 100;
     _female = random.nextInt(201) + 100;
-     _totalPerson = _randomPopulation!+_female!;
+    _totalPerson = _randomPopulation! + _female!;
     notifyListeners();
   }
 
@@ -51,17 +51,17 @@ class DetailScreenController extends ChangeNotifier {
         if (barPopulation % 2 == 0) {
           _randomPopulation = barPopulation + random.nextInt(10);
           _female = barPopulation + random.nextInt(10);
-          _totalPerson = _randomPopulation!+_female!;
+          _totalPerson = _randomPopulation! + _female!;
           notifyListeners();
         } else {
           _randomPopulation = barPopulation - random.nextInt(10);
           _female = barPopulation - random.nextInt(10);
-          _totalPerson = _randomPopulation!+_female!;
+          _totalPerson = _randomPopulation! + _female!;
           log("${totalPerson}total person");
           notifyListeners();
         }
         await saveBarId(barPlaceId);
-        
+
         notifyListeners();
       }
     } catch (e) {

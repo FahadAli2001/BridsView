@@ -102,8 +102,6 @@ class LoginController extends ChangeNotifier {
     }
   }
 
- 
-
   void saveUserIdAndToken(String id, String token) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setString('user_id', id);
