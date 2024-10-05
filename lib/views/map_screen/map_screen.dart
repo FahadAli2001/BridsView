@@ -72,7 +72,7 @@ class _MapScreenState extends State<MapScreen> {
           context,
         );
         log("${widget.bar[widget.index].geometry!.location!.lat!} bar lat");
-         log("${widget.bar[widget.index].geometry!.location!.lng!} bar lng");
+        log("${widget.bar[widget.index].geometry!.location!.lng!} bar lng");
         mapController.clearPolylines();
         mapController.getPolyline(widget.bar, widget.index);
         CameraPosition cameraPosition = CameraPosition(
@@ -187,11 +187,11 @@ class _MapScreenState extends State<MapScreen> {
                   top: size.height * 0.03,
                   left: size.width * 0.03,
                   child: GestureDetector(
-                    onTap: ()async {
+                    onTap: () async {
                       Navigator.pop(context);
                       value.isGettingDirection = false;
 
-                    await  _positionStream.cancel();
+                      await _positionStream.cancel();
                     },
                     child: const CircleAvatar(
                       backgroundColor: Colors.black,

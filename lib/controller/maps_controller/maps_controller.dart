@@ -323,7 +323,7 @@ class MapsController extends ChangeNotifier {
     log("lat : ${bars[index].geometry!.location!.lat!} lon :  ${bars[index].geometry!.location!.lng!.toString()}");
     try {
       SharedPreferences sp = await SharedPreferences.getInstance();
-  
+
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         googleApiKey: googleMapApiKey,
         request: PolylineRequest(
@@ -335,7 +335,6 @@ class MapsController extends ChangeNotifier {
       );
       sp.setString("lastVisitedBar", bars[index].placeId.toString());
       if (result.points.isNotEmpty) {
-       
         notifyListeners();
         for (var point in result.points) {
           polylineCoordinates.add(LatLng(point.latitude, point.longitude));
