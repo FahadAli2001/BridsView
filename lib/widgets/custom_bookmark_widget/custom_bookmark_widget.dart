@@ -81,14 +81,14 @@ class CustomBookmarkWidget extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            width: size.width * 0.5,
-                            child: Text(
+                          Container(
+                            constraints:
+                                BoxConstraints(maxWidth: size.width * 0.5),
+                            child: AutoSizeText(
                               bookmarksBarsDetailList[index].name!,
-                              style: GoogleFonts.urbanist(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: size.height * 0.025),
+                              maxLines: 2,
+                              overflow: TextOverflow.fade,
+                              style: GoogleFonts.urbanist(color: Colors.white),
                             ),
                           ),
                           SizedBox(

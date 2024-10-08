@@ -625,12 +625,14 @@ class _DetailScreenState extends State<DetailScreen>
                           widget.searchBarDetail![widget.index]
                                       .editorialSummary ==
                                   null
-                              ? const Text('')
+                              ? const SizedBox()
                               : SizedBox(
                                   width: size.width,
                                   child: Text(
                                     widget.searchBarDetail![widget.index]
-                                        .editorialSummary!.overview!,
+                                        .editorialSummary!.overview!
+                                        .trim(),
+                                    textAlign: TextAlign.left,
                                     style: GoogleFonts.urbanist(
                                         fontSize: size.height * 0.016,
                                         color: Colors.white),
@@ -640,15 +642,15 @@ class _DetailScreenState extends State<DetailScreen>
                           widget.searchBarDetail![widget.index]
                                       .editorialSummary ==
                                   null
-                              ? const SizedBox.shrink()
+                              ? const SizedBox()
                               : SizedBox(
                                   height: size.height * 0.01,
                                 ),
-
                           CustomDescriptionRichText(
                               title: "Address : ",
                               subtitle: widget.searchBarDetail![widget.index]
-                                  .formattedAddress!),
+                                  .formattedAddress!
+                                  .trim()),
 
                           SizedBox(
                             height: size.height * 0.02,
@@ -658,14 +660,27 @@ class _DetailScreenState extends State<DetailScreen>
                               ? const Text('')
                               : Align(
                                   alignment: Alignment.topLeft,
-                                  child: CustomDescriptionRichText(
-                                      title: "Open Now : ",
-                                      subtitle:
-                                          widget.searchBarDetail![widget.index]
-                                                      .openingHours!.openNow! ==
-                                                  true
-                                              ? "Open"
-                                              : "Closed")),
+                                  child: Text(
+                                    widget.searchBarDetail![widget.index]
+                                                .openingHours!.openNow! ==
+                                            true
+                                        ? "Open"
+                                        : "Closed",
+                                    style: GoogleFonts.urbanist(
+                                      fontSize: size.height * 0.016,
+                                      fontWeight: FontWeight.normal,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  //  CustomDescriptionRichText(
+                                  //     title: "" ,
+                                  //     subtitle:
+                                  //         widget.searchBarDetail![widget.index]
+                                  //                     .openingHours!.openNow! ==
+                                  //                 true
+                                  //             ? "Open"
+                                  //             : "Closed")
+                                ),
                           //
                           //
                           SizedBox(
@@ -956,9 +971,12 @@ class _DetailScreenState extends State<DetailScreen>
                                                                           barDetail![0]
                                                                               .placeId!,
                                                                           !isBookmarked);
+                                                                         setState(() {
+                                                                           
+                                                                         });
                                                                       if (success) {
                                                                         Future.delayed(
-                                                                            const Duration(seconds: 1),
+                                                                            const Duration(seconds: 3),
                                                                             () {
                                                                           showCustomSuccessToast(
                                                                               message: isBookmarked ? "Bookmark Removed" : "Bookmark Added");
@@ -1326,7 +1344,7 @@ class _DetailScreenState extends State<DetailScreen>
                                   subtitle: barDetail![0].formattedAddress!),
 
                               //
-                              barDetail![0].editorialSummary == null
+                              barDetail![0].openingHours == null
                                   ? Container()
                                   : SizedBox(
                                       height: size.height * 0.02,
@@ -1335,14 +1353,26 @@ class _DetailScreenState extends State<DetailScreen>
                                   ? const Text('')
                                   : Align(
                                       alignment: Alignment.topLeft,
-                                      child: CustomDescriptionRichText(
-                                          title: "Open Now : ",
-                                          subtitle: barDetail![0]
-                                                      .openingHours!
-                                                      .openNow! ==
-                                                  true
-                                              ? "Open"
-                                              : "Closed")),
+                                      child: Text(
+                                        barDetail![0].openingHours!.openNow! ==
+                                                true
+                                            ? "Open"
+                                            : "Closed",
+                                        style: GoogleFonts.urbanist(
+                                          fontSize: size.height * 0.016,
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      // CustomDescriptionRichText(
+                                      //     title: "Open Now : ",
+                                      //     subtitle: barDetail![0]
+                                      //                 .openingHours!
+                                      //                 .openNow! ==
+                                      //             true
+                                      //         ? "Open"
+                                      //         : "Closed")
+                                    ),
                               //
                               //
                               barDetail![0].openingHours == null

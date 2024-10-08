@@ -176,7 +176,10 @@ class _LogInScreenState extends State<LogInScreen> {
                               : CustomButton(
                                   text: "Log In",
                                   ontap: () {
-                                    value.loginWithEmailAndPassword(context);
+                                    value.loginWithEmailAndPassword(
+                                        context,
+                                        value.emailController.text,
+                                        value.passwordController.text);
                                   },
                                 ),
                           //

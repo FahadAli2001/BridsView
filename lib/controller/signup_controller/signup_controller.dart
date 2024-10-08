@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:birds_view/controller/login_controller/login_controller.dart';
 import 'package:birds_view/utils/apis.dart';
-import 'package:birds_view/views/login_screen/login_screen.dart';
 import 'package:birds_view/widgets/custom_error_toast/custom_error_toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 import '../../model/user_model/user_model.dart';
 import '../../widgets/custom_success_toast/custom_success_toast.dart';
@@ -89,6 +89,8 @@ class SignUpController extends ChangeNotifier {
   }
 
   Future<void> createAccount(context) async {
+    final loginController =
+        Provider.of<LoginController>(context, listen: false);
     try {
       if (!EmailValidator.validate(emailController.text)) {
         showCustomErrorToast(message: 'Invalid email format.');
@@ -127,16 +129,18 @@ class SignUpController extends ChangeNotifier {
             responseBody.substring(responseBody.indexOf('{'));
         var jsonData = json.decode(jsonDataString);
         UserModel user = UserModel.fromJson(jsonData);
-        showCustomSuccessToast(message: 'User Created Successfully');
 
         // log(user.toString());
         await storeUserDataToFirestore(user);
-        log(jsonData.toString());
-        Navigator.pushAndRemoveUntil(
-            context,
-            PageTransition(
-                child: const LogInScreen(), type: PageTransitionType.fade),
-            (route) => false);
+        // log(jsonData.toString());
+        await loginController.loginWithEmailAndPassword(
+            context, emailController.text, passwordController.text);
+        showCustomSuccessToast(message: 'User Created Successfully');
+        // Navigator.pushAndRemoveUntil(
+        //     context,
+        //     PageTransition(
+        //         child: const LogInScreen(), type: PageTransitionType.fade),
+        //     (route) => false);
         notifyListeners();
       } else {
         String responseBody = response.body;

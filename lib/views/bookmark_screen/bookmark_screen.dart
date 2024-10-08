@@ -57,7 +57,6 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                 ),
                 (Route<dynamic> route) => false,
               );
-              
             },
             child: const Icon(
               Icons.arrow_back_ios,
@@ -85,7 +84,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                     )
                   : ListView.builder(
                       scrollDirection: Axis.vertical,
-                      itemCount: bookmarksBarsDetailList.length,
+                      itemCount: bookmarksBarsImagesList.length,
                       itemBuilder: (context, index) {
                         return CustomBookmarkWidget(
                           userModel: widget.userModel,

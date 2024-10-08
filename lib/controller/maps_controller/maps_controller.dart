@@ -725,6 +725,7 @@ class MapsController extends ChangeNotifier {
         var data = jsonDecode(response.body);
         var detailResponse = data['result'];
         result = Result.fromJson(detailResponse as Map<String, dynamic>);
+       
       } else {
         log(response.body);
       }

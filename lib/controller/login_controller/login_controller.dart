@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:birds_view/controller/signup_controller/signup_controller.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/apis.dart';
 import 'package:birds_view/views/login_screen/login_screen.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -39,25 +41,22 @@ class LoginController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void loginWithEmailAndPassword(context) async {
+  Future<void> loginWithEmailAndPassword(context, email, pass) async {
     // Input validation
     if (!EmailValidator.validate(emailController.text)) {
       showCustomErrorToast(message: 'Invalid Email Format');
       return; // Return to stop further execution
     }
 
-    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-      showCustomErrorToast(message: "Enter Email And Password");
-      return; // Return to stop further execution
-    }
+    // if (email || pass) {
+    //   showCustomErrorToast(message: "Enter Email And Password");
+    //   return; // Return to stop further execution
+    // }
 
     _isLoging = true;
     notifyListeners();
 
-    var body = {
-      "email": emailController.text,
-      "password": passwordController.text
-    };
+    var body = {"email": email, "password": pass};
 
     try {
       // Setting headers with content type
@@ -183,10 +182,6 @@ class LoginController extends ChangeNotifier {
             context,
             userProfileImage ?? '',
             '');
-
-        log('User Email: $userEmail');
-        log('User Name: $userName');
-        log('User Profile Image: $userProfileImage');
       }
     } catch (error) {
       log('Error signing in with Apple: $error');
@@ -202,6 +197,8 @@ class LoginController extends ChangeNotifier {
       context,
       String image,
       String? gender) async {
+    final signUpController =
+        Provider.of<SignUpController>(context, listen: false);
     try {
       var body = {
         'first_name': firstName.toString(),
@@ -223,6 +220,7 @@ class LoginController extends ChangeNotifier {
         log('user register successfully');
 
         UserModel user = UserModel.fromJson(data);
+        await signUpController.storeUserDataToFirestore(user);
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(

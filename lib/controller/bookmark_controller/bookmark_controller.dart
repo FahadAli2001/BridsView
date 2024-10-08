@@ -59,19 +59,22 @@ class BookmarkController extends ChangeNotifier {
       var response = await http.get(
         Uri.parse('$checkBookmarkApi$userId&bar_type_id=$placeId'),
         headers: headers,
-      );
+      ) ;
 
       if (response.statusCode == 200) {
         var bookmark = jsonDecode(response.body);
         log(bookmark.toString());
+     
         return bookmark;
       } else {
         throw Exception("Failed to load bookmark status");
       }
+     
     } catch (e) {
       log("Error fetching bookmark status: $e");
       return {"status": -1, "error": e.toString()};
     }
+   
   }
 
   Future<bool> handleBookmarkAction(String placeId, bool isAdding) async {
@@ -93,7 +96,7 @@ class BookmarkController extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        notifyListeners();
+        
         return true;
       } else {
         log("Error ${isAdding ? 'adding' : 'deleting'} bookmark: ${response.body}");
