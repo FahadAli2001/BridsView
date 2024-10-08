@@ -971,9 +971,8 @@ class _DetailScreenState extends State<DetailScreen>
                                                                           barDetail![0]
                                                                               .placeId!,
                                                                           !isBookmarked);
-                                                                         setState(() {
-                                                                           
-                                                                         });
+                                                                      setState(
+                                                                          () {});
                                                                       if (success) {
                                                                         Future.delayed(
                                                                             const Duration(seconds: 3),
