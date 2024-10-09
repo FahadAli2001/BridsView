@@ -173,15 +173,17 @@ class _LogInScreenState extends State<LogInScreen> {
                                     color: primaryColor,
                                   ),
                                 )
-                              : CustomButton(
-                                  text: "Log In",
-                                  ontap: () {
-                                    value.loginWithEmailAndPassword(
-                                        context,
-                                        value.emailController.text,
-                                        value.passwordController.text);
-                                  },
-                                ),
+                              : Center(
+                                child: CustomButton(
+                                    text: "Log In",
+                                    ontap: () {
+                                      value.loginWithEmailAndPassword(
+                                          context,
+                                          value.emailController.text,
+                                          value.passwordController.text);
+                                    },
+                                  ),
+                              ),
                           //
                           SizedBox(
                             height: size.height * 0.03,

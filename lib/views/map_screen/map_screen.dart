@@ -91,19 +91,24 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _startLiveLocationTracking(MapsController mapController) {
-    _positionStream =
-        Geolocator.getPositionStream().listen((Position position) async {
-      log("Current Location: ${position.latitude}, ${position.longitude}");
+    try {
+      log("_startLiveLocationTracking");
+      _positionStream =
+          Geolocator.getPositionStream().listen((Position position) async {
+        log("Current Location: ${position.latitude}, ${position.longitude}");
 
-      mapController.updateLiveLocationMarker(
-          position.latitude, position.longitude);
-      final GoogleMapController controller = await _controller.future;
-      controller.animateCamera(
-        CameraUpdate.newLatLng(
-          LatLng(position.latitude, position.longitude),
-        ),
-      );
-    });
+        mapController.updateLiveLocationMarker(
+            position.latitude, position.longitude);
+        final GoogleMapController controller = await _controller.future;
+        controller.animateCamera(
+          CameraUpdate.newLatLng(
+            LatLng(position.latitude, position.longitude),
+          ),
+        );
+      });
+    } catch (e) {
+      log("_startLiveLocationTracking error : $e");
+    }
   }
 
   @override
