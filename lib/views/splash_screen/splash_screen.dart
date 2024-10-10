@@ -54,7 +54,6 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-      
         checkRoute();
       }
     });
@@ -63,9 +62,9 @@ class _SplashScreenState extends State<SplashScreen>
   Future<void> checkRoute() async {
     try {
       SharedPreferences sp = await SharedPreferences.getInstance();
-       final splashController =
-           // ignore: use_build_context_synchronously
-           Provider.of<SplashController>(context, listen: false);
+      final splashController =
+          // ignore: use_build_context_synchronously
+          Provider.of<SplashController>(context, listen: false);
       String? id = sp.getString('user_id') ?? '';
       String? token = sp.getString('token') ?? '';
       log('User ID: $id, Token: $token');

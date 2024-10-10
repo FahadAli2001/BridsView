@@ -167,7 +167,9 @@ class CustomDrawer extends StatelessWidget {
                   Navigator.push(
                       context,
                       PageTransition(
-                          child:   BookmarkScreen(userModel: user,),
+                          child: BookmarkScreen(
+                            userModel: user,
+                          ),
                           type: PageTransitionType.fade));
                 }
               },

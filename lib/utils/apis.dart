@@ -24,10 +24,6 @@ String addBookmarkApi = baseUrl + addBookmarkUrl;
 String deleteBookmarkApi = baseUrl + deletBookmarkUrl;
 String checkBookmarkApi = baseUrl + checkBookmarkUrl;
 String getAllBookmarksApi = baseUrl + getAllBookmarksUrl;
-String postReviewApi = baseUrl+reviewUrl;
+String postReviewApi = baseUrl + reviewUrl;
 String visitedBarsApi = baseUrl + visitedBarsUrl;
 String subscribeApi = baseUrl + subscribeUrl;
-
-
-
-

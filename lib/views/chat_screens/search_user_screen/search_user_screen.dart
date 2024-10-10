@@ -311,7 +311,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                       ],
 
                       // Conditional Rendering for Groups
-                       if (value.groups) ...[
+                      if (value.groups) ...[
                         if (value.groupsDetail.isEmpty)
                           Center(
                             child: Text(
@@ -449,8 +449,7 @@ class _SearchUserScreenState extends State<SearchUserScreen> {
                                                               value
                                                                   .firebaseUserModel!,
                                                               index,
-                                                              widget.userModel
-                                                              );
+                                                              widget.userModel);
                                                         },
                                                         child: Icon(Icons.add,
                                                             color: whiteColor,

@@ -22,8 +22,8 @@ void showProSubscriptionPopup(BuildContext context, VoidCallback ontap) {
             fontWeight: FontWeight.bold),
         content: Text(
           'Upgrade to Premium for just \$9.99/month and gain real-time access to the number of guys and girls in any establishment. Maximize your night with exclusive crowd insights and more!',
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.ltr,
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
           style: GoogleFonts.urbanist(color: Colors.white),
         ),
         actions: [
@@ -33,7 +33,8 @@ void showProSubscriptionPopup(BuildContext context, VoidCallback ontap) {
           // ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Center(child: CustomButton(text: 'Proceed to Purchase', ontap: ontap)),
+            child: Center(
+                child: CustomButton(text: 'Proceed to Purchase', ontap: ontap)),
           )
         ],
       );

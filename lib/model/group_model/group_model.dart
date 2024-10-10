@@ -11,7 +11,6 @@ class GroupModel {
     required this.memberIds,
   });
 
- 
   factory GroupModel.fromJson(Map<String, dynamic> json) {
     return GroupModel(
       groupId: json['groupId'],

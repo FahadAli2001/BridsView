@@ -174,7 +174,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                   ),
                                 )
                               : Center(
-                                child: CustomButton(
+                                  child: CustomButton(
                                     text: "Log In",
                                     ontap: () {
                                       value.loginWithEmailAndPassword(
@@ -183,7 +183,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                           value.passwordController.text);
                                     },
                                   ),
-                              ),
+                                ),
                           //
                           SizedBox(
                             height: size.height * 0.03,

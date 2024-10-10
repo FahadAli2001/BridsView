@@ -20,21 +20,16 @@ import 'controller/search_bars_controller/search_bars_controller.dart';
 import 'controller/splash_controller/splash_controller.dart';
 import 'controller/visited_bars_controller/visited_bars_controller.dart';
 
-
-
 void main() async {
- 
   WidgetsFlutterBinding.ensureInitialized();
 
- 
   Stripe.publishableKey =
       "pk_test_51PYYmlFwqpbZ1f3dMZyxLHPjGJzGT6S1SBgbRO2pZ3DFuRewfwdHEHdfQsOGy2FrjCdavvqyMBdJljqAtVorzDVk00TM57AjlT";
   Stripe.merchantIdentifier = 'merchant.birds.view.app';
   Stripe.urlScheme = 'flutterstripe';
- 
+
   await Stripe.instance.applySettings();
 
- 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -66,7 +61,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ReviewController()),
         ChangeNotifierProvider(create: (_) => VisitedBarsController()),
         ChangeNotifierProvider(create: (_) => PaymentController()),
-        ChangeNotifierProvider(create: (_)=>ChatController())
+        ChangeNotifierProvider(create: (_) => ChatController())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -83,4 +78,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-  

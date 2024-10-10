@@ -22,7 +22,7 @@ class FirebaseUserModel {
   // Convert a UserModel into a Map (for sending to Firebase or other APIs)
   Map<String, dynamic> toJson() {
     return {
-      "id":id,
+      "id": id,
       'first_name': firstName,
       'last_name': lastName,
       'email': email,
@@ -36,7 +36,7 @@ class FirebaseUserModel {
   // Create a UserModel from a Map (e.g., from Firebase)
   factory FirebaseUserModel.fromJson(Map<String, dynamic> json) {
     return FirebaseUserModel(
-      id:json['id'],
+      id: json['id'],
       firstName: json['first_name'],
       lastName: json['last_name'],
       email: json['email'],

@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> getLastBar() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    lastVisitedBar =   sp.getString("lastVisitedBar")!;
+    lastVisitedBar = sp.getString("lastVisitedBar")!;
     setState(() {});
     log(lastVisitedBar);
   }
@@ -296,7 +296,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .homeScreennearestbarsOrClubsData!
                                         .length,
                                     itemBuilder: (context, index) {
-                                       bool hasImage = index <
+                                      bool hasImage = index <
                                               mapController
                                                   .homeScreennearsetbarsOrClubsImages
                                                   .length &&

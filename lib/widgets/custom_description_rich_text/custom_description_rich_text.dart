@@ -24,7 +24,6 @@ class CustomDescriptionRichText extends StatelessWidget {
             WidgetSpan(
               alignment: PlaceholderAlignment.baseline,
               baseline: TextBaseline.alphabetic,
-              
               child: ShaderMask(
                 shaderCallback: (bounds) => const LinearGradient(
                   colors: [

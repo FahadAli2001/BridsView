@@ -2,12 +2,10 @@ class MessageModel {
   String? messageId;
   String? sender;
   String? text;
-  bool? seen; 
+  bool? seen;
   int? createdOn;
   String? imageUrl;
   String? videoUrl;
- 
- 
 
   MessageModel({
     this.sender,
@@ -17,8 +15,6 @@ class MessageModel {
     this.messageId,
     this.imageUrl,
     this.videoUrl,
-   
- 
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
@@ -30,7 +26,6 @@ class MessageModel {
       messageId: json['messageId'],
       imageUrl: json['imageUrl'],
       videoUrl: json['videoUrl'],
-     
     );
   }
 
@@ -43,7 +38,6 @@ class MessageModel {
       'messageId': messageId,
       'imageUrl': imageUrl,
       'videoUrl': videoUrl,
-       
     };
   }
 }

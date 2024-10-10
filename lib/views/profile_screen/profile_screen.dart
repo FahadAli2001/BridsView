@@ -148,7 +148,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.push(
                           context,
                           PageTransition(
-                              child:   BookmarkScreen(userModel: widget.user,),
+                              child: BookmarkScreen(
+                                userModel: widget.user,
+                              ),
                               type: PageTransitionType.fade));
                     },
                     child: Text(

@@ -1,16 +1,16 @@
 class ChatRoomModel {
   String? roomId;
-  Map<String, dynamic>? participants; 
+  Map<String, dynamic>? participants;
   String? lastMessage;
-  String? groupName;  
-  String? groupImage; 
+  String? groupName;
+  String? groupImage;
 
   ChatRoomModel({
     this.roomId,
     this.participants,
     this.lastMessage,
-    this.groupName,  
-    this.groupImage,  
+    this.groupName,
+    this.groupImage,
   });
 
   factory ChatRoomModel.fromJson(Map<String, dynamic> json) {
@@ -18,8 +18,8 @@ class ChatRoomModel {
       roomId: json['roomId'],
       participants: json['participants'],
       lastMessage: json['lastMessage'],
-      groupName: json['groupName'],  
-      groupImage: json['groupImage'],  
+      groupName: json['groupName'],
+      groupImage: json['groupImage'],
     );
   }
 
@@ -28,8 +28,8 @@ class ChatRoomModel {
       'roomId': roomId,
       'participants': participants,
       'lastMessage': lastMessage,
-      'groupName': groupName,  
-      'groupImage': groupImage,  
+      'groupName': groupName,
+      'groupImage': groupImage,
     };
   }
 }

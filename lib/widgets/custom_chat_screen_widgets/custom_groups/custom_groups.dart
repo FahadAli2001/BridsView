@@ -74,7 +74,7 @@ class CustomGroups extends StatelessWidget {
                     if (snapshot.data!.docs.isNotEmpty) {
                       var lastMessageData = snapshot.data!.docs.first.data()
                           as Map<String, dynamic>;
-                          
+
                       var lastMessageTime = lastMessageData['createdOn'];
                       value.groupLastMessage = lastMessageData['text'];
 

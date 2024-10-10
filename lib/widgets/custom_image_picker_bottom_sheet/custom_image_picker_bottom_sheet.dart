@@ -1,7 +1,7 @@
- import 'package:birds_view/widgets/custom_button/custom_button.dart';
+import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
 import 'package:flutter/material.dart';
- 
+
 class CustomImagePickerBottomSheet extends StatelessWidget {
   final VoidCallback cameraontap;
   final VoidCallback galleryontap;

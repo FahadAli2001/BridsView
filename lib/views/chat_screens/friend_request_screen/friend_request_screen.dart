@@ -129,18 +129,17 @@ class _FriendRequestScreenState extends State<FriendRequestScreen> {
                                         },
                                         child: SvgPicture.asset(acceptIcon)),
                                     GestureDetector(
-                                      onTap: () {
-                                        value.rejectFriendRequest(value.friendRequests, index);
-                                      },
-                                      child: SvgPicture.asset(rejectIcon))
+                                        onTap: () {
+                                          value.rejectFriendRequest(
+                                              value.friendRequests, index);
+                                        },
+                                        child: SvgPicture.asset(rejectIcon))
                                   ],
                                 ),
                               )),
                         );
                       },
                     ),
-           
-           
             );
           },
         ));

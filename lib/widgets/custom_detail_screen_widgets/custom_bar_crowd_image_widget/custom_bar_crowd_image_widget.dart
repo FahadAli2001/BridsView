@@ -1,6 +1,6 @@
 import 'package:birds_view/controller/deatil_screen_controller/detail_screen_controller.dart';
 import 'package:birds_view/utils/images.dart';
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -14,10 +14,9 @@ class CustomBarCrowdImageWidget extends StatelessWidget {
     return Consumer<DetailScreenController>(
       builder: (context, value, child) {
         return SizedBox(
-          width: size.width*0.9,
-          height: size.height*0.13,
+          width: size.width * 0.9,
+          height: size.height * 0.13,
           child: Row(
-             
             children: [
               Column(
                 children: [
@@ -36,7 +35,7 @@ class CustomBarCrowdImageWidget extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                width: size.width*0.03,
+                width: size.width * 0.03,
               ),
               Column(
                 children: [
@@ -54,19 +53,19 @@ class CustomBarCrowdImageWidget extends StatelessWidget {
                   ),
                 ],
               ),
-               SizedBox(
-                width: size.width*0.03,
+              SizedBox(
+                width: size.width * 0.03,
               ),
-              // 
+              //
               Container(
-                height: size.height*0.15,
+                height: size.height * 0.15,
                 width: 5,
                 color: Colors.grey.withOpacity(0.5),
               ),
-               SizedBox(
-                width: size.width*0.03,
+              SizedBox(
+                width: size.width * 0.03,
               ),
-               Column(
+              Column(
                 children: [
                   Image.asset(
                     "assets/mix.png",
@@ -82,7 +81,6 @@ class CustomBarCrowdImageWidget extends StatelessWidget {
                   ),
                 ],
               ),
-             
             ],
           ),
         );
@@ -91,7 +89,6 @@ class CustomBarCrowdImageWidget extends StatelessWidget {
   }
 }
 
-
 // class CustomBarCrowdImageWidget extends StatelessWidget {
 //   final Size size;
 //   const CustomBarCrowdImageWidget({super.key, required this.size});
@@ -99,7 +96,7 @@ class CustomBarCrowdImageWidget extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
 //     return Positioned(
-       
+
 //         top: size.height * 0.07,
 //         child: Consumer<DetailScreenController>(
 //           builder: (context, value, child) {
@@ -134,7 +131,7 @@ class CustomBarCrowdImageWidget extends StatelessWidget {
 //                             size: size, text: value.female.toString())
 //                       ],
 //                     ),
-                     
+
 //                     GradientText(
 //                         text: value.totalPerson.toString(),
 //                         fontSize: size.height * 0.02,
@@ -147,6 +144,3 @@ class CustomBarCrowdImageWidget extends StatelessWidget {
 //         ));
 //   }
 // }
-
-
-

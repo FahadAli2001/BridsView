@@ -303,7 +303,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: Container(
                     color: Colors.transparent,
                     width: size.width,
-                   
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -331,7 +330,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
                           ),
                         ),
-                         
                         const Divider(color: Colors.white60),
                       ],
                     ),

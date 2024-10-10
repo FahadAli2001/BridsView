@@ -84,7 +84,9 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
             ),
           )
         : Center(
-            child: Text("Waiting For Video ...", style: GoogleFonts.urbanist(color: whiteColor.withOpacity(0.4))),
+            child: Text("Waiting For Video ...",
+                style:
+                    GoogleFonts.urbanist(color: whiteColor.withOpacity(0.4))),
           );
   }
 }

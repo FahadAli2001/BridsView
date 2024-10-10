@@ -23,10 +23,10 @@ class CustomChat extends StatelessWidget {
     return SizedBox(
         width: size.width,
         child: Consumer<ChatController>(
-          builder: (context, value, child)  {
+          builder: (context, value, child) {
             return ListTile(
-              onTap: ()async {
-                   ChatRoomModel? chatRoomModel = await value
+              onTap: () async {
+                ChatRoomModel? chatRoomModel = await value
                     .getChatRoomModel(friendModel[index]!.friendId.toString());
                 if (chatRoomModel != null) {
                   // ignore: use_build_context_synchronously
@@ -41,7 +41,7 @@ class CustomChat extends StatelessWidget {
                                 index: index,
                                 chatRoomModel: chatRoomModel,
                               )));
-              }
+                }
               },
               leading: CircleAvatar(
                 backgroundColor: Colors.grey.withOpacity(0.5),
@@ -55,16 +55,23 @@ class CustomChat extends StatelessWidget {
                     fontSize: size.height * 0.02),
               ),
               subtitle: Text(
-             value.lastMessagesAndTime != null ?    value.lastMessagesAndTime!["sender"] ==
-                        userModel!.data!.id.toString()
-                    ? "You : ${value.lastMessagesAndTime!["text"]}"
-                    : "${friendModel[index]!.firstName!} : ${value.lastMessagesAndTime!["text"]}" :"",
+                value.lastMessagesAndTime != null
+                    ? value.lastMessagesAndTime!["sender"] ==
+                            userModel!.data!.id.toString()
+                        ? "You : ${value.lastMessagesAndTime!["text"]}"
+                        : "${friendModel[index]!.firstName!} : ${value.lastMessagesAndTime!["text"]}"
+                    : "",
                 style: GoogleFonts.urbanist(
                   color: Colors.white,
                 ),
               ),
               trailing: Text(
-             value.lastMessagesAndTime?['createdOn'] != null?   value.formatTime(value.lastMessagesAndTime!['createdOn'].toString()).toString():"",
+                value.lastMessagesAndTime?['createdOn'] != null
+                    ? value
+                        .formatTime(
+                            value.lastMessagesAndTime!['createdOn'].toString())
+                        .toString()
+                    : "",
                 style: GoogleFonts.urbanist(
                   color: Colors.white,
                 ),
