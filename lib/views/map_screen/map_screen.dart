@@ -41,14 +41,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   void initState() {
     super.initState();
-    DefaultAssetBundle.of(context)
-        .loadString("assets/map_theme/night_map_theme.json")
-        .then((value) {
-      mapTheme = value;
-
-      _loadInitialData();
-      setState(() {});
-    });
+    _loadInitialData();
   }
 
   @override
@@ -90,8 +83,19 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  void _startLiveLocationTracking(MapsController mapController) {
+  void _startLiveLocationTracking(MapsController mapController) async {
     try {
+      String theme = await DefaultAssetBundle.of(context)
+          .loadString("assets/map_theme/night_map_theme.json");
+
+      setState(() {
+        mapTheme = theme;
+      });
+
+      // Apply the map theme immediately
+      final GoogleMapController controller = await _controller.future;
+      // ignore: deprecated_member_use
+      controller.setMapStyle(mapTheme);
       log("_startLiveLocationTracking");
       _positionStream =
           Geolocator.getPositionStream().listen((Position position) async {
@@ -144,6 +148,8 @@ class _MapScreenState extends State<MapScreen> {
                     markers: Set<Marker>.of(value.markers),
                     polylines: Set<Polyline>.of(value.polylines.values),
                     onMapCreated: (GoogleMapController controller) {
+                      // ignore: deprecated_member_use
+                      controller.setMapStyle(mapTheme);
                       _controller.complete(controller);
                       value.customInfoWindowController.googleMapController =
                           controller;
