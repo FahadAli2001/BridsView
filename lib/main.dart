@@ -8,6 +8,7 @@ import 'package:birds_view/firebase_options.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/views/splash_screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -21,26 +22,62 @@ import 'controller/splash_controller/splash_controller.dart';
 import 'controller/visited_bars_controller/visited_bars_controller.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  if (kIsWeb) {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
-  Stripe.publishableKey =
-      "pk_test_51PYYmlFwqpbZ1f3dMZyxLHPjGJzGT6S1SBgbRO2pZ3DFuRewfwdHEHdfQsOGy2FrjCdavvqyMBdJljqAtVorzDVk00TM57AjlT";
-  Stripe.merchantIdentifier = 'merchant.birds.view.app';
-  Stripe.urlScheme = 'flutterstripe';
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
-  await Stripe.instance.applySettings();
+    runApp(const MyApp());
+  } else {
+    WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+    Stripe.publishableKey =
+        "pk_test_51PYYmlFwqpbZ1f3dMZyxLHPjGJzGT6S1SBgbRO2pZ3DFuRewfwdHEHdfQsOGy2FrjCdavvqyMBdJljqAtVorzDVk00TM57AjlT";
+    Stripe.merchantIdentifier = 'merchant.birds.view.app';
+    Stripe.urlScheme = 'flutterstripe';
 
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+    await Stripe.instance.applySettings();
 
-  runApp(const MyApp());
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
+    runApp(const MyApp());
+  }
 }
+
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+
+//   Stripe.publishableKey =
+//       "pk_test_51PYYmlFwqpbZ1f3dMZyxLHPjGJzGT6S1SBgbRO2pZ3DFuRewfwdHEHdfQsOGy2FrjCdavvqyMBdJljqAtVorzDVk00TM57AjlT";
+//   Stripe.merchantIdentifier = 'merchant.birds.view.app';
+//   Stripe.urlScheme = 'flutterstripe';
+
+//   await Stripe.instance.applySettings();
+
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+
+//   SystemChrome.setPreferredOrientations([
+//     DeviceOrientation.portraitUp,
+//     DeviceOrientation.portraitDown,
+//   ]);
+
+//   runApp(const MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
