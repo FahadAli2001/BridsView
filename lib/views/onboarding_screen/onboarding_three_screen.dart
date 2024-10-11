@@ -70,45 +70,7 @@ class _OnboardingThreeState extends State<OnboardingThree> {
             const Center(
                 child:
                     CustomHeadingText(heading: "Check The Vibe, Then Arrive")),
-            // Center(
-            //   child: RichText(
-            //     text: TextSpan(
-            //       children: [
-            //         WidgetSpan(
-            //           alignment: PlaceholderAlignment.baseline,
-            //           baseline: TextBaseline.alphabetic,
-            //           child: ShaderMask(
-            //             shaderCallback: (bounds) => const LinearGradient(
-            //               colors: [
-            //                 Color(0xFFC59241),
-            //                 Color(0xFFFEF6D1),
-            //                 Color(0xFFC49138),
-            //               ],
-            //               begin: Alignment.centerLeft,
-            //               end: Alignment.centerRight,
-            //               stops: [0.0, 0.5, 1.0],
-            //             ).createShader(
-            //                 Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
-            //             child: Text(
-            //               'Check the Vibe, ',
-            //               style: GoogleFonts.urbanist(
-            //                   fontSize: size.height * 0.026,
-            //                   fontWeight: FontWeight.w900,
-            //                   color: Colors.white),
-            //             ),
-            //           ),
-            //         ),
-            //         TextSpan(
-            //           text: 'Then Arrive',
-            //           style: GoogleFonts.urbanist(
-            //               fontSize: size.height * 0.026,
-            //               fontWeight: FontWeight.w900,
-            //               color: whiteColor),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
+            
 
             //
             SizedBox(
