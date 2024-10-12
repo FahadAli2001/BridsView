@@ -266,7 +266,7 @@ class _SignupScreenState extends State<SignupScreen> {
               Container(
                 color: Colors.transparent,
                 width: size.width,
-                height: size.height * 0.071,
+                height: size.height * 0.072,
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: () {

@@ -30,12 +30,14 @@ class MapsController extends ChangeNotifier {
   double? _lat;
   double? _lon;
   bool _isGettingDirection = false;
+  bool _exploring = false;
 
   List<Marker> get markers => _markers;
   Map<PolylineId, Polyline> get polylines => _polylines;
   List<LatLng> get polylineCoordinates => _polylineCoordinates;
   PolylinePoints get polylinePoints => _polylinePoints;
   bool get isGettingDirection => _isGettingDirection;
+  bool get exploring => _exploring;
 
   set isGettingDirection(bool val) {
     _isGettingDirection = val;
@@ -385,6 +387,7 @@ class MapsController extends ChangeNotifier {
   Future<void> getCurrentLocation(context) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     _isGettingLocation = true;
+     
     notifyListeners();
     try {
       LocationPermission locationPermission =
@@ -738,6 +741,9 @@ class MapsController extends ChangeNotifier {
     log('exploreBarsOrClubs: Started');
     clearExploreScreenList();
     // Clear previous data
+    _exploring = true;
+    notifyListeners();
+    
 
     try {
       // Fetch latitude and longitude once from SharedPreferences
@@ -817,6 +823,8 @@ class MapsController extends ChangeNotifier {
 
           // Wait for all tasks to complete
           await Future.wait(fetchTasks);
+          _exploring = false;
+          notifyListeners();
         }));
 
         // Remove null values from detailsList and assign to exploreScreenbarAndClubsDetails
@@ -829,11 +837,15 @@ class MapsController extends ChangeNotifier {
         log('Total images: ${exploreScreenbarsOrClubsImages.length}');
       } else {
         log("Error: ${response.statusCode}");
+          _exploring = false;
+          notifyListeners();
       }
 
       // Notify the listeners after all data has been fetched
       notifyListeners();
     } catch (e) {
+        _exploring = false;
+          notifyListeners();
       log(e.toString());
     }
   }

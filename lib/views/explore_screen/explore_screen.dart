@@ -168,12 +168,17 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
                             mapController
                                     .exploreScreenbarAndClubsDetails.isEmpty
-                                ? Center(
-                                    child: CircularProgressIndicator(
-                                      color: primaryColor,
-                                    ),
+                                ? const Center(
+                                    child:Text("No Bar Or Club Found",
+                                    style: TextStyle(
+                                      color:Colors.white60
+                                    ),)
                                   )
-                                : isClubs == true
+                                : mapController.exploring==true?Center(
+                                  child:CircularProgressIndicator(
+                                    color:primaryColor
+                                  )
+                                ): isClubs == true
                                     ? Expanded(
                                         child: ListView.builder(
                                           scrollDirection: Axis.vertical,
