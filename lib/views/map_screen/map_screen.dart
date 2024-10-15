@@ -103,6 +103,7 @@ class _MapScreenState extends State<MapScreen> {
       });
 
       final GoogleMapController controller = await _controller.future;
+      // ignore: deprecated_member_use
       controller.setMapStyle(mapTheme);
 
       
