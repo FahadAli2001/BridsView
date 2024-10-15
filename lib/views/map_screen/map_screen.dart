@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
+import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/images.dart';
 import 'package:custom_info_window/custom_info_window.dart';
@@ -32,7 +33,13 @@ class _MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _controller = Completer();
   String mapTheme = '';
   late StreamSubscription<Position> _positionStream;
-
+  //
+  List<String> turnByTurnInstructions = [];
+  List<LatLng> routeCoords = [];
+  int currentInstructionIndex = 0;
+  String remainingTime = "0";
+  List<Rows>? distanceList = [];
+  //
   CameraPosition kGooglePlex = const CameraPosition(
     target: LatLng(0.0, 0.0),
     zoom: 14,
@@ -83,36 +90,121 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  void _startLiveLocationTracking(MapsController mapController) async {
+  Future<void> _startLiveLocationTracking(MapsController mapController) async {
+   
+    final mapController = Provider.of<MapsController>(context, listen: false);
+
     try {
-      String theme = await DefaultAssetBundle.of(context)
+       String theme = await DefaultAssetBundle.of(context)
           .loadString("assets/map_theme/night_map_theme.json");
 
       setState(() {
         mapTheme = theme;
       });
 
-      // Apply the map theme immediately
       final GoogleMapController controller = await _controller.future;
-      // ignore: deprecated_member_use
       controller.setMapStyle(mapTheme);
-      log("_startLiveLocationTracking");
+
+      
+      List<String> directions = await mapController.getTurnByTurnDirections(
+        widget.bar[widget.index].geometry!.location!.lat!,
+        widget.bar[widget.index].geometry!.location!.lng!,
+      );
+
+      
+      setState(() {
+        turnByTurnInstructions = directions;  
+      });
+
       _positionStream =
           Geolocator.getPositionStream().listen((Position position) async {
         log("Current Location: ${position.latitude}, ${position.longitude}");
 
-        mapController.updateLiveLocationMarker(
-            position.latitude, position.longitude);
-        final GoogleMapController controller = await _controller.future;
         controller.animateCamera(
-          CameraUpdate.newLatLng(
+          CameraUpdate.newLatLngZoom(
             LatLng(position.latitude, position.longitude),
+            20.0,
           ),
         );
+         distanceList!.clear();
+
+        var data = await mapController.getDistanceBetweenPoints(
+            widget.bar[widget.index].geometry!.location!.lat.toString(),
+            widget.bar[widget.index].geometry!.location!.lng!,
+            position.latitude,
+            position.longitude);
+        distanceList!.addAll(data);
+        setState(() {
+          
+        });
+         
+        if (_isUserCloseToNextStep(position.latitude, position.longitude)) {
+          _showNextInstruction();
+        }
       });
     } catch (e) {
-      log("_startLiveLocationTracking error : $e");
+      log("Live location tracking error: $e");
     }
+  }
+
+  
+  
+  bool _isUserCloseToNextStep(double userLat, double userLng) {
+    if (currentInstructionIndex >= routeCoords.length) return false;
+
+    LatLng nextStep = routeCoords[currentInstructionIndex];
+    double distance = Geolocator.distanceBetween(
+      userLat,
+      userLng,
+      nextStep.latitude,
+      nextStep.longitude,
+    );
+
+    return distance < 50.0;
+  }
+
+  void _showNextInstruction() {
+    if (currentInstructionIndex < turnByTurnInstructions.length - 1) {
+      setState(() {
+        currentInstructionIndex++;
+      });
+    }
+  }
+
+  // void _startLiveLocationTracking(MapsController mapController) async {
+  //   try {
+  //     String theme = await DefaultAssetBundle.of(context)
+  //         .loadString("assets/map_theme/night_map_theme.json");
+
+  //     setState(() {
+  //       mapTheme = theme;
+  //     });
+
+  //     // Apply the map theme immediately
+  //     final GoogleMapController controller = await _controller.future;
+  //     // ignore: deprecated_member_use
+  //     controller.setMapStyle(mapTheme);
+  //     log("_startLiveLocationTracking");
+  //     _positionStream =
+  //         Geolocator.getPositionStream().listen((Position position) async {
+  //       log("Current Location: ${position.latitude}, ${position.longitude}");
+
+  //       mapController.updateLiveLocationMarker(
+  //           position.latitude, position.longitude);
+  //       final GoogleMapController controller = await _controller.future;
+  //       controller.animateCamera(
+  //         CameraUpdate.newLatLng(
+  //           LatLng(position.latitude, position.longitude),
+  //         ),
+  //       );
+  //     });
+  //   } catch (e) {
+  //     log("_startLiveLocationTracking error : $e");
+  //   }
+  // }
+  String removeHtmlTags(String input) {
+    final RegExp exp = RegExp(r'<[^>]*>');
+    return input.replaceAll(exp, '');
   }
 
   @override
@@ -136,7 +228,7 @@ class _MapScreenState extends State<MapScreen> {
                     zoomGesturesEnabled: true,
                     myLocationButtonEnabled: true,
                     myLocationEnabled: true,
-                    trafficEnabled: true,
+                    
                     rotateGesturesEnabled: true,
                     buildingsEnabled: true,
                     onTap: (argument) {
@@ -156,6 +248,27 @@ class _MapScreenState extends State<MapScreen> {
                     },
                   ),
                 ),
+                turnByTurnInstructions.isNotEmpty
+                    ? Positioned(
+                        left: 20,
+                        right: 20,
+                        top: 80,
+                        child: Container(
+                          width: size.width,
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                              color: Colors.green.shade700,
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Text(
+                            removeHtmlTags(
+                                "${turnByTurnInstructions[currentInstructionIndex]} , Time Left: ${distanceList!.isEmpty ? '' : distanceList![0].elements![0].duration!.text} "),
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.white),
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
+
                 value.onMapNearestBar.isEmpty
                     ? Center(
                         child: CircularProgressIndicator(
@@ -179,21 +292,23 @@ class _MapScreenState extends State<MapScreen> {
                 //         ),
                 //       )
                 //     :
-                Positioned(
-                  left: size.width * 0.3,
-                  right: size.width * 0.3,
-                  bottom: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: GestureDetector(
-                      onTap: () {
-                        // Start tracking live location when the direction button is tapped
-                        _startLiveLocationTracking(value);
-                      },
-                      child: Image.asset(directionBtn),
-                    ),
-                  ),
-                ),
+                turnByTurnInstructions.isEmpty
+                    ? Positioned(
+                        left: size.width * 0.3,
+                        right: size.width * 0.3,
+                        bottom: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: GestureDetector(
+                            onTap: () {
+                              // Start tracking live location when the direction button is tapped
+                              _startLiveLocationTracking(value);
+                            },
+                            child: Image.asset(directionBtn),
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
                 Positioned(
                   top: size.height * 0.03,
                   left: size.width * 0.03,

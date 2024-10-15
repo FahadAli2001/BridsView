@@ -77,6 +77,7 @@ class _DetailScreenState extends State<DetailScreen>
     if (widget.fromSearchScreen == false && widget.fromBookmark == false) {
       getBarsDetails(widget.barDetail![widget.index].placeId!);
       checkBarId(widget.barDetail![widget.index].placeId!);
+      log(widget.barDetail![widget.index].placeId!.toString());
       getUserCredential();
     } else if (widget.fromBookmark == true) {
       getBarsDetails(widget.searchBarDetail![widget.index].placeId!);

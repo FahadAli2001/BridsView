@@ -874,4 +874,39 @@ class MapsController extends ChangeNotifier {
     homeScreenExplorebarsOrClubsDistanceList.clear();
     notifyListeners();
   }
+
+    List<LatLng> routeCoords = [];
+
+   Future<List<String>> getTurnByTurnDirections( double endLat, double endLng) async {
+    const String baseUrl = 'https://maps.googleapis.com/maps/api/directions/json';
+    const String apiKey = googleMapApiKey;  // Replace with your API key
+    String url = '$baseUrl?origin=$_lat,$_lon&destination=$endLat,$endLng&key=$apiKey';
+
+    var response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+      List<dynamic> steps = jsonResponse['routes'][0]['legs'][0]['steps'];
+
+      // Extracting the turn-by-turn instructions
+      List<String> instructions = steps.map((step) => step['html_instructions'].toString()).toList();
+        routeCoords = steps
+            .map((step) => LatLng(
+                  step['end_location']['lat'],
+                  step['end_location']['lng'],
+                ))
+            .toList();;
+      log(instructions.toString());
+
+      return instructions;
+    } else {
+      throw Exception('Failed to load directions');
+    }
+  }
+
+
+
+
+
+
 }
