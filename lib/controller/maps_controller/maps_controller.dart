@@ -758,7 +758,7 @@ class MapsController extends ChangeNotifier {
 
       // Google Maps Places API URL
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=2000&type=$type&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=96560&type=$type&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
