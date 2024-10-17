@@ -308,6 +308,7 @@ class MapsController extends ChangeNotifier {
   }
 
   _addPolyLine() {
+    // _polylines.clear();
     PolylineId id = const PolylineId("poly");
     Polyline polyline = Polyline(
         jointType: JointType.bevel,
@@ -320,18 +321,22 @@ class MapsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  getPolyline(List<Result> bars, int index) async {
-    log("Getting polyLines");
-    log("lat : ${bars[index].geometry!.location!.lat!} lon :  ${bars[index].geometry!.location!.lng!.toString()}");
+ 
+
+
+  getPolyline(List<Result> bars, int index,{double? userLat,double? userLng}) async {
+    log("user lat : ${userLat ?? 'n/a'}");
+    
     try {
       SharedPreferences sp = await SharedPreferences.getInstance();
 
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         googleApiKey: googleMapApiKey,
         request: PolylineRequest(
-          origin: PointLatLng(lat!, lon!),
-          destination: PointLatLng(bars[index].geometry!.location!.lat!,
-              bars[index].geometry!.location!.lng!),
+          origin:userLat != null && userLng != null? PointLatLng(userLat, userLng):PointLatLng(lat!, lon!),
+          destination: PointLatLng(bars[index].geometry!.viewport!.
+          southwest!.lat!,
+              bars[index].geometry!.viewport!.southwest!.lng!),
           mode: TravelMode.driving,
         ),
       );
@@ -350,23 +355,23 @@ class MapsController extends ChangeNotifier {
     }
   }
 
-  void updateLiveLocationMarker(double latitude, double longitude) {
-    markers.removeWhere(
-        (marker) => marker.markerId == const MarkerId('live_location'));
+  // void updateLiveLocationMarker(double latitude, double longitude) {
+  //   markers.removeWhere(
+  //       (marker) => marker.markerId == const MarkerId('live_location'));
 
-    markers.add(
-      Marker(
-        markerId: const MarkerId('live_location'),
-        position: LatLng(latitude, longitude),
-        infoWindow: const InfoWindow(
-          title: 'Your Location',
-        ),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-      ),
-    );
+  //   markers.add(
+  //     Marker(
+  //       markerId: const MarkerId('live_location'),
+  //       position: LatLng(latitude, longitude),
+  //       infoWindow: const InfoWindow(
+  //         title: 'Your Location',
+  //       ),
+  //       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+  //     ),
+  //   );
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
   void clearPolylines() {
     _polylines.clear();
@@ -895,7 +900,7 @@ class MapsController extends ChangeNotifier {
                   step['end_location']['lat'],
                   step['end_location']['lng'],
                 ))
-            .toList();;
+            .toList();
       log(instructions.toString());
 
       return instructions;

@@ -64,6 +64,7 @@ class _DetailScreenState extends State<DetailScreen>
   late AnimationController _controller;
   late Animation<double> _animation;
   List<Result>? barDetail = [];
+  bool showShimmer = false;
 
   @override
   void initState() {
@@ -268,21 +269,24 @@ class _DetailScreenState extends State<DetailScreen>
                                                             return FutureBuilder<
                                                                 Map<String,
                                                                     dynamic>>(
-                                                              future: controller
-                                                                  .getBookMarkStatus(widget
+                                                              future: controller.getBookMarkStatus(
+                                                                  widget
                                                                       .searchBarDetail![
                                                                           widget
                                                                               .index]
-                                                                      .placeId!),
+                                                                      .placeId!,
+                                                                  widget.user),
                                                               builder: (context,
                                                                   snapshot) {
+                                                                // if (snapshot
+                                                                //         .connectionState ==
+                                                                //     ConnectionState
+                                                                //         .waiting) {
+                                                                //   return const Icon(
+                                                                //       CupertinoIcons
+                                                                //           .bookmark);
+                                                                // }
                                                                 if (snapshot
-                                                                        .connectionState ==
-                                                                    ConnectionState
-                                                                        .waiting) {
-                                                                  return const Text(
-                                                                      " ");
-                                                                } else if (snapshot
                                                                         .hasError ||
                                                                     snapshot.data?[
                                                                             "status"] ==
@@ -295,14 +299,28 @@ class _DetailScreenState extends State<DetailScreen>
                                                                       snapshot.data?[
                                                                               "status"] ==
                                                                           1;
+
                                                                   return GestureDetector(
                                                                     onTap:
                                                                         () async {
+                                                                      setState(
+                                                                          () {
+                                                                        showShimmer =
+                                                                            true;
+                                                                        isBookmarked =
+                                                                            !isBookmarked;
+                                                                      });
                                                                       bool success = await controller.handleBookmarkAction(
                                                                           widget
                                                                               .searchBarDetail![widget.index]
                                                                               .placeId!,
-                                                                          !isBookmarked);
+                                                                          !isBookmarked,
+                                                                          widget.user);
+                                                                      setState(
+                                                                          () {
+                                                                        showShimmer =
+                                                                            false;
+                                                                      });
                                                                       if (success) {
                                                                         Future.delayed(
                                                                             const Duration(seconds: 1),
@@ -316,87 +334,33 @@ class _DetailScreenState extends State<DetailScreen>
                                                                                 "Action failed");
                                                                       }
                                                                     },
-                                                                    child: Icon(
-                                                                      isBookmarked
-                                                                          ? CupertinoIcons
-                                                                              .bookmark_fill
-                                                                          : CupertinoIcons
-                                                                              .bookmark,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
+                                                                    child: showShimmer ==
+                                                                            true
+                                                                        ? Shimmer
+                                                                            .fromColors(
+                                                                            baseColor:
+                                                                                Colors.grey[300]!,
+                                                                            highlightColor:
+                                                                                Colors.grey[100]!,
+                                                                            child:
+                                                                                Icon(
+                                                                              isBookmarked ? CupertinoIcons.bookmark_fill : CupertinoIcons.bookmark,
+                                                                              color: Colors.black,
+                                                                            ),
+                                                                          )
+                                                                        : Icon(
+                                                                            isBookmarked
+                                                                                ? CupertinoIcons.bookmark_fill
+                                                                                : CupertinoIcons.bookmark,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
                                                                   );
                                                                 }
                                                               },
                                                             );
                                                           },
-                                                        )
-
-                                              // Consumer<
-                                              //     BookmarkController>(
-                                              //     builder: (context,
-                                              //         value, child) {
-                                              //       return StreamBuilder(
-                                              //         stream: value.getBookMarkStream(widget
-                                              //             .searchBarDetail![
-                                              //                 widget
-                                              //                     .index]
-                                              //             .placeId!),
-                                              //         builder: (context,
-                                              //             snapshot) {
-                                              //           if (snapshot
-                                              //                   .connectionState ==
-                                              //               ConnectionState
-                                              //                   .waiting) {
-                                              //             return Shimmer
-                                              //                 .fromColors(
-                                              //               baseColor:
-                                              //                   primaryColor,
-                                              //               highlightColor:
-                                              //                   Colors
-                                              //                       .white10,
-                                              //               child: Center(
-                                              //                   child: Container(
-                                              //                 color: Colors
-                                              //                     .white,
-                                              //               )),
-                                              //             );
-                                              //           } else if (snapshot
-                                              //               .hasError) {
-                                              //             return Text(
-                                              //                 'Error: ${snapshot.error}');
-                                              //           } else {
-                                              //             return GestureDetector(
-                                              //                 onTap:
-                                              //                     () {
-                                              //                   if (snapshot.data["status"] ==
-                                              //                       0) {
-                                              //                     value.addBookmark(widget
-                                              //                         .searchBarDetail![widget.index]
-                                              //                         .placeId!);
-                                              //                   } else if (snapshot.data["status"] ==
-                                              //                       1) {
-                                              //                     value.deleteBookmark(widget
-                                              //                         .searchBarDetail![widget.index]
-                                              //                         .placeId!);
-                                              //                   }
-                                              //                 },
-                                              //                 child: snapshot.data["status"] ==
-                                              //                         1
-                                              //                     ? const Icon(
-                                              //                         CupertinoIcons.bookmark_fill,
-                                              //                         color: Colors.black,
-                                              //                       )
-                                              //                     : const Icon(
-                                              //                         CupertinoIcons.bookmark,
-                                              //                         color: Colors.black,
-                                              //                       ));
-                                              //           }
-                                              //         },
-                                              //       );
-                                              //     },
-                                              //   )
-                                              )
+                                                        ))
                                         ],
                                       ),
                                     ),
@@ -620,192 +584,102 @@ class _DetailScreenState extends State<DetailScreen>
                           SizedBox(
                             height: size.height * 0.01,
                           ),
-                          widget.searchBarDetail![widget.index]
-                                      .editorialSummary ==
-                                  null
-                              ? const SizedBox()
-                              : SizedBox(
-                                  width: size.width,
-                                  child: Text(
-                                    widget.searchBarDetail![widget.index]
-                                        .editorialSummary!.overview!
-                                        .trim(),
-                                    textAlign: TextAlign.left,
-                                    style: GoogleFonts.urbanist(
-                                        fontSize: size.height * 0.016,
-                                        color: Colors.white),
-                                  ),
-                                ),
+                          // widget.searchBarDetail![widget.index]
+                          //             .editorialSummary ==
+                          //         null
+                          //     ? const SizedBox()
+                          //     :
+                          CustomDescriptionRichText(title: "OverView : ", subtitle: widget.searchBarDetail![widget.index]
+                                          .editorialSummary ==
+                                      null
+                                  ? "N/A"
+                                  : widget.searchBarDetail![widget.index]
+                                      .editorialSummary!.overview! ),
+                          // SizedBox(
+                          //   width: size.width,
+                          //   child: Text(
+                          //     widget.searchBarDetail![widget.index]
+                          //                 .editorialSummary ==
+                          //             null
+                          //         ? "N/A"
+                          //         : widget.searchBarDetail![widget.index]
+                          //             .editorialSummary!.overview!
+                          //             .trim(),
+                          //     textAlign: TextAlign.left,
+                          //     style: GoogleFonts.urbanist(
+                          //         fontSize: size.height * 0.016,
+                          //         color: Colors.white),
+                          //   ),
+                          // ),
                           //
-                          widget.searchBarDetail![widget.index]
-                                      .editorialSummary ==
-                                  null
-                              ? const SizedBox()
-                              : SizedBox(
-                                  height: size.height * 0.01,
-                                ),
+                          // widget.searchBarDetail![widget.index]
+                          //             .editorialSummary ==
+                          //         null
+                          //     ? const SizedBox()
+                          //     :
+                          SizedBox(
+                            height: size.height * 0.01,
+                          ),
                           CustomDescriptionRichText(
                               title: "Address : ",
                               subtitle: widget.searchBarDetail![widget.index]
-                                  .formattedAddress!
-                                  .trim()),
+                                      .formattedAddress ??
+                                  "N/A"),
 
                           SizedBox(
-                            height: size.height * 0.02,
+                            height: size.height * 0.01,
                           ),
-                          widget.searchBarDetail![widget.index].openingHours ==
-                                  null
-                              ? const Text('')
-                              : Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    widget.searchBarDetail![widget.index]
-                                                .openingHours!.openNow! ==
-                                            true
-                                        ? "Open"
-                                        : "Closed",
-                                    style: GoogleFonts.urbanist(
-                                      fontSize: size.height * 0.016,
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  //  CustomDescriptionRichText(
-                                  //     title: "" ,
-                                  //     subtitle:
-                                  //         widget.searchBarDetail![widget.index]
-                                  //                     .openingHours!.openNow! ==
-                                  //                 true
-                                  //             ? "Open"
-                                  //             : "Closed")
-                                ),
+                          // widget.searchBarDetail![widget.index].openingHours ==
+                          //         null
+                          //     ? const Text('')
+                          //     :
+                          CustomDescriptionRichText(title: "Status : ", subtitle:    
+                            widget.searchBarDetail![widget.index]
+                                    .openingHours ==
+                                      null
+                                  ? "N/A"
+                                  : widget.searchBarDetail![widget.index]
+                                              .openingHours!.openNow! ==
+                                          true
+                                      ? "Currently Open"
+                                      : "Currently Closed",),
+                          // Align(,
+                          //   alignment: Alignment.topLeft,
+                          //   child: Text(
+                          //     widget.searchBarDetail![widget.index]
+                          //                 .openingHours ==
+                          //             null
+                          //         ? "N/A"
+                          //         : widget.searchBarDetail![widget.index]
+                          //                     .openingHours!.openNow! ==
+                          //                 true
+                          //             ? "Open"
+                          //             : "Closed",
+                          //     style: GoogleFonts.urbanist(
+                          //       fontSize: size.height * 0.016,
+                          //       fontWeight: FontWeight.normal,
+                          //       color: Colors.white,
+                          //     ),
+                          //   ),
+                          // ),
                           //
                           //
                           SizedBox(
-                            height: size.height * 0.02,
+                            height: size.height * 0.01,
                           ),
-                          widget.searchBarDetail![widget.index].openingHours ==
-                                  null
-                              ? const Text('')
-                              : Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Stack(
-                                    children: [
-                                      // Gradient border
-                                      Container(
-                                        width: size.width,
-                                        height: size.height * 0.32,
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(1)),
-                                          gradient: LinearGradient(
-                                            colors: [
-                                              Color(0xFFC59241),
-                                              Color(0xFFFEF6D1),
-                                              Color(0xFFC49138),
-                                            ],
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                          ),
-                                        ),
-                                      ),
-
-                                      // RichText inside the container
-                                      Positioned(
-                                        right: 3,
-                                        left: 3,
-                                        bottom: 3,
-                                        top: 3,
-                                        child: Container(
-                                          width: size.width,
-                                          color: Colors.black,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(3),
-                                            child: RichText(
-                                              text: TextSpan(
-                                                children: [
-                                                  WidgetSpan(
-                                                    child: ShaderMask(
-                                                      shaderCallback: (bounds) =>
-                                                          const LinearGradient(
-                                                        colors: [
-                                                          Color(
-                                                              0xFFC59241), // Left side color
-                                                          Color(
-                                                              0xFFFEF6D1), // Center color
-                                                          Color(
-                                                              0xFFC49138), // Right side color
-                                                        ],
-                                                        begin: Alignment
-                                                            .centerLeft,
-                                                        end: Alignment
-                                                            .centerRight,
-                                                      ).createShader(bounds),
-                                                      child: Text(
-                                                        "Hours Of Operation: ",
-                                                        style: GoogleFonts
-                                                            .urbanist(
-                                                          fontSize:
-                                                              size.height *
-                                                                  0.016,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          height: 2,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  for (var i = 0;
-                                                      i <
-                                                          widget
-                                                              .searchBarDetail![
-                                                                  widget.index]
-                                                              .openingHours!
-                                                              .weekdayText!
-                                                              .length;
-                                                      i++) ...[
-                                                    TextSpan(
-                                                      text:
-                                                          "\n${widget.searchBarDetail![widget.index].openingHours!.weekdayText![i]} \n",
-                                                      style:
-                                                          GoogleFonts.urbanist(
-                                                              fontSize:
-                                                                  size.height *
-                                                                      0.016,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal,
-                                                              color:
-                                                                  whiteColor),
-                                                    ),
-                                                  ],
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                          widget.searchBarDetail![widget.index]
-                                      .wheelchairAccessibleEntrance ==
-                                  null
-                              ? const SizedBox()
-                              : SizedBox(
-                                  height: size.height * 0.02,
-                                ),
-                          //
-                          widget.searchBarDetail![widget.index].website == null
-                              ? const Text('')
-                              : Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Consumer<DetailScreenController>(
-                                    builder: (context, value, child) {
-                                      return RichText(
-                                        text: TextSpan(
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Container(
+                                  padding: const EdgeInsets.all(3),
+                                  decoration:
+                                      BoxDecoration(gradient: gradientColor),
+                                  child: Container(
+                                      width: double.infinity,
+                                      color: Colors.black,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(3.0),
+                                        child: RichText(
+                                            text: TextSpan(
                                           children: [
                                             WidgetSpan(
                                               alignment:
@@ -815,51 +689,143 @@ class _DetailScreenState extends State<DetailScreen>
                                                 shaderCallback: (bounds) =>
                                                     const LinearGradient(
                                                   colors: [
-                                                    Color(0xFFC59241),
-                                                    Color(0xFFFEF6D1),
-                                                    Color(0xFFC49138),
+                                                    Color(
+                                                        0xFFC59241), // Left side color
+                                                    Color(
+                                                        0xFFFEF6D1), // Center color
+                                                    Color(
+                                                        0xFFC49138), // Right side color
                                                   ],
                                                   begin: Alignment.centerLeft,
                                                   end: Alignment.centerRight,
                                                 ).createShader(bounds),
                                                 child: Text(
-                                                  "Website : ",
+                                                  "Hours Of Operation: ",
                                                   style: GoogleFonts.urbanist(
-                                                      fontSize:
-                                                          size.height * 0.016,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      height: 2,
-                                                      color: Colors.white),
+                                                    fontSize:
+                                                        size.height * 0.016,
+                                                    fontWeight: FontWeight.bold,
+                                                    height: 2,
+                                                    color: Colors.white,
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                             TextSpan(
-                                              text: "Click To Visit Website!",
+                                              children: widget
+                                                          .searchBarDetail![
+                                                              widget.index]
+                                                          .openingHours ==
+                                                      null
+                                                  ? [
+                                                      TextSpan(
+                                                        text: "N/A",
+                                                        style: GoogleFonts
+                                                            .urbanist(
+                                                          fontSize:
+                                                              size.height *
+                                                                  0.016,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: Colors.white,
+                                                        ),
+                                                      )
+                                                    ]
+                                                  : List.generate(
+                                                      widget
+                                                          .searchBarDetail![
+                                                              widget.index]
+                                                          .openingHours!
+                                                          .weekdayText!
+                                                          .length,
+                                                      (i) => TextSpan(
+                                                        text:
+                                                            "\n${widget.searchBarDetail![widget.index].openingHours!.weekdayText![i]} \n",
+                                                        style: GoogleFonts
+                                                            .urbanist(
+                                                          fontSize:
+                                                              size.height *
+                                                                  0.016,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                            )
+                                          ],
+                                        )),
+                                      )))),
+
+                          //
+                          SizedBox(
+                            height: size.height * 0.01,
+                          ),
+
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Consumer<DetailScreenController>(
+                                builder: (context, value, child) {
+                                  return RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        WidgetSpan(
+                                          alignment:
+                                              PlaceholderAlignment.baseline,
+                                          baseline: TextBaseline.alphabetic,
+                                          child: ShaderMask(
+                                            shaderCallback: (bounds) =>
+                                                const LinearGradient(
+                                              colors: [
+                                                Color(0xFFC59241),
+                                                Color(0xFFFEF6D1),
+                                                Color(0xFFC49138),
+                                              ],
+                                              begin: Alignment.centerLeft,
+                                              end: Alignment.centerRight,
+                                            ).createShader(bounds),
+                                            child: Text(
+                                              "Website : ",
                                               style: GoogleFonts.urbanist(
-                                                  fontWeight: FontWeight.normal,
                                                   fontSize: size.height * 0.016,
+                                                  fontWeight: FontWeight.bold,
+                                                  height: 2,
                                                   color: Colors.white),
-                                              recognizer: TapGestureRecognizer()
-                                                ..onTap = () async {
-                                                  final url = widget
+                                            ),
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: widget
                                                       .searchBarDetail![
                                                           widget.index]
-                                                      .website;
+                                                      .website ==
+                                                  ""
+                                              ? "N/A"
+                                              : "Click To Visit Website!",
+                                          style: GoogleFonts.urbanist(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: size.height * 0.016,
+                                              color: Colors.white),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () async {
+                                              final url = widget
+                                                  .searchBarDetail![
+                                                      widget.index]
+                                                  .website;
 
-                                                  try {
-                                                    await value
-                                                        .socialLaunchUrl(url!);
-                                                  } catch (e) {
-                                                    log(e.toString());
-                                                  }
-                                                },
-                                            ),
-                                          ],
+                                              try {
+                                                await value
+                                                    .socialLaunchUrl(url!);
+                                              } catch (e) {
+                                                log(e.toString());
+                                              }
+                                            },
                                         ),
-                                      );
-                                    },
-                                  )),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              )),
                         ],
                       ),
                     ),
@@ -940,16 +906,12 @@ class _DetailScreenState extends State<DetailScreen>
                                                                   .getBookMarkStatus(
                                                                       barDetail![
                                                                               0]
-                                                                          .placeId!),
+                                                                          .placeId!,
+                                                                      widget
+                                                                          .user),
                                                               builder: (context,
                                                                   snapshot) {
                                                                 if (snapshot
-                                                                        .connectionState ==
-                                                                    ConnectionState
-                                                                        .waiting) {
-                                                                  return const Text(
-                                                                      " ");
-                                                                } else if (snapshot
                                                                         .hasError ||
                                                                     snapshot.data?[
                                                                             "status"] ==
@@ -962,140 +924,75 @@ class _DetailScreenState extends State<DetailScreen>
                                                                       snapshot.data?[
                                                                               "status"] ==
                                                                           1;
-                                                                  return GestureDetector(
+
+                                                                  return InkWell(
                                                                     onTap:
                                                                         () async {
+                                                                      setState(
+                                                                          () {
+                                                                        showShimmer =
+                                                                            true;
+                                                                        isBookmarked =
+                                                                            !isBookmarked;
+                                                                      });
+
                                                                       bool success = await controller.handleBookmarkAction(
                                                                           barDetail![0]
                                                                               .placeId!,
-                                                                          !isBookmarked);
+                                                                          isBookmarked,
+                                                                          widget
+                                                                              .user);
                                                                       setState(
-                                                                          () {});
-                                                                      if (success) {
-                                                                        Future.delayed(
-                                                                            const Duration(seconds: 3),
+                                                                          () {
+                                                                        showShimmer =
+                                                                            false;
+                                                                      });
+
+                                                                      if (!success) {
+                                                                        setState(
                                                                             () {
-                                                                          showCustomSuccessToast(
-                                                                              message: isBookmarked ? "Bookmark Removed" : "Bookmark Added");
+                                                                          isBookmarked =
+                                                                              !isBookmarked;
                                                                         });
-                                                                      } else {
                                                                         showCustomErrorToast(
                                                                             message:
                                                                                 "Action failed");
+                                                                      } else {
+                                                                        Future.delayed(
+                                                                            const Duration(seconds: 1),
+                                                                            () {
+                                                                          showCustomSuccessToast(
+                                                                              message: isBookmarked ? "Bookmark Added" : "Bookmark Removed");
+                                                                        });
                                                                       }
                                                                     },
-                                                                    child: Icon(
-                                                                      isBookmarked
-                                                                          ? CupertinoIcons
-                                                                              .bookmark_fill
-                                                                          : CupertinoIcons
-                                                                              .bookmark,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
+                                                                    child: showShimmer ==
+                                                                            true
+                                                                        ? Shimmer
+                                                                            .fromColors(
+                                                                            baseColor:
+                                                                                Colors.grey[300]!,
+                                                                            highlightColor:
+                                                                                Colors.grey[100]!,
+                                                                            child:
+                                                                                Icon(
+                                                                              isBookmarked ? CupertinoIcons.bookmark_fill : CupertinoIcons.bookmark,
+                                                                              color: Colors.black,
+                                                                            ),
+                                                                          )
+                                                                        : Icon(
+                                                                            isBookmarked
+                                                                                ? CupertinoIcons.bookmark_fill
+                                                                                : CupertinoIcons.bookmark,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
                                                                   );
                                                                 }
                                                               },
                                                             );
                                                           },
-                                                        )
-
-                                                  // Consumer<
-                                                  //     BookmarkController>(
-                                                  //     builder: (context,
-                                                  //         value, child) {
-                                                  //       return StreamBuilder(
-                                                  //         stream: value
-                                                  //             .getBookMarkStream(
-                                                  //                 barDetail![
-                                                  //                         0]
-                                                  //                     .placeId!),
-                                                  //         builder: (context,
-                                                  //             snapshot) {
-                                                  //           int currentStatus = snapshot.data !=
-                                                  //                       null &&
-                                                  //                   snapshot.data["status"] !=
-                                                  //                       null
-                                                  //               ? snapshot
-                                                  //                       .data[
-                                                  //                   "status"]
-                                                  //               : 0;
-
-                                                  //           if (snapshot
-                                                  //                   .connectionState ==
-                                                  //               ConnectionState
-                                                  //                   .waiting) {
-                                                  //             return Shimmer
-                                                  //                 .fromColors(
-                                                  //               baseColor:
-                                                  //                   primaryColor,
-                                                  //               highlightColor:
-                                                  //                   Colors
-                                                  //                       .white10,
-                                                  //               child:
-                                                  //                   Center(
-                                                  //                 child:
-                                                  //                     Container(
-                                                  //                   color: Colors
-                                                  //                       .white,
-                                                  //                 ),
-                                                  //               ),
-                                                  //             );
-                                                  //           } else if (snapshot
-                                                  //               .hasError) {
-                                                  //             return Text(
-                                                  //                 'Error: ${snapshot.error}');
-                                                  //           } else {
-                                                  //             return GestureDetector(
-                                                  //               onTap:
-                                                  //                   () async {
-                                                  //                 if (currentStatus ==
-                                                  //                     0) {
-                                                  //                   currentStatus =
-                                                  //                       1;
-                                                  //                   value.addBookmark(
-                                                  //                       barDetail![0].placeId!);
-                                                  //                 } else if (currentStatus ==
-                                                  //                     1) {
-                                                  //                   currentStatus =
-                                                  //                       0;
-                                                  //                   value.deleteBookmark(
-                                                  //                       barDetail![0].placeId!);
-                                                  //                 }
-                                                  //               },
-                                                  //               child: value.loading ==
-                                                  //                       true
-                                                  //                   ? Shimmer
-                                                  //                       .fromColors(
-                                                  //                       baseColor:
-                                                  //                           primaryColor,
-                                                  //                       highlightColor:
-                                                  //                           Colors.white10,
-                                                  //                       child:
-                                                  //                           Center(
-                                                  //                         child: Container(
-                                                  //                           color: Colors.white,
-                                                  //                         ),
-                                                  //                       ),
-                                                  //                     )
-                                                  //                   : currentStatus ==
-                                                  //                           1
-                                                  //                       ? const Icon(
-                                                  //                           CupertinoIcons.bookmark_fill,
-                                                  //                           color: Colors.black,
-                                                  //                         )
-                                                  //                       : const Icon(
-                                                  //                           CupertinoIcons.bookmark,
-                                                  //                           color: Colors.black,
-                                                  //                         ),
-                                                  //             );
-                                                  //           }
-                                                  //         },
-                                                  //       );
-                                                  //     },
-                                                  //   ))
-
-                                                  )
+                                                        ))
                                             ],
                                           ),
                                         ),
@@ -1229,10 +1126,6 @@ class _DetailScreenState extends State<DetailScreen>
                                                   ),
                                           ],
                                         ),
-                                        // GestureDetector(
-                                        //     onTap: () {},
-                                        //     child: Image.asset(twitterLink,
-                                        //         width: size.height * 0.04))
                                       ],
                                     ),
                               //
@@ -1308,170 +1201,175 @@ class _DetailScreenState extends State<DetailScreen>
                               SizedBox(
                                 height: size.height * 0.01,
                               ),
-                              barDetail![0].editorialSummary == null
-                                  ? const Text('')
-                                  : SizedBox(
-                                      width: size.width,
-                                      child: Text(
-                                        barDetail![0]
-                                            .editorialSummary!
-                                            .overview!,
-                                        style: GoogleFonts.urbanist(
-                                            fontSize: size.height * 0.016,
-                                            color: Colors.white),
-                                      ),
-                                    ),
+                              // barDetail![0].editorialSummary == null
+                              //     ? const Text('')
+                              // //
+                              CustomDescriptionRichText(
+                                  title: "OverView : ",
+                                  subtitle:
+                                      barDetail![0].editorialSummary == null
+                                          ? "N/A"
+                                          : barDetail![0]
+                                              .editorialSummary!
+                                              .overview!),
+                              // SizedBox(
+                              //   width: size.width,
+                              //   child: Text(
+                              //     barDetail![0].editorialSummary == null
+                              //         ? "N/A"
+                              //         : barDetail![0]
+                              //             .editorialSummary!
+                              //             .overview!,
+                              //     style: GoogleFonts.urbanist(
+                              //         fontSize: size.height * 0.016,
+                              //         color: Colors.white),
+                              //   ),
+                              // ),
                               //
-                              barDetail![0].editorialSummary == null
-                                  ? Container()
-                                  : SizedBox(
-                                      height: size.height * 0.01,
-                                    ),
+                              // barDetail![0].editorialSummary == null
+                              //     ? Container()
+                              //     :
+                              SizedBox(
+                                height: size.height * 0.01,
+                              ),
                               CustomDescriptionRichText(
                                   title: "Address : ",
-                                  subtitle: barDetail![0].formattedAddress!),
+                                  subtitle:
+                                      barDetail![0].formattedAddress ?? "N/A"),
 
                               //
-                              barDetail![0].openingHours == null
-                                  ? Container()
-                                  : SizedBox(
-                                      height: size.height * 0.02,
-                                    ),
-                              barDetail![0].openingHours == null
-                                  ? const Text('')
-                                  : Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        barDetail![0].openingHours!.openNow! ==
-                                                true
-                                            ? "Open"
-                                            : "Closed",
-                                        style: GoogleFonts.urbanist(
-                                          fontSize: size.height * 0.016,
-                                          fontWeight: FontWeight.normal,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      // CustomDescriptionRichText(
-                                      //     title: "Open Now : ",
-                                      //     subtitle: barDetail![0]
-                                      //                 .openingHours!
-                                      //                 .openNow! ==
-                                      //             true
-                                      //         ? "Open"
-                                      //         : "Closed")
-                                    ),
+                              // barDetail![0].openingHours == null
+                              //     ? Container()
+                              //     :
+                              SizedBox(
+                                height: size.height * 0.01,
+                              ),
+                              // barDetail![0].openingHours == null
+                              //     ? const Text('')
+                              //   
+                             CustomDescriptionRichText(title: "Status : ", subtitle:  barDetail![0].openingHours == null
+                                      ? "N/A"
+                                      : barDetail![0].openingHours!.openNow! ==
+                                              true
+                                          ? "Currently Open"
+                                          : "Currently Closed"),
+                              // Align(
+                              //   alignment: Alignment.topLeft,
+                              //   child: Text(
+                              //     barDetail![0].openingHours == null
+                              //         ? "N/A"
+                              //         : barDetail![0].openingHours!.openNow! ==
+                              //                 true
+                              //             ? "Open"
+                              //             : "Closed",
+                              //     style: GoogleFonts.urbanist(
+                              //       fontSize: size.height * 0.016,
+                              //       fontWeight: FontWeight.normal,
+                              //       color: Colors.white,
+                              //     ),
+                              //   ),
+                              // ),
                               //
                               //
-                              barDetail![0].openingHours == null
-                                  ? const SizedBox()
-                                  : SizedBox(
-                                      height: size.height * 0.02,
-                                    ),
-                              barDetail![0].openingHours == null
-                                  ? const Text('')
-                                  : Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Stack(
-                                        children: [
-                                          Container(
-                                            width: size.width,
-                                            height: size.height * 0.318,
-                                            decoration: const BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(1)),
-                                              gradient: LinearGradient(
-                                                colors: [
-                                                  Color(0xFFC59241),
-                                                  Color(0xFFFEF6D1),
-                                                  Color(0xFFC49138),
-                                                ],
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomRight,
-                                              ),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            right: 3,
-                                            left: 3,
-                                            bottom: 3,
-                                            top: 3,
-                                            child: Container(
-                                              width: size.width,
-                                              color: Colors.black,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(3),
-                                                child: RichText(
-                                                  text: TextSpan(
-                                                    children: [
-                                                      WidgetSpan(
-                                                        child: ShaderMask(
-                                                          shaderCallback:
-                                                              (bounds) =>
-                                                                  const LinearGradient(
-                                                            colors: [
-                                                              Color(
-                                                                  0xFFC59241), // Left side color
-                                                              Color(
-                                                                  0xFFFEF6D1), // Center color
-                                                              Color(
-                                                                  0xFFC49138), // Right side color
-                                                            ],
-                                                            begin: Alignment
-                                                                .centerLeft,
-                                                            end: Alignment
-                                                                .centerRight,
-                                                          ).createShader(
-                                                                      bounds),
-                                                          child: Text(
-                                                            "Hours Of Operation: ",
-                                                            style: GoogleFonts
-                                                                .urbanist(
-                                                              fontSize:
-                                                                  size.height *
-                                                                      0.016,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              height: 2,
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      for (var i = 0;
-                                                          i <
-                                                              barDetail![0]
-                                                                  .openingHours!
-                                                                  .weekdayText!
-                                                                  .length;
-                                                          i++) ...[
-                                                        TextSpan(
-                                                          text:
-                                                              "\n${barDetail![0].openingHours!.weekdayText![i]} \n",
-                                                          style: GoogleFonts
-                                                              .urbanist(
-                                                            fontSize:
-                                                                size.height *
-                                                                    0.016,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ],
+                              // barDetail![0].openingHours == null
+                              //     ? const SizedBox()
+                              //     :
+                              SizedBox(
+                                height: size.height * 0.01,
+                              ),
+                              // barDetail![0].openingHours == null
+                              //     ? const Text('')
+                              //     :
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 3, vertical: 3),
+                                  decoration:
+                                      BoxDecoration(gradient: gradientColor),
+                                  child: Container(
+                                    color: Colors.black,
+                                    width: double.infinity,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(3),
+                                      child: RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            WidgetSpan(
+                                              alignment:
+                                                  PlaceholderAlignment.baseline,
+                                              baseline: TextBaseline.alphabetic,
+                                              child: ShaderMask(
+                                                shaderCallback: (bounds) =>
+                                                    const LinearGradient(
+                                                  colors: [
+                                                    Color(
+                                                        0xFFC59241), // Left side color
+                                                    Color(
+                                                        0xFFFEF6D1), // Center color
+                                                    Color(
+                                                        0xFFC49138), // Right side color
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                ).createShader(bounds),
+                                                child: Text(
+                                                  "Hours Of Operation: ",
+                                                  style: GoogleFonts.urbanist(
+                                                    fontSize:
+                                                        size.height * 0.016,
+                                                    fontWeight: FontWeight.bold,
+                                                    height: 2,
+                                                    color: Colors.white,
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                            TextSpan(
+                                              children: barDetail![0]
+                                                          .openingHours ==
+                                                      null
+                                                  ? [
+                                                      TextSpan(
+                                                        text: "N/A",
+                                                        style: GoogleFonts
+                                                            .urbanist(
+                                                          fontSize:
+                                                              size.height *
+                                                                  0.016,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: Colors.white,
+                                                        ),
+                                                      )
+                                                    ]
+                                                  : List.generate(
+                                                      barDetail![0]
+                                                          .openingHours!
+                                                          .weekdayText!
+                                                          .length,
+                                                      (i) => TextSpan(
+                                                        text:
+                                                            "\n${barDetail![0].openingHours!.weekdayText![i]} \n",
+                                                        style: GoogleFonts
+                                                            .urbanist(
+                                                          fontSize:
+                                                              size.height *
+                                                                  0.016,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
+                                  ),
+                                ),
+                              ),
 
                               //
                               // barDetail![0].wheelchairAccessibleEntrance == null
@@ -1480,80 +1378,69 @@ class _DetailScreenState extends State<DetailScreen>
                               //         height: size.height * 0.02,
                               //       ),
                               //
-                              barDetail![0].website == null
-                                  ? const Text('')
-                                  : Align(
-                                      alignment: Alignment.topLeft,
-                                      child: Consumer<DetailScreenController>(
-                                        builder: (context, value, child) {
-                                          return RichText(
-                                            text: TextSpan(
-                                              children: [
-                                                WidgetSpan(
-                                                  alignment:
-                                                      PlaceholderAlignment
-                                                          .baseline,
-                                                  baseline:
-                                                      TextBaseline.alphabetic,
-                                                  child: ShaderMask(
-                                                    shaderCallback: (bounds) =>
-                                                        const LinearGradient(
-                                                      colors: [
-                                                        Color(0xFFC59241),
-                                                        Color(0xFFFEF6D1),
-                                                        Color(0xFFC49138),
-                                                      ],
-                                                      begin:
-                                                          Alignment.centerLeft,
-                                                      end:
-                                                          Alignment.centerRight,
-                                                    ).createShader(bounds),
-                                                    child: Text(
-                                                      "Website : ",
-                                                      style:
-                                                          GoogleFonts.urbanist(
-                                                              fontSize:
-                                                                  size.height *
-                                                                      0.016,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              height: 2,
-                                                              color:
-                                                                  Colors.white),
-                                                    ),
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text:
-                                                      "Click To Visit Website!",
+                              SizedBox(
+                                height: size.height * 0.01,
+                              ),
+                              Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Consumer<DetailScreenController>(
+                                    builder: (context, value, child) {
+                                      return RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            WidgetSpan(
+                                              alignment:
+                                                  PlaceholderAlignment.baseline,
+                                              baseline: TextBaseline.alphabetic,
+                                              child: ShaderMask(
+                                                shaderCallback: (bounds) =>
+                                                    const LinearGradient(
+                                                  colors: [
+                                                    Color(0xFFC59241),
+                                                    Color(0xFFFEF6D1),
+                                                    Color(0xFFC49138),
+                                                  ],
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                ).createShader(bounds),
+                                                child: Text(
+                                                  "Website : ",
                                                   style: GoogleFonts.urbanist(
-                                                      fontWeight:
-                                                          FontWeight.normal,
                                                       fontSize:
                                                           size.height * 0.016,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      height: 2,
                                                       color: Colors.white),
-                                                  recognizer:
-                                                      TapGestureRecognizer()
-                                                        ..onTap = () async {
-                                                          final url =
-                                                              barDetail![0]
-                                                                  .website;
-
-                                                          try {
-                                                            await value
-                                                                .socialLaunchUrl(
-                                                                    url!);
-                                                          } catch (e) {
-                                                            log(e.toString());
-                                                          }
-                                                        },
                                                 ),
-                                              ],
+                                              ),
                                             ),
-                                          );
-                                        },
-                                      )),
+                                            TextSpan(
+                                              text: barDetail![0].website == ""
+                                                  ? "N/A"
+                                                  : "Click To Visit Website!",
+                                              style: GoogleFonts.urbanist(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: size.height * 0.016,
+                                                  color: Colors.white),
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = () async {
+                                                  final url =
+                                                      barDetail![0].website;
+
+                                                  try {
+                                                    await value
+                                                        .socialLaunchUrl(url!);
+                                                  } catch (e) {
+                                                    log(e.toString());
+                                                  }
+                                                },
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  )),
                             ],
                           ),
                         ),

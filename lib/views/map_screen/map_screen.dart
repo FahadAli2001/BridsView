@@ -74,7 +74,7 @@ class _MapScreenState extends State<MapScreen> {
         log("${widget.bar[widget.index].geometry!.location!.lat!} bar lat");
         log("${widget.bar[widget.index].geometry!.location!.lng!} bar lng");
         mapController.clearPolylines();
-        mapController.getPolyline(widget.bar, widget.index);
+       await mapController.getPolyline(widget.bar, widget.index);
         CameraPosition cameraPosition = CameraPosition(
           target: LatLng(mapController.lat!, mapController.lon!),
           zoom: 16,
@@ -91,11 +91,10 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Future<void> _startLiveLocationTracking(MapsController mapController) async {
-   
     final mapController = Provider.of<MapsController>(context, listen: false);
 
     try {
-       String theme = await DefaultAssetBundle.of(context)
+      String theme = await DefaultAssetBundle.of(context)
           .loadString("assets/map_theme/night_map_theme.json");
 
       setState(() {
@@ -106,15 +105,13 @@ class _MapScreenState extends State<MapScreen> {
       // ignore: deprecated_member_use
       controller.setMapStyle(mapTheme);
 
-      
       List<String> directions = await mapController.getTurnByTurnDirections(
         widget.bar[widget.index].geometry!.location!.lat!,
         widget.bar[widget.index].geometry!.location!.lng!,
       );
 
-      
       setState(() {
-        turnByTurnInstructions = directions;  
+        turnByTurnInstructions = directions;
       });
 
       _positionStream =
@@ -127,7 +124,10 @@ class _MapScreenState extends State<MapScreen> {
             20.0,
           ),
         );
-         distanceList!.clear();
+         mapController.clearPolylines();
+      await  mapController.getPolyline(widget.bar, widget.index,
+            userLat: position.latitude, userLng: position.longitude);
+        distanceList!.clear();
 
         var data = await mapController.getDistanceBetweenPoints(
             widget.bar[widget.index].geometry!.location!.lat.toString(),
@@ -135,10 +135,8 @@ class _MapScreenState extends State<MapScreen> {
             position.latitude,
             position.longitude);
         distanceList!.addAll(data);
-        setState(() {
-          
-        });
-         
+        setState(() {});
+
         if (_isUserCloseToNextStep(position.latitude, position.longitude)) {
           _showNextInstruction();
         }
@@ -148,8 +146,6 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  
-  
   bool _isUserCloseToNextStep(double userLat, double userLng) {
     if (currentInstructionIndex >= routeCoords.length) return false;
 
@@ -229,7 +225,6 @@ class _MapScreenState extends State<MapScreen> {
                     zoomGesturesEnabled: true,
                     myLocationButtonEnabled: true,
                     myLocationEnabled: true,
-                    
                     rotateGesturesEnabled: true,
                     buildingsEnabled: true,
                     onTap: (argument) {

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
 import 'package:birds_view/model/get_bookmarks_model/get_bookmarks_model.dart';
+import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/apis.dart';
 import 'package:birds_view/widgets/custom_success_toast/custom_success_toast.dart';
 import 'package:flutter/material.dart';
@@ -53,11 +54,11 @@ class BookmarkController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Map<String, dynamic>> getBookMarkStatus(String placeId) async {
-    var headers = {'Authorization': 'Bearer $token'};
+  Future<Map<String, dynamic>> getBookMarkStatus(String placeId, UserModel? user) async {
+    var headers = {'Authorization': 'Bearer ${user!.token}'};
     try {
       var response = await http.get(
-        Uri.parse('$checkBookmarkApi$userId&bar_type_id=$placeId'),
+        Uri.parse('$checkBookmarkApi${user.data!.id.toString()}&bar_type_id=$placeId'),
         headers: headers,
       );
 
@@ -74,12 +75,15 @@ class BookmarkController extends ChangeNotifier {
       return {"status": -1, "error": e.toString()};
     }
   }
+  
 
-  Future<bool> handleBookmarkAction(String placeId, bool isAdding) async {
+  Future<bool> handleBookmarkAction(String placeId, bool isAdding , UserModel? user) async {
+     log("$placeId : place id");
+    log("${user!.data!.id.toString()} : user id");
     _setLoading(true);
     try {
-      var header = {"Authorization": "Bearer $token"};
-      var body = {"user_id": userId, "bar_type_id": placeId};
+      var header = {"Authorization": "Bearer ${user.token}"};
+      var body = {"user_id": user.data!.id.toString(), "bar_type_id": placeId};
       var url = isAdding ? addBookmarkApi : deleteBookmarkApi;
 
       if (!isAdding) {
@@ -87,20 +91,22 @@ class BookmarkController extends ChangeNotifier {
         body.remove("bar_type_id");
       }
 
-      var response = await http.post(
+       var response = await http.post(
         Uri.parse(url),
         headers: header,
         body: body,
       );
+      log(response.body.toString());
 
       if (response.statusCode == 200) {
         return true;
       } else {
         log("Error ${isAdding ? 'adding' : 'deleting'} bookmark: ${response.body}");
+        
         return false;
       }
     } catch (e) {
-      log("${isAdding ? 'Add' : 'Delete'} Bookmark call error: $e");
+       log("${isAdding ? 'Adding' : 'Delete'} Bookmark call error: $e");
       return false;
     } finally {
       _setLoading(false);
@@ -132,6 +138,8 @@ class BookmarkController extends ChangeNotifier {
   // }
 
   Future<void> addBookmark(String placeId) async {
+    log("$placeId : place id");
+    log("$userId : user id");
     _setLoading(true);
     try {
       var header = {"Authorization": "Bearer $token"};
