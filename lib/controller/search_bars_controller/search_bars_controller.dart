@@ -46,7 +46,8 @@ class SearchBarsController extends ChangeNotifier {
 
     try {
       var response = await http.get(Uri.parse(
-          "https://maps.googleapis.com/maps/api/place/textsearch/json?query=$placeName&type=bar|night_club&location=$lat,$lon&radius=$radius&key=$googleMapApiKey"
+          "https://maps.googleapis.com/maps/api/place/textsearch/json?query=$placeName&type=bar|night_club&region=us&key=$googleMapApiKey"
+
           // "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$lat,$lon&radius=2500&type=bar|night_club&key=$googleMapApiKey"
           ));
       // log(response.body.toString());
