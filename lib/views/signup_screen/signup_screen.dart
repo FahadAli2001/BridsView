@@ -11,7 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
-
+import '../../component/loading_widget.dart';
 import '../../widgets/custom_image_picker_bottom_sheet/custom_image_picker_bottom_sheet.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -49,7 +49,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               child: Center(
                                 child: SizedBox(
                                   width: size.width * 0.1,
-                                  child: const CircularProgressIndicator(),
+                                  child: const LoadingWidget(),
                                 ),
                               ),
                             ),
@@ -85,49 +85,7 @@ class _SignupScreenState extends State<SignupScreen> {
         title: const CustomHeadingText(
           heading: 'Create An Account',
         ),
-        //  Center(
-        //   child: RichText(
-        //     text: TextSpan(
-        //       text: "Create ",
-        //       style: GoogleFonts.urbanist(
-        //           fontWeight: FontWeight.bold,
-        //           fontSize: size.height * 0.026,
-        //           color: Colors.white),
-        //       children: [
-        //         WidgetSpan(
-        //             child: Text(
-        //           'An ',
-        //           style: GoogleFonts.urbanist(
-        //               fontSize: size.height * 0.026, color: Colors.white70),
-        //         )),
-        //         WidgetSpan(
-        //           alignment: PlaceholderAlignment.baseline,
-        //           baseline: TextBaseline.alphabetic,
-        //           child: ShaderMask(
-        //             shaderCallback: (bounds) => const LinearGradient(
-        //               colors: [
-        //                 Color(0xFFC59241),
-        //                 Color(0xFFFEF6D1),
-        //                 Color(0xFFC49138),
-        //               ],
-        //               begin: Alignment.centerLeft,
-        //               end: Alignment.centerRight,
-        //               stops: [0.0, 0.5, 1.0],
-        //             ).createShader(
-        //                 Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
-        //             child: Text(
-        //               'Account ',
-        //               style: GoogleFonts.urbanist(
-        //                   fontSize: size.height * 0.026,
-        //                   fontWeight: FontWeight.w900,
-        //                   color: whiteColor),
-        //             ),
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
+        
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),

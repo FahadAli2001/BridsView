@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:ui';
+import 'package:birds_view/component/loading_widget.dart';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/controller/review_controller/review_controller.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
@@ -667,14 +668,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               customSearchBarWidget(),
                               value.searchingBar
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 20),
-                                      child: Center(
-                                        child: CircularProgressIndicator(
-                                          color: primaryColor,
-                                        ),
-                                      ),
+                                  ? const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20),
+                                      child: Center(child: LoadingWidget()),
                                     )
                                   : value.barDetail.isEmpty
                                       ? Padding(

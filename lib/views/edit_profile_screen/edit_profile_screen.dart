@@ -1,3 +1,4 @@
+import 'package:birds_view/component/loading_widget.dart';
 import 'package:birds_view/model/user_model/user_model.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
@@ -63,7 +64,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               child: Center(
                                 child: SizedBox(
                                   width: size.width * 0.1,
-                                  child: const CircularProgressIndicator(),
+                                  child:const LoadingWidget(),
                                 ),
                               ),
                             ),

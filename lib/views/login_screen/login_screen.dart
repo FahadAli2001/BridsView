@@ -1,3 +1,4 @@
+import 'package:birds_view/component/loading_widget.dart';
 import 'package:birds_view/controller/login_controller/login_controller.dart';
 import 'package:birds_view/utils/colors.dart';
 import 'package:birds_view/utils/icons.dart';
@@ -168,10 +169,8 @@ class _LogInScreenState extends State<LogInScreen> {
                           ),
                           //
                           value.isLoging == true
-                              ? Center(
-                                  child: CircularProgressIndicator(
-                                    color: primaryColor,
-                                  ),
+                              ? const Center(
+                                  child:  LoadingWidget()
                                 )
                               : Center(
                                   child: CustomButton(

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:birds_view/component/loading_widget.dart';
 import 'package:birds_view/controller/maps_controller/maps_controller.dart';
 import 'package:birds_view/controller/search_bars_controller/search_bars_controller.dart';
 import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
@@ -167,9 +168,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             ),
 
                             mapController.exploring == true
-                                ? Center(
-                                    child: CircularProgressIndicator(
-                                        color: primaryColor))
+                                ? const Center(child: LoadingWidget())
                                 : mapController
                                         .exploreScreenbarAndClubsDetails.isEmpty
                                     ? const Center(
@@ -242,12 +241,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                         children: [
                                           customSearchBarWidget(),
                                           value.searchingBar
-                                              ? Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: primaryColor,
-                                                  ),
-                                                )
+                                              ? const Center(
+                                                  child: LoadingWidget())
                                               : value.barDetail.isEmpty
                                                   ? Padding(
                                                       padding: const EdgeInsets
