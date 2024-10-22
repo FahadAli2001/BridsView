@@ -1,9 +1,7 @@
 import 'package:birds_view/controller/chat_controller/chat_controller.dart';
-import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/widgets/custom_button/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+import 'package:birds_view/views/views.dart';
+
 
 void customGroupChatNameAlertBox(BuildContext context) {
   showDialog(

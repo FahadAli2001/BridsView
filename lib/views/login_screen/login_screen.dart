@@ -1,19 +1,6 @@
-import 'package:birds_view/component/loading_widget.dart';
-import 'package:birds_view/controller/login_controller/login_controller.dart';
-import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/utils/icons.dart';
-import 'package:birds_view/views/forgot_password_screen/verify_email_screen.dart';
-import 'package:birds_view/views/signup_screen/signup_screen.dart';
-import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
-import 'package:birds_view/widgets/custom_textfield/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-
-import '../../widgets/custom_button/custom_button.dart';
+import 'package:birds_view/views/views.dart';
 
 class LogInScreen extends StatefulWidget {
   const LogInScreen({super.key});
@@ -49,42 +36,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 ),
                 //
                 const Center(child: CustomHeadingText(heading: "Log In")),
-                // Center(
-                //   child: RichText(
-                //     text: TextSpan(
-                //       text: "Log ",
-                //       style: GoogleFonts.urbanist(
-                //           fontSize: size.height * 0.04, color: Colors.white70),
-                //       children: [
-                //         WidgetSpan(
-                //           alignment: PlaceholderAlignment.baseline,
-                //           baseline: TextBaseline.alphabetic,
-                //           child: ShaderMask(
-                //             shaderCallback: (bounds) => const LinearGradient(
-                //               colors: [
-                //                 Color(0xFFC59241),
-                //                 Color(0xFFFEF6D1),
-                //                 Color(0xFFC49138),
-                //               ],
-                //               begin: Alignment.centerLeft,
-                //               end: Alignment.centerRight,
-                //               stops: [0.0, 0.5, 1.0],
-                //             ).createShader(Rect.fromLTWH(
-                //                 0, 0, bounds.width, bounds.height)),
-                //             child: Text(
-                //               'In ',
-                //               style: GoogleFonts.urbanist(
-                //                   fontSize: size.height * 0.04,
-                //                   fontWeight: FontWeight.w900,
-                //                   color: Colors.white),
-                //             ),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-
+                
                 //
                 SizedBox(
                   height: size.height * 0.03,
@@ -138,28 +90,22 @@ class _LogInScreenState extends State<LogInScreen> {
                                         onChanged: (val) {
                                           value.rememberMe = val!;
                                         }),
-                                    Text(
-                                      'Remember Me',
-                                      style: GoogleFonts.urbanist(
-                                          color: whiteColor),
-                                    ),
+                                    TextWidget(
+                                        text: "Remember Me", color: whiteColor)
                                   ],
                                 ),
                               ),
                               GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          child: const VerifyEmailScreen(),
-                                          type: PageTransitionType.fade));
-                                },
-                                child: Text(
-                                  "Forgot Password ?",
-                                  style: GoogleFonts.urbanist(
-                                      color: whiteColor.withOpacity(.7)),
-                                ),
-                              ),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            child: const VerifyEmailScreen(),
+                                            type: PageTransitionType.fade));
+                                  },
+                                  child: TextWidget(
+                                      text: "Forgot Password ?",
+                                      color: whiteColor.withOpacity(.7))),
                             ],
                           ),
 
@@ -169,9 +115,7 @@ class _LogInScreenState extends State<LogInScreen> {
                           ),
                           //
                           value.isLoging == true
-                              ? const Center(
-                                  child:  LoadingWidget()
-                                )
+                              ? const Center(child: LoadingWidget())
                               : Center(
                                   child: CustomButton(
                                     text: "Log In",
@@ -188,13 +132,10 @@ class _LogInScreenState extends State<LogInScreen> {
                             height: size.height * 0.03,
                           ),
                           //
-                          Center(
-                            child: Text(
-                              "or login with",
-                              style:
-                                  GoogleFonts.urbanist(color: Colors.white70),
-                            ),
-                          ),
+                          const Center(
+                              child: TextWidget(
+                                  text: "or login with",
+                                  color: Colors.white70)),
                           //
                           SizedBox(
                             height: size.height * 0.03,
@@ -222,13 +163,6 @@ class _LogInScreenState extends State<LogInScreen> {
                                         child: Image.asset(appleLoginIcon,
                                             width: size.height * 0.05),
                                       ),
-                                      // GestureDetector(
-                                      //   onTap: () {},
-                                      //   child: Image.asset(
-                                      //     facebookLoginIcon,
-                                      //     width: size.height * 0.05,
-                                      //   ),
-                                      // ),
                                     ],
                                   );
                                 },

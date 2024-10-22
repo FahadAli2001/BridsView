@@ -1,22 +1,10 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:ui' as ui;
-import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
-import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
 import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
-import 'package:birds_view/utils/api_keys.dart';
-import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/utils/images.dart';
-import 'package:custom_info_window/custom_info_window.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class MapsController extends ChangeNotifier {
   // String googleAPiKey = "AIzaSyAl8_GZb77k5io7_DCkAFYJHgGqDnzeH2k";

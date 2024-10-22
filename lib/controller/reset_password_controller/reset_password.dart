@@ -1,17 +1,9 @@
-import 'dart:developer';
-import 'package:birds_view/utils/apis.dart';
-import 'package:birds_view/views/forgot_password_screen/verify_email_screen.dart';
-import 'package:birds_view/views/login_screen/login_screen.dart';
-import 'package:birds_view/widgets/custom_success_toast/custom_success_toast.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
-import 'package:page_transition/page_transition.dart';
-import '../../views/forgot_password_screen/change_password_screen.dart';
-import '../../views/forgot_password_screen/otp_verification_screen.dart';
-import '../../widgets/custom_error_toast/custom_error_toast.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class ResetPasswordController extends ChangeNotifier {
   TextEditingController emailController = TextEditingController();

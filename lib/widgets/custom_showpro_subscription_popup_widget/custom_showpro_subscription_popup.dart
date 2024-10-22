@@ -1,9 +1,6 @@
-// ignore: file_names
-import 'package:birds_view/widgets/custom_gradient_text/custom_gradient_text.dart';
 import 'package:flutter/material.dart';
-import 'package:birds_view/utils/icons.dart';
-import 'package:birds_view/widgets/custom_button/custom_button.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:birds_view/views/views.dart';
+
 
 void showProSubscriptionPopup(BuildContext context, VoidCallback ontap) {
   showDialog(

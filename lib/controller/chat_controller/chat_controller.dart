@@ -1,21 +1,16 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:birds_view/model/group_model/group_model.dart';
-import 'package:birds_view/widgets/custom_error_toast/custom_error_toast.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:birds_view/model/firebase_friendreq_model/firebase_friendreq_model.dart';
 import 'package:birds_view/model/firebase_user_model/firebase_user_model.dart';
 import 'package:birds_view/model/friend_model/friend_model.dart';
 import 'package:birds_view/model/message_model/message_model.dart';
-import 'package:birds_view/model/user_model/user_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import '../../model/chat_room_model/chat_room_model.dart';
-import '../../widgets/custom_success_toast/custom_success_toast.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class ChatController extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

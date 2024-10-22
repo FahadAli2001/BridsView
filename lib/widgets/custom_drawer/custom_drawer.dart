@@ -1,19 +1,6 @@
-import 'package:birds_view/controller/login_controller/login_controller.dart';
-import 'package:birds_view/model/user_model/user_model.dart';
-import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/utils/icons.dart';
-import 'package:birds_view/views/bookmark_screen/bookmark_screen.dart';
-import 'package:birds_view/views/login_screen/login_screen.dart';
-import 'package:birds_view/views/profile_screen/profile_screen.dart';
-import 'package:birds_view/views/visited_bars/visited_bars.dart';
-import 'package:birds_view/widgets/custom_button/custom_button.dart';
-import 'package:birds_view/widgets/custom_register_alertbox/custom_register_alertbox.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class CustomDrawer extends StatelessWidget {
   final UserModel? user;

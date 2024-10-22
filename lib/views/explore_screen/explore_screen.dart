@@ -1,14 +1,6 @@
-import 'dart:ui';
-import 'package:birds_view/component/loading_widget.dart';
-import 'package:birds_view/controller/maps_controller/maps_controller.dart';
-import 'package:birds_view/controller/search_bars_controller/search_bars_controller.dart';
-import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
-import 'package:birds_view/model/user_model/user_model.dart';
-import 'package:birds_view/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import '../../widgets/custom_explore_widget/custom_explore_widget.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class ExploreScreen extends StatefulWidget {
   final UserModel? user;
@@ -59,12 +51,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     color: Colors.white,
                   )),
               centerTitle: true,
-              title: Text(
-                'Explore',
-                style: GoogleFonts.urbanist(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: size.height * 0.03),
+              title: TextWidget(
+                text: 'Explore',
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: size.height * 0.03,
               ),
               actions: [
                 Padding(
@@ -103,12 +94,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                     },
                                     child: Column(
                                       children: [
-                                        Text(
-                                          'Clubs',
-                                          style: GoogleFonts.urbanist(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: size.height * 0.03),
+                                        TextWidget(
+                                          text: 'Clubs',
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: size.height * 0.03,
                                         ),
                                         Container(
                                           height: size.height * 0.006,
@@ -138,12 +128,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                     },
                                     child: Column(
                                       children: [
-                                        Text(
-                                          'Bars',
-                                          style: GoogleFonts.urbanist(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: size.height * 0.03),
+                                        TextWidget(
+                                          text: 'Bars',
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: size.height * 0.03,
                                         ),
                                         Container(
                                           height: size.height * 0.006,
@@ -172,10 +161,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                 : mapController
                                         .exploreScreenbarAndClubsDetails.isEmpty
                                     ? const Center(
-                                        child: Text(
-                                        "No Bar Or Club Found",
-                                        style: TextStyle(color: Colors.white60),
-                                      ))
+                                        child: TextWidget(
+                                            text: 'No Bar Or Club Found',
+                                            color: Colors.white60))
                                     : isClubs == true
                                         ? Expanded(
                                             child: ListView.builder(
@@ -244,18 +232,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                               ? const Center(
                                                   child: LoadingWidget())
                                               : value.barDetail.isEmpty
-                                                  ? Padding(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          vertical: 20),
-                                                      child: Text(
-                                                        "Search Bars Or Clubs",
-                                                        style: GoogleFonts
-                                                            .urbanist(
-                                                                color: Colors
-                                                                    .white60),
-                                                      ),
-                                                    )
+                                                  ? const Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 20),
+                                                      child: TextWidget(
+                                                          text:
+                                                              'Search Bars Or Clubs',
+                                                          color:
+                                                              Colors.white60))
                                                   : Expanded(
                                                       child: ListView.builder(
                                                         itemCount: value

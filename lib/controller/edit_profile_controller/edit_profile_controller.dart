@@ -1,15 +1,9 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
-
-import 'package:birds_view/utils/apis.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import '../../model/user_model/user_model.dart';
-import '../../views/home_screen/home_screem.dart';
-import '../../widgets/custom_error_toast/custom_error_toast.dart';
-import '../../widgets/custom_success_toast/custom_success_toast.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class EditProfileController extends ChangeNotifier {
   TextEditingController firstNameController = TextEditingController();

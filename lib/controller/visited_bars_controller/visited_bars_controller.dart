@@ -1,15 +1,9 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:typed_data';
 import 'package:http/http.dart' as http;
-import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/model/get_bookmarks_model/get_bookmarks_model.dart';
-import 'package:birds_view/utils/apis.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:birds_view/views/views.dart';
 
-import '../maps_controller/maps_controller.dart';
 
 class VisitedBarsController extends ChangeNotifier {
   final List<Result> _visitedBarsDetailList = [];

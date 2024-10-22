@@ -1,18 +1,9 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
-import 'package:birds_view/controller/login_controller/login_controller.dart';
-import 'package:birds_view/utils/apis.dart';
-import 'package:birds_view/widgets/custom_error_toast/custom_error_toast.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
+import 'package:birds_view/views/views.dart';
 
-import '../../model/user_model/user_model.dart';
-import '../../widgets/custom_success_toast/custom_success_toast.dart';
 
 class SignUpController extends ChangeNotifier {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;

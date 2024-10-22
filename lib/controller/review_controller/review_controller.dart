@@ -1,10 +1,9 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'package:birds_view/utils/apis.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class ReviewController extends ChangeNotifier {
   TextEditingController reviewController = TextEditingController();

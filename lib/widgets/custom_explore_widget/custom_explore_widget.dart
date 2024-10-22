@@ -1,15 +1,7 @@
-import 'dart:typed_data';
 import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
-import 'package:birds_view/model/user_model/user_model.dart';
-import 'package:birds_view/utils/icons.dart';
-import 'package:birds_view/utils/images.dart';
-import 'package:birds_view/views/map_screen/map_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
-import '../../model/bar_details_model/bar_details_model.dart';
-import '../../model/bars_distance_model/bars_distance_model.dart';
-import '../../views/detail_screen/detail_screen.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class CustomExploreWidget extends StatelessWidget {
   final UserModel? user;
@@ -131,32 +123,26 @@ class CustomExploreWidget extends StatelessWidget {
                 bottom: size.height * 0.1,
                 left: size.height * 0.03,
                 child: SizedBox(
-                  width: size.width * 0.85,
-                  child: Text(
-                    barAndClubsDetails[index].name ?? "",
-                    style: GoogleFonts.urbanist(
-                      color: Colors.white,
+                    width: size.width * 0.85,
+                    child: TextWidget(
+                      text: barAndClubsDetails[index].name ?? "",
+                      color: whiteColor,
                       fontWeight: FontWeight.bold,
                       fontSize: size.height * 0.026,
-                    ),
-                  ),
-                ),
+                    )),
               ),
               Positioned(
                 bottom: size.height * 0.04,
                 left: size.height * 0.03,
                 child: SizedBox(
-                  width: size.width * 0.7,
-                  child: Text(
-                    barAndClubsDetails[index].formattedAddress ?? " ",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.urbanist(
-                      color: Colors.white,
+                    width: size.width * 0.7,
+                    child: TextWidget(
+                      text: barAndClubsDetails[index].formattedAddress ?? " ",
+                      color: whiteColor,
+                      textOverflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                       fontSize: size.height * 0.016,
-                    ),
-                  ),
-                ),
+                    )),
               ),
             ],
           ),

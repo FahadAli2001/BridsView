@@ -1,18 +1,6 @@
-import 'package:birds_view/controller/signup_controller/signup_controller.dart';
-import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/widgets/custom_button/custom_button.dart';
-import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
-import 'package:birds_view/widgets/custom_textfield/custom_textfield.dart';
-import 'package:bottom_picker/bottom_picker.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:provider/provider.dart';
-import '../../component/loading_widget.dart';
-import '../../widgets/custom_image_picker_bottom_sheet/custom_image_picker_bottom_sheet.dart';
+import '../views.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -85,7 +73,6 @@ class _SignupScreenState extends State<SignupScreen> {
         title: const CustomHeadingText(
           heading: 'Create An Account',
         ),
-        
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -230,13 +217,10 @@ class _SignupScreenState extends State<SignupScreen> {
                   onTap: () {
                     BottomPicker.date(
                       backgroundColor: Colors.black,
-                      pickerTitle: Text(
-                        'Select Date Of Birth',
-                        style: GoogleFonts.urbanist(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: whiteColor,
-                        ),
+                      pickerTitle: TextWidget(
+                        text: 'Select Date Of Birth',
+                        color: whiteColor,
+                        fontSize: 18,
                       ),
                       dateOrder: DatePickerDateOrder.dmy,
                       initialDateTime: DateTime(1996, 10, 22),
@@ -265,17 +249,14 @@ class _SignupScreenState extends State<SignupScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            'Date Of Birth',
-                            style: GoogleFonts.urbanist(
+                            alignment: Alignment.topLeft,
+                            child: TextWidget(
+                              text: "Date Of Birth",
                               color: Colors.white60,
                               fontSize: value.selectedDate != null
                                   ? size.height * 0.015
                                   : size.height * 0.018,
-                            ),
-                          ),
-                        ),
+                            )),
                         Align(
                           alignment: Alignment.topLeft,
                           child: Text(
@@ -296,16 +277,13 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
 
               //
-              // const CustomTextField(hintText: "Gender", labelText: "Gender"),
               DropdownButtonHideUnderline(
                 child: DropdownButton2<String>(
                   isExpanded: true,
-                  hint: Text(
-                    'Gender',
-                    style: GoogleFonts.urbanist(
-                      fontSize: size.height * 0.02,
-                      color: Colors.white60,
-                    ),
+                  hint: TextWidget(
+                    text: "Gender",
+                    color: Colors.white60,
+                    fontSize: size.height * 0.02,
                   ),
                   items: value.gendersList
                       .map((String item) => DropdownMenuItem<String>(

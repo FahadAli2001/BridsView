@@ -1,13 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'package:birds_view/model/user_model/user_model.dart';
-import 'package:birds_view/utils/apis.dart';
-import 'package:birds_view/views/home_screen/home_screem.dart';
-import 'package:birds_view/widgets/custom_success_toast/custom_success_toast.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class PaymentController extends ChangeNotifier {
   String? _userId;

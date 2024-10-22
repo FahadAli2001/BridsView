@@ -1,15 +1,6 @@
-import 'dart:developer';
-import 'dart:typed_data';
-
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:birds_view/controller/bookmark_controller/bookmark_controller.dart';
-import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
-import 'package:birds_view/model/user_model/user_model.dart';
-import 'package:birds_view/views/detail_screen/detail_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class CustomBookmarkWidget extends StatelessWidget {
   final UserModel? userModel;

@@ -1,13 +1,5 @@
-import 'package:birds_view/model/user_model/user_model.dart';
-import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/utils/icons.dart';
-import 'package:birds_view/views/bookmark_screen/bookmark_screen.dart';
-import 'package:birds_view/views/edit_profile_screen/edit_profile_screen.dart';
-import 'package:birds_view/views/visited_bars/visited_bars.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:birds_view/views/views.dart';
 
 class ProfileScreen extends StatefulWidget {
   final UserModel? user;
@@ -88,34 +80,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           alignment: PlaceholderAlignment.baseline,
                           baseline: TextBaseline.alphabetic,
                           child: ShaderMask(
-                            shaderCallback: (bounds) => const LinearGradient(
-                              colors: [
-                                Color(0xFFC59241),
-                                Color(0xFFFEF6D1),
-                                Color(0xFFC49138),
-                              ],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              stops: [0.0, 0.5, 1.0],
-                            ).createShader(Rect.fromLTWH(
-                                0, 0, bounds.width, bounds.height)),
-                            child: Text(
-                              widget.user == null ||
-                                      widget.user!.data!.subscribe == '0'
-                                  ? " "
-                                  : 'Pro',
-                              style: GoogleFonts.urbanist(
-                                  fontSize: size.height * 0.012,
-                                  color: whiteColor),
-                            ),
-                          ),
+                              shaderCallback: (bounds) => const LinearGradient(
+                                    colors: [
+                                      Color(0xFFC59241),
+                                      Color(0xFFFEF6D1),
+                                      Color(0xFFC49138),
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    stops: [0.0, 0.5, 1.0],
+                                  ).createShader(Rect.fromLTWH(
+                                      0, 0, bounds.width, bounds.height)),
+                              child: TextWidget(
+                                text: widget.user == null ||
+                                        widget.user!.data!.subscribe == '0'
+                                    ? " "
+                                    : 'Pro',
+                                color: whiteColor,
+                                fontSize: size.height * 0.012,
+                              )),
                         ),
                       ],
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: size.height * 0.03,
+                  height: size.height * 0.02,
                 ),
                 Center(
                   child: GestureDetector(
@@ -128,13 +118,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               type: PageTransitionType.fade));
                     },
-                    child: Text(
-                      "Edit Profile",
-                      style: GoogleFonts.urbanist(
-                          fontSize: size.height * 0.022,
-                          decorationColor: Colors.white,
-                          decoration: TextDecoration.underline,
-                          color: Colors.white),
+                    child: TextWidget(
+                      text: 'Edit Profile',
+                      color: whiteColor,
+                      fontSize: size.height * 0.022,
+                      underline: TextDecoration.underline,
+                      decorationColor: whiteColor,
                     ),
                   ),
                 ),
@@ -144,21 +133,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              child: BookmarkScreen(
-                                userModel: widget.user,
-                              ),
-                              type: PageTransitionType.fade));
-                    },
-                    child: Text(
-                      "Bookmarks",
-                      style: GoogleFonts.urbanist(
-                          fontSize: size.height * 0.022, color: Colors.white),
-                    ),
-                  ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: BookmarkScreen(
+                                  userModel: widget.user,
+                                ),
+                                type: PageTransitionType.fade));
+                      },
+                      child: TextWidget(
+                        text: 'Bookmarks',
+                        color: Colors.white,
+                        fontSize: size.height * 0.022,
+                      )),
                 ),
                 SizedBox(
                   height: size.height * 0.01,
@@ -172,19 +160,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              child: const VisitedBar(),
-                              type: PageTransitionType.fade));
-                    },
-                    child: Text(
-                      "Visited Places",
-                      style: GoogleFonts.urbanist(
-                          fontSize: size.height * 0.022, color: Colors.white),
-                    ),
-                  ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: const VisitedBar(),
+                                type: PageTransitionType.fade));
+                      },
+                      child: TextWidget(
+                        text: 'Visited Places',
+                        color: Colors.white,
+                        fontSize: size.height * 0.022,
+                      )),
                 ),
                 SizedBox(
                   height: size.height * 0.01,

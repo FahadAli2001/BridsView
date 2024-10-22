@@ -1,13 +1,5 @@
-import 'dart:developer';
-import 'package:birds_view/controller/splash_controller/splash_controller.dart';
-import 'package:birds_view/utils/icons.dart';
-import 'package:birds_view/utils/images.dart';
-import 'package:birds_view/views/onboarding_screen/onboarding_three_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../views.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

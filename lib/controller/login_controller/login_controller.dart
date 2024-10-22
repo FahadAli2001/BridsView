@@ -1,21 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'package:birds_view/controller/signup_controller/signup_controller.dart';
-import 'package:birds_view/model/user_model/user_model.dart';
-import 'package:birds_view/utils/apis.dart';
-import 'package:birds_view/views/login_screen/login_screen.dart';
-import 'package:birds_view/widgets/custom_error_toast/custom_error_toast.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:birds_view/views/views.dart';
 
-import '../../views/home_screen/home_screem.dart';
 
 class LoginController extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;

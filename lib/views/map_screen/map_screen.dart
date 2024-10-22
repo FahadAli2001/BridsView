@@ -1,17 +1,6 @@
-import 'dart:async';
-import 'dart:developer';
-import 'package:birds_view/controller/maps_controller/maps_controller.dart';
-import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
-import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/utils/images.dart';
-import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:provider/provider.dart';
-import '../../model/bar_details_model/bar_details_model.dart';
+import 'package:birds_view/views/views.dart';
 
 class MapScreen extends StatefulWidget {
   final List<Uint8List> barImage;

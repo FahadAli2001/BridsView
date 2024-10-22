@@ -1,11 +1,5 @@
-import 'package:birds_view/controller/reset_password_controller/reset_password.dart';
-import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/utils/icons.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import '../../widgets/custom_button/custom_button.dart';
-import '../../widgets/custom_textfield/custom_textfield.dart';
+import 'package:birds_view/views/views.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({super.key});
@@ -74,25 +68,24 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                             alignment: PlaceholderAlignment.baseline,
                             baseline: TextBaseline.alphabetic,
                             child: ShaderMask(
-                              shaderCallback: (bounds) => const LinearGradient(
-                                colors: [
-                                  Color(0xFFC59241),
-                                  Color(0xFFFEF6D1),
-                                  Color(0xFFC49138),
-                                ],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                stops: [0.0, 0.5, 1.0],
-                              ).createShader(Rect.fromLTWH(
-                                  0, 0, bounds.width, bounds.height)),
-                              child: Text(
-                                'Email ',
-                                style: GoogleFonts.urbanist(
-                                    fontSize: size.height * 0.04,
-                                    fontWeight: FontWeight.w900,
-                                    color: Colors.white),
-                              ),
-                            ),
+                                shaderCallback: (bounds) =>
+                                    const LinearGradient(
+                                      colors: [
+                                        Color(0xFFC59241),
+                                        Color(0xFFFEF6D1),
+                                        Color(0xFFC49138),
+                                      ],
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      stops: [0.0, 0.5, 1.0],
+                                    ).createShader(Rect.fromLTWH(
+                                        0, 0, bounds.width, bounds.height)),
+                                child: TextWidget(
+                                  text: 'Email ',
+                                  color: whiteColor,
+                                  fontSize: size.height * 0.04,
+                                  fontWeight: FontWeight.w900,
+                                )),
                           ),
                         ],
                       ),

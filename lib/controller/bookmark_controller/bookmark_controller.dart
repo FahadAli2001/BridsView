@@ -1,18 +1,9 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:typed_data';
-import 'package:birds_view/controller/maps_controller/maps_controller.dart';
-import 'package:birds_view/model/bars_distance_model/bars_distance_model.dart';
 import 'package:birds_view/model/get_bookmarks_model/get_bookmarks_model.dart';
-import 'package:birds_view/model/user_model/user_model.dart';
-import 'package:birds_view/utils/apis.dart';
-import 'package:birds_view/widgets/custom_success_toast/custom_success_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:birds_view/views/views.dart';
 
-import '../../model/bar_details_model/bar_details_model.dart';
 
 class BookmarkController extends ChangeNotifier {
   final List<Result> _bookmarksBarsDetailList = [];

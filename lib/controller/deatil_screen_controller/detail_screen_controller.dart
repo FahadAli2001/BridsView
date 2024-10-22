@@ -1,8 +1,8 @@
 import 'dart:math' as math;
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class DetailScreenController extends ChangeNotifier {
   math.Random random = math.Random();

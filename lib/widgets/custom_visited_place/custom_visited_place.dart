@@ -1,10 +1,6 @@
-import 'dart:typed_data';
-
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
-import 'package:birds_view/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class CustomVisitedPlace extends StatelessWidget {
   final int index;
@@ -53,13 +49,11 @@ class CustomVisitedPlace extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: size.width * 0.3,
-                      child: Text(
-                        visitedBarsDetailList[index].name!,
-                        style: GoogleFonts.urbanist(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: size.height * 0.02),
-                      ),
+                      child: TextWidget(
+                          text: visitedBarsDetailList[index].name!,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: size.height * 0.02),
                     ),
                     SizedBox(
                       height: size.height * 0.01,
@@ -71,18 +65,14 @@ class CustomVisitedPlace extends StatelessWidget {
                           color: primaryColor,
                           size: size.height * 0.02,
                         ),
-                        Text(
-                          visitedBarsDetailList[index].rating.toString(),
-                          style: GoogleFonts.urbanist(
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          " (${visitedBarsDetailList[index].userRatingsTotal.toString()} Review's)",
-                          style: GoogleFonts.urbanist(
-                            color: primaryColor,
-                          ),
-                        ),
+                        TextWidget(
+                            text:
+                                visitedBarsDetailList[index].rating.toString(),
+                            color: Colors.white),
+                        TextWidget(
+                            text:
+                                " (${visitedBarsDetailList[index].userRatingsTotal.toString()} Review's)",
+                            color: primaryColor)
                       ],
                     ),
                     SizedBox(

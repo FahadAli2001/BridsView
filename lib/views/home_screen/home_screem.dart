@@ -1,32 +1,5 @@
-import 'dart:developer';
-import 'dart:ui';
-import 'package:birds_view/component/loading_widget.dart';
-import 'package:birds_view/controller/maps_controller/maps_controller.dart';
-import 'package:birds_view/controller/review_controller/review_controller.dart';
-import 'package:birds_view/model/user_model/user_model.dart';
-import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/utils/icons.dart';
-import 'package:birds_view/utils/images.dart';
-import 'package:birds_view/views/detail_screen/detail_screen.dart';
-import 'package:birds_view/widgets/custom_button/custom_button.dart';
-import 'package:birds_view/widgets/custom_gradient_text/custom_gradient_text.dart';
-import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shimmer/shimmer.dart';
-import '../../controller/search_bars_controller/search_bars_controller.dart';
-import '../../model/bar_details_model/bar_details_model.dart';
-import '../../widgets/custom_drawer/custom_drawer.dart';
-import '../../widgets/custom_explore_widget/custom_explore_widget.dart';
-import '../../widgets/custom_recommended_widget/custom_recommended_widget.dart';
-import '../explore_screen/explore_screen.dart';
+import 'package:birds_view/views/views.dart';
 
 class HomeScreen extends StatefulWidget {
   final UserModel? user;
@@ -192,34 +165,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   PlaceholderAlignment.baseline,
                                               baseline: TextBaseline.alphabetic,
                                               child: ShaderMask(
-                                                shaderCallback: (bounds) =>
-                                                    const LinearGradient(
-                                                  colors: [
-                                                    Color(0xFFC59241),
-                                                    Color(0xFFFEF6D1),
-                                                    Color(0xFFC49138),
-                                                  ],
-                                                  begin: Alignment.centerLeft,
-                                                  end: Alignment.centerRight,
-                                                  stops: [0.0, 0.5, 1.0],
-                                                ).createShader(Rect.fromLTWH(
-                                                        0,
-                                                        0,
-                                                        bounds.width,
-                                                        bounds.height)),
-                                                child: Text(
-                                                  widget.user == null ||
-                                                          widget.user!.data!
-                                                                  .subscribe ==
-                                                              '0'
-                                                      ? " "
-                                                      : 'Pro',
-                                                  style: GoogleFonts.urbanist(
-                                                      fontSize:
-                                                          size.height * 0.013,
-                                                      color: whiteColor),
-                                                ),
-                                              ),
+                                                  shaderCallback: (bounds) =>
+                                                      const LinearGradient(
+                                                        colors: [
+                                                          Color(0xFFC59241),
+                                                          Color(0xFFFEF6D1),
+                                                          Color(0xFFC49138),
+                                                        ],
+                                                        begin: Alignment
+                                                            .centerLeft,
+                                                        end: Alignment
+                                                            .centerRight,
+                                                        stops: [0.0, 0.5, 1.0],
+                                                      ).createShader(
+                                                          Rect.fromLTWH(
+                                                              0,
+                                                              0,
+                                                              bounds.width,
+                                                              bounds.height)),
+                                                  child: TextWidget(
+                                                    text: widget.user == null ||
+                                                            widget.user!.data!
+                                                                    .subscribe ==
+                                                                '0'
+                                                        ? " "
+                                                        : 'Pro',
+                                                    color: whiteColor,
+                                                    fontSize:
+                                                        size.height * 0.013,
+                                                  )),
                                             ),
                                           ],
                                         ),
@@ -371,29 +345,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             .spaceBetween,
                                                     children: [
                                                       SizedBox(
-                                                        width:
-                                                            size.width * 0.25,
-                                                        child: Text(
-                                                          mapController
-                                                                  .homeScreennearestbarsOrClubsData![
-                                                                      index]
-                                                                  .name ??
-                                                              'Unknown',
-                                                          maxLines: 1,
-                                                          overflow:
-                                                              TextOverflow.fade,
-                                                          style: GoogleFonts
-                                                              .urbanist(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  fontSize: size
-                                                                          .height *
-                                                                      0.016),
-                                                        ),
-                                                      ),
+                                                          width:
+                                                              size.width * 0.25,
+                                                          child: TextWidget(
+                                                            text: mapController
+                                                                    .homeScreennearestbarsOrClubsData![
+                                                                        index]
+                                                                    .name ??
+                                                                'Unknown',
+                                                            color: Colors.white,
+                                                            maxLines: 1,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize:
+                                                                size.height *
+                                                                    0.016,
+                                                            textOverflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                          )),
                                                       Row(
                                                         children: [
                                                           SvgPicture.asset(
@@ -524,23 +494,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               const CustomHeadingText(heading: "Explore"),
                               GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          child: ExploreScreen(
-                                            user: widget.user,
-                                          ),
-                                          type: PageTransitionType.fade));
-                                },
-                                child: Text(
-                                  'More',
-                                  style: GoogleFonts.urbanist(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: size.height * 0.016),
-                                ),
-                              ),
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            child: ExploreScreen(
+                                              user: widget.user,
+                                            ),
+                                            type: PageTransitionType.fade));
+                                  },
+                                  child: TextWidget(
+                                    text: 'More',
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: size.height * 0.016,
+                                  )),
                             ],
                           ),
                           SizedBox(
@@ -625,23 +593,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: Align(
                                               alignment: Alignment.bottomLeft,
                                               child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8),
-                                                child: Text(
-                                                  mapController
-                                                          .homeScreenExplorebarsOrClubsData![
-                                                              index]
-                                                          .name ??
-                                                      "UnKnown",
-                                                  maxLines: 2,
-                                                  style: GoogleFonts.urbanist(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize:
-                                                          size.height * 0.016),
-                                                ),
-                                              ),
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: TextWidget(
+                                                    text: mapController
+                                                            .homeScreenExplorebarsOrClubsData![
+                                                                index]
+                                                            .name ??
+                                                        "UnKnown",
+                                                    color: Colors.white,
+                                                    maxLines: 2,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize:
+                                                        size.height * 0.016,
+                                                  )),
                                             ),
                                           ),
                                         ),
@@ -674,15 +639,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: Center(child: LoadingWidget()),
                                     )
                                   : value.barDetail.isEmpty
-                                      ? Padding(
-                                          padding: const EdgeInsets.symmetric(
+                                      ? const Padding(
+                                          padding: EdgeInsets.symmetric(
                                               vertical: 20),
-                                          child: Text(
-                                            "Search Bars Or Clubs",
-                                            style: GoogleFonts.urbanist(
-                                                color: Colors.white60),
-                                          ),
-                                        )
+                                          child: TextWidget(
+                                              text: 'Search Bars Or Clubs',
+                                              color: Colors.white60))
                                       : Expanded(
                                           child: ListView.builder(
                                             itemCount:
@@ -742,12 +704,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            'Bar/Club Reviews',
-                                            style: GoogleFonts.urbanist(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: size.height * 0.026),
+                                          TextWidget(
+                                            text: "Bar/Club Reviews",
+                                            color: Colors.white,
+                                            fontSize: size.height * 0.026,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                           GestureDetector(
                                             onTap: () async {

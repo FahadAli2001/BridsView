@@ -1,13 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
-
-import 'package:birds_view/utils/apis.dart';
 import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
-import 'package:page_transition/page_transition.dart';
+import 'package:birds_view/views/views.dart';
 
-import '../../model/user_model/user_model.dart';
-import '../../views/home_screen/home_screem.dart';
 
 class SplashController extends ChangeNotifier {
   Future<void> fetchUserProfile(String id, String token, context) async {

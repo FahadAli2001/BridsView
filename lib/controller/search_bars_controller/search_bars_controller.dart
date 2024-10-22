@@ -1,15 +1,9 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:typed_data';
-import 'package:birds_view/controller/maps_controller/maps_controller.dart';
-import 'package:birds_view/model/bar_details_model/bar_details_model.dart';
 import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
-import 'package:birds_view/utils/api_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../model/bars_distance_model/bars_distance_model.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class SearchBarsController extends ChangeNotifier {
   TextEditingController searchTextFieldController = TextEditingController();

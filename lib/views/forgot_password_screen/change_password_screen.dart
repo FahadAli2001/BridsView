@@ -1,11 +1,6 @@
-import 'package:birds_view/controller/reset_password_controller/reset_password.dart';
-import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/utils/icons.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import '../../widgets/custom_button/custom_button.dart';
-import '../../widgets/custom_textfield/custom_textfield.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class ChangePaasswordScreen extends StatefulWidget {
   const ChangePaasswordScreen({super.key});
@@ -60,13 +55,13 @@ class _ChangePaasswordScreenState extends State<ChangePaasswordScreen> {
                             stops: [0.0, 0.5, 1.0],
                           ).createShader(
                               Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
-                          child: Text(
-                            'Password ',
-                            style: GoogleFonts.urbanist(
-                                fontSize: size.height * 0.04,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.white),
-                          ),
+                          child:
+                          TextWidget(
+                                  text: 'Password ',
+                                  color: whiteColor,
+                                  fontSize: size.height * 0.04,
+                                  fontWeight: FontWeight.w900,
+                                )
                         ),
                       ),
                     ],

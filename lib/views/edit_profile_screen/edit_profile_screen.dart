@@ -1,19 +1,7 @@
-import 'package:birds_view/component/loading_widget.dart';
-import 'package:birds_view/model/user_model/user_model.dart';
-import 'package:birds_view/utils/colors.dart';
-import 'package:birds_view/widgets/custom_heading_text/custom_heading_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:provider/provider.dart';
-import '../../controller/edit_profile_controller/edit_profile_controller.dart';
-import '../../widgets/custom_button/custom_button.dart';
-import '../../widgets/custom_error_toast/custom_error_toast.dart';
-import '../../widgets/custom_image_picker_bottom_sheet/custom_image_picker_bottom_sheet.dart';
-import '../../widgets/custom_textfield/custom_textfield.dart';
+import 'package:birds_view/views/views.dart';
+
 
 class EditProfileScreen extends StatefulWidget {
   final UserModel? user;
