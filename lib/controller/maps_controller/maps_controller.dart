@@ -321,21 +321,21 @@ class MapsController extends ChangeNotifier {
     notifyListeners();
   }
 
- 
-
-
-  getPolyline(List<Result> bars, int index,{double? userLat,double? userLng}) async {
+  getPolyline(List<Result> bars, int index,
+      {double? userLat, double? userLng}) async {
     log("user lat : ${userLat ?? 'n/a'}");
-    
+
     try {
       SharedPreferences sp = await SharedPreferences.getInstance();
 
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         googleApiKey: googleMapApiKey,
         request: PolylineRequest(
-          origin:userLat != null && userLng != null? PointLatLng(userLat, userLng):PointLatLng(lat!, lon!),
-          destination: PointLatLng(bars[index].geometry!.viewport!.
-          southwest!.lat!,
+          origin: userLat != null && userLng != null
+              ? PointLatLng(userLat, userLng)
+              : PointLatLng(lat!, lon!),
+          destination: PointLatLng(
+              bars[index].geometry!.viewport!.southwest!.lat!,
               bars[index].geometry!.viewport!.southwest!.lng!),
           mode: TravelMode.driving,
         ),
@@ -392,7 +392,7 @@ class MapsController extends ChangeNotifier {
   Future<void> getCurrentLocation(context) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     _isGettingLocation = true;
-     
+
     notifyListeners();
     try {
       LocationPermission locationPermission =
@@ -748,7 +748,6 @@ class MapsController extends ChangeNotifier {
     // Clear previous data
     _exploring = true;
     notifyListeners();
-    
 
     try {
       // Fetch latitude and longitude once from SharedPreferences
@@ -842,15 +841,15 @@ class MapsController extends ChangeNotifier {
         log('Total images: ${exploreScreenbarsOrClubsImages.length}');
       } else {
         log("Error: ${response.statusCode}");
-          _exploring = false;
-          notifyListeners();
+        _exploring = false;
+        notifyListeners();
       }
 
       // Notify the listeners after all data has been fetched
       notifyListeners();
     } catch (e) {
-        _exploring = false;
-          notifyListeners();
+      _exploring = false;
+      notifyListeners();
       log(e.toString());
     }
   }
@@ -880,12 +879,15 @@ class MapsController extends ChangeNotifier {
     notifyListeners();
   }
 
-    List<LatLng> routeCoords = [];
+  List<LatLng> routeCoords = [];
 
-   Future<List<String>> getTurnByTurnDirections( double endLat, double endLng) async {
-    const String baseUrl = 'https://maps.googleapis.com/maps/api/directions/json';
-    const String apiKey = googleMapApiKey;  // Replace with your API key
-    String url = '$baseUrl?origin=$_lat,$_lon&destination=$endLat,$endLng&key=$apiKey';
+  Future<List<String>> getTurnByTurnDirections(
+      double endLat, double endLng) async {
+    const String baseUrl =
+        'https://maps.googleapis.com/maps/api/directions/json';
+    const String apiKey = googleMapApiKey; // Replace with your API key
+    String url =
+        '$baseUrl?origin=$_lat,$_lon&destination=$endLat,$endLng&key=$apiKey';
 
     var response = await http.get(Uri.parse(url));
 
@@ -894,13 +896,14 @@ class MapsController extends ChangeNotifier {
       List<dynamic> steps = jsonResponse['routes'][0]['legs'][0]['steps'];
 
       // Extracting the turn-by-turn instructions
-      List<String> instructions = steps.map((step) => step['html_instructions'].toString()).toList();
-        routeCoords = steps
-            .map((step) => LatLng(
-                  step['end_location']['lat'],
-                  step['end_location']['lng'],
-                ))
-            .toList();
+      List<String> instructions =
+          steps.map((step) => step['html_instructions'].toString()).toList();
+      routeCoords = steps
+          .map((step) => LatLng(
+                step['end_location']['lat'],
+                step['end_location']['lng'],
+              ))
+          .toList();
       log(instructions.toString());
 
       return instructions;
@@ -908,10 +911,4 @@ class MapsController extends ChangeNotifier {
       throw Exception('Failed to load directions');
     }
   }
-
-
-
-
-
-
 }

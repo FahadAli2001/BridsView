@@ -54,11 +54,13 @@ class BookmarkController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Map<String, dynamic>> getBookMarkStatus(String placeId, UserModel? user) async {
+  Future<Map<String, dynamic>> getBookMarkStatus(
+      String placeId, UserModel? user) async {
     var headers = {'Authorization': 'Bearer ${user!.token}'};
     try {
       var response = await http.get(
-        Uri.parse('$checkBookmarkApi${user.data!.id.toString()}&bar_type_id=$placeId'),
+        Uri.parse(
+            '$checkBookmarkApi${user.data!.id.toString()}&bar_type_id=$placeId'),
         headers: headers,
       );
 
@@ -75,10 +77,10 @@ class BookmarkController extends ChangeNotifier {
       return {"status": -1, "error": e.toString()};
     }
   }
-  
 
-  Future<bool> handleBookmarkAction(String placeId, bool isAdding , UserModel? user) async {
-     log("$placeId : place id");
+  Future<bool> handleBookmarkAction(
+      String placeId, bool isAdding, UserModel? user) async {
+    log("$placeId : place id");
     log("${user!.data!.id.toString()} : user id");
     _setLoading(true);
     try {
@@ -91,7 +93,7 @@ class BookmarkController extends ChangeNotifier {
         body.remove("bar_type_id");
       }
 
-       var response = await http.post(
+      var response = await http.post(
         Uri.parse(url),
         headers: header,
         body: body,
@@ -102,11 +104,11 @@ class BookmarkController extends ChangeNotifier {
         return true;
       } else {
         log("Error ${isAdding ? 'adding' : 'deleting'} bookmark: ${response.body}");
-        
+
         return false;
       }
     } catch (e) {
-       log("${isAdding ? 'Adding' : 'Delete'} Bookmark call error: $e");
+      log("${isAdding ? 'Adding' : 'Delete'} Bookmark call error: $e");
       return false;
     } finally {
       _setLoading(false);
