@@ -74,7 +74,7 @@ class _MapScreenState extends State<MapScreen> {
         log("${widget.bar[widget.index].geometry!.location!.lat!} bar lat");
         log("${widget.bar[widget.index].geometry!.location!.lng!} bar lng");
         mapController.clearPolylines();
-       await mapController.getPolyline(widget.bar, widget.index);
+        await mapController.getPolyline(widget.bar, widget.index);
         CameraPosition cameraPosition = CameraPosition(
           target: LatLng(mapController.lat!, mapController.lon!),
           zoom: 16,
@@ -114,37 +114,122 @@ class _MapScreenState extends State<MapScreen> {
         turnByTurnInstructions = directions;
       });
 
+      Position? previousPosition;
+      DateTime? lastUpdateTime;
+
       _positionStream =
           Geolocator.getPositionStream().listen((Position position) async {
+        if (lastUpdateTime != null &&
+            DateTime.now().difference(lastUpdateTime!) <
+                const Duration(seconds: 5)) {
+          return;
+        }
+        lastUpdateTime = DateTime.now();
+
         log("Current Location: ${position.latitude}, ${position.longitude}");
 
-        controller.animateCamera(
-          CameraUpdate.newLatLngZoom(
-            LatLng(position.latitude, position.longitude),
-            20.0,
-          ),
-        );
-         mapController.clearPolylines();
-      await  mapController.getPolyline(widget.bar, widget.index,
-            userLat: position.latitude, userLng: position.longitude);
-        distanceList!.clear();
+        if (previousPosition == null ||
+            _isUserMovedSignificantly(previousPosition!, position)) {
+          previousPosition = position;
 
-        var data = await mapController.getDistanceBetweenPoints(
-            widget.bar[widget.index].geometry!.location!.lat.toString(),
-            widget.bar[widget.index].geometry!.location!.lng!,
-            position.latitude,
-            position.longitude);
-        distanceList!.addAll(data);
-        setState(() {});
+          await controller.moveCamera(
+            CameraUpdate.newLatLngZoom(
+              LatLng(position.latitude, position.longitude),
+              20.0,
+            ),
+          );
 
-        if (_isUserCloseToNextStep(position.latitude, position.longitude)) {
-          _showNextInstruction();
+          mapController.clearPolylines();
+          await mapController.getPolyline(widget.bar, widget.index,
+              userLat: position.latitude, userLng: position.longitude);
+
+          distanceList!.clear();
+
+          var data = await mapController.getDistanceBetweenPoints(
+              widget.bar[widget.index].geometry!.location!.lat.toString(),
+              widget.bar[widget.index].geometry!.location!.lng!,
+              position.latitude,
+              position.longitude);
+          distanceList!.addAll(data);
+          setState(() {});
+
+          if (_isUserCloseToNextStep(position.latitude, position.longitude)) {
+            _showNextInstruction();
+          }
         }
       });
     } catch (e) {
       log("Live location tracking error: $e");
     }
   }
+
+  bool _isUserMovedSignificantly(Position previous, Position current) {
+    const double threshold =
+        10.0; // 10 meters threshold for significant movement
+    double distance = Geolocator.distanceBetween(
+      previous.latitude,
+      previous.longitude,
+      current.latitude,
+      current.longitude,
+    );
+    return distance > threshold;
+  }
+
+  // Future<void> _startLiveLocationTracking(MapsController mapController) async {
+  //   final mapController = Provider.of<MapsController>(context, listen: false);
+  //   mapController.clearPolylines();
+  //   try {
+  //     String theme = await DefaultAssetBundle.of(context)
+  //         .loadString("assets/map_theme/night_map_theme.json");
+
+  //     setState(() {
+  //       mapTheme = theme;
+  //     });
+
+  //     final GoogleMapController controller = await _controller.future;
+  //     // ignore: deprecated_member_use
+  //     controller.setMapStyle(mapTheme);
+
+  //     List<String> directions = await mapController.getTurnByTurnDirections(
+  //       widget.bar[widget.index].geometry!.location!.lat!,
+  //       widget.bar[widget.index].geometry!.location!.lng!,
+  //     );
+
+  //     setState(() {
+  //       turnByTurnInstructions = directions;
+  //     });
+
+  //     _positionStream =
+  //         Geolocator.getPositionStream().listen((Position position) async {
+  //       log("Current Location: ${position.latitude}, ${position.longitude}");
+
+  //       controller.animateCamera(
+  //         CameraUpdate.newLatLngZoom(
+  //           LatLng(position.latitude, position.longitude),
+  //           20.0,
+  //         ),
+  //       );
+
+  //       await mapController.getPolyline(widget.bar, widget.index,
+  //           userLat: position.latitude, userLng: position.longitude);
+  //       distanceList!.clear();
+
+  //       var data = await mapController.getDistanceBetweenPoints(
+  //           widget.bar[widget.index].geometry!.location!.lat.toString(),
+  //           widget.bar[widget.index].geometry!.location!.lng!,
+  //           position.latitude,
+  //           position.longitude);
+  //       distanceList!.addAll(data);
+  //       setState(() {});
+
+  //       if (_isUserCloseToNextStep(position.latitude, position.longitude)) {
+  //         _showNextInstruction();
+  //       }
+  //     });
+  //   } catch (e) {
+  //     log("Live location tracking error: $e");
+  //   }
+  // }
 
   bool _isUserCloseToNextStep(double userLat, double userLng) {
     if (currentInstructionIndex >= routeCoords.length) return false;
@@ -168,37 +253,6 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  // void _startLiveLocationTracking(MapsController mapController) async {
-  //   try {
-  //     String theme = await DefaultAssetBundle.of(context)
-  //         .loadString("assets/map_theme/night_map_theme.json");
-
-  //     setState(() {
-  //       mapTheme = theme;
-  //     });
-
-  //     // Apply the map theme immediately
-  //     final GoogleMapController controller = await _controller.future;
-  //     // ignore: deprecated_member_use
-  //     controller.setMapStyle(mapTheme);
-  //     log("_startLiveLocationTracking");
-  //     _positionStream =
-  //         Geolocator.getPositionStream().listen((Position position) async {
-  //       log("Current Location: ${position.latitude}, ${position.longitude}");
-
-  //       mapController.updateLiveLocationMarker(
-  //           position.latitude, position.longitude);
-  //       final GoogleMapController controller = await _controller.future;
-  //       controller.animateCamera(
-  //         CameraUpdate.newLatLng(
-  //           LatLng(position.latitude, position.longitude),
-  //         ),
-  //       );
-  //     });
-  //   } catch (e) {
-  //     log("_startLiveLocationTracking error : $e");
-  //   }
-  // }
   String removeHtmlTags(String input) {
     final RegExp exp = RegExp(r'<[^>]*>');
     return input.replaceAll(exp, '');
@@ -306,7 +360,7 @@ class _MapScreenState extends State<MapScreen> {
                       )
                     : const SizedBox(),
                 Positioned(
-                  top: size.height * 0.03,
+                  top: size.height * 0.06,
                   left: size.width * 0.03,
                   child: GestureDetector(
                     onTap: () async {
