@@ -11,17 +11,16 @@ class TextWidget extends StatelessWidget {
   final int? maxLines;
   final TextOverflow? textOverflow;
 
-  const TextWidget({
-    super.key,
-    required this.text,
-    required this.color,
-    this.fontSize,
-    this.underline,
-    this.decorationColor,
-    this.fontWeight,
-    this.maxLines,
-    this.textOverflow
-  });
+  const TextWidget(
+      {super.key,
+      required this.text,
+      required this.color,
+      this.fontSize,
+      this.underline,
+      this.decorationColor,
+      this.fontWeight,
+      this.maxLines,
+      this.textOverflow});
 
   @override
   Widget build(BuildContext context) {
