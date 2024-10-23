@@ -33,4 +33,28 @@ class SplashController extends ChangeNotifier {
       log('Error fetching user profile: $e');
     }
   }
+
+  Future<void> checkRoute(context) async {
+    try {
+      SharedPreferences sp = await SharedPreferences.getInstance();
+   
+      String? id = sp.getString('user_id') ?? '';
+      String? token = sp.getString('token') ?? '';
+      log('User ID: $id, Token: $token');
+
+      if (id.isEmpty && token.isEmpty) {
+        log('Navigating to OnboardingOneScreen');
+        Navigator.of(context).pushReplacement(PageTransition(
+            duration: const Duration(seconds: 1),
+            child: const OnboardingThree(),
+            type: PageTransitionType.fade));
+      } else {
+        log('Fetching user profile');
+       
+        fetchUserProfile(id, token, context);
+      }
+    } catch (e) {
+      log('Error in checkRoute: $e');
+    }
+  }
 }

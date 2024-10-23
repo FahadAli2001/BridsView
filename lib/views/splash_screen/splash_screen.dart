@@ -14,6 +14,7 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
+     final splashController = SplashController();
 
   @override
   void initState() {
@@ -46,37 +47,12 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        checkRoute();
+        splashController. checkRoute(context);
       }
     });
   }
 
-  Future<void> checkRoute() async {
-    try {
-      SharedPreferences sp = await SharedPreferences.getInstance();
-      final splashController =
-          // ignore: use_build_context_synchronously
-          Provider.of<SplashController>(context, listen: false);
-      String? id = sp.getString('user_id') ?? '';
-      String? token = sp.getString('token') ?? '';
-      log('User ID: $id, Token: $token');
-
-      if (id.isEmpty && token.isEmpty) {
-        log('Navigating to OnboardingOneScreen');
-        // ignore: use_build_context_synchronously
-        Navigator.of(context).pushReplacement(PageTransition(
-            duration: const Duration(seconds: 1),
-            child: const OnboardingThree(),
-            type: PageTransitionType.fade));
-      } else {
-        log('Fetching user profile');
-        // ignore: use_build_context_synchronously
-        await splashController.fetchUserProfile(id, token, context);
-      }
-    } catch (e) {
-      log('Error in checkRoute: $e');
-    }
-  }
+  
 
   @override
   void dispose() {
