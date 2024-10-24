@@ -1,3 +1,4 @@
+import 'package:birds_view/controller/push_notification_controller/push_notification_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:birds_view/views/views.dart';
 
@@ -11,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final PushNotificationController pushNotificationController = PushNotificationController();
   final FocusNode _focusNode = FocusNode();
 
   bool isSearchBarOpen = false;
@@ -26,13 +28,15 @@ class _HomeScreenState extends State<HomeScreen> {
     log(lastVisitedBar);
   }
 
+  
+
   @override
   void initState() {
     super.initState();
     final searchController =
         Provider.of<SearchBarsController>(context, listen: false);
     final mapController = Provider.of<MapsController>(context, listen: false);
-
+    pushNotificationController.initialize(widget.user);
     mapController.getCurrentLocation(context).then((val) {
       searchController.getCordinateds();
 
