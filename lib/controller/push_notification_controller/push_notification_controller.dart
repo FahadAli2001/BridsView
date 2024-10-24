@@ -19,13 +19,27 @@ class PushNotificationController extends ChangeNotifier {
     "Looking for a lively spot? See where the crowd's at",
     "Skip the guessing. Know the vibe before you arrive",
     "Want to avoid a dead night out? BirdsView’s got you covered",
-    // Add more messages as needed...
+    "Girls night? See where the scene is poppin’ right now",
+    "Up for a chill night? Find the perfect spot with BirdsView",
+    "Planning your night out? See the real-time crowd count now",
+    "New in town? Find the best spots without the hassle",
+    "Check the vibe before you arrive. Make tonight count",
+    "Don’t waste a night. Find the action with BirdsView",
+    "Bar hopping is overrated. See where to go next",
+    "Your go-to spot is heating up. Get there now",
+    "Ready to make moves? Find the perfect place tonight",
+    "Find your vibe, avoid the duds. BirdsView has you covered"
   ];
 
   final List<String> nonAccountMessages = [
     "Ready to see the nightlife scene? Create an account and unlock full access",
     "Don’t miss out. Sign up now and find the best spots around you",
-    // Add more messages as needed...
+    'Ready to see the nightlife scene? Create an account and unlock full access',
+    "Don’t miss out. Sign up now and find the best spots around you",
+    "Get the full experience. Create an account and see real-time club vibes",
+    "Want to know where the crowd's at? Make an account to see it all",
+    "Sign up today and find your perfect night out spot in seconds",
+    "Unlock the full BirdsView experience by creating an account now"
   ];
 
   Future<void> initialize(UserModel? user) async {
@@ -122,7 +136,6 @@ void onStart(ServiceInstance service) async {
 
   service.on('setAsBackground').listen((event) {
     // service.();
-    
   });
 
   service.on('stopService').listen((event) {
@@ -130,7 +143,7 @@ void onStart(ServiceInstance service) async {
   });
 
   // Trigger random notifications periodically (in your case every 3 hours)
-  Timer.periodic(const Duration(seconds: 3), (timer) async {
+  Timer.periodic(const Duration(hours: 6), (timer) async {
     final random = math.Random();
     final message = [
       "Time to check the nightlife!",

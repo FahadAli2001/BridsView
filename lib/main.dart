@@ -7,8 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:birds_view/views/views.dart';
-import 'package:workmanager/workmanager.dart';
-
+ 
 void main() async {
   if (kIsWeb) {
     WidgetsFlutterBinding.ensureInitialized();
@@ -27,12 +26,7 @@ void main() async {
     WidgetsFlutterBinding.ensureInitialized();
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
      await initializeService(); 
-    // Workmanager().initialize(callbackDispatcher);
-    // Workmanager().registerPeriodicTask(
-    //   "1",
-    //   simpleTask,
-    //   frequency: const Duration(seconds: 3), // Run every 3 hours
-    // );
+     
 
     Stripe.publishableKey =
         "pk_test_51PYYmlFwqpbZ1f3dMZyxLHPjGJzGT6S1SBgbRO2pZ3DFuRewfwdHEHdfQsOGy2FrjCdavvqyMBdJljqAtVorzDVk00TM57AjlT";
