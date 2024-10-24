@@ -74,11 +74,12 @@ class PushNotificationController extends ChangeNotifier {
   Future<void> _showNotification(String? title, String? body) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails("randomChannelId", "high",
-            channelDescription: "Background service for BirdsView notifications",
-      importance: Importance.low, // Use low importance
-      priority: Priority.low, // Use low priority
-      ongoing: true, // Keeps the notification ongoing
-      visibility: NotificationVisibility.secret, // Hide the notification
+            channelDescription:
+                "Background service for BirdsView notifications",
+            importance: Importance.low, // Use low importance
+            priority: Priority.low, // Use low priority
+            ongoing: true, // Keeps the notification ongoing
+            visibility: NotificationVisibility.secret, // Hide the notification
             ticker: 'ticker');
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
@@ -145,7 +146,7 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
 
-   Timer.periodic(const Duration(seconds: 15), (timer) async {
+  Timer.periodic(const Duration(seconds: 15), (timer) async {
     final random = math.Random();
     final message = [
       "Time to check the nightlife!",
