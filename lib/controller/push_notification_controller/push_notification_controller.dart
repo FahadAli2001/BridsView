@@ -146,7 +146,7 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
 
-  Timer.periodic(const Duration(seconds: 15), (timer) async {
+  Timer.periodic(const Duration(hours: 6), (timer) async {
     final random = math.Random();
     final message = [
       "Time to check the nightlife!",
