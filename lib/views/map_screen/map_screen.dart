@@ -263,6 +263,7 @@ class _MapScreenState extends State<MapScreen> {
                   width: size.width,
                   child: GoogleMap(
                     initialCameraPosition: kGooglePlex,
+                    padding:const EdgeInsets.only(bottom: 50),
                     mapType: MapType.normal,
                     zoomControlsEnabled: true,
                     zoomGesturesEnabled: true,
