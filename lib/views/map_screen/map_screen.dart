@@ -164,62 +164,6 @@ class _MapScreenState extends State<MapScreen> {
     return distance > threshold;
   }
 
-  // Future<void> _startLiveLocationTracking(MapsController mapController) async {
-  //   final mapController = Provider.of<MapsController>(context, listen: false);
-  //   mapController.clearPolylines();
-  //   try {
-  //     String theme = await DefaultAssetBundle.of(context)
-  //         .loadString("assets/map_theme/night_map_theme.json");
-
-  //     setState(() {
-  //       mapTheme = theme;
-  //     });
-
-  //     final GoogleMapController controller = await _controller.future;
-  //     // ignore: deprecated_member_use
-  //     controller.setMapStyle(mapTheme);
-
-  //     List<String> directions = await mapController.getTurnByTurnDirections(
-  //       widget.bar[widget.index].geometry!.location!.lat!,
-  //       widget.bar[widget.index].geometry!.location!.lng!,
-  //     );
-
-  //     setState(() {
-  //       turnByTurnInstructions = directions;
-  //     });
-
-  //     _positionStream =
-  //         Geolocator.getPositionStream().listen((Position position) async {
-  //       log("Current Location: ${position.latitude}, ${position.longitude}");
-
-  //       controller.animateCamera(
-  //         CameraUpdate.newLatLngZoom(
-  //           LatLng(position.latitude, position.longitude),
-  //           20.0,
-  //         ),
-  //       );
-
-  //       await mapController.getPolyline(widget.bar, widget.index,
-  //           userLat: position.latitude, userLng: position.longitude);
-  //       distanceList!.clear();
-
-  //       var data = await mapController.getDistanceBetweenPoints(
-  //           widget.bar[widget.index].geometry!.location!.lat.toString(),
-  //           widget.bar[widget.index].geometry!.location!.lng!,
-  //           position.latitude,
-  //           position.longitude);
-  //       distanceList!.addAll(data);
-  //       setState(() {});
-
-  //       if (_isUserCloseToNextStep(position.latitude, position.longitude)) {
-  //         _showNextInstruction();
-  //       }
-  //     });
-  //   } catch (e) {
-  //     log("Live location tracking error: $e");
-  //   }
-  // }
-
   bool _isUserCloseToNextStep(double userLat, double userLng) {
     if (currentInstructionIndex >= routeCoords.length) return false;
 
