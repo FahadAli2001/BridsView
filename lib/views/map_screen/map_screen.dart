@@ -263,7 +263,8 @@ class _MapScreenState extends State<MapScreen> {
                   width: size.width,
                   child: GoogleMap(
                     initialCameraPosition: kGooglePlex,
-                    padding:const EdgeInsets.only(bottom: 50),
+                    padding:
+                        EdgeInsets.only(bottom: 50, top: size.height * 0.04),
                     mapType: MapType.normal,
                     zoomControlsEnabled: true,
                     zoomGesturesEnabled: true,
@@ -292,7 +293,7 @@ class _MapScreenState extends State<MapScreen> {
                     ? Positioned(
                         left: 20,
                         right: 20,
-                        top: 80,
+                        top: 120,
                         child: Container(
                           width: size.width,
                           padding: const EdgeInsets.all(15),
