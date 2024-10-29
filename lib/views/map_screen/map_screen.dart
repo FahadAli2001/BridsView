@@ -237,7 +237,7 @@ class _MapScreenState extends State<MapScreen> {
                     ? Positioned(
                         left: 20,
                         right: 20,
-                        top: 120,
+                        top: size.height * 0.15,
                         child: Container(
                           width: size.width,
                           padding: const EdgeInsets.all(15),
@@ -267,16 +267,7 @@ class _MapScreenState extends State<MapScreen> {
                   height: 120,
                   offset: 50,
                 ),
-                // value.isGettingDirection == true
-                //     ? Positioned(
-                //         bottom: 15,
-                //         left: size.width * 0.45,
-                //         right: size.width * 0.45,
-                //         child: CircularProgressIndicator(
-                //           color: primaryColor,
-                //         ),
-                //       )
-                //     :
+                 
                 turnByTurnInstructions.isEmpty
                     ? Positioned(
                         left: size.width * 0.3,
