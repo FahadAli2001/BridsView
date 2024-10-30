@@ -102,6 +102,7 @@ class _MapScreenState extends State<MapScreen> {
       setState(() {
         turnByTurnInstructions = directions;
       });
+       mapController.clearCurrentLocationMarker();
 
       Position? previousPosition;
       DateTime? lastUpdateTime;

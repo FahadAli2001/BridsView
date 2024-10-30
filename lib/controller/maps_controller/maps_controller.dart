@@ -295,6 +295,13 @@ class MapsController extends ChangeNotifier {
     }
   }
 
+  
+  
+  void clearCurrentLocationMarker() {
+  markers.removeWhere((marker) => marker.markerId ==const MarkerId('user'));
+  notifyListeners();
+}
+
   _addPolyLine() {
     // _polylines.clear();
     PolylineId id = const PolylineId("poly");

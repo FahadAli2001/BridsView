@@ -12,7 +12,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final PushNotificationController pushNotificationController = PushNotificationController();
+  final PushNotificationController pushNotificationController =
+      PushNotificationController();
   final FocusNode _focusNode = FocusNode();
 
   bool isSearchBarOpen = false;
@@ -27,8 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
     log(lastVisitedBar);
   }
-
-  
 
   @override
   void initState() {
@@ -697,8 +696,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: size.width,
                                 height: size.height * 0.4,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.black),
+                                  borderRadius: BorderRadius.circular(10),
+                                    color: Colors.black.withOpacity(0.8),
+                                    image: DecorationImage(
+                                      image: AssetImage(splashBackground),
+                                      fit: BoxFit.cover,
+                                      colorFilter: ColorFilter.mode(
+                                        Colors.black.withOpacity(0.85),
+                                        BlendMode.srcOver,
+                                      ),
+                                    )),
                                 child: Padding(
                                   padding: const EdgeInsets.all(15),
                                   child: Column(
@@ -708,12 +715,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          TextWidget(
-                                            text: "Bar/Club Reviews",
-                                            color: Colors.white,
-                                            fontSize: size.height * 0.026,
-                                            fontWeight: FontWeight.bold,
+                                          const Icon(
+                                            Icons.cancel_outlined,
+                                            size: 30,
+                                            color: Colors.black,
                                           ),
+                                          Image.asset(
+                                            whiteLogo,
+                                            height: 50,
+                                          ),
+                                          //
                                           GestureDetector(
                                             onTap: () async {
                                               SharedPreferences sp =
@@ -729,16 +740,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       .createShader(bounds),
                                               child: const Icon(
                                                 Icons.cancel_outlined,
-                                                size: 50,
+                                                size: 30,
                                                 color: Colors.white,
                                               ),
                                             ),
-                                          )
+                                          ),
                                         ],
+                                      ),
+                                      TextWidget(
+                                        text: "Bar/Club Reviews",
+                                        color: Colors.white,
+                                        fontSize: size.height * 0.026,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.center,
                                         children: [
                                           RatingBar.builder(
                                             unratedColor: Colors.grey,
@@ -750,7 +767,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             itemPadding:
                                                 const EdgeInsets.symmetric(
                                                     horizontal: 4.0),
-                                            itemSize: size.height * 0.031,
+                                            itemSize: size.height * 0.035,
                                             itemBuilder: (context, _) {
                                               return ShaderMask(
                                                 shaderCallback: (bounds) =>

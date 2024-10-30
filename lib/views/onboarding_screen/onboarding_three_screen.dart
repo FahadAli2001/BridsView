@@ -25,17 +25,17 @@ class _OnboardingThreeState extends State<OnboardingThree> {
               height: size.height * 0.3,
             )),
             //
-            SizedBox(
-              height: size.height * 0.05,
-            ),
-            //
-            const Center(
-                child:
-                    CustomHeadingText(heading: "Check The Vibe, Then Arrive")),
+            // SizedBox(
+            //   height: size.height * 0.05,
+            // ),
+            // //
+            // const Center(
+            //     child:
+            //         CustomHeadingText(heading: "Check The Vibe, Then Arrive")),
 
             //
             SizedBox(
-              height: size.height * 0.1,
+              height: size.height * 0.05,
             ),
             CustomButton(
                 text: 'Log In',
