@@ -696,7 +696,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: size.width,
                                 height: size.height * 0.4,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(10),
                                     color: Colors.black.withOpacity(0.8),
                                     image: DecorationImage(
                                       image: AssetImage(splashBackground),
