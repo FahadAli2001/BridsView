@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:birds_view/views/views.dart';
 
-
 class MapsController extends ChangeNotifier {
   // String googleAPiKey = "AIzaSyAl8_GZb77k5io7_DCkAFYJHgGqDnzeH2k";
   CustomInfoWindowController customInfoWindowController =
@@ -295,12 +294,10 @@ class MapsController extends ChangeNotifier {
     }
   }
 
-  
-  
   void clearCurrentLocationMarker() {
-  markers.removeWhere((marker) => marker.markerId ==const MarkerId('user'));
-  notifyListeners();
-}
+    markers.removeWhere((marker) => marker.markerId == const MarkerId('user'));
+    notifyListeners();
+  }
 
   _addPolyLine() {
     // _polylines.clear();
@@ -349,24 +346,6 @@ class MapsController extends ChangeNotifier {
       log("polyline error : $e");
     }
   }
-
-  // void updateLiveLocationMarker(double latitude, double longitude) {
-  //   markers.removeWhere(
-  //       (marker) => marker.markerId == const MarkerId('live_location'));
-
-  //   markers.add(
-  //     Marker(
-  //       markerId: const MarkerId('live_location'),
-  //       position: LatLng(latitude, longitude),
-  //       infoWindow: const InfoWindow(
-  //         title: 'Your Location',
-  //       ),
-  //       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-  //     ),
-  //   );
-
-  //   notifyListeners();
-  // }
 
   void clearPolylines() {
     _polylines.clear();
@@ -421,10 +400,6 @@ class MapsController extends ChangeNotifier {
   }
 
   Future<void> exploreNearbyBarsMethod() async {
-    // List<Results> exploreNearbyBars = [];
-    // exploreBarsDistanceList.clear();
-    // exploreBarsImages.clear();
-
     try {
       SharedPreferences sp = await SharedPreferences.getInstance();
       String latitude = sp.getString('latitude') ?? '';
@@ -432,7 +407,7 @@ class MapsController extends ChangeNotifier {
       log('Latitude: $latitude, Longitude: $longitude');
 
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=bar|night_club&keyword=bar|club&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=bar|night_club|liquor_store&keyword=bar|club&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
@@ -504,7 +479,7 @@ class MapsController extends ChangeNotifier {
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=bar|night_club&keyword=bar|club&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=bar|night_club&keyword=bar|night_club|liquor_store&key=$googleMapApiKey';
 
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
@@ -530,10 +505,8 @@ class MapsController extends ChangeNotifier {
                 longitude,
               );
 
-              // Ensure bar, image, and distance are added in sync
               if (imageData.isNotEmpty) {
-                homeScreenRecommendedbarsOrClubsImages
-                    .add(imageData.first); // Add the first image
+                homeScreenRecommendedbarsOrClubsImages.add(imageData.first);
                 homeScreenRecommendedbarsOrClubsDistanceList
                     .add(distanceData.first);
                 homeScreenRecommendedbarsOrClubsData!.add(bar);
@@ -542,7 +515,6 @@ class MapsController extends ChangeNotifier {
           }
         }
 
-        // Wait for all fetch tasks to complete
         await Future.wait(fetchTasks);
       }
       notifyListeners();
@@ -570,7 +542,7 @@ class MapsController extends ChangeNotifier {
   }
 
   Future<void> nearsetBarsMethod() async {
-    clearHomeScreenList(); // Clear lists before fetching new data
+    clearHomeScreenList();
 
     List<Future> fetchTasks = [];
 
@@ -580,7 +552,7 @@ class MapsController extends ChangeNotifier {
       String longitude = sp.getString('longitude') ?? '';
 
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=bar|night_club&keyword=bar|club&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=bar|night_club|liquor_store&keyword=bar|club&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
@@ -589,28 +561,23 @@ class MapsController extends ChangeNotifier {
         var bars = list.map((i) => Results.fromJson(i)).toList();
         log('Total nearest bars: ${bars.length}');
 
-        // Iterate through each bar and fetch image and distance in parallel
         for (var bar in bars) {
           fetchTasks.add(() async {
             Uint8List? imageData;
             Rows? distanceData;
 
-            // Fetch image if available, otherwise keep it empty
             if (bar.photos != null && bar.photos!.isNotEmpty) {
               var imageResults =
                   await exploreImages(bar.photos![0].photoReference!);
               if (imageResults.isNotEmpty) {
                 imageData = imageResults[0];
               } else {
-                imageData =
-                    Uint8List(0); // Empty image data for bars without images
+                imageData = Uint8List(0);
               }
             } else {
-              imageData =
-                  Uint8List(0); // Empty image data for bars without images
+              imageData = Uint8List(0);
             }
 
-            // Fetch distance if the bar's geometry is available
             if (bar.geometry != null && bar.geometry!.location != null) {
               var distanceResults = await getDistanceBetweenPoints(
                 bar.geometry!.location!.lat.toString(),
@@ -623,7 +590,6 @@ class MapsController extends ChangeNotifier {
               }
             }
 
-            // Add the bar, image, and distance to their respective lists
             homeScreennearestbarsOrClubsData!.add(bar);
             homeScreennearsetbarsOrClubsImages.add(imageData ?? Uint8List(0));
             homeScreennearestbarsOrClubsDistanceList
@@ -631,7 +597,6 @@ class MapsController extends ChangeNotifier {
           }());
         }
 
-        // Wait for all fetching tasks to complete
         await Future.wait(fetchTasks);
       } else {
         log("Error: ${response.statusCode}");
@@ -652,9 +617,8 @@ class MapsController extends ChangeNotifier {
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
       String url =
-          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=3000&type=night_club|bar&keyword=bar|club&key=$googleMapApiKey';
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=3000&type=night_club|bar|liquor_store&keyword=bar|club&key=$googleMapApiKey';
 
-      // Fetch data from API
       http.Response response = await http.get(Uri.parse(url));
       final values = jsonDecode(response.body);
 
@@ -664,7 +628,6 @@ class MapsController extends ChangeNotifier {
             list.map((e) => Results.fromJson(e)).toList();
         log("result list length : ${resultsList.length}");
 
-        // Initialize lists for concurrent tasks
         List<Future> fetchTasks = [];
         List<Uint8List?> imageList = List.filled(resultsList.length, null);
         List<Rows?> distanceList = List.filled(resultsList.length, null);
@@ -672,7 +635,6 @@ class MapsController extends ChangeNotifier {
         for (int i = 0; i < resultsList.length; i++) {
           var bar = resultsList[i];
 
-          // Fetch image data
           if (bar.photos != null && bar.photos!.isNotEmpty) {
             fetchTasks.add(() async {
               var imageData =
@@ -683,7 +645,6 @@ class MapsController extends ChangeNotifier {
             }());
           }
 
-          // Fetch bar details and distance data
           fetchTasks.add(() async {
             var barDetail = await barsDetailMethod(bar.placeId!);
             if (barDetail != null) {
@@ -701,10 +662,8 @@ class MapsController extends ChangeNotifier {
           }());
         }
 
-        // Wait for all tasks to complete
         await Future.wait(fetchTasks);
 
-        // Update the state
         nearestBarsImages = imageList.whereType<Uint8List>().toList();
         nearestBarsDistanceList = distanceList.whereType<Rows>().toList();
       } else {
@@ -745,12 +704,10 @@ class MapsController extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Fetch latitude and longitude once from SharedPreferences
       SharedPreferences sp = await SharedPreferences.getInstance();
       String latitude = sp.getString('latitude') ?? '';
       String longitude = sp.getString('longitude') ?? '';
 
-      // Google Maps Places API URL
       String url =
           'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=$type&keyword=bar|club&key=$googleMapApiKey';
       http.Response response = await http.get(Uri.parse(url));
@@ -765,14 +722,11 @@ class MapsController extends ChangeNotifier {
           log(element.toString());
         }
 
-        // Log data size
         log('Number of bars/clubs found: ${exploreScreenbarsOrClubsData!.length}');
 
-        // Initialize a list to hold details, with null values allowed
         List<Result?> detailsList =
             List.filled(exploreScreenbarsOrClubsData!.length, null);
 
-        // Parallelize fetching of details, images, and distances
         await Future.wait(
             exploreScreenbarsOrClubsData!.asMap().entries.map((entry) async {
           int index = entry.key;
@@ -780,7 +734,7 @@ class MapsController extends ChangeNotifier {
 
           List<Future> fetchTasks = [];
           fetchTasks.clear();
-          // Fetch image data for bars with photos
+
           if (bar.photos != null && bar.photos!.isNotEmpty) {
             fetchTasks.add(exploreImages(bar.photos![0].photoReference!)
                 .then((imageResults) {
@@ -792,20 +746,17 @@ class MapsController extends ChangeNotifier {
               }
             }));
           } else {
-            // Ensure the images list has enough entries for the current index
             if (index >= exploreScreenbarsOrClubsImages.length) {
               exploreScreenbarsOrClubsImages.add(null);
             }
           }
 
-          // Fetch bar details in parallel
           fetchTasks.add(barsDetailMethod(bar.reference!).then((detail) {
             if (detail != null) {
               detailsList[index] = detail;
             }
           }));
 
-          // Fetch distance data in parallel
           fetchTasks.add(getDistanceBetweenPoints(
             bar.geometry!.location!.lat.toString(),
             bar.geometry!.location!.lng.toString(),
@@ -820,7 +771,6 @@ class MapsController extends ChangeNotifier {
             }
           }));
 
-          // Wait for all tasks to complete
           await Future.wait(fetchTasks);
           _exploring = false;
           notifyListeners();

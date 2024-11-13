@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:birds_view/component/text_widget.dart';
 import 'package:birds_view/model/nearby_bars_model/nearby_bars_model.dart';
 import 'package:birds_view/utils/images.dart';
+import 'package:birds_view/views/views.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -77,6 +78,12 @@ class CustomRecommendedWidget extends StatelessWidget {
                 )
               ],
             ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: GradientText(text: recomendedBar[index].openingHours == null ?'':
+              recomendedBar[index].openingHours!.openNow == true?"Open":"Closed",
+               fontSize: 0.014, fontWeight: FontWeight.w500),
+            )
           ],
         ),
       ),

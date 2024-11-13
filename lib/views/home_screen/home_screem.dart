@@ -365,7 +365,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     0.016,
                                                             textOverflow:
                                                                 TextOverflow
-                                                                    .fade,
+                                                                    .visible,
                                                           )),
                                                       Row(
                                                         children: [
@@ -412,6 +412,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         ],
                                                       ),
                                                     ],
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: GradientText(
+                                                      text: mapController
+                                                                  .homeScreennearestbarsOrClubsData![
+                                                                      index]
+                                                                  .openingHours ==
+                                                              null
+                                                          ? ''
+                                                          : mapController
+                                                                      .homeScreennearestbarsOrClubsData![
+                                                                          index]
+                                                                      .openingHours!
+                                                                      .openNow ==
+                                                                  true
+                                                              ? 'Open'
+                                                              : 'Closed',
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 0.014,
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -593,12 +616,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       image: AssetImage(
                                                           emptyImage)),
                                             ),
-                                            child: Align(
-                                              alignment: Alignment.bottomLeft,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8),
-                                                  child: TextWidget(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  TextWidget(
                                                     text: mapController
                                                             .homeScreenExplorebarsOrClubsData![
                                                                 index]
@@ -609,7 +636,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     fontWeight: FontWeight.w600,
                                                     fontSize:
                                                         size.height * 0.016,
-                                                  )),
+                                                  ),
+                                                  GradientText(
+                                                      text: mapController
+                                                                  .homeScreenExplorebarsOrClubsData![
+                                                                      index]
+                                                                  .openingHours ==
+                                                              null
+                                                          ? " "
+                                                          : mapController
+                                                                      .homeScreenExplorebarsOrClubsData![
+                                                                          index]
+                                                                      .openingHours!
+                                                                      .openNow ==
+                                                                  true
+                                                              ? "Open"
+                                                              : "Closed",
+                                                      fontSize: 0.014,
+                                                      fontWeight:
+                                                          FontWeight.w500)
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),

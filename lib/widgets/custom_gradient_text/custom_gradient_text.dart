@@ -26,7 +26,7 @@ class GradientText extends StatelessWidget {
         begin: Alignment.centerLeft,
         end: Alignment.centerRight,
         stops: [0.0, 0.5, 1.0],
-      ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+      ).createShader(Rect.fromLTWH(0, 0, 2, bounds.height)),
       child: Text(
         text,
         style: GoogleFonts.urbanist(
