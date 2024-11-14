@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:birds_view/views/views.dart';
 
-
 class ExploreScreen extends StatefulWidget {
   final UserModel? user;
   const ExploreScreen({super.key, required this.user});
@@ -13,6 +12,9 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   bool isSearchBarOpen = false;
   bool isClubs = true;
+  bool isBars = false;
+
+  bool isRestaurant = false;
   @override
   void initState() {
     super.initState();
@@ -63,6 +65,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   child: GestureDetector(
                     onTap: () {
                       isSearchBarOpen = true;
+
                       setState(() {});
                     },
                     child: Icon(Icons.search,
@@ -90,6 +93,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                       getBarsAndClubs('night_club');
                                       setState(() {
                                         isClubs = true;
+                                        isBars = false;
+                                        isRestaurant = false;
                                       });
                                     },
                                     child: Column(
@@ -98,7 +103,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                           text: 'Clubs',
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: size.height * 0.03,
+                                          fontSize: size.height * 0.025,
                                         ),
                                         Container(
                                           height: size.height * 0.006,
@@ -124,6 +129,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                       getBarsAndClubs('bar');
                                       setState(() {
                                         isClubs = false;
+                                        isBars = true;
+                                        isRestaurant = false;
                                       });
                                     },
                                     child: Column(
@@ -132,15 +139,50 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                           text: 'Bars',
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: size.height * 0.03,
+                                          fontSize: size.height * 0.025,
                                         ),
                                         Container(
                                           height: size.height * 0.006,
                                           decoration: BoxDecoration(
-                                            gradient: isClubs == false
+                                            gradient: isBars == true
                                                 ? gradientColor
                                                 : null,
-                                            color: isClubs == true
+                                            color: isBars == false
+                                                ? Colors.white
+                                                : null,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      mapController.clearExploreScreenList();
+                                      getBarsAndClubs('restaurant');
+                                      setState(() {
+                                        isClubs = false;
+                                        isBars = false;
+                                        isRestaurant = true;
+                                      });
+                                    },
+                                    child: Column(
+                                      children: [
+                                        TextWidget(
+                                          text: 'Restaurants',
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: size.height * 0.025,
+                                        ),
+                                        Container(
+                                          height: size.height * 0.006,
+                                          decoration: BoxDecoration(
+                                            gradient: isRestaurant == true
+                                                ? gradientColor
+                                                : null,
+                                            color: isRestaurant == false
                                                 ? Colors.white
                                                 : null,
                                           ),
@@ -156,15 +198,18 @@ class _ExploreScreenState extends State<ExploreScreen> {
                               height: size.height * 0.03,
                             ),
 
-                            mapController.exploring == true
+                            mapController.exploring
                                 ? const Center(child: LoadingWidget())
                                 : mapController
                                         .exploreScreenbarAndClubsDetails.isEmpty
                                     ? const Center(
                                         child: TextWidget(
-                                            text: 'No Bar Or Club Found',
-                                            color: Colors.white60))
-                                    : isClubs == true
+                                          text:
+                                              'No Bar, Club, or Restaurant Found',
+                                          color: Colors.white60,
+                                        ),
+                                      )
+                                    : isClubs
                                         ? Expanded(
                                             child: ListView.builder(
                                               scrollDirection: Axis.vertical,
@@ -188,27 +233,60 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                               },
                                             ),
                                           )
-                                        : Expanded(
-                                            child: ListView.builder(
-                                            itemCount: mapController
-                                                .exploreScreenbarsOrClubsData!
-                                                .length,
-                                            itemBuilder: (context, index) {
-                                              return CustomExploreWidget(
-                                                user: widget.user,
-                                                barsOrClubsImages: mapController
-                                                    .exploreScreenbarsOrClubsImages,
-                                                barsOrClubsData: mapController
-                                                    .exploreScreenbarsOrClubsData,
-                                                barsOrClubsDistanceList:
-                                                    mapController
-                                                        .exploreScreenbarsOrClubsDistanceList,
-                                                index: index,
-                                                barAndClubsDetails: mapController
-                                                    .exploreScreenbarAndClubsDetails,
-                                              );
-                                            },
-                                          ))
+                                        : isBars
+                                            ? Expanded(
+                                                child: ListView.builder(
+                                                  itemCount: mapController
+                                                      .exploreScreenbarsOrClubsData!
+                                                      .length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return CustomExploreWidget(
+                                                      user: widget.user,
+                                                      barsOrClubsImages:
+                                                          mapController
+                                                              .exploreScreenbarsOrClubsImages,
+                                                      barsOrClubsData: mapController
+                                                          .exploreScreenbarsOrClubsData,
+                                                      barsOrClubsDistanceList:
+                                                          mapController
+                                                              .exploreScreenbarsOrClubsDistanceList,
+                                                      index: index,
+                                                      barAndClubsDetails:
+                                                          mapController
+                                                              .exploreScreenbarAndClubsDetails,
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            : isRestaurant
+                                                ? Expanded(
+                                                    child: ListView.builder(
+                                                      itemCount: mapController
+                                                          .exploreScreenbarsOrClubsData!
+                                                          .length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return CustomExploreWidget(
+                                                          user: widget.user,
+                                                          barsOrClubsImages:
+                                                              mapController
+                                                                  .exploreScreenbarsOrClubsImages,
+                                                          barsOrClubsData:
+                                                              mapController
+                                                                  .exploreScreenbarsOrClubsData,
+                                                          barsOrClubsDistanceList:
+                                                              mapController
+                                                                  .exploreScreenbarsOrClubsDistanceList,
+                                                          index: index,
+                                                          barAndClubsDetails:
+                                                              mapController
+                                                                  .exploreScreenbarAndClubsDetails,
+                                                        );
+                                                      },
+                                                    ),
+                                                  )
+                                                : Container()
                           ],
                         ),
                         //
