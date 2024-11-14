@@ -246,9 +246,58 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: size.height * 0.03,
                           ),
                           //
-                          const Align(
-                              alignment: Alignment.topLeft,
-                              child: CustomHeadingText(heading: "Nearest")),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Align(
+                                alignment: Alignment.topLeft,
+                                child: CustomHeadingText(heading: "Nearest"),
+                              ),
+                              DropdownButtonHideUnderline(
+                                
+                                child: SizedBox(
+                                  width: 120,
+                                  child: DropdownButton<String>(
+                                    dropdownColor: Colors.black,
+                                    value: mapController.dropDownValue,
+                                    onChanged: (newValue)async {
+                                      
+                                        mapController.dropDownValue = newValue!;
+                                       await mapController.nearsetBarsMethod();
+                                       await mapController.exploreNearbyBarsMethod();
+                                       await mapController.recommendedBarsMethod();
+                                       setState(() {
+                                         
+                                       });
+                                       
+                                    },
+                                    items: mapController.dropDownList
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: TextWidget(
+                                          text: value,
+                                          color: Colors.white,
+                                        ),
+                                      );
+                                    }).toList(),
+                                    icon: Icon(
+                                      Icons.filter_list,
+                                      color: whiteColor,
+                                    ),
+                                    selectedItemBuilder: (BuildContext context) {
+                                      return mapController.dropDownList
+                                          .map((String value) {
+                                        return Container();
+                                      }).toList();
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
                           SizedBox(
                             height: size.height * 0.02,
                           ),
